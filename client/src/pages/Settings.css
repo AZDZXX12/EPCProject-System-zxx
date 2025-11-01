@@ -1,0 +1,14 @@
+.settings-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ant-tabs-nav {
+  margin-bottom: 24px;
+}
+
+.ant-form-vertical .ant-form-item-label {
+  font-weight: 500;
+}
+
+

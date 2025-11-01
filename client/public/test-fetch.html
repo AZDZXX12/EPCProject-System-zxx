@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetch测试</title>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        #result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+    </style>
+</head>
+<body>
+    <h1>后端连接测试</h1>
+    
+    <button onclick="testHealth()">测试 /health</button>
+    <button onclick="testProjects()">测试 /api/v1/projects/</button>
+    <button onclick="testTasks()">测试 /api/v1/tasks/</button>
+    <button onclick="testWithTimeout()">测试5秒超时</button>
+    
+    <div id="result"></div>
+
+    <script>
+        const result = document.getElementById('result');
+        
+        async function testHealth() {
+            result.textContent = '正在测试 /health...';
+            result.className = '';
+            
+            try {
+                const start = Date.now();
+                const response = await fetch('http://localhost:8000/health');
+                const elapsed = Date.now() - start;
+                const data = await response.json();
+                
+                result.textContent = `✅ 成功 (${elapsed}ms)\n${JSON.stringify(data, null, 2)}`;
+                result.className = 'success';
+            } catch (error) {
+                result.textContent = `❌ 失败\n${error.message}\n${error.stack}`;
+                result.className = 'error';
+            }
+        }
+        
+        async function testProjects() {
+            result.textContent = '正在测试 /api/v1/projects/...';
+            result.className = '';
+            
+            try {
+                const start = Date.now();
+                const response = await fetch('http://localhost:8000/api/v1/projects/');
+                const elapsed = Date.now() - start;
+                const data = await response.json();
+                
+                result.textContent = `✅ 成功 (${elapsed}ms)\n返回 ${data.length} 个项目\n${JSON.stringify(data, null, 2)}`;
+                result.className = 'success';
+            } catch (error) {
+                result.textContent = `❌ 失败\n${error.message}\n${error.stack}`;
+                result.className = 'error';
+            }
+        }
+        
+        async function testTasks() {
+            result.textContent = '正在测试 /api/v1/tasks/...';
+            result.className = '';
+            
+            try {
+                const start = Date.now();
+                const response = await fetch('http://localhost:8000/api/v1/tasks/?project_id=TEST');
+                const elapsed = Date.now() - start;
+                const data = await response.json();
+                
+                result.textContent = `✅ 成功 (${elapsed}ms)\n返回 ${data.length} 个任务\n${JSON.stringify(data, null, 2)}`;
+                result.className = 'success';
+            } catch (error) {
+                result.textContent = `❌ 失败\n${error.message}\n${error.stack}`;
+                result.className = 'error';
+            }
+        }
+        
+        async function testWithTimeout() {
+            result.textContent = '正在测试5秒超时机制...';
+            result.className = '';
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
+            try {
+                const start = Date.now();
+                const response = await fetch('http://localhost:8000/api/v1/tasks/', {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const elapsed = Date.now() - start;
+                const data = await response.json();
+                
+                result.textContent = `✅ 成功 (${elapsed}ms)\n超时机制正常，请求在5秒内完成\n${JSON.stringify(data, null, 2)}`;
+                result.className = 'success';
+            } catch (error) {
+                clearTimeout(timeoutId);
+                const elapsed = Date.now() - start;
+                
+                if (error.name === 'AbortError') {
+                    result.textContent = `⏱️ 超时 (${elapsed}ms)\n请求被5秒超时中止`;
+                } else {
+                    result.textContent = `❌ 失败 (${elapsed}ms)\n${error.message}\n${error.stack}`;
+                }
+                result.className = 'error';
+            }
+        }
+        
+        // 页面加载时自动测试
+        window.onload = () => {
+            console.log('测试页面已加载，点击按钮开始测试');
+        };
+    </script>
+</body>
+</html>
+
+

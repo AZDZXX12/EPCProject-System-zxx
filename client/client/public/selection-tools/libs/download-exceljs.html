@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载 ExcelJS 库</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .step {
+            background: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 下载 ExcelJS 库</h1>
+        
+        <div class="info status">
+            <strong>为什么需要 ExcelJS？</strong><br>
+            ExcelJS 提供完整的 Excel 格式支持（边框、居中、字体、颜色等），而标准的 XLSX.js 只支持基础功能。
+        </div>
+
+        <div class="step">
+            <h3>方法1：自动下载（推荐）</h3>
+            <p>点击下面的按钮，系统会尝试从国内镜像下载 ExcelJS：</p>
+            <button onclick="downloadExcelJS()">🚀 自动下载 ExcelJS</button>
+            <div id="downloadStatus"></div>
+        </div>
+
+        <div class="step">
+            <h3>方法2：手动下载</h3>
+            <p>如果自动下载失败，请手动下载：</p>
+            <ol>
+                <li>点击下载链接：
+                    <ul>
+                        <li><a href="https://registry.npmmirror.com/exceljs/4.4.0/files/dist/exceljs.min.js" target="_blank">国内镜像（推荐）</a></li>
+                        <li><a href="https://unpkg.com/exceljs@4.4.0/dist/exceljs.min.js" target="_blank">unpkg CDN</a></li>
+                    </ul>
+                </li>
+                <li>将下载的文件重命名为 <code>exceljs.min.js</code></li>
+                <li>将文件放到 <code>src/libs/</code> 目录下</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <h3>方法3：检查是否已安装</h3>
+            <button onclick="checkExcelJS()">🔍 检查 ExcelJS 状态</button>
+            <div id="checkStatus"></div>
+        </div>
+
+        <div class="step">
+            <h3>验证安装</h3>
+            <p>完成后，刷新主页面，打开控制台输入：</p>
+            <code>typeof ExcelJS</code>
+            <p>如果返回 <code>"object"</code> 则安装成功！</p>
+        </div>
+    </div>
+
+    <script>
+        async function downloadExcelJS() {
+            const statusDiv = document.getElementById('downloadStatus');
+            statusDiv.innerHTML = '<div class="info status">⏳ 正在下载...</div>';
+            
+            const urls = [
+                'https://registry.npmmirror.com/exceljs/4.4.0/files/dist/exceljs.min.js',
+                'https://unpkg.com/exceljs@4.4.0/dist/exceljs.min.js',
+                'https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js'
+            ];
+            
+            for (const url of urls) {
+                try {
+                    console.log('尝试从:', url);
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error('下载失败');
+                    
+                    const blob = await response.blob();
+                    const downloadUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = 'exceljs.min.js';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(downloadUrl);
+                    
+                    statusDiv.innerHTML = `
+                        <div class="success status">
+                            ✅ 下载成功！<br>
+                            文件已保存到下载文件夹，请将其移动到 <code>src/libs/</code> 目录
+                        </div>
+                    `;
+                    return;
+                } catch (error) {
+                    console.error('下载失败:', url, error);
+                }
+            }
+            
+            statusDiv.innerHTML = `
+                <div class="error status">
+                    ❌ 自动下载失败，请使用方法2手动下载
+                </div>
+            `;
+        }
+
+        function checkExcelJS() {
+            const statusDiv = document.getElementById('checkStatus');
+            
+            // 尝试加载本地的 ExcelJS
+            const script = document.createElement('script');
+            script.src = './exceljs.min.js';
+            
+            script.onload = function() {
+                if (typeof ExcelJS !== 'undefined') {
+                    statusDiv.innerHTML = `
+                        <div class="success status">
+                            ✅ ExcelJS 已安装！版本信息已加载。
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="error status">
+                            ❌ 文件存在但加载失败
+                        </div>
+                    `;
+                }
+            };
+            
+            script.onerror = function() {
+                statusDiv.innerHTML = `
+                    <div class="error status">
+                        ❌ 未找到 exceljs.min.js 文件<br>
+                        请确保文件在 <code>src/libs/</code> 目录下
+                    </div>
+                `;
+            };
+            
+            document.head.appendChild(script);
+        }
+    </script>
+</body>
+</html>

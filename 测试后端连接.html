@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>后端连接测试</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>后端连接测试</h1>
+    <button onclick="testBackend()">测试连接</button>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        async function testBackend() {
+            const result = document.getElementById('result');
+            result.innerHTML = '正在测试...';
+            
+            try {
+                console.log('开始测试 /health');
+                const healthResponse = await fetch('http://localhost:8000/health');
+                const healthData = await healthResponse.json();
+                console.log('Health 响应:', healthData);
+                
+                console.log('开始测试 /api/v1/projects/');
+                const projectsResponse = await fetch('http://localhost:8000/api/v1/projects/');
+                const projectsData = await projectsResponse.json();
+                console.log('Projects 响应:', projectsData);
+                
+                console.log('开始测试 /api/v1/tasks/');
+                const tasksResponse = await fetch('http://localhost:8000/api/v1/tasks/');
+                const tasksData = await tasksResponse.json();
+                console.log('Tasks 响应:', tasksData);
+                
+                result.innerHTML = `
+                    <h3 style="color: green;">✅ 所有测试通过！</h3>
+                    <p><strong>Health:</strong> ${JSON.stringify(healthData)}</p>
+                    <p><strong>Projects:</strong> ${JSON.stringify(projectsData)}</p>
+                    <p><strong>Tasks:</strong> ${JSON.stringify(tasksData)}</p>
+                `;
+            } catch (error) {
+                console.error('测试失败:', error);
+                result.innerHTML = `
+                    <h3 style="color: red;">❌ 测试失败</h3>
+                    <p><strong>错误:</strong> ${error.message}</p>
+                    <p><strong>详情:</strong> ${error.stack}</p>
+                `;
+            }
+        }
+        
+        // 页面加载时自动测试
+        window.onload = () => {
+            setTimeout(testBackend, 500);
+        };
+    </script>
+</body>
+</html>
+
+

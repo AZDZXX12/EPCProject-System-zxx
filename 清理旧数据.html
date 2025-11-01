@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清理旧数据 - EPC项目管理系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .warning h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .info h3 {
+            color: #0c5460;
+            margin-top: 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 清理旧数据</h1>
+        
+        <div class="warning">
+            <h3>⚠️ 问题说明</h3>
+            <p>如果您看到 <code>Task not found id=PROJ-1761296252178-TASK-1</code> 错误，说明系统中存在旧的项目数据（使用时间戳ID）。</p>
+            <p><strong>原因</strong>：之前的项目ID格式为 <code>PROJ-1761296252178</code>（时间戳），现已优化为 <code>PROJ-001</code>（递增ID）。</p>
+        </div>
+
+        <div class="info">
+            <h3>📋 清理内容</h3>
+            <p>此操作将清理以下数据：</p>
+            <ul>
+                <li>LocalStorage中的旧项目数据</li>
+                <li>LocalStorage中的旧甘特图任务</li>
+                <li>LocalStorage中的旧施工日志</li>
+                <li>浏览器缓存的项目列表</li>
+            </ul>
+            <p><strong>注意</strong>：清理后需要重新创建项目。</p>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-danger" onclick="clearAllData()">
+                🗑️ 清理所有旧数据
+            </button>
+            <button class="btn btn-success" onclick="clearOldProjects()">
+                🔄 只清理旧项目（保留新项目）
+            </button>
+            <button class="btn btn-primary" onclick="window.location.href='http://localhost:3001'">
+                🏠 返回系统
+            </button>
+        </div>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function clearAllData() {
+            if (!confirm('确定要清理所有数据吗？此操作不可恢复！')) {
+                return;
+            }
+
+            try {
+                // 清理所有LocalStorage数据
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && (
+                        key.includes('gantt_tasks_') ||
+                        key.includes('construction_logs_') ||
+                        key.includes('construction_phase_') ||
+                        key.includes('projects_cache') ||
+                        key.includes('PROJ-')
+                    )) {
+                        keysToRemove.push(key);
+                    }
+                }
+
+                keysToRemove.forEach(key => localStorage.removeItem(key));
+
+                showResult('success', `
+                    ✅ 清理完成！
+                    <br><br>
+                    已清理 ${keysToRemove.length} 项数据：
+                    <ul>
+                        ${keysToRemove.map(k => `<li><code>${k}</code></li>`).join('')}
+                    </ul>
+                    <br>
+                    <strong>下一步</strong>：点击"返回系统"按钮，刷新页面后重新创建项目。
+                `);
+            } catch (error) {
+                showResult('error', `❌ 清理失败：${error.message}`);
+            }
+        }
+
+        function clearOldProjects() {
+            if (!confirm('确定要清理旧项目吗？只会删除使用时间戳ID的旧项目。')) {
+                return;
+            }
+
+            try {
+                const keysToRemove = [];
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.match(/PROJ-\d{13}/)) { // 匹配时间戳ID（13位数字）
+                        keysToRemove.push(key);
+                    }
+                }
+
+                // 清理projects_cache中的旧项目
+                const cached = localStorage.getItem('projects_cache');
+                if (cached) {
+                    try {
+                        const projects = JSON.parse(cached);
+                        const newProjects = projects.filter(p => !p.id.match(/PROJ-\d{13}/));
+                        if (newProjects.length !== projects.length) {
+                            localStorage.setItem('projects_cache', JSON.stringify(newProjects));
+                            keysToRemove.push('projects_cache (已更新)');
+                        }
+                    } catch (e) {
+                        console.error('解析projects_cache失败:', e);
+                    }
+                }
+
+                keysToRemove.forEach(key => {
+                    if (!key.includes('已更新')) {
+                        localStorage.removeItem(key);
+                    }
+                });
+
+                if (keysToRemove.length === 0) {
+                    showResult('success', `
+                        ℹ️ 未发现旧项目数据
+                        <br><br>
+                        系统中没有使用时间戳ID的旧项目。
+                    `);
+                } else {
+                    showResult('success', `
+                        ✅ 清理完成！
+                        <br><br>
+                        已清理 ${keysToRemove.length} 项旧数据：
+                        <ul>
+                            ${keysToRemove.map(k => `<li><code>${k}</code></li>`).join('')}
+                        </ul>
+                        <br>
+                        <strong>下一步</strong>：点击"返回系统"按钮，刷新页面。
+                    `);
+                }
+            } catch (error) {
+                showResult('error', `❌ 清理失败：${error.message}`);
+            }
+        }
+
+        function showResult(type, message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result ${type}`;
+            resultDiv.innerHTML = message;
+            resultDiv.style.display = 'block';
+        }
+
+        // 页面加载时显示当前数据
+        window.onload = function() {
+            let oldProjectCount = 0;
+            let newProjectCount = 0;
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.match(/PROJ-\d{13}/)) {
+                    oldProjectCount++;
+                }
+                if (key && key.match(/PROJ-\d{3}/)) {
+                    newProjectCount++;
+                }
+            }
+
+            if (oldProjectCount > 0) {
+                showResult('error', `
+                    ⚠️ 检测到 ${oldProjectCount} 个旧项目数据（使用时间戳ID）
+                    <br>
+                    新项目数量：${newProjectCount}
+                    <br><br>
+                    <strong>建议</strong>：点击"只清理旧项目"按钮清理旧数据。
+                `);
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+

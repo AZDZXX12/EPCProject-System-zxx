@@ -1,0 +1,83 @@
+.equipment-selection-page {
+  padding: 32px;
+  background: #f5f7fa;
+  min-height: calc(100vh - 100px);
+}
+
+.page-header {
+  margin-bottom: 40px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.selection-tool-card {
+  height: 100%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+  position: relative;
+}
+
+.selection-tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  border-color: #1890ff;
+}
+
+.card-header {
+  position: relative;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fafafa;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #666;
+  transition: all 0.2s;
+}
+
+.feature-item:hover {
+  color: #1890ff;
+  transform: translateX(4px);
+}
+
+.feature-dot {
+  color: #1890ff;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .equipment-selection-page {
+    padding: 16px;
+  }
+
+  .page-header {
+    padding: 20px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+

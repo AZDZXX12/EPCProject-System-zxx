@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YJV电缆选型数据表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 25px 40px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .search-bar {
+            padding: 20px 40px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .search-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .table-wrapper {
+            padding: 20px 40px 40px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        th {
+            background: #34495e;
+            color: white;
+            padding: 12px 10px;
+            text-align: center;
+            font-weight: 600;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #fafbfc;
+        }
+        
+        tbody tr:nth-child(even):hover {
+            background: #f1f3f5;
+        }
+        
+        .section-header {
+            background: #3498db !important;
+            color: white !important;
+            font-weight: 600;
+            text-align: left;
+            padding: 15px 20px !important;
+        }
+        
+        .highlight {
+            background: #fff3cd !important;
+        }
+        
+        .stats {
+            padding: 15px 40px;
+            background: #e9ecef;
+            font-size: 13px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ YJV 0.6/1KV 交联聚乙烯绝缘聚氯乙烯护套电力电缆数据表</h1>
+            <p>数据来源：数据库.xlsx | 包含单芯、双芯、三芯、四芯、五芯等多种规格</p>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索电缆规格（如：3×10、4×25）...">
+        </div>
+        
+        <div class="stats" id="stats">
+            正在加载数据...
+        </div>
+        
+        <div class="table-wrapper">
+            <table id="cableTable">
+                <thead>
+                    <tr>
+                        <th>型号规格<br>mm²</th>
+                        <th>绝缘层厚度<br>mm</th>
+                        <th>护套层厚度<br>mm</th>
+                        <th>电缆近似外径<br>mm</th>
+                        <th>电缆近似重量<br>kg/km</th>
+                        <th>导体最大直流电阻<br>Ω/km</th>
+                        <th>试验电压<br>KV</th>
+                        <th>在空气中载流量<br>A</th>
+                        <th>直埋土壤中载流量<br>A</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="9" style="padding:40px;">正在加载数据...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="yjv_full_table.js"></script>
+    <script>
+        let allCables = [];
+        
+        function loadTable() {
+            if (typeof YJV_FULL_TABLE === 'undefined') {
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" style="padding:40px;color:red;">数据加载失败！</td></tr>';
+                return;
+            }
+            
+            allCables = YJV_FULL_TABLE;
+            renderTable(allCables);
+            updateStats(allCables.length, allCables.length);
+        }
+        
+        function renderTable(cables) {
+            const tbody = document.getElementById('tableBody');
+            
+            if (!cables || cables.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="padding:40px;">没有找到数据</td></tr>';
+                return;
+            }
+            
+            let currentSection = null;
+            let html = '';
+            
+            cables.forEach(cable => {
+                // 如果是新的分类，添加分类标题行
+                if (cable.section && cable.section !== currentSection) {
+                    currentSection = cable.section;
+                    html += `<tr><td colspan="9" class="section-header">${cable.section} 交联聚乙烯绝缘聚氯乙烯护套电力电缆</td></tr>`;
+                }
+                
+                html += `
+                    <tr>
+                        <td><strong>${cable.spec}</strong></td>
+                        <td>${cable.insulation || '-'}</td>
+                        <td>${cable.sheath || '-'}</td>
+                        <td>${cable.approx_outer_diameter || '-'}</td>
+                        <td>${cable.approx_weight || '-'}</td>
+                        <td>${cable.max_conductor_dc_resistance || '-'}</td>
+                        <td>${cable.test_voltage || '-'}</td>
+                        <td>${cable.rated_voltage || '-'}</td>
+                        <td>${cable.min_bending_radius || '-'}</td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+        
+        function updateStats(total, filtered) {
+            const statsEl = document.getElementById('stats');
+            if (total === filtered) {
+                statsEl.textContent = `共 ${total} 条电缆数据`;
+            } else {
+                statsEl.textContent = `显示 ${filtered} 条（共 ${total} 条）`;
+            }
+        }
+        
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const keyword = e.target.value.toLowerCase().trim();
+            
+            if (!keyword) {
+                renderTable(allCables);
+                updateStats(allCables.length, allCables.length);
+                return;
+            }
+            
+            const filtered = allCables.filter(cable => 
+                cable.spec.toLowerCase().includes(keyword) ||
+                (cable.section && cable.section.toLowerCase().includes(keyword))
+            );
+            
+            renderTable(filtered);
+            updateStats(allCables.length, filtered.length);
+        });
+        
+        // 页面加载时加载数据
+        window.addEventListener('DOMContentLoaded', loadTable);
+    </script>
+</body>
+</html>
+
+

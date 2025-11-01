@@ -1,0 +1,15 @@
+.system-management-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.ant-card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.ant-list-item-meta-avatar {
+  display: flex;
+  align-items: center;
+}
+
+

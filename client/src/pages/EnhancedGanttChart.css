@@ -1,0 +1,79 @@
+.enhanced-gantt-page {
+  padding: 24px;
+  background: linear-gradient(135deg, #0a0a1f 0%, #1a1a3f 50%, #0f0f2a 100%);
+  min-height: 100vh;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #00ff88, #00bfff, #ff00ff, #00ff88);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 4s ease infinite;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-icon {
+  animation: rotate 3s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradientFlow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.log-panel {
+  height: calc(100vh - 200px);
+}
+
+.log-scroll {
+  height: calc(100% - 60px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.log-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.log-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.log-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 136, 0.3);
+  border-radius: 3px;
+}
+
+.log-entry {
+  transition: all 0.3s ease;
+}
+
+.log-time {
+  font-family: 'Courier New', monospace;
+  color: #00bfff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+

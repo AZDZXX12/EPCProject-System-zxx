@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Word文档编辑器 - 设备参数选型系统</title>
+	
+	<!-- Tiptap核心库 - 使用国内CDN镜像 -->
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/core@2.1.13/dist/tiptap-core.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/starter-kit@2.1.13/dist/tiptap-starter-kit.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-text-style@2.1.13/dist/tiptap-extension-text-style.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-color@2.1.13/dist/tiptap-extension-color.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-text-align@2.1.13/dist/tiptap-extension-text-align.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-table@2.1.13/dist/tiptap-extension-table.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-table-row@2.1.13/dist/tiptap-extension-table-row.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-table-cell@2.1.13/dist/tiptap-extension-table-cell.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-table-header@2.1.13/dist/tiptap-extension-table-header.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-image@2.1.13/dist/tiptap-extension-image.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-link@2.1.13/dist/tiptap-extension-link.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-underline@2.1.13/dist/tiptap-extension-underline.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-font-family@2.1.13/dist/tiptap-extension-font-family.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-highlight@2.1.13/dist/tiptap-extension-highlight.umd.min.js"></script>
+	
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: 'Microsoft YaHei', '微软雅黑', 'SimSun', '宋体', sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+		}
+		
+		/* 顶部工具栏 */
+		.top-toolbar {
+			background: white;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+			padding: 12px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			z-index: 1000;
+		}
+		
+		.top-toolbar-left {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+		}
+		
+		.top-toolbar-right {
+			display: flex;
+			gap: 10px;
+		}
+		
+		.logo {
+			font-size: 18px;
+			font-weight: bold;
+			color: #667eea;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+		
+		.btn {
+			padding: 8px 16px;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: 500;
+			transition: all 0.3s;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+		
+		.btn-primary {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+		}
+		
+		.btn-primary:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+		}
+		
+		.btn-secondary {
+			background: #f5f5f5;
+			color: #333;
+		}
+		
+		.btn-secondary:hover {
+			background: #e0e0e0;
+		}
+		
+		.btn-danger {
+			background: #ff4444;
+			color: white;
+		}
+		
+		.btn-danger:hover {
+			background: #cc0000;
+		}
+		
+		/* 编辑器容器 */
+		.editor-container {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			padding: 20px;
+			overflow: auto;
+		}
+		
+		.editor-wrapper {
+			max-width: 900px;
+			margin: 0 auto;
+			width: 100%;
+			background: white;
+			border-radius: 12px;
+			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+			overflow: hidden;
+		}
+		
+		/* Tiptap工具栏 */
+		.tiptap-toolbar {
+			background: #f8f9fa;
+			border-bottom: 2px solid #e9ecef;
+			padding: 12px;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			align-items: center;
+		}
+		
+		.toolbar-group {
+			display: flex;
+			gap: 4px;
+			padding: 4px;
+			border-radius: 6px;
+			background: white;
+		}
+		
+		.toolbar-btn {
+			padding: 6px 10px;
+			border: 1px solid #dee2e6;
+			border-radius: 4px;
+			background: white;
+			cursor: pointer;
+			font-size: 14px;
+			transition: all 0.2s;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 32px;
+			height: 32px;
+		}
+		
+		.toolbar-btn:hover {
+			background: #e7f3ff;
+			border-color: #667eea;
+			color: #667eea;
+		}
+		
+		.toolbar-btn.is-active {
+			background: #667eea;
+			color: white;
+			border-color: #667eea;
+		}
+		
+		.toolbar-select {
+			padding: 6px 10px;
+			border: 1px solid #dee2e6;
+			border-radius: 4px;
+			background: white;
+			cursor: pointer;
+			font-size: 14px;
+			min-width: 120px;
+		}
+		
+		.toolbar-select:focus {
+			outline: none;
+			border-color: #667eea;
+		}
+		
+		.toolbar-separator {
+			width: 1px;
+			height: 24px;
+			background: #dee2e6;
+			margin: 0 4px;
+		}
+		
+		/* Tiptap编辑区 */
+		.tiptap-editor {
+			min-height: 600px;
+			padding: 60px 80px;
+			font-size: 14px;
+			line-height: 1.8;
+			color: #333;
+		}
+		
+		.tiptap-editor:focus {
+			outline: none;
+		}
+		
+		/* 编辑器内容样式 */
+		.tiptap-editor h1 {
+			font-size: 32px;
+			font-weight: bold;
+			margin: 24px 0 16px 0;
+			color: #1a1a1a;
+		}
+		
+		.tiptap-editor h2 {
+			font-size: 28px;
+			font-weight: bold;
+			margin: 20px 0 14px 0;
+			color: #1a1a1a;
+		}
+		
+		.tiptap-editor h3 {
+			font-size: 24px;
+			font-weight: bold;
+			margin: 18px 0 12px 0;
+			color: #1a1a1a;
+		}
+		
+		.tiptap-editor h4 {
+			font-size: 20px;
+			font-weight: bold;
+			margin: 16px 0 10px 0;
+			color: #1a1a1a;
+		}
+		
+		.tiptap-editor p {
+			margin: 12px 0;
+		}
+		
+		.tiptap-editor ul,
+		.tiptap-editor ol {
+			padding-left: 30px;
+			margin: 12px 0;
+		}
+		
+		.tiptap-editor li {
+			margin: 6px 0;
+		}
+		
+		.tiptap-editor blockquote {
+			border-left: 4px solid #667eea;
+			padding-left: 20px;
+			margin: 20px 0;
+			color: #666;
+			font-style: italic;
+		}
+		
+		.tiptap-editor code {
+			background: #f5f5f5;
+			padding: 2px 6px;
+			border-radius: 3px;
+			font-family: 'Courier New', monospace;
+			font-size: 0.9em;
+		}
+		
+		.tiptap-editor pre {
+			background: #2d2d2d;
+			color: #f8f8f2;
+			padding: 16px;
+			border-radius: 6px;
+			overflow-x: auto;
+			margin: 16px 0;
+		}
+		
+		.tiptap-editor pre code {
+			background: transparent;
+			color: inherit;
+			padding: 0;
+		}
+		
+		.tiptap-editor table {
+			border-collapse: collapse;
+			width: 100%;
+			margin: 20px 0;
+		}
+		
+		.tiptap-editor table td,
+		.tiptap-editor table th {
+			border: 1px solid #dee2e6;
+			padding: 10px 14px;
+			text-align: left;
+		}
+		
+		.tiptap-editor table th {
+			background: #f8f9fa;
+			font-weight: bold;
+		}
+		
+		.tiptap-editor img {
+			max-width: 100%;
+			height: auto;
+			display: block;
+			margin: 20px auto;
+			border-radius: 6px;
+		}
+		
+		.tiptap-editor a {
+			color: #667eea;
+			text-decoration: underline;
+		}
+		
+		.tiptap-editor a:hover {
+			color: #764ba2;
+		}
+		
+		.tiptap-editor hr {
+			border: none;
+			border-top: 2px solid #e9ecef;
+			margin: 24px 0;
+		}
+		
+		.tiptap-editor mark {
+			background: #fff3cd;
+			padding: 2px 4px;
+			border-radius: 2px;
+		}
+		
+		/* 打印样式 */
+		@media print {
+			.top-toolbar {
+				display: none;
+			}
+			
+			.editor-container {
+				padding: 0;
+			}
+			
+			.editor-wrapper {
+				box-shadow: none;
+				max-width: 100%;
+			}
+			
+			.tiptap-toolbar {
+				display: none;
+			}
+		}
+		
+		/* 响应式 */
+		@media (max-width: 768px) {
+			.tiptap-editor {
+				padding: 40px 20px;
+			}
+			
+			.toolbar-group {
+				gap: 2px;
+			}
+			
+			.toolbar-btn {
+				min-width: 28px;
+				height: 28px;
+				font-size: 12px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- 顶部工具栏 -->
+	<div class="top-toolbar">
+		<div class="top-toolbar-left">
+			<div class="logo">
+				📝 Word文档编辑器
+			</div>
+			<button class="btn btn-secondary" onclick="window.location.href='index.html'">
+				← 返回选型表
+			</button>
+		</div>
+		<div class="top-toolbar-right">
+			<button class="btn btn-primary" id="saveBtn">💾 保存</button>
+			<button class="btn btn-secondary" id="exportPdfBtn">📄 导出PDF</button>
+			<button class="btn btn-secondary" id="exportHtmlBtn">🌐 导出HTML</button>
+			<button class="btn btn-danger" id="clearBtn">🗑️ 清空</button>
+		</div>
+	</div>
+	
+	<!-- 编辑器容器 -->
+	<div class="editor-container">
+		<div class="editor-wrapper">
+			<!-- Tiptap工具栏 -->
+			<div class="tiptap-toolbar" id="toolbar">
+				<!-- 工具栏将由JavaScript动态生成 -->
+			</div>
+			
+			<!-- Tiptap编辑区 -->
+			<div class="tiptap-editor" id="editor"></div>
+		</div>
+	</div>
+	
+	<script>
+		console.log('📝 Word编辑器页面加载中...');
+		
+		// 等待所有Tiptap库加载完成
+		function waitForTiptap() {
+			return new Promise((resolve) => {
+				const checkLibs = () => {
+					if (window.TiptapCore && 
+						window.TiptapStarterKit && 
+						window.TiptapTextStyle && 
+						window.TiptapColor && 
+						window.TiptapTextAlign && 
+						window.TiptapTable && 
+						window.TiptapTableRow && 
+						window.TiptapTableCell && 
+						window.TiptapTableHeader && 
+						window.TiptapImage && 
+						window.TiptapLink && 
+						window.TiptapUnderline && 
+						window.TiptapFontFamily &&
+						window.TiptapHighlight) {
+						resolve();
+					} else {
+						setTimeout(checkLibs, 100);
+					}
+				};
+				checkLibs();
+			});
+		}
+		
+		// 初始化编辑器
+		async function initEditor() {
+			console.log('⏳ 等待Tiptap库加载...');
+			await waitForTiptap();
+			console.log('✅ Tiptap库加载完成');
+			
+			// 创建编辑器实例
+			const editor = new TiptapCore.Editor({
+				element: document.querySelector('#editor'),
+				extensions: [
+					TiptapStarterKit.StarterKit.configure({
+						heading: {
+							levels: [1, 2, 3, 4, 5, 6]
+						}
+					}),
+					TiptapTextStyle.TextStyle,
+					TiptapColor.Color,
+					TiptapTextAlign.TextAlign.configure({
+						types: ['heading', 'paragraph']
+					}),
+					TiptapTable.Table.configure({
+						resizable: true,
+						HTMLAttributes: {
+							style: 'border-collapse: collapse; width: 100%;'
+						}
+					}),
+					TiptapTableRow.TableRow,
+					TiptapTableCell.TableCell,
+					TiptapTableHeader.TableHeader,
+					TiptapImage.Image,
+					TiptapLink.Link.configure({
+						openOnClick: false,
+						HTMLAttributes: {
+							class: 'editor-link'
+						}
+					}),
+					TiptapUnderline.Underline,
+					TiptapFontFamily.FontFamily,
+					TiptapHighlight.Highlight.configure({
+						multicolor: true
+					})
+				],
+				content: '',
+				editorProps: {
+					attributes: {
+						class: 'tiptap-editor'
+					}
+				},
+				onUpdate: ({ editor }) => {
+					// 自动保存
+					clearTimeout(window.autoSaveTimer);
+					window.autoSaveTimer = setTimeout(() => {
+						const html = editor.getHTML();
+						localStorage.setItem('wordEditorContent', html);
+						console.log('💾 内容已自动保存');
+					}, 3000);
+				}
+			});
+			
+			window.editor = editor;
+			console.log('✅ 编辑器实例创建成功');
+			
+			// 创建工具栏
+			createToolbar(editor);
+			
+			// 加载保存的内容
+			loadContent(editor);
+			
+			// 绑定按钮事件
+			bindButtons(editor);
+		}
+		
+		// 创建工具栏
+		function createToolbar(editor) {
+			const toolbar = document.getElementById('toolbar');
+			
+			toolbar.innerHTML = `
+				<!-- 文本格式组 -->
+				<div class="toolbar-group">
+					<select id="headingSelect" class="toolbar-select" title="标题">
+						<option value="">正文</option>
+						<option value="1">标题 1</option>
+						<option value="2">标题 2</option>
+						<option value="3">标题 3</option>
+						<option value="4">标题 4</option>
+						<option value="5">标题 5</option>
+						<option value="6">标题 6</option>
+					</select>
+					
+					<select id="fontSelect" class="toolbar-select" title="字体">
+						<option value="">默认字体</option>
+						<option value="SimSun">宋体</option>
+						<option value="SimHei">黑体</option>
+						<option value="Microsoft YaHei">微软雅黑</option>
+						<option value="KaiTi">楷体</option>
+						<option value="FangSong">仿宋</option>
+						<option value="Arial">Arial</option>
+						<option value="Times New Roman">Times New Roman</option>
+					</select>
+				</div>
+				
+				<div class="toolbar-separator"></div>
+				
+				<!-- 文本样式组 -->
+				<div class="toolbar-group">
+					<button class="toolbar-btn" data-action="bold" title="粗体 (Ctrl+B)"><b>B</b></button>
+					<button class="toolbar-btn" data-action="italic" title="斜体 (Ctrl+I)"><i>I</i></button>
+					<button class="toolbar-btn" data-action="underline" title="下划线 (Ctrl+U)"><u>U</u></button>
+					<button class="toolbar-btn" data-action="strike" title="删除线"><s>S</s></button>
+					<button class="toolbar-btn" data-action="highlight" title="高亮">🖍</button>
+				</div>
+				
+				<div class="toolbar-separator"></div>
+				
+				<!-- 对齐组 -->
+				<div class="toolbar-group">
+					<button class="toolbar-btn" data-action="alignLeft" title="左对齐">⬅️</button>
+					<button class="toolbar-btn" data-action="alignCenter" title="居中">⬆️</button>
+					<button class="toolbar-btn" data-action="alignRight" title="右对齐">➡️</button>
+					<button class="toolbar-btn" data-action="alignJustify" title="两端对齐">↔️</button>
+				</div>
+				
+				<div class="toolbar-separator"></div>
+				
+				<!-- 列表组 -->
+				<div class="toolbar-group">
+					<button class="toolbar-btn" data-action="bulletList" title="无序列表">• 列表</button>
+					<button class="toolbar-btn" data-action="orderedList" title="有序列表">1. 列表</button>
+				</div>
+				
+				<div class="toolbar-separator"></div>
+				
+				<!-- 插入组 -->
+				<div class="toolbar-group">
+					<button class="toolbar-btn" data-action="blockquote" title="引用">❝</button>
+					<button class="toolbar-btn" data-action="codeBlock" title="代码块">&lt;/&gt;</button>
+					<button class="toolbar-btn" data-action="horizontalRule" title="分隔线">───</button>
+				</div>
+				
+				<div class="toolbar-separator"></div>
+				
+				<!-- 表格和媒体组 -->
+				<div class="toolbar-group">
+					<button class="toolbar-btn" data-action="insertTable" title="插入表格 (3x3)">📊</button>
+					<button class="toolbar-btn" data-action="link" title="插入链接">🔗</button>
+					<button class="toolbar-btn" data-action="image" title="插入图片">🖼️</button>
+				</div>
+				
+				<div class="toolbar-separator"></div>
+				
+				<!-- 撤销重做组 -->
+				<div class="toolbar-group">
+					<button class="toolbar-btn" data-action="undo" title="撤销 (Ctrl+Z)">↶</button>
+					<button class="toolbar-btn" data-action="redo" title="重做 (Ctrl+Y)">↷</button>
+				</div>
+			`;
+			
+			// 绑定工具栏事件
+			bindToolbarEvents(editor);
+		}
+		
+		// 绑定工具栏事件
+		function bindToolbarEvents(editor) {
+			// 标题选择
+			document.getElementById('headingSelect').addEventListener('change', (e) => {
+				const level = e.target.value;
+				if (level === '') {
+					editor.chain().focus().setParagraph().run();
+				} else {
+					editor.chain().focus().toggleHeading({ level: parseInt(level) }).run();
+				}
+			});
+			
+			// 字体选择
+			document.getElementById('fontSelect').addEventListener('change', (e) => {
+				const font = e.target.value;
+				if (font) {
+					editor.chain().focus().setFontFamily(font).run();
+				} else {
+					editor.chain().focus().unsetFontFamily().run();
+				}
+			});
+			
+			// 工具按钮
+			document.querySelectorAll('.toolbar-btn[data-action]').forEach(btn => {
+				btn.addEventListener('click', () => {
+					const action = btn.getAttribute('data-action');
+					handleAction(editor, action);
+					updateToolbarState(editor);
+				});
+			});
+			
+			// 监听编辑器状态变化，更新工具栏
+			editor.on('selectionUpdate', () => updateToolbarState(editor));
+			editor.on('transaction', () => updateToolbarState(editor));
+		}
+		
+		// 处理工具栏操作
+		function handleAction(editor, action) {
+			switch(action) {
+				case 'bold':
+					editor.chain().focus().toggleBold().run();
+					break;
+				case 'italic':
+					editor.chain().focus().toggleItalic().run();
+					break;
+				case 'underline':
+					editor.chain().focus().toggleUnderline().run();
+					break;
+				case 'strike':
+					editor.chain().focus().toggleStrike().run();
+					break;
+				case 'highlight':
+					editor.chain().focus().toggleHighlight({ color: '#fff3cd' }).run();
+					break;
+				case 'alignLeft':
+					editor.chain().focus().setTextAlign('left').run();
+					break;
+				case 'alignCenter':
+					editor.chain().focus().setTextAlign('center').run();
+					break;
+				case 'alignRight':
+					editor.chain().focus().setTextAlign('right').run();
+					break;
+				case 'alignJustify':
+					editor.chain().focus().setTextAlign('justify').run();
+					break;
+				case 'bulletList':
+					editor.chain().focus().toggleBulletList().run();
+					break;
+				case 'orderedList':
+					editor.chain().focus().toggleOrderedList().run();
+					break;
+				case 'blockquote':
+					editor.chain().focus().toggleBlockquote().run();
+					break;
+				case 'codeBlock':
+					editor.chain().focus().toggleCodeBlock().run();
+					break;
+				case 'horizontalRule':
+					editor.chain().focus().setHorizontalRule().run();
+					break;
+				case 'insertTable':
+					editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+					break;
+				case 'link':
+					const url = prompt('输入链接URL:');
+					if (url) {
+						editor.chain().focus().setLink({ href: url }).run();
+					}
+					break;
+				case 'image':
+					const imgUrl = prompt('输入图片URL:');
+					if (imgUrl) {
+						editor.chain().focus().setImage({ src: imgUrl }).run();
+					}
+					break;
+				case 'undo':
+					editor.chain().focus().undo().run();
+					break;
+				case 'redo':
+					editor.chain().focus().redo().run();
+					break;
+			}
+		}
+		
+		// 更新工具栏状态
+		function updateToolbarState(editor) {
+			document.querySelectorAll('.toolbar-btn[data-action]').forEach(btn => {
+				const action = btn.getAttribute('data-action');
+				const isActive = checkActive(editor, action);
+				btn.classList.toggle('is-active', isActive);
+			});
+		}
+		
+		// 检查按钮是否激活
+		function checkActive(editor, action) {
+			switch(action) {
+				case 'bold': return editor.isActive('bold');
+				case 'italic': return editor.isActive('italic');
+				case 'underline': return editor.isActive('underline');
+				case 'strike': return editor.isActive('strike');
+				case 'highlight': return editor.isActive('highlight');
+				case 'bulletList': return editor.isActive('bulletList');
+				case 'orderedList': return editor.isActive('orderedList');
+				case 'blockquote': return editor.isActive('blockquote');
+				case 'codeBlock': return editor.isActive('codeBlock');
+				case 'alignLeft': return editor.isActive({ textAlign: 'left' });
+				case 'alignCenter': return editor.isActive({ textAlign: 'center' });
+				case 'alignRight': return editor.isActive({ textAlign: 'right' });
+				case 'alignJustify': return editor.isActive({ textAlign: 'justify' });
+				default: return false;
+			}
+		}
+		
+		// 加载内容
+		function loadContent(editor) {
+			const savedContent = localStorage.getItem('wordEditorContent');
+			if (savedContent) {
+				editor.commands.setContent(savedContent);
+				console.log('📂 已加载保存的内容');
+			} else {
+				// 设置默认内容
+				const defaultHTML = `
+					<h1 style="text-align: center;">设备参数选型文档</h1>
+					<p style="text-align: center;"><em>Device Parameter Selection Document</em></p>
+					<hr>
+					<h2>项目概述</h2>
+					<p>在此输入项目的基本信息和概述...</p>
+					<h2>设备清单</h2>
+					<p>在此输入设备清单内容...</p>
+					<p><mark>提示：点击工具栏的"📊"按钮可以插入表格，您也可以从选型表页面导入数据</mark></p>
+					<h2>技术参数说明</h2>
+					<p>在此输入详细的技术参数说明...</p>
+				`;
+				editor.commands.setContent(defaultHTML);
+			}
+		}
+		
+		// 绑定按钮事件
+		function bindButtons(editor) {
+			// 保存按钮
+			document.getElementById('saveBtn').addEventListener('click', () => {
+				const html = editor.getHTML();
+				localStorage.setItem('wordEditorContent', html);
+				alert('✅ 文档已保存到本地！');
+				console.log('💾 文档已保存');
+			});
+			
+			// 导出PDF按钮（通过打印）
+			document.getElementById('exportPdfBtn').addEventListener('click', () => {
+				window.print();
+				console.log('📄 打开打印对话框');
+			});
+			
+			// 导出HTML按钮
+			document.getElementById('exportHtmlBtn').addEventListener('click', () => {
+				const content = editor.getHTML();
+				const blob = new Blob([`
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>设备参数选型文档</title>
+	<style>
+		body {
+			font-family: 'Microsoft YaHei', '微软雅黑', 'SimSun', '宋体', sans-serif;
+			font-size: 14px;
+			line-height: 1.8;
+			padding: 60px 80px;
+			max-width: 900px;
+			margin: 0 auto;
+			color: #333;
+		}
+		h1, h2, h3, h4, h5, h6 {
+			font-weight: bold;
+			color: #1a1a1a;
+		}
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			margin: 20px 0;
+		}
+		table td, table th {
+			border: 1px solid #dee2e6;
+			padding: 10px 14px;
+		}
+		table th {
+			background: #f8f9fa;
+			font-weight: bold;
+		}
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+		code {
+			background: #f5f5f5;
+			padding: 2px 6px;
+			border-radius: 3px;
+			font-family: 'Courier New', monospace;
+		}
+		pre {
+			background: #2d2d2d;
+			color: #f8f8f2;
+			padding: 16px;
+			border-radius: 6px;
+			overflow-x: auto;
+		}
+		blockquote {
+			border-left: 4px solid #667eea;
+			padding-left: 20px;
+			color: #666;
+			font-style: italic;
+		}
+	</style>
+</head>
+<body>
+${content}
+</body>
+</html>
+				`], { type: 'text/html;charset=utf-8' });
+				
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = `设备选型文档_${new Date().toISOString().slice(0, 10)}.html`;
+				a.click();
+				URL.revokeObjectURL(url);
+				
+				alert('✅ HTML文件已导出！');
+				console.log('🌐 HTML文件已导出');
+			});
+			
+			// 清空按钮
+			document.getElementById('clearBtn').addEventListener('click', () => {
+				if (confirm('确定要清空所有内容吗？此操作不可撤销。')) {
+					editor.commands.setContent('');
+					localStorage.removeItem('wordEditorContent');
+					alert('✅ 内容已清空！');
+					console.log('🗑️ 内容已清空');
+				}
+			});
+		}
+		
+		// 启动编辑器
+		initEditor();
+	</script>
+	
+	<!-- 版权信息 -->
+	<div style="position: fixed; bottom: 10px; right: 15px; font-size: 10px; color: white; background: rgba(0,0,0,0.3); padding: 6px 12px; border-radius: 4px; z-index: 100;">
+		Word编辑器 v1.0 | © 2025 ZXX
+	</div>
+</body>
+</html>
+

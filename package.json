@@ -1,0 +1,70 @@
+{
+  "name": "chemical-project-management-desktop",
+  "version": "1.0.0",
+  "description": "化工项目管理系统 - 桌面版",
+  "main": "main.js",
+  "author": "Your Name",
+  "license": "MIT",
+  "homepage": ".",
+  "scripts": {
+    "start": "electron .",
+    "electron": "electron .",
+    "electron-dev": "cross-env NODE_ENV=development electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "client": "cd client && npm start",
+    "server": "cd server && venv\\Scripts\\activate && python -m uvicorn main:app --reload"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "electron": "^22.3.27",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "dayjs": "^1.9.6",
+    "escape-html": "^1.0.3"
+  },
+  "build": {
+    "appId": "com.chemical.project.management",
+    "productName": "化工项目管理系统",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "client/public/**/*",
+      "main.js",
+      "preload.js",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "化工项目管理系统",
+      "deleteAppDataOnUninstall": true
+    },
+    "extraResources": [
+      {
+        "from": "client/public",
+        "to": "client/public",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
+  }
+}

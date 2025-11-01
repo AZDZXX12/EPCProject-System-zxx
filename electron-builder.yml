@@ -1,0 +1,49 @@
+appId: com.luckysheet.desktop
+productName: Luckysheet选型系统
+copyright: Copyright © 2025
+directories:
+  output: release
+  buildResources: build
+files:
+  - dist/**/*
+  - main.js
+  - preload.js
+  - package.json
+  - node_modules/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - ia32
+  icon: dist/css/paint_32px.ico
+  artifactName: ${productName}-${version}-${arch}.${ext}
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  perMachine: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Luckysheet选型系统
+  installerLanguages:
+    - zh_CN
+  language: 2052
+mac:
+  target:
+    - dmg
+    - zip
+  icon: dist/css/paint_32px.ico
+  category: public.app-category.productivity
+  artifactName: ${productName}-${version}-${arch}.${ext}
+dmg:
+  title: ${productName} ${version}
+  icon: dist/css/paint_32px.ico
+linux:
+  target:
+    - AppImage
+    - deb
+    - rpm
+  icon: dist/css/paint_32px.ico
+  category: Office
+  artifactName: ${productName}-${version}-${arch}.${ext}
+

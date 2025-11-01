@@ -1,0 +1,1082 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="renderer" content="webkit" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>设备参数选型系统</title>
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+
+	<link rel='stylesheet' href='./plugins/css/pluginsCss.css' />
+	<link rel='stylesheet' href='./plugins/plugins.css' />
+	<link rel='stylesheet' href='./css/luckysheet.css' />
+	<link rel='stylesheet' href='./assets/iconfont/iconfont.css' />
+	
+	<!-- 应用样式 -->
+	<link rel='stylesheet' href='./css/app.css' />
+	
+	<!-- 动画样式 -->
+	<style>
+		@keyframes slideIn {
+			from { transform: translateX(400px); opacity: 0; }
+			to { transform: translateX(0); opacity: 1; }
+		}
+		@keyframes fadeOut {
+			from { opacity: 1; }
+			to { opacity: 0; }
+		}
+		
+		/* Luckysheet工具栏样式增强 - 增大图标和字体 */
+		.luckysheet-wa-editor .luckysheet-toolbar-button {
+			font-size: 15px !important;
+			padding: 6px 8px !important;
+		}
+		
+		.luckysheet-wa-editor .luckysheet-toolbar-button-split-left {
+			font-size: 15px !important;
+			padding: 6px 8px !important;
+		}
+		
+		.luckysheet-wa-editor .luckysheet-toolbar-select,
+		.luckysheet-wa-editor .luckysheet-toolbar-combo-button {
+			font-size: 14px !important;
+			height: 28px !important;
+			line-height: 28px !important;
+		}
+		
+		.luckysheet-wa-editor .luckysheet-icon {
+			font-size: 16px !important;
+		}
+		
+		/* 工具栏整体高度调整 */
+		#luckysheet-wa-editor {
+			min-height: 40px !important;
+		}
+		
+		.luckysheet-wa-editor {
+			padding: 5px 8px !important;
+		}
+	</style>
+	
+	<!-- jQuery 和依赖库 -->
+	<script>
+		window.module = undefined;
+		window.exports = undefined;
+	</script>
+	<script src="./plugins/js/plugin.js"></script>
+	<script>
+		if (typeof jQuery !== 'undefined') {
+			window.jQuery = jQuery;
+			window.$ = jQuery;
+			console.log('✅ jQuery 已注册到全局:', jQuery.fn.jquery);
+		} else {
+			console.error('❌ jQuery 未定义！');
+		}
+	</script>
+	
+	<!-- Luckysheet 核心 -->
+	<script src="./luckysheet.umd.js"></script>
+	<script>
+		console.log('✅ 所有核心库加载完成');
+		if (typeof $ !== 'undefined') {
+			console.log('✅ jQuery 版本:', $.fn.jquery);
+		}
+		window.luckysheetLoaded = true;
+	</script>
+	
+	<!-- ExcelJS（可选） -->
+	<script>
+		(function() {
+			const script = document.createElement('script');
+			script.src = './libs/exceljs.min.js';
+			script.onload = function() {
+				console.log('✅ ExcelJS 加载成功');
+				window.excelJSLoaded = true;
+			};
+			script.onerror = function() {
+				console.warn('⚠️ ExcelJS未安装');
+				window.excelJSLoaded = false;
+			};
+			document.head.appendChild(script);
+		})();
+	</script>
+	
+	<!-- LuckyExcel - Excel导入导出库，保留样式和格式 -->
+	<script src="./libs/luckyexcel.js" onload="console.log('✅ LuckyExcel 加载成功！'); window.luckyExcelLoaded = true;" onerror="console.warn('⚠️ LuckyExcel 未找到，将使用基础XLSX解析'); window.luckyExcelLoaded = false;"></script>
+	
+	<!-- XLSX 库异步加载 - 使用CDN -->
+	<script>
+		(function() {
+			const script = document.createElement('script');
+			script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+			script.onload = function() {
+				console.log('✅ XLSX 加载成功（CDN）');
+				window.xlsxLoaded = true;
+			};
+			script.onerror = function() {
+				console.error('❌ XLSX 加载失败（CDN连接失败）');
+				window.xlsxLoaded = false;
+			};
+			document.head.appendChild(script);
+		})();
+	</script>
+	
+	<script>
+		// 定义空的 LuckyExcel 对象，避免报错
+		window.LuckyExcel = {
+			transformExcelToLucky: function(file, callback) {
+				console.warn('⚠️ LuckyExcel 不可用，使用基础 XLSX 解析');
+				// 直接调用原有的 loadExcelFile 函数
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					try {
+					// 检查 XLSX 是否加载
+					if (typeof XLSX === 'undefined') {
+						console.error('❌ XLSX 库未加载，请等待或刷新页面');
+						return;
+					}
+						const data = new Uint8Array(e.target.result);
+						const workbook = XLSX.read(data, {type: 'array'});
+						const sheetName = workbook.SheetNames[0];
+						const worksheet = workbook.Sheets[sheetName];
+						const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+						
+						// ========== 🔍 识别Excel版本（回退方案也要识别）==========
+						console.log('🔍 开始识别Excel文件版本（基础XLSX解析）...');
+						let hasDeviceNumber = false;
+						// 检查第4-5行（索引3-4）的B列
+						if (jsonData.length > 3) {
+							const row3 = jsonData[3] || [];
+							const row4 = jsonData[4] || [];
+							// 去除所有空格后再判断
+							const b3 = String(row3[1] || '').replace(/\s+/g, '');
+							const b4 = String(row4[1] || '').replace(/\s+/g, '');
+							const b3Original = String(row3[1] || '').trim();
+							const b4Original = String(row4[1] || '').trim();
+							console.log(`  📋 第4行B列: "${b3Original}" (去空格后: "${b3}")`);
+							console.log(`  📋 第5行B列: "${b4Original}" (去空格后: "${b4}")`);
+							// 去除空格后检查，更准确
+							if (b3.includes('设备位号') || b3.includes('位号') || b4.includes('设备位号') || b4.includes('位号')) {
+								hasDeviceNumber = true;
+							}
+						}
+						const isSimplified = !hasDeviceNumber;
+						const version = isSimplified ? '简化版' : '完整版';
+						console.log(`✅ 识别结果: ${version}`);
+						console.log(`  - 是否有设备位号列: ${hasDeviceNumber ? '是' : '否'}`);
+						const versionInfo = { isSimplified, version, expectedColumns: isSimplified ? 14 : 16 };
+						
+						// 裁剪数据：从第5行到"安装费"行之前（表头表尾之间）
+						let endRow = jsonData.length;
+						for (let i = 4; i < jsonData.length; i++) {
+							const row = jsonData[i];
+							if (row && row.some(cell => cell && cell.toString().includes('安装费'))) {
+								endRow = i;
+								break;
+							}
+						}
+						const startRow = 5; // 从第6行开始（包含第6行）
+						const filteredData = jsonData.slice(startRow, endRow);
+						
+						// 转换为Luckysheet celldata格式
+						const celldata = [];
+						const dynamicRowlen = {}; // 动态行高配置
+						const dynamicColumnlen = {}; // 动态列宽配置
+						
+						// 智能计算行高：根据内容和列宽估算
+						filteredData.forEach((row, r) => {
+							let maxRowHeight = 25; // 最小行高25px
+							
+							row.forEach((cell, c) => {
+                                // 跳过A列（序号列）读取，由程序生成
+                                if (c === 0) return;
+								
+								// 读取原始列宽
+								const originalColWidth = worksheet['!cols'] && worksheet['!cols'][c] ? worksheet['!cols'][c].wpx : null;
+								if (originalColWidth && !dynamicColumnlen[c]) {
+									dynamicColumnlen[c] = originalColWidth;
+								}
+								
+								// 根据单元格内容和列宽估算所需行高
+								if (cell !== undefined && cell !== null && cell !== '') {
+									const cellText = String(cell);
+									const textLength = cellText.length;
+									
+									// 获取该列宽度（默认值）
+									const colWidth = dynamicColumnlen[c] || (c === 4 ? 200 : c === 2 ? 140 : 80);
+									
+									// 估算每行能容纳的字符数（中文字符约10px宽）
+									const charsPerLine = Math.floor(colWidth / 10);
+									
+									// 计算需要的行数
+									const linesNeeded = Math.ceil(textLength / charsPerLine);
+									
+									// 每行约20px高度，加上8px的padding
+									const estimatedHeight = Math.max(25, linesNeeded * 20 + 8);
+									
+									maxRowHeight = Math.max(maxRowHeight, estimatedHeight);
+									
+									celldata.push({
+										r: r + startRow, // 数据从第6行开始（索引5）
+										c: c,
+										v: {
+											v: cell,
+											m: cell.toString(),
+											ct: {fa: "General", t: "g"},
+											ff: "SimSun", // 宋体
+											fs: 10, // 数据字体10号
+											ht: (c === 4) ? 1 : 0, // E列左对齐，其他居中
+											vt: 0, // 垂直居中
+											tb: 2 // 自动换行
+										}
+									});
+								}
+							});
+							
+							// 设置该行的行高，最大不超过150px（避免过高）
+							dynamicRowlen[startRow + r] = Math.min(maxRowHeight, 150);
+						});
+						
+						// 重新创建完整的 Luckysheet 实例，保留表头表尾
+						luckysheet.destroy();
+						// 减少延迟，提升加载速度
+						setTimeout(() => {
+							// 根据版本创建对应的表头表尾数据
+							const headerData = versionInfo.isSimplified ? createSimplifiedTableHeader() : createTableHeader();
+							console.log(`📋 使用${versionInfo.version}表头模板`);
+							const allCelldata = [];
+							
+							// 计算表尾位置：表头(5行) + 加载数据行数，表尾紧接数据
+							const dataRowCount = filteredData.length;
+							const footerStartRow = 5 + dataRowCount; // 表尾开始行（数据从第5行开始，表尾紧接数据后）
+							console.log(`🔍 调试信息: 数据行数=${dataRowCount}, 表尾开始行=${footerStartRow}`);
+							
+							// 重新计算表头表尾位置
+							const adjustedHeaderData = [];
+							
+							// 添加表头数据（前5行保持不变）
+							for (let r = 0; r < 5; r++) {
+								adjustedHeaderData[r] = headerData[r];
+							}
+							
+							// 添加表尾数据（根据数据行数调整位置）
+							for (let r = 15; r < 20; r++) {
+								const newRowIndex = footerStartRow + (r - 15);
+								adjustedHeaderData[newRowIndex] = headerData[r];
+							}
+							
+						// 添加表头表尾数据（并设置合并单元格mc属性）
+							adjustedHeaderData.forEach((row, r) => {
+								if (row) {
+									row.forEach((cell, c) => {
+									// 表尾"合计"行即使为空字符串也要添加，因为有合并单元格
+									const isFooterMergeCell = (r === footerStartRow + 4 && (c === 0 || c === 1 || c === 2));
+									if ((cell !== undefined && cell !== null && cell !== '') || isFooterMergeCell) {
+											let fontSize = 12; // 默认12号字体
+										let fontWeight = (r <= 4) ? 1 : 0; // 只有表头粗体，表尾不加粗
+										let horizontalAlign = 0; // 默认居中
+											
+											// 根据特殊位置调整字体大小
+										if (r === 0 && c === 0) { // 公司名称（ABCD合并）
+												fontSize = 14;
+										} else if (r === 0 && c === 4) { // 设备一览表（EFG合并）
+												fontSize = 20;
+											}
+											
+						// E列对齐方式：表头表尾居中，数据区域左对齐
+						if (c === 4) {
+							if (r <= 4 || r >= footerStartRow) {
+								horizontalAlign = 0; // 表头表尾E列居中
+							} else {
+								horizontalAlign = 1; // 数据区域E列左对齐
+							}
+						}
+						
+						// 表尾字体大小特殊处理
+						if (r >= footerStartRow) {
+							fontSize = 10; // 表尾10号字体
+							fontWeight = 0; // 表尾不加粗
+						}
+						
+						// 构建单元格对象
+						const cellValue = (cell === undefined || cell === null) ? '' : cell;
+						const cellObj = {
+												r: r, c: c,
+												v: {
+												v: cellValue, 
+												m: cellValue.toString(), 
+												ct: {fa: "General", t: "g"},
+												bg: null, bl: fontWeight, it: 0, ff: "SimSun", fs: fontSize,
+													fc: "rgb(51, 51, 51)",
+												ht: horizontalAlign,
+													vt: 0, tb: 2
+												}
+										};
+										
+										// 为表尾合计行ABC列添加合并单元格mc属性
+										if (r === footerStartRow + 4 && c === 0) {
+											cellObj.v.mc = {r: footerStartRow + 4, c: 0, rs: 1, cs: 3};
+											cellObj.v.v = '合计'; // 确保显示"合计"
+											cellObj.v.m = '合计';
+										} else if (r === footerStartRow + 4 && (c === 1 || c === 2)) {
+											cellObj.v.mc = {r: footerStartRow + 4, c: 0}; // 被合并的单元格
+										}
+										
+										allCelldata.push(cellObj);
+										}
+									});
+								}
+							});
+							
+							// 添加加载的数据（除E列外居中显示）
+							celldata.forEach(item => {
+								if (item.v) {
+									// 确保数据格式不受表头表尾影响
+									if (item.r >= 5 && item.r < footerStartRow) {
+										item.v.fs = 10; // 数据字体10号
+										item.v.ht = (item.c === 4) ? 1 : 0; // E列左对齐，其他居中
+										item.v.vt = 0;
+										item.v.bl = 0; // 数据区域不加粗
+										item.v.tb = 2; // 自动换行
+										item.v.ff = "SimSun"; // 宋体
+									}
+									// 表尾数据特殊处理
+									else if (item.r >= footerStartRow) {
+										item.v.fs = 10; // 表尾字体10号
+										item.v.ht = 0; // 表尾居中对齐
+										item.v.vt = 0;
+										item.v.bl = 0; // 表尾不加粗
+										item.v.tb = 2; // 自动换行
+										item.v.ff = "SimSun"; // 宋体
+									}
+								}
+								allCelldata.push(item);
+							});
+							
+							// 为A列生成序号：数据区与表尾均排序，合计行不编号
+							let serial = 1;
+							for (let r = 5; r < footerStartRow; r++) {
+								allCelldata.push({
+									r: r,
+									c: 0,
+									v: { v: serial, m: String(serial), ct: {fa: "General", t: "n"},
+										bg: null, bl: 0, it: 0, ff: "SimSun", fs: 10, fc: "rgb(51, 51, 51)", ht: 0, vt: 0, tb: 2 }
+								});
+								serial++;
+							}
+							// 表尾前四行继续编号（安装费/钢材用量/电器材料/电线电缆）
+							for (let i = 0; i < 4; i++) {
+								const r = footerStartRow + i;
+								allCelldata.push({
+									r: r,
+									c: 0,
+									v: { v: serial, m: String(serial), ct: {fa: "General", t: "n"},
+										bg: null, bl: 0, it: 0, ff: "SimSun", fs: 10, fc: "rgb(51, 51, 51)", ht: 0, vt: 0, tb: 2 }
+								});
+								serial++;
+							}
+							
+							// 创建动态合并配置，避免配置错误
+							// 根据版本选择合并配置
+							const dynamicMergeConfig = versionInfo.isSimplified ? {
+						// 简化版（14列）
+						"0_0": {r: 0, c: 0, rs: 3, cs: 3}, "0_3": {r: 0, c: 3, rs: 3, cs: 3},
+						"0_6": {r: 0, c: 6, rs: 1, cs: 2}, "1_6": {r: 1, c: 6, rs: 1, cs: 2}, "2_6": {r: 2, c: 6, rs: 1, cs: 2},
+						"0_8": {r: 0, c: 8, rs: 1, cs: 3}, "1_8": {r: 1, c: 8, rs: 1, cs: 3}, "2_8": {r: 2, c: 8, rs: 1, cs: 3},
+						// L列独立，M/N列不合并（各自独立）
+						"3_0": {r: 3, c: 0, rs: 2, cs: 1}, "3_1": {r: 3, c: 1, rs: 2, cs: 1}, "3_2": {r: 3, c: 2, rs: 2, cs: 1},
+							"3_3": {r: 3, c: 3, rs: 2, cs: 1}, "3_4": {r: 3, c: 4, rs: 2, cs: 1}, "3_5": {r: 3, c: 5, rs: 2, cs: 1},
+						"3_6": {r: 3, c: 6, rs: 1, cs: 2}, "3_8": {r: 3, c: 8, rs: 2, cs: 1}, "3_9": {r: 3, c: 9, rs: 1, cs: 2},
+						"3_11": {r: 3, c: 11, rs: 1, cs: 2}, "3_13": {r: 3, c: 13, rs: 2, cs: 1}
+							} : {
+								// 完整版（16列）
+								"0_0": {r: 0, c: 0, rs: 3, cs: 4}, "0_4": {r: 0, c: 4, rs: 3, cs: 3},
+								"0_7": {r: 0, c: 7, rs: 1, cs: 2}, "1_7": {r: 1, c: 7, rs: 1, cs: 2}, "2_7": {r: 2, c: 7, rs: 1, cs: 2},
+								"0_9": {r: 0, c: 9, rs: 1, cs: 4}, "1_9": {r: 1, c: 9, rs: 1, cs: 4}, "2_9": {r: 2, c: 9, rs: 1, cs: 4},
+								"0_14": {r: 0, c: 14, rs: 1, cs: 2}, "1_14": {r: 1, c: 14, rs: 1, cs: 2}, "2_14": {r: 2, c: 14, rs: 1, cs: 2},
+								"3_0": {r: 3, c: 0, rs: 2, cs: 1}, "3_1": {r: 3, c: 1, rs: 2, cs: 1}, "3_2": {r: 3, c: 2, rs: 2, cs: 1},
+								"3_3": {r: 3, c: 3, rs: 2, cs: 1}, "3_4": {r: 3, c: 4, rs: 2, cs: 1}, "3_5": {r: 3, c: 5, rs: 2, cs: 1},
+								"3_6": {r: 3, c: 6, rs: 2, cs: 1}, "3_7": {r: 3, c: 7, rs: 2, cs: 1}, "3_8": {r: 3, c: 8, rs: 1, cs: 2},
+								"3_10": {r: 3, c: 10, rs: 2, cs: 1}, "3_11": {r: 3, c: 11, rs: 1, cs: 2}, "3_13": {r: 3, c: 13, rs: 1, cs: 2},
+								"3_15": {r: 3, c: 15, rs: 2, cs: 1}
+							};
+							
+							// 表尾合计行ABC动态合并
+							dynamicMergeConfig[`${footerStartRow + 4}_0`] = { r: footerStartRow + 4, c: 0, rs: 1, cs: 3 };
+							
+							// 为表尾行设置适当的行高
+							for (let i = 0; i < 5; i++) {
+								dynamicRowlen[footerStartRow + i] = 28; // 表尾行高28
+							}
+							
+							const totalRows = Math.max(footerStartRow + 5, 84);
+							
+							const options = {
+								container: 'luckysheet', lang: 'zh', title: '设备参数选型',
+								showinfobar: false, showtoolbar: true,
+								showtoolbarConfig: {
+									undoRedo: false, paintFormat: true, currencyFormat: false,
+									percentageFormat: false, numberDecrease: false, numberIncrease: false,
+									moreFormats: true, font: true, fontSize: true, bold: true, italic: true,
+									strikethrough: true, underline: true, textColor: true, fillColor: true,
+									border: true, mergeCell: true, horizontalAlignMode: true, verticalAlignMode: true,
+									textWrapMode: true, textRotateMode: true, image: true, link: true, chart: true,
+									postil: false, pivotTable: false, function: true, frozenMode: true,
+									sortAndFilter: true, conditionalFormat: true, dataVerification: true,
+									splitColumn: false, screenshot: false, findAndReplace: true, protection: true, print: true
+								},
+						data: [
+						// 根据识别结果创建对应版本的sheet
+						{
+				name: `设备参数选型（${versionInfo.version}）`,
+				color: versionInfo.isSimplified ? "#70ad47" : "#5b9bd5",  // 简化版绿色，完整版蓝色
+									config: { 
+										merge: dynamicMergeConfig, 
+										borderInfo: versionInfo.isSimplified ? 
+											[...getSimplifiedBorderConfig(footerStartRow), ...getSimplifiedDataBorderConfig(5, footerStartRow)] : 
+											[...getBorderConfig(footerStartRow), ...getDataBorderConfig(5, footerStartRow)],
+										columnlen: versionInfo.isSimplified ? 
+											{ ...dynamicColumnlen, '0': 35, '1': 115, '2': 80, '3': 200, '4': 50, '5': 50, '6': 40, '7': 40, '8': 60, '9': 60, '10': 60, '11': 60, '12': 60, '13': 60 } :
+											{ ...dynamicColumnlen, '0': 50, '1': 40, '2': 140, '3': 80, '4': 200, '5': 80, '6': 50, '7': 50, '8': 40, '9': 40, '10': 70, '11': 60, '12': 60, '13': 60, '14': 60, '15': 80 },
+										rowlen: {...dynamicRowlen, '0': 35, '1': 35, '2': 35, '3': 28, '4': 28}
+									},
+									index: "0", zoomRatio: 1, order: 0, status: 1, row: totalRows, column: 60,
+									celldata: allCelldata
+								}
+							]
+							};
+							
+							luckysheet.create(options);
+							
+							// 保存表尾位置到全局变量，供序号刷新使用
+							window.currentFooterStartRow = footerStartRow;
+							// 保存版本信息到全局变量，供详情页回写使用
+							window.currentSheetVersion = versionInfo;
+							console.log(`✅ 版本信息已保存到全局变量: ${versionInfo.version}`);
+							
+				// 强制刷新，确保E列左对齐立即生效
+				setTimeout(() => {
+					luckysheet.refresh();
+					console.log('✅ 已强制刷新E列样式');
+				}, 50);
+							
+					// 初始化序号
+					setTimeout(() => {
+						refreshSerialNumbers(5, footerStartRow);
+						
+					// 只监听行的增删事件，不监听单元格更新（避免循环）
+					// 注意：hook已在主初始化中注册，这里不再重复注册
+					console.log('✅ 序号初始化完成（hook已全局注册）');
+					}, 100);
+							
+							console.log(`✅ 数据加载完成，表尾位置：第${footerStartRow + 1}行，总行数：${totalRows}`);
+							
+							// 数据加载完成后，添加公式并更新设备列表
+							setTimeout(() => {
+								// 添加计算公式（只添加一次）
+								if (typeof addFormulasToAllRows === 'function' && !window.formulasAdded) {
+									console.log('📐 Excel数据加载完成，添加计算公式');
+									window.formulasAdded = true;
+									addFormulasToAllRows();
+								}
+								
+								// 更新设备列表
+								if (typeof updateDeviceListFromTable === 'function') {
+									console.log('📊 Excel数据加载完成，更新设备列表');
+									updateDeviceListFromTable();
+								}
+							}, 1000);
+						}, 100);
+					} catch (error) {
+						console.error('Excel解析失败:', error);
+					}
+				};
+				reader.readAsArrayBuffer(file);
+			}
+		};
+	</script>
+	<!-- PDF导出库 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="container">
+	<!-- 工具栏 -->
+	<div class="custom-toolbar">
+		<div style="display: flex; gap: 8px; align-items: center;">
+			<button id="openFileBtn" class="custom-btn" title="打开本地表格文件">打开</button>
+			<input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.json" style="display: none;" />
+			<button id="saveFileBtn" class="custom-btn" title="保存表格到本地">保存</button>
+			<button id="newFileBtn" class="custom-btn" title="新建空白表格">新建</button>
+			<button id="exportPdfBtn" class="custom-btn" title="导出为PDF文件">导出PDF</button>
+		</div>
+		<div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+			<span style="font-size: 26px; font-weight: bold; color: #333; letter-spacing: 2px;">设备参数选型系统</span>
+		</div>
+		<div style="display: flex; gap: 8px; align-items: center;">
+			<button id="openWordEditorBtn" class="title-btn" title="打开Word文档编辑器（新窗口）">📝 Word编辑器</button>
+			<button id="openFanSelectorBtn" class="title-btn" title="打开离心风机选型工具（新窗口）">🌀 离心风机选型</button>
+			<button id="openCableSelectorBtn" class="title-btn" title="打开电缆选型工具（新窗口）">⚡ 电缆选型</button>
+			<button id="refreshDbBtn" class="refresh-btn" title="刷新表格">🔄 刷新</button>
+			<span style="color: #888; font-size: 12px;">💡 打开加载文件后刷新一下</span>
+		</div>
+	</div>
+	
+	<!-- 主内容区域 -->
+	<div class="main-content">
+		<!-- Luckysheet容器 -->
+		<div class="table-container">
+			<div id="luckysheet"></div>
+		</div>
+		
+		<!-- 设备详情面板 -->
+		<div class="detail-panel-container" id="detailPanel">
+			<button class="collapse-toggle" id="collapseToggle" title="折叠/展开面板">折叠面板</button>
+			
+			<!-- 数据库文件加载区域 -->
+			<div class="database-load-section">
+				<span style="color: #666; font-weight: 500;">数据库:</span>
+				<span id="dbFileStatus" style="color: #666; flex: 1;">未加载</span>
+				<button id="loadDatabaseBtn" class="db-btn" title="加载数据库文件">加载数据库</button>
+				<input type="file" id="databaseFileInput" accept=".xlsx,.xls,.json" style="display: none;" />
+			</div>
+			
+			<div class="detail-panel-header">
+				<button id="deviceTabBtn" class="action-btn">设备详情</button>
+				<button id="projectTabBtn" class="action-btn secondary">项目明细</button>
+				<button id="equipmentDataTabBtn" class="action-btn secondary">设备资料</button>
+				<button id="supplierTabBtn" class="action-btn secondary">配套厂家</button>
+			</div>
+			
+			<div class="detail-body">
+				<div class="device-sidebar">
+					<div style="font-weight:600; margin-bottom:8px;">设备列表</div>
+					<div id="deviceListEmpty" style="font-size:12px; color:#666;">暂无数据</div>
+					<ul id="deviceList" style="list-style:none; padding-left:0; margin:0;"></ul>
+				</div>
+				
+				<div class="device-detail-panel">
+					<!-- 设备详情内容 -->
+					<div id="deviceDetailContent">
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="deviceNumber">设备位号</label>
+								<input type="text" id="deviceNumber" class="detail-input" value="/" placeholder="设备编号">
+							</div>
+							<div class="detail-field">
+								<label for="deviceType">设备类型</label>
+								<select id="deviceType" class="detail-select">
+									<option value="">请选择设备类型</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="deviceName">设备名称</label>
+								<select id="deviceName" class="detail-select">
+									<option value="">请选择设备名称</option>
+								</select>
+							</div>
+							<div class="detail-field">
+								<label for="specification">规格型号</label>
+								<select id="specification" class="detail-select">
+									<option value="">请选择规格型号</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="material">材料</label>
+								<select id="material" class="detail-select">
+									<option value="">请选择材料</option>
+									<option value="钢组件">钢组件</option>
+									<option value="304">304</option>
+									<option value="316L">316L</option>
+									<option value="FRP">FRP</option>
+								</select>
+							</div>
+							<div class="detail-field">
+								<label for="unit">单位</label>
+								<select id="unit" class="detail-select">
+									<option value="">请选择单位</option>
+									<option value="台">台</option>
+									<option value="套">套</option>
+									<option value="个">个</option>
+									<option value="件">件</option>
+									<option value="宗">宗</option>
+									<option value="项">项</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="quantity">设备数量</label>
+								<input type="number" id="quantity" class="detail-input" placeholder="数量">
+							</div>
+							<div class="detail-field">
+								<label for="motorQuantity">单台电机数量</label>
+								<input type="number" id="motorQuantity" class="detail-input" placeholder="电机数量">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="motorPower">电机功率</label>
+								<input type="text" id="motorPower" class="detail-input" placeholder="电机功率，可填 11+44">
+							</div>
+							<div class="detail-field">
+								<label for="singleDevicePower">单台设备功率</label>
+								<input type="number" id="singleDevicePower" class="detail-input" placeholder="单台功率(kW)" readonly style="background-color: #f5f5f5;">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="totalPower">设备总功率</label>
+								<input type="number" id="totalPower" class="detail-input" placeholder="总功率(kW)" readonly style="background-color: #f5f5f5;">
+							</div>
+							<div class="detail-field">
+								<label for="unitPrice">设备单价</label>
+								<input type="number" id="unitPrice" class="detail-input" placeholder="单价(元)">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="totalPrice">设备总价</label>
+								<input type="number" id="totalPrice" class="detail-input" placeholder="总价(元)" readonly style="background-color: #f5f5f5;">
+							</div>
+							<div class="detail-field">
+								<label for="priceIncrease">价格增幅</label>
+								<input type="number" id="priceIncrease" class="detail-input" placeholder="价格增幅(%)" min="0" max="100" step="1">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="installedPower">装机功率</label>
+								<input type="number" id="installedPower" class="detail-input" placeholder="装机功率(kW)" readonly style="background-color: #f5f5f5;">
+							</div>
+							<div class="detail-field">
+								<label for="totalQuotePrice">总报价</label>
+								<input type="number" id="totalQuotePrice" class="detail-input" placeholder="总报价(元)" readonly style="background-color: #f5f5f5;">
+							</div>
+						</div>
+						
+						<div class="detail-row">
+							<label for="technicalParams">技术参数</label>
+							<textarea id="technicalParams" class="detail-textarea" placeholder="技术参数描述"></textarea>
+						</div>
+						
+						<div class="detail-row">
+							<label for="remarks">备注</label>
+							<textarea id="remarks" class="detail-textarea" placeholder="备注信息"></textarea>
+						</div>
+						
+						<div class="detail-separator"></div>
+						
+						<div class="detail-actions">
+							<button id="addDeviceBtn" class="action-btn">添加设备</button>
+							<button id="updateDeviceBtn" class="action-btn">更新设备</button>
+							<button id="clearFormBtn" class="action-btn secondary">清空表单</button>
+						</div>
+					</div>
+					
+					<!-- 项目详情内容 (隐藏) -->
+					<div id="projectDetailContent" style="display: none;">
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="installedCapacity">装机容量</label>
+							<input type="number" id="installedCapacity" class="detail-input" placeholder="装机容量(kW)" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field">
+							<label for="totalQuote">总报价</label>
+							<input type="number" id="totalQuote" class="detail-input" placeholder="总报价(元)" readonly style="background-color: #f5f5f5;">
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="projectPriceIncrease">价格增幅</label>
+							<input type="number" id="projectPriceIncrease" class="detail-input" placeholder="价格增幅(元)" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field">
+							<label for="conveyorCount">输送机数量</label>
+							<input type="number" id="conveyorCount" class="detail-input" placeholder="输送机数量" readonly style="background-color: #f5f5f5;">
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="elevatorCount">提升机数量</label>
+							<input type="number" id="elevatorCount" class="detail-input" placeholder="提升机数量" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field">
+							<label for="scraperCount">刮板机数量</label>
+							<input type="number" id="scraperCount" class="detail-input" placeholder="刮板机数量" readonly style="background-color: #f5f5f5;">
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="steelTonnage">钢材吨数</label>
+							<input type="number" id="steelTonnage" class="detail-input" placeholder="钢材吨数(吨)" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field" style="visibility: hidden;">
+							<!-- 占位，保持布局 -->
+						</div>
+						</div>
+					</div>
+				
+				<!-- 设备资料内容 (隐藏) -->
+				<div id="equipmentDataContent" style="display: none;">
+					<div style="padding: 20px;">
+						<h3 style="margin-bottom: 20px; color: #333;">设备资料库</h3>
+						
+						<div class="detail-row">
+							<label for="equipmentCategory">设备类别</label>
+							<select id="equipmentCategory" class="detail-input">
+								<option value="">请选择设备类别</option>
+							</select>
+				</div>
+						
+						<div class="detail-row">
+							<label for="equipmentModel">设备型号</label>
+							<input type="text" id="equipmentModel" class="detail-input" placeholder="设备型号" readonly>
+				</div>
+						
+						<div class="detail-row">
+							<label for="equipmentManufacturer">制造商</label>
+							<input type="text" id="equipmentManufacturer" class="detail-input" placeholder="制造商">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentPower">额定功率</label>
+							<input type="text" id="equipmentPower" class="detail-input" placeholder="额定功率">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentVoltage">额定电压</label>
+							<input type="text" id="equipmentVoltage" class="detail-input" placeholder="额定电压">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentWeight">设备重量</label>
+							<input type="text" id="equipmentWeight" class="detail-input" placeholder="设备重量(kg)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentDimensions">外形尺寸</label>
+							<input type="text" id="equipmentDimensions" class="detail-input" placeholder="长×宽×高(mm)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentStandard">执行标准</label>
+							<input type="text" id="equipmentStandard" class="detail-input" placeholder="执行标准">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentCertificate">认证证书</label>
+							<input type="text" id="equipmentCertificate" class="detail-input" placeholder="认证证书编号">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentWarranty">质保期</label>
+							<input type="text" id="equipmentWarranty" class="detail-input" placeholder="质保期(月)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentNotes">备注说明</label>
+							<textarea id="equipmentNotes" class="detail-input" placeholder="备注说明" rows="4"></textarea>
+						</div>
+						
+						<div class="detail-separator"></div>
+						
+					<div class="detail-actions">
+						<button id="saveEquipmentDataBtn" class="action-btn">保存资料</button>
+						<button id="clearEquipmentDataBtn" class="action-btn secondary">清空</button>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 配套厂家内容 (隐藏) -->
+			<div id="supplierContent" style="display: none;">
+				<div style="padding: 20px;">
+					<h3 style="margin-bottom: 20px; color: #333;">配套厂家信息</h3>
+					
+					<div class="detail-row">
+						<label for="supplierName">厂家名称</label>
+						<input type="text" id="supplierName" class="detail-input" placeholder="厂家名称">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierContact">联系人</label>
+						<input type="text" id="supplierContact" class="detail-input" placeholder="联系人">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierPhone">联系电话</label>
+						<input type="text" id="supplierPhone" class="detail-input" placeholder="联系电话">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierEmail">电子邮箱</label>
+						<input type="email" id="supplierEmail" class="detail-input" placeholder="电子邮箱">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierAddress">厂家地址</label>
+						<input type="text" id="supplierAddress" class="detail-input" placeholder="厂家地址">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierWebsite">公司网址</label>
+						<input type="text" id="supplierWebsite" class="detail-input" placeholder="公司网址">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierType">厂家类型</label>
+						<select id="supplierType" class="detail-input">
+							<option value="">请选择</option>
+							<option value="制造商">制造商</option>
+							<option value="代理商">代理商</option>
+							<option value="经销商">经销商</option>
+							<option value="贸易商">贸易商</option>
+						</select>
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierLevel">合作等级</label>
+						<select id="supplierLevel" class="detail-input">
+							<option value="">请选择</option>
+							<option value="优选">优选</option>
+							<option value="良好">良好</option>
+							<option value="一般">一般</option>
+						</select>
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierPayment">付款方式</label>
+						<input type="text" id="supplierPayment" class="detail-input" placeholder="付款方式">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierDelivery">交货周期</label>
+						<input type="text" id="supplierDelivery" class="detail-input" placeholder="交货周期(天)">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierWarranty">质保期限</label>
+						<input type="text" id="supplierWarranty" class="detail-input" placeholder="质保期限">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierNotes">备注说明</label>
+						<textarea id="supplierNotes" class="detail-input" placeholder="备注说明" rows="4"></textarea>
+					</div>
+					
+					<div class="detail-separator"></div>
+					
+					<div class="detail-actions">
+						<button id="saveSupplierBtn" class="action-btn">保存厂家</button>
+						<button id="clearSupplierBtn" class="action-btn secondary">清空</button>
+					</div>
+				</div>
+			</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ========== 模块化JavaScript引用（按顺序加载） ========== -->
+<!-- 1. 配置模块 -->
+<script src="./js/config/tableConfig.js"></script>
+
+<!-- 2. 工具模块 -->
+<script src="./js/utils/cellUtils.js"></script>
+<script src="./js/utils/versionUtils.js"></script>
+<script src="./js/utils/alignmentUtils.js"></script>
+<script src="./js/utils/rowHeightUtils.js"></script>
+
+<!-- 3. 数据模块 -->
+<script src="./js/data/deviceDatabase.js"></script>
+
+<!-- 4. 业务模块 -->
+<script src="./js/modules/formula.js"></script>
+<script src="./js/modules/sheet.js"></script>
+<script src="./js/modules/excel.js"></script>
+<script src="./js/modules/form.js"></script>
+<script src="./js/modules/sync.js"></script>
+<script src="./js/modules/database.js"></script>
+<script src="./js/modules/pdf.js"></script>
+<script src="./js/modules/wordEditor.js"></script>
+
+<!-- 5. 初始化模块 -->
+<script src="./js/init.js"></script>
+
+<!-- 6. 遗留代码模块（临时） -->
+<script src="./js/modules/legacy.js"></script>
+
+<script>
+console.log('🎉 所有模块已加载！');
+console.log('📋 已模块化: 配置、工具、公式、初始化');
+console.log('⏳ 待提取: 遗留代码（见 js/modules/legacy.js）');
+</script>
+
+<!-- PDF预览模态框 -->
+<div id="pdfPreviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow: auto;">
+	<div style="background: white; margin: 20px auto; max-width: 1200px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+		<!-- 模态框头部 -->
+		<div style="padding: 20px; border-bottom: 2px solid #e9ecef; display: flex; justify-content: space-between; align-items: center;">
+			<h2 style="margin: 0; color: #333; font-size: 20px;">📄 PDF导出预览</h2>
+			<button id="closePdfModal" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #666; line-height: 1;">&times;</button>
+		</div>
+		
+		<!-- 选项区域 -->
+		<div style="padding: 20px; border-bottom: 1px solid #e9ecef; background: #f8f9fa;">
+			<div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+				<div>
+					<label style="font-weight: 500; color: #555;">导出范围：</label>
+					<select id="pdfRangeType" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; margin-left: 10px;">
+						<option value="all">全部内容</option>
+						<option value="current">当前选区</option>
+						<option value="custom">自定义范围</option>
+					</select>
+				</div>
+				
+				<div id="customRangeInput" style="display: none;">
+					<label style="font-weight: 500; color: #555;">范围：</label>
+					<input type="text" id="pdfCustomRange" placeholder="例如：A1:O20" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; margin-left: 10px; width: 150px;">
+				</div>
+				
+				<div>
+					<label style="font-weight: 500; color: #555;">页面方向：</label>
+					<select id="pdfOrientation" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; margin-left: 10px;">
+						<option value="landscape">横向</option>
+						<option value="portrait">纵向</option>
+					</select>
+				</div>
+				
+			<div>
+				<label style="font-weight: 500; color: #555;">纸张大小：</label>
+				<select id="pdfPageSize" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; margin-left: 10px;">
+					<option value="a4">A4</option>
+					<option value="a3">A3</option>
+					<option value="letter">Letter</option>
+				</select>
+			</div>
+			
+		<div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+			<label style="font-weight: 500; color: #555;">
+				<input type="checkbox" id="enableWatermark" style="margin-right: 5px;">
+				添加水印
+			</label>
+		</div>
+		
+		<div id="watermarkSettings" style="display: none; width: 100%; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 4px; margin-top: 10px;">
+			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+				<div>
+					<label style="display: block; margin-bottom: 5px; font-size: 13px; color: #666;">水印文字</label>
+					<input type="text" id="watermarkText" value="" autocomplete="off" placeholder="输入水印内容" style="width: 100%; padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px;">
+				</div>
+				<div>
+					<label style="display: block; margin-bottom: 5px; font-size: 13px; color: #666;">字体大小 (px)</label>
+					<input type="number" id="watermarkFontSize" value="40" min="20" max="200" style="width: 100%; padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px;">
+				</div>
+				<div>
+					<label style="display: block; margin-bottom: 5px; font-size: 13px; color: #666;">旋转角度 (度)</label>
+					<input type="number" id="watermarkRotation" value="-45" min="-180" max="180" style="width: 100%; padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px;">
+				</div>
+				<div>
+					<label style="display: block; margin-bottom: 5px; font-size: 13px; color: #666;">透明度 (0-1)</label>
+					<input type="number" id="watermarkOpacity" value="0.05" min="0" max="1" step="0.01" style="width: 100%; padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px;">
+				</div>
+				<div>
+					<label style="display: block; margin-bottom: 5px; font-size: 13px; color: #666;">水印密度</label>
+					<select id="watermarkDensity" style="width: 100%; padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px;">
+						<option value="1">单个（中央）</option>
+						<option value="4">稀疏（4个）</option>
+						<option value="9">适中（9个）</option>
+						<option value="16">密集（16个）</option>
+						<option value="25">很密（25个）</option>
+					</select>
+				</div>
+				<div>
+					<label style="display: block; margin-bottom: 5px; font-size: 13px; color: #666;">水印颜色</label>
+					<select id="watermarkColor" style="width: 100%; padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px;">
+						<option value="gray">灰色</option>
+						<option value="red">红色</option>
+						<option value="blue">蓝色</option>
+						<option value="green">绿色</option>
+						<option value="black">黑色</option>
+					</select>
+				</div>
+			</div>
+		</div>
+			
+			<button id="refreshPdfPreview" style="padding: 8px 20px; background: #4285f4; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 500;">
+				🔄 刷新预览
+			</button>
+			</div>
+		</div>
+		
+		<!-- 预览区域 -->
+		<div style="padding: 20px; max-height: 600px; overflow: auto; background: #e9ecef;">
+			<div id="pdfPreviewContent" style="background: white; padding: 40px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); min-height: 400px;">
+				<p style="text-align: center; color: #999; padding: 100px 0;">正在加载预览...</p>
+			</div>
+		</div>
+		
+		<!-- 底部操作按钮 -->
+		<div style="padding: 20px; border-top: 2px solid #e9ecef; display: flex; justify-content: flex-end; gap: 12px;">
+			<button id="cancelPdfExport" style="padding: 10px 24px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500;">
+				取消
+			</button>
+			<button id="confirmPdfExport" style="padding: 10px 24px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500;">
+				📥 确认导出
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- 版权信息 - 最左侧底部 -->
+<div style="position: fixed; bottom: 3px; left: 10px; font-size: 11px; color: #666; z-index: 100; font-family: 'Microsoft YaHei', SimSun, sans-serif; white-space: nowrap;">
+	设备参数选型系统 v1.0.2 | © 2025 ZXX
+</div>
+
+<!-- 协议检测提示 -->
+<script>
+(function() {
+	// 检测是否在Electron环境
+	const isElectron = typeof window !== 'undefined' && 
+	                   window.process && 
+	                   window.process.type === 'renderer';
+	
+	if (window.location.protocol === 'file:' && !isElectron) {
+		// 只在非Electron环境下显示警告
+		const warning = document.createElement('div');
+		warning.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; padding: 12px 20px; text-align: center; z-index: 10000; font-size: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);';
+		warning.innerHTML = `
+			<strong>⚠️ 警告：</strong> 您正在使用 file:// 协议访问。部分功能（如电缆选型）将无法正常工作！<br>
+			<span style="font-size: 12px; opacity: 0.9;">请双击运行 <code style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 3px;">启动.bat</code> 启动HTTP服务器，然后访问 <code style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 3px;">http://localhost:8000/index.html</code></span>
+		`;
+		document.body.insertBefore(warning, document.body.firstChild);
+		console.error('❌ 当前使用 file:// 协议，部分功能受限。请使用HTTP服务器访问。');
+	} else if (window.location.protocol.startsWith('http')) {
+		if (isElectron) {
+			console.log('✅ Electron内置HTTP服务器运行中，所有功能正常。');
+		} else {
+			console.log('✅ 正在通过HTTP服务器访问，所有功能正常。');
+		}
+	}
+})();
+</script>
+
+</body>
+</html>
+

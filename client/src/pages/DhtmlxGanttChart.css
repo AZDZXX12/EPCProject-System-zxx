@@ -1,0 +1,94 @@
+.dhtmlx-gantt-container {
+  padding: 24px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.gantt-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.gantt-card .ant-card-head {
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.gantt-container {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden !important;
+  max-width: 100%;
+  width: 100%;
+  height: calc(100vh - 250px);
+}
+
+.gantt-container .gantt_layout_content {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+
+.gantt-container .gantt_layout {
+  overflow: hidden !important;
+}
+
+/* ✅ 删除了所有强制颜色样式，让JavaScript完全控制颜色 */
+/* 颜色现在由 computeTaskColors() 函数动态计算并应用 */
+
+/* 优化进度条拖拽体验 */
+.gantt_task_progress {
+  cursor: pointer !important;
+  transition: all 0.2s ease;
+}
+
+.gantt_task_progress:hover {
+  opacity: 0.9;
+  filter: brightness(1.1);
+}
+
+/* 优化任务条拖拽体验 */
+.gantt_task_line {
+  cursor: move !important;
+  transition: all 0.2s ease;
+}
+
+.gantt_task_line:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  transform: translateY(-1px);
+}
+
+/* 优化任务边缘拖拽手柄 */
+.gantt_task_drag {
+  cursor: ew-resize !important;
+  width: 8px !important;
+  opacity: 0.6;
+}
+
+.gantt_task_drag:hover {
+  opacity: 1;
+  background: rgba(24, 144, 255, 0.3) !important;
+}
+
+/* 拖拽时的视觉反馈 */
+.gantt_drag_marker {
+  opacity: 0.7 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .dhtmlx-gantt-container {
+    padding: 16px;
+  }
+
+  .gantt-container {
+    height: calc(100vh - 250px) !important;
+  }
+  
+  /* 移动端增大拖拽区域 */
+  .gantt_task_drag {
+    width: 12px !important;
+  }
+}
+
+
