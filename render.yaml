@@ -1,15 +1,30 @@
 services:
+  # 后端服务
   - type: web
-    name: chemical-backend
+    name: epc-backend
     env: python
     region: singapore
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    branch: main
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: cd server && python quick-start-sqlite.py
     envVars:
       - key: PYTHON_VERSION
-        value: 3.10.0
+        value: 3.11
       - key: PORT
         value: 8000
-    healthCheckPath: /docs
 
+  # 前端服务
+  - type: web
+    name: epc-frontend
+    env: static
+    region: singapore
+    plan: free
+    branch: main
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: client/build
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: REACT_APP_API_URL
+        value: https://epc-backend.onrender.com
