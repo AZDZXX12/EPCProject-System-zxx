@@ -7,7 +7,7 @@
 const DEV_API_URL = 'http://localhost:8000';  // 直接连接后端
 
 // 生产环境 API 地址（从环境变量读取，或使用默认值）
-const PROD_API_URL = process.env.REACT_APP_API_URL || 'https://chemical-backend.onrender.com';
+const PROD_API_URL = process.env.REACT_APP_API_URL || 'https://epc-backend.onrender.com';
 
 // 根据环境选择 API 地址
 export const API_BASE_URL = process.env.NODE_ENV === 'production' 
