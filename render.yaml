@@ -21,7 +21,7 @@ services:
     region: singapore
     plan: free
     branch: main
-    buildCommand: cd client && npm install && npm run build
+    buildCommand: npm install --prefix client && npm run build --prefix client
     staticPublishPath: client/build
     envVars:
       - key: NODE_VERSION
