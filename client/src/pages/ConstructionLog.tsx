@@ -13,6 +13,7 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { useProject } from '../contexts/ProjectContext';
+import { API_BASE_URL } from '../config';
 import { eventBus, EVENTS, LogEventData } from '../utils/EventBus';
 import { StorageManager } from '../utils/StorageManager';
 
@@ -77,7 +78,7 @@ const ConstructionLog: React.FC = () => {
         setAvailableTasks(tasks);
       } else {
         // 尝试从API加载
-        const response = await fetch(`http://localhost:8000/api/v1/tasks?project_id=${currentProject.id}`);
+        const response = await fetch(`${API_BASE_URL}/api/v1/tasks?project_id=${currentProject.id}`);
         if (response.ok) {
           const tasks = await response.json();
           setAvailableTasks(tasks.map((t: any) => ({
@@ -107,7 +108,7 @@ const ConstructionLog: React.FC = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('access_token');
-      const response = await fetch(`http://localhost:8000/api/v1/construction-logs/?project_id=${currentProject.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/construction-logs/?project_id=${currentProject.id}`, {
         headers: {
           'Authorization': token ? `Bearer ${token}` : '',
         }

@@ -37,7 +37,7 @@ const TaskList: React.FC = () => {
     if (!currentProject) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tasks/?project_id=${currentProject.id}`);
+      const response = await fetch(`${API_ENDPOINTS.tasks}/?project_id=${currentProject.id}`);
       if (response.ok) {
         const data = await response.json();
         setTasks(data);
@@ -79,7 +79,7 @@ const TaskList: React.FC = () => {
 
       if (editingTask) {
         // Update
-        const response = await fetch(`http://localhost:8000/api/v1/tasks/${editingTask.id}`, {
+        const response = await fetch(`${API_ENDPOINTS.tasks}/${editingTask.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(taskData)
@@ -111,7 +111,7 @@ const TaskList: React.FC = () => {
 
   const handleDelete = async (taskId: string) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/tasks/${taskId}`, {
+      const response = await fetch(`${API_ENDPOINTS.tasks}/${taskId}`, {
         method: 'DELETE'
       });
       if (response.ok) {

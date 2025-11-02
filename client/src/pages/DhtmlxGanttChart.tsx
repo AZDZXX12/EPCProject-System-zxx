@@ -577,11 +577,10 @@ const DhtmlxGanttChart: React.FC = () => {
         console.log(`[Gantt] 💾 已保存 ${allTasks.length} 个任务到LocalStorage`);
       }
       
-      // ⚠️ 暂时禁用后端保存（后端API未实现）
-      // TODO: 后端实现 /api/v1/tasks 接口后启用
-      // saveTask(item).catch(err => {
-      //   console.error('[Gantt] 保存任务到后端失败:', err);
-      // });
+      // ✅ 保存到后端
+      saveTask(item).catch(err => {
+        console.error('[Gantt] 保存任务到后端失败:', err);
+      });
       
       // 🔗 联动：发布任务创建事件
       if (currentProject) {
@@ -614,11 +613,10 @@ const DhtmlxGanttChart: React.FC = () => {
         console.log(`[Gantt] 💾 已保存 ${allTasks.length} 个任务到LocalStorage`);
       }
       
-      // ⚠️ 暂时禁用后端保存（后端API未实现）
-      // TODO: 后端实现 /api/v1/tasks 接口后启用
-      // saveTask(item).catch(err => {
-      //   console.error('[Gantt] 保存任务到后端失败:', err);
-      // });
+      // ✅ 保存到后端
+      saveTask(item).catch(err => {
+        console.error('[Gantt] 保存任务到后端失败:', err);
+      });
       
       // 🔗 联动：发布任务更新事件
       if (currentProject) {
