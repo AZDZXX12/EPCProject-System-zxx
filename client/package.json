@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "cross-env PORT=3001 react-scripts start",
-    "build": "cross-env REACT_APP_API_URL=${REACT_APP_API_URL:-https://epc-backend.onrender.com} react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -53,6 +53,7 @@
   "proxy": "http://localhost:8000",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "electron": "^28.0.0",
     "http-proxy-middleware": "^3.0.5"
   }
