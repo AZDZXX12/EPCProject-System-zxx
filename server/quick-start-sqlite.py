@@ -266,15 +266,17 @@ async def create_task(task: Task):
             
             print(f"[DEBUG] Creating task: {task.id}, name: {task.name}, project: {task.project_id}")
             
+            # 🔧 使用 INSERT OR REPLACE 避免 UNIQUE 冲突
             cursor.execute("""
-                INSERT INTO tasks (id, name, description, start_date, end_date, progress, 
-                                 assignee, priority, status, project_id, parent_id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT OR REPLACE INTO tasks (id, name, description, start_date, end_date, progress, 
+                                 assignee, priority, status, project_id, parent_id, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                        COALESCE((SELECT created_at FROM tasks WHERE id = ?), CURRENT_TIMESTAMP))
             """, (task.id, task.name, task.description, task.start_date, task.end_date,
                   task.progress, task.assignee, task.priority, task.status, 
-                  task.project_id, task.parent_id))
+                  task.project_id, task.parent_id, task.id))
             
-            print(f"[DEBUG] Task created successfully: {task.id}")
+            print(f"[DEBUG] Task created/updated successfully: {task.id}")
             return {"message": "Task created", "id": task.id}
     except Exception as e:
         print(f"[ERROR] Failed to create task: {str(e)}")
