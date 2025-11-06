@@ -978,9 +978,12 @@ const DhtmlxGanttChart: React.FC = () => {
       // 🔧 确保ID是字符串（DHTMLX可能生成数字ID）
       if (typeof task.id !== 'string' || !task.id.startsWith('PROJ-')) {
         console.log('[Gantt] ⚠️ 检测到非标准ID，重新生成:', task.id);
+        const oldId = task.id;
         const newId = generateTaskId(currentProject?.id || 'PROJ-001');
-        // 更新Gantt中的任务ID
-        gantt.changeTaskId(task.id, newId);
+        // 更新Gantt中的任务ID（如果gantt已加载）
+        if (typeof window !== 'undefined' && (window as any).gantt) {
+          (window as any).gantt.changeTaskId(oldId, newId);
+        }
         task.id = newId;
       }
       
