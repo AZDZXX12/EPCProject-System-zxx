@@ -990,18 +990,28 @@ const DhtmlxGanttChart: React.FC = () => {
         project_id: currentProject?.id
       };
 
-      // 🔧 简化逻辑：直接使用PUT更新（FastAPI会自动创建或更新）
+      // 🔧 修复：先尝试PUT更新，404时改用POST创建
       console.log('[Gantt] 💾 保存任务:', task.id, task.text);
-      const response = await fetchWithTimeout(`${API_ENDPOINTS.tasks}/${task.id}`, {
+      let response = await fetchWithTimeout(`${API_ENDPOINTS.tasks}/${task.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(taskData)
       });
       
+      // 如果PUT返回404（任务不存在），则使用POST创建
+      if (!response.ok && response.status === 404) {
+        console.log('[Gantt] 📝 任务不存在，使用POST创建:', task.id);
+        response = await fetchWithTimeout(`${API_ENDPOINTS.tasks}/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(taskData)
+        });
+      }
+      
       if (response.ok) {
         const savedTask = await response.json();
-        console.log('[Gantt] ✅ 任务保存成功:', savedTask.id);
-        notification.success({ message: '任务已保存', duration: 2 });
+        console.log('[Gantt] ✅ 任务保存成功:', savedTask.id || task.id);
+        // notification.success({ message: '任务已保存', duration: 2 });
         return savedTask;
       } else {
         const errorText = await response.text().catch(() => '');
