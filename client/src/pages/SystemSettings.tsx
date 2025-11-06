@@ -6,6 +6,7 @@ import {
   ReloadOutlined, InfoCircleOutlined, CloudServerOutlined
 } from '@ant-design/icons';
 import PageContainer from '../components/Layout/PageContainer';
+import { API_BASE_URL } from '../config';
 
 import { Typography } from 'antd';
 
@@ -35,7 +36,7 @@ const SystemSettings: React.FC = () => {
   const loadDatabaseInfo = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/database/info');
+      const response = await fetch(`${API_BASE_URL}/api/v1/database/info`);
       if (response.ok) {
         const data = await response.json();
         setDbInfo(data);
@@ -62,7 +63,7 @@ const SystemSettings: React.FC = () => {
   const backupDatabase = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/v1/database/backup', {
+      const response = await fetch(`${API_BASE_URL}/api/v1/database/backup`, {
         method: 'POST'
       });
       
@@ -212,8 +213,8 @@ const SystemSettings: React.FC = () => {
           <Descriptions.Item label="前端端口">3001</Descriptions.Item>
           <Descriptions.Item label="后端端口">8000</Descriptions.Item>
           <Descriptions.Item label="API地址">
-            <a href="http://localhost:8000/docs" target="_blank" rel="noopener noreferrer">
-              http://localhost:8000
+            <a href={`${API_BASE_URL}/docs`} target="_blank" rel="noopener noreferrer">
+              {API_BASE_URL}
             </a>
           </Descriptions.Item>
         </Descriptions>

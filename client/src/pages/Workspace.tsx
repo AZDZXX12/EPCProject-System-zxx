@@ -44,7 +44,7 @@ const Workspace: React.FC = () => {
   // 加载项目列表
   const loadProjects = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/projects/');
+      const response = await fetch(`${API_ENDPOINTS.projects}/`);
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
