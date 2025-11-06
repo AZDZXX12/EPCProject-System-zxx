@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "cross-env PORT=3001 react-scripts start",
-    "build": "react-scripts build",
+    "build": "cross-env REACT_APP_API_URL=${REACT_APP_API_URL:-https://epc-backend.onrender.com} react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

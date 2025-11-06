@@ -21,7 +21,7 @@ services:
     region: singapore
     plan: free
     branch: main
-    buildCommand: cd client && npm install && REACT_APP_API_URL=https://epc-backend.onrender.com NODE_ENV=production npm run build
+    buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/build
     envVars:
       - key: NODE_VERSION
