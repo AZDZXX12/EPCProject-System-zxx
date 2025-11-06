@@ -975,6 +975,15 @@ const DhtmlxGanttChart: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const saveTask = async (task: any) => {
     try {
+      // 🔧 确保ID是字符串（DHTMLX可能生成数字ID）
+      if (typeof task.id !== 'string' || !task.id.startsWith('PROJ-')) {
+        console.log('[Gantt] ⚠️ 检测到非标准ID，重新生成:', task.id);
+        const newId = generateTaskId(currentProject?.id || 'PROJ-001');
+        // 更新Gantt中的任务ID
+        gantt.changeTaskId(task.id, newId);
+        task.id = newId;
+      }
+      
       // 🔧 修复日期计算：直接使用Gantt计算的end_date
       const endDate = task.end_date ? dayjs(task.end_date).format('YYYY-MM-DD') : dayjs(task.start_date).add(task.duration, 'day').format('YYYY-MM-DD');
       
