@@ -256,40 +256,62 @@ async def get_tasks(project_id: Optional[str] = None):
 
 @app.post("/api/v1/tasks/")
 async def create_task(task: Task):
-    with get_db() as conn:
-        cursor = conn.cursor()
-        
-        # Generate task ID
-        if not task.id:
-            task.id = f"TASK-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-        
-        cursor.execute("""
-            INSERT INTO tasks (id, name, description, start_date, end_date, progress, 
-                             assignee, priority, status, project_id, parent_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (task.id, task.name, task.description, task.start_date, task.end_date,
-              task.progress, task.assignee, task.priority, task.status, 
-              task.project_id, task.parent_id))
-        
-        return {"message": "Task created", "id": task.id}
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            
+            # Generate task ID
+            if not task.id:
+                task.id = f"TASK-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+            
+            print(f"[DEBUG] Creating task: {task.id}, name: {task.name}, project: {task.project_id}")
+            
+            cursor.execute("""
+                INSERT INTO tasks (id, name, description, start_date, end_date, progress, 
+                                 assignee, priority, status, project_id, parent_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (task.id, task.name, task.description, task.start_date, task.end_date,
+                  task.progress, task.assignee, task.priority, task.status, 
+                  task.project_id, task.parent_id))
+            
+            print(f"[DEBUG] Task created successfully: {task.id}")
+            return {"message": "Task created", "id": task.id}
+    except Exception as e:
+        print(f"[ERROR] Failed to create task: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to create task: {str(e)}")
 
 @app.put("/api/v1/tasks/{task_id}")
 async def update_task(task_id: str, task: Task):
-    with get_db() as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE tasks 
-            SET name=?, description=?, start_date=?, end_date=?, progress=?,
-                assignee=?, priority=?, status=?, project_id=?, parent_id=?
-            WHERE id=?
-        """, (task.name, task.description, task.start_date, task.end_date, 
-              task.progress, task.assignee, task.priority, task.status,
-              task.project_id, task.parent_id, task_id))
-        
-        if cursor.rowcount == 0:
-            raise HTTPException(status_code=404, detail="Task not found")
-        
-        return {"message": "Task updated"}
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            
+            print(f"[DEBUG] Updating task: {task_id}, name: {task.name}")
+            
+            cursor.execute("""
+                UPDATE tasks 
+                SET name=?, description=?, start_date=?, end_date=?, progress=?,
+                    assignee=?, priority=?, status=?, project_id=?, parent_id=?
+                WHERE id=?
+            """, (task.name, task.description, task.start_date, task.end_date, 
+                  task.progress, task.assignee, task.priority, task.status,
+                  task.project_id, task.parent_id, task_id))
+            
+            if cursor.rowcount == 0:
+                print(f"[DEBUG] Task not found: {task_id}")
+                raise HTTPException(status_code=404, detail="Task not found")
+            
+            print(f"[DEBUG] Task updated successfully: {task_id}")
+            return {"message": "Task updated", "id": task_id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] Failed to update task: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to update task: {str(e)}")
 
 @app.delete("/api/v1/tasks/{task_id}")
 async def delete_task(task_id: str):
