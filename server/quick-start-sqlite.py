@@ -174,6 +174,7 @@ async def backup_database():
 
 # Project APIs
 @app.get("/api/v1/projects/")
+@app.get("/api/v1/projects")  # 🔧 添加不带斜杠的路由，避免CORS重定向问题
 async def get_projects():
     with get_db() as conn:
         cursor = conn.cursor()
@@ -182,21 +183,33 @@ async def get_projects():
         return projects
 
 @app.post("/api/v1/projects/")
+@app.post("/api/v1/projects")  # 🔧 添加不带斜杠的路由，避免CORS重定向问题
 async def create_project(project: Project):
-    with get_db() as conn:
-        cursor = conn.cursor()
+    try:
+        print(f"[DEBUG] Creating project: {project.name}, id: {project.id}")
         
-        # Generate project ID
-        if not project.id:
-            project.id = f"PROJ-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-        
-        cursor.execute("""
-            INSERT INTO projects (id, name, description, status, progress, start_date, end_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        """, (project.id, project.name, project.description, project.status, 
-              project.progress, project.start_date, project.end_date))
-        
-        return {"message": "Project created", "id": project.id}
+        with get_db() as conn:
+            cursor = conn.cursor()
+            
+            # Generate project ID
+            if not project.id:
+                project.id = f"PROJ-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+            
+            print(f"[DEBUG] Generated project ID: {project.id}")
+            
+            cursor.execute("""
+                INSERT OR REPLACE INTO projects (id, name, description, status, progress, start_date, end_date)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (project.id, project.name, project.description, project.status, 
+                  project.progress, project.start_date, project.end_date))
+            
+            print(f"[DEBUG] Project created successfully: {project.id}")
+            return {"message": "Project created", "id": project.id}
+    except Exception as e:
+        print(f"[ERROR] Failed to create project: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to create project: {str(e)}")
 
 @app.get("/api/v1/projects/{project_id}")
 async def get_project(project_id: str):
@@ -242,6 +255,7 @@ async def delete_project(project_id: str):
 
 # Task APIs
 @app.get("/api/v1/tasks/")
+@app.get("/api/v1/tasks")  # 🔧 避免CORS重定向问题
 async def get_tasks(project_id: Optional[str] = None):
     with get_db() as conn:
         cursor = conn.cursor()
@@ -255,6 +269,7 @@ async def get_tasks(project_id: Optional[str] = None):
         return tasks
 
 @app.post("/api/v1/tasks/")
+@app.post("/api/v1/tasks")  # 🔧 避免CORS重定向问题
 async def create_task(task: Task):
     try:
         with get_db() as conn:
@@ -347,6 +362,7 @@ async def login(credentials: dict):
 
 # Device APIs
 @app.get("/api/v1/devices/")
+@app.get("/api/v1/devices")  # 🔧 避免CORS重定向问题
 async def get_devices(project_id: Optional[str] = None):
     """获取设备列表"""
     with get_db() as conn:
@@ -361,6 +377,7 @@ async def get_devices(project_id: Optional[str] = None):
         return devices
 
 @app.post("/api/v1/devices/")
+@app.post("/api/v1/devices")  # 🔧 避免CORS重定向问题
 async def create_device(device: dict):
     """创建设备"""
     with get_db() as conn:
