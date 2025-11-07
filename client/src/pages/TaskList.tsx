@@ -91,7 +91,7 @@ const TaskList: React.FC = () => {
         }
       } else {
         // Create
-        const response = await fetch('http://localhost:8000/api/v1/tasks/', {
+        const response = await fetch(`${API_ENDPOINTS.tasks}/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(taskData)

@@ -10,15 +10,16 @@ import {
   RocketOutlined,
   SafetyOutlined,
 } from '@ant-design/icons';
+import { API_BASE_URL } from '../config';
 import './SystemManagement.css';
 
 const SystemManagement: React.FC = () => {
   const openSwagger = () => {
-    window.open('http://localhost:8000/docs', '_blank');
+    window.open(`${API_BASE_URL}/docs`, '_blank');
   };
 
   const openRedoc = () => {
-    window.open('http://localhost:8000/redoc', '_blank');
+    window.open(`${API_BASE_URL}/redoc`, '_blank');
   };
 
   const managementLinks = [
@@ -26,14 +27,14 @@ const SystemManagement: React.FC = () => {
       icon: <ApiOutlined style={{ fontSize: 24, color: '#1890ff' }} />,
       title: 'Swagger UI',
       description: '交互式API文档，可以直接测试所有API接口',
-      url: 'http://localhost:8000/docs',
+      url: `${API_BASE_URL}/docs`,
       action: openSwagger,
     },
     {
       icon: <FileTextOutlined style={{ fontSize: 24, color: '#52c41a' }} />,
       title: 'ReDoc',
       description: '更美观的API文档阅读界面',
-      url: 'http://localhost:8000/redoc',
+      url: `${API_BASE_URL}/redoc`,
       action: openRedoc,
     },
     {
@@ -209,7 +210,7 @@ const SystemManagement: React.FC = () => {
             <strong>前端地址:</strong> http://localhost:3000
           </div>
           <div style={{ marginBottom: 8 }}>
-            <strong>后端地址:</strong> http://localhost:8000
+            <strong>后端地址:</strong> {API_BASE_URL}
           </div>
           <div style={{ marginBottom: 8 }}>
             <strong>数据库:</strong> SQLite (server/data/epc_system.db)
