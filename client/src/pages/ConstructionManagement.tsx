@@ -1,15 +1,16 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { 
   Card, Tabs, Empty, Button, Space, Progress, Tag, Timeline, 
   Descriptions, Modal, Form, Input, DatePicker, Slider, Select,
-  Table, Statistic, Row, Col, message 
+  Table, Statistic, Row, Col, message, notification 
 } from 'antd';
 import { 
   DashboardOutlined, RocketOutlined, FileTextOutlined, 
   SafetyOutlined, CheckCircleOutlined, EditOutlined,
-  PlusOutlined, SyncOutlined
+  PlusOutlined, SyncOutlined, WarningOutlined
 } from '@ant-design/icons';
 import { useProject } from '../contexts/ProjectContext';
+import { API_ENDPOINTS } from '../config';
 import dayjs from 'dayjs';
 
 /**
@@ -149,14 +150,89 @@ const ConstructionManagement: React.FC = () => {
     const overallProgress = calculateOverallProgress(updatedPhases);
     await updateProjectProgress(overallProgress);
     
+    // 🔄 自动检查阶段完成并推进
+    const updatedPhase = updatedPhases.find(p => p.key === editingPhase.key);
+    if (updatedPhase && updatedPhase.progress === 100 && updatedPhase.status !== 'completed') {
+      checkAndAdvancePhase(updatedPhase, updatedPhases);
+    }
+    
     setIsPhaseModalVisible(false);
     message.success('阶段信息已更新');
   };
 
+  // 🎯 自动推进阶段
+  const checkAndAdvancePhase = (currentPhase: any, phases: any[]) => {
+    const currentIndex = phases.findIndex(p => p.key === currentPhase.key);
+    if (currentIndex < phases.length - 1) {
+      const nextPhase = phases[currentIndex + 1];
+      
+      notification.success({
+        message: `🎉 ${currentPhase.name}完成！`,
+        description: `自动进入下一阶段：${nextPhase.name}`,
+        duration: 5,
+        icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />
+      });
+      
+      // 更新当前阶段为完成
+      setEpcPhases(prev => prev.map(p => 
+        p.key === currentPhase.key 
+          ? { ...p, status: 'completed' }
+          : p.key === nextPhase.key
+          ? { ...p, status: 'in_progress' }
+          : p
+      ));
+      
+      // 自动同步到甘特图
+      syncToGantt(nextPhase);
+    } else {
+      notification.success({
+        message: '🎊 项目完工！',
+        description: '所有EPC阶段已完成，请进行最终验收',
+        duration: 10,
+        icon: <RocketOutlined style={{ color: '#52c41a' }} />
+      });
+    }
+  };
+  
   // 🔄 同步到甘特图
-  const syncToGantt = (phase: any) => {
-    message.info(`正在将 ${phase.name} 同步到甘特图...`);
-    // TODO: 实现甘特图同步逻辑
+  const syncToGantt = async (phase: any) => {
+    if (!currentProject) return;
+    
+    try {
+      // 将EPC阶段转换为甘特图任务
+      const ganttTask = {
+        id: `${currentProject.id}-PHASE-${phase.key}`,
+        name: phase.name,
+        start_date: phase.startDate,
+        end_date: phase.endDate,
+        progress: phase.progress,
+        assignee: phase.responsible,
+        priority: 'high',
+        status: phase.status,
+        project_id: currentProject.id,
+        phase: phase.key,
+        description: `EPC阶段：${phase.name}，交付物：${phase.deliverables.join('、')}`
+      };
+      
+      // 保存到后端
+      const response = await fetch(`${API_ENDPOINTS.tasks}/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ganttTask)
+      });
+      
+      if (response.ok) {
+        notification.success({
+          message: '同步成功',
+          description: `${phase.name}已同步到甘特图`
+        });
+      }
+    } catch (error) {
+      notification.error({
+        message: '同步失败',
+        description: '无法连接到后端服务'
+      });
+    }
   };
 
   // 📊 项目概览

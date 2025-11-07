@@ -1,8 +1,10 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html, Environment, ContactShadows, Sky, Stars, Cloud } from '@react-three/drei';
-import { Spin, Progress } from 'antd';
+import { Spin, Progress, Tag, Statistic, Row, Col } from 'antd';
+import { WarningOutlined, CheckCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import * as THREE from 'three';
+import { API_ENDPOINTS } from '../../config';
 
 interface ModelProps {
   position?: [number, number, number];
