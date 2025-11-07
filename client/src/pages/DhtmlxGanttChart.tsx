@@ -711,14 +711,14 @@ const DhtmlxGanttChart: React.FC = () => {
     }
     
     setIsLoading(true);
-    setError('');
+    setError('⏳ 正在加载甘特图数据...');
     
     // 🔧 优先从LocalStorage加载（确保切换项目时数据不丢失）
     const cacheKey = `gantt_tasks_${currentProject.id}`;
     const cachedData = StorageManager.load(cacheKey);
     
     if (cachedData && cachedData.data && cachedData.data.length > 0) {
-      console.log(`[Gantt] 📦 从LocalStorage加载 ${cachedData.data.length} 个任务`);
+      console.log(`[Gantt] 📦 从LocalStorage加载 ${cachedData.data.length} 个任务（瞬时加载）`);
       
       // 🔧 修复：将字符串日期转换为Date对象 + 预分配颜色索引 + 应用颜色
       const fixedData = {
@@ -755,16 +755,17 @@ const DhtmlxGanttChart: React.FC = () => {
       return; // ✅ 直接返回，不再请求后端
     }
     
-    // 📡 LocalStorage无数据，尝试从后端加载
+    // 📡 LocalStorage无数据，尝试从后端加载（快速失败模式）
     const url = `${API_ENDPOINTS.tasks}?project_id=${currentProject.id}`;
     console.log('[Gantt] 📡 从后端加载任务:', url);
+    setError('⏳ 本地无数据，正在连接后端...');
 
     try {
-      // 🆕 使用智能重试机制（最多3次，指数退避）
+      // 🚀 优化：快速失败模式（2秒超时，只重试1次）
       const tasksData = await smartFetch(url, {
-        timeout: 5000,
-        retries: 3,
-        retryDelay: 1000,
+        timeout: 2000, // ⚡ 从5秒减少到2秒
+        retries: 1,    // ⚡ 从3次减少到1次（总共最多4秒）
+        retryDelay: 500, // ⚡ 从1秒减少到500ms
         cache: false, // ❌ 禁用smartFetch的缓存，使用LocalStorage作为唯一缓存源
         cacheTTL: 0
       });
@@ -923,7 +924,7 @@ const DhtmlxGanttChart: React.FC = () => {
           }),
           links: []
         };
-        setError(`⚠️ 本地模式：后端未连接，显示演示数据（仅供查看）`);
+        setError(`⚠️ 本地模式：后端连接失败（${error.message}），显示演示数据`);
       }
       
       if (window.gantt) {
