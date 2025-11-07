@@ -103,39 +103,80 @@ const DhtmlxGanttChart: React.FC = () => {
       if (scriptLoadingRef.current || window.__ganttScriptLoaded) return;
       scriptLoadingRef.current = true;
 
+      // 🚀 优化：优先使用CDN，失败时回退到本地文件
+      const CSS_SOURCES = [
+        'https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css',  // CDN主源
+        '/gantt-master/codebase/dhtmlxgantt.css'              // 本地备份
+      ];
+      
+      const JS_SOURCES = [
+        'https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js',   // CDN主源
+        '/gantt-master/codebase/dhtmlxgantt.js'               // 本地备份
+      ];
+
       // 加载 CSS（防重复注入，添加错误处理）
-      if (!document.querySelector('link[href="/gantt-master/codebase/dhtmlxgantt.css"]')) {
+      const loadCSS = (sources: string[], index = 0) => {
+        if (index >= sources.length) {
+          console.error('[Gantt] ❌ All CSS sources failed');
+          return;
+        }
+        
+        const href = sources[index];
+        if (document.querySelector(`link[href="${href}"]`)) {
+          console.log(`[Gantt] CSS already loaded: ${href}`);
+          return;
+        }
+        
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/gantt-master/codebase/dhtmlxgantt.css';
+        link.href = href;
+        link.onload = () => {
+          console.log(`[Gantt] ✅ CSS loaded from: ${href}`);
+        };
         link.onerror = () => {
-          console.warn('[Gantt] ⚠️ Failed to load Gantt CSS, using fallback styles');
+          console.warn(`[Gantt] ⚠️ Failed to load CSS from: ${href}, trying next...`);
+          loadCSS(sources, index + 1);
         };
         document.head.appendChild(link);
-      }
+      };
+      
+      loadCSS(CSS_SOURCES);
 
-      // 加载 JS（防重复注入，添加错误处理）
-      if (!document.querySelector('script[src="/gantt-master/codebase/dhtmlxgantt.js"]')) {
+      // 加载 JS（防重复注入，添加错误处理，支持CDN回退）
+      const loadJS = (sources: string[], index = 0) => {
+        if (index >= sources.length) {
+          console.error('[Gantt] ❌ All JS sources failed');
+          notification.error({
+            message: '甘特图库加载失败',
+            description: '无法从CDN或本地加载DHTMLX Gantt库，请检查网络连接',
+            duration: 5
+          });
+          return;
+        }
+        
+        const src = sources[index];
+        if (document.querySelector(`script[src="${src}"]`)) {
+          console.log(`[Gantt] JS already loaded: ${src}`);
+          window.__ganttScriptLoaded = true;
+          initGantt();
+          return;
+        }
+        
         const script = document.createElement('script');
-        script.src = '/gantt-master/codebase/dhtmlxgantt.js';
+        script.src = src;
         script.onload = () => {
-          console.log('[Gantt] ✅ Gantt library loaded successfully');
+          console.log(`[Gantt] ✅ JS loaded from: ${src}`);
           window.__ganttScriptLoaded = true;
           initGantt();
         };
         script.onerror = () => {
-          console.error('[Gantt] ❌ Failed to load Gantt library from /gantt-master/');
-          notification.error({
-            message: '甘特图库加载失败',
-            description: '无法加载DHTMLX Gantt库，请检查网络连接或联系管理员',
-            duration: 5
-          });
+          console.warn(`[Gantt] ⚠️ Failed to load JS from: ${src}, trying next...`);
+          loadJS(sources, index + 1);
         };
         document.body.appendChild(script);
-      } else {
-        window.__ganttScriptLoaded = true;
-        initGantt();
-      }
+      };
+      
+      loadJS(JS_SOURCES);
     };
 
     loadDhtmlxGantt();
