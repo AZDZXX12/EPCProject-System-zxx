@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Statistic, Progress, Timeline, List, Tag, Alert, Divider } from 'antd';
+import { API_ENDPOINTS } from '../config';
 import {
   ProjectOutlined,
   CheckCircleOutlined,
@@ -39,7 +40,7 @@ const Dashboard: React.FC = () => {
     const fetchTaskStats = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const url = `http://localhost:8000/api/v1/tasks/?project_id=${currentProject.id}`;
+        const url = `${API_ENDPOINTS.tasks}/?project_id=${currentProject.id}`;
         const response = await fetch(url, {
           headers: { 'Authorization': token ? `Bearer ${token}` : '' }
         });
@@ -72,7 +73,7 @@ const Dashboard: React.FC = () => {
     const fetchDeviceStats = async () => {
       try {
         const token = localStorage.getItem('access_token');
-        const url = `http://localhost:8000/api/v1/devices/?project_id=${currentProject.id}`;
+        const url = `${API_ENDPOINTS.devices}/?project_id=${currentProject.id}`;
         const response = await fetch(url, {
           headers: { 'Authorization': token ? `Bearer ${token}` : '' }
         });
@@ -97,7 +98,7 @@ const Dashboard: React.FC = () => {
   }, [currentProject]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/v1/projects/')
+    fetch(`${API_ENDPOINTS.projects}/`)
       .then(res => {
         if (res.ok) {
           return res.json();

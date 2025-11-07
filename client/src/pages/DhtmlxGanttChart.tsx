@@ -103,21 +103,33 @@ const DhtmlxGanttChart: React.FC = () => {
       if (scriptLoadingRef.current || window.__ganttScriptLoaded) return;
       scriptLoadingRef.current = true;
 
-      // 加载 CSS（防重复注入）
+      // 加载 CSS（防重复注入，添加错误处理）
       if (!document.querySelector('link[href="/gantt-master/codebase/dhtmlxgantt.css"]')) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = '/gantt-master/codebase/dhtmlxgantt.css';
+        link.onerror = () => {
+          console.warn('[Gantt] ⚠️ Failed to load Gantt CSS, using fallback styles');
+        };
         document.head.appendChild(link);
       }
 
-      // 加载 JS（防重复注入）
+      // 加载 JS（防重复注入，添加错误处理）
       if (!document.querySelector('script[src="/gantt-master/codebase/dhtmlxgantt.js"]')) {
         const script = document.createElement('script');
         script.src = '/gantt-master/codebase/dhtmlxgantt.js';
         script.onload = () => {
+          console.log('[Gantt] ✅ Gantt library loaded successfully');
           window.__ganttScriptLoaded = true;
           initGantt();
+        };
+        script.onerror = () => {
+          console.error('[Gantt] ❌ Failed to load Gantt library from /gantt-master/');
+          notification.error({
+            message: '甘特图库加载失败',
+            description: '无法加载DHTMLX Gantt库，请检查网络连接或联系管理员',
+            duration: 5
+          });
         };
         document.body.appendChild(script);
       } else {
