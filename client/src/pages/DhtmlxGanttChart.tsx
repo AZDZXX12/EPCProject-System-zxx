@@ -754,32 +754,26 @@ const DhtmlxGanttChart: React.FC = () => {
     setIsLoading(true);
     setError('⏳ 正在加载甘特图数据...');
     
-    // 🔧 优先从LocalStorage加载（确保切换项目时数据不丢失）
+    // 🚀 优化：先快速显示本地数据，然后静默同步后端
     const cacheKey = `gantt_tasks_${currentProject.id}`;
     const cachedData = StorageManager.load(cacheKey);
     
     if (cachedData && cachedData.data && cachedData.data.length > 0) {
-      console.log(`[Gantt] 📦 从LocalStorage加载 ${cachedData.data.length} 个任务（瞬时加载）`);
+      console.log(`[Gantt] 📦 快速显示本地数据 ${cachedData.data.length} 个任务`);
       
-      // 🔧 修复：将字符串日期转换为Date对象 + 预分配颜色索引 + 应用颜色
+      // 立即显示本地数据
       const fixedData = {
         data: cachedData.data.map((task: any) => {
-          // 1. 预分配颜色索引（如果还没有）
           if (!taskColorMapRef.current.has(task.id)) {
             const colorIdx = colorIndexRef.current % colorPalette.length;
             taskColorMapRef.current.set(task.id, colorIdx);
             colorIndexRef.current++;
-            console.log(`[Gantt] 预分配颜色 - 任务: ${task.text}, 索引: ${colorIdx}`);
           }
-          
-          // 2. 转换日期
           const t = {
             ...task,
             start_date: typeof task.start_date === 'string' ? new Date(task.start_date) : task.start_date,
             end_date: task.end_date && typeof task.end_date === 'string' ? new Date(task.end_date) : task.end_date
           };
-          
-          // 3. 应用动态颜色计算
           return computeTaskColors(t);
         }),
         links: cachedData.links || []
@@ -788,12 +782,10 @@ const DhtmlxGanttChart: React.FC = () => {
       if (window.gantt) {
         window.gantt.clearAll();
         window.gantt.parse(fixedData);
-        // 强制刷新以应用颜色
         setTimeout(() => window.gantt.render(), 50);
       }
-      setIsLoading(false);
-      setError(`✅ 本地数据 (${cachedData.data.length} 个任务)`);
-      return; // ✅ 直接返回，不再请求后端
+      setError(`⚡ 本地数据 (${cachedData.data.length} 个任务) - 正在同步后端...`);
+      // ✅ 不立即返回，继续同步后端
     }
     
     // 📡 LocalStorage无数据，尝试从后端加载（快速失败模式）
