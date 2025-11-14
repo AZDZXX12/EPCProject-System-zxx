@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>页面结构调试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .preview-container {
+            border: 2px solid #2196F3;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 200px;
+        }
+        .page-num-test {
+            position: relative;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 150px;
+        }
+        .page-num {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            background: white;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 页面结构调试</h1>
+
+    <div class="box">
+        <h2>测试1：检查页码元素</h2>
+        <div class="preview-container" id="testContainer1">
+            <div class="page-num-test">
+                <p>这是测试内容</p>
+                <div class="page-num" id="testPageNum">第 1 页 / 共 3 页</div>
+            </div>
+        </div>
+        <button onclick="inspectPageNum()">检查页码元素</button>
+        <pre id="pageNumResult"></pre>
+    </div>
+
+    <div class="box">
+        <h2>测试2：检查所有子元素</h2>
+        <button onclick="checkAllElements()">检查所有元素</button>
+        <pre id="allElementsResult"></pre>
+    </div>
+
+    <div class="box">
+        <h2>测试3：检查计算后的样式</h2>
+        <button onclick="checkComputedStyle()">检查样式</button>
+        <pre id="styleResult"></pre>
+    </div>
+
+    <div class="box">
+        <h2>测试4：检查是否有伪元素</h2>
+        <button onclick="checkPseudoElements()">检查伪元素</button>
+        <pre id="pseudoResult"></pre>
+    </div>
+
+    <div class="box">
+        <h2>测试5：打开PDF预览并检查</h2>
+        <p>请按以下步骤操作：</p>
+        <ol>
+            <li>点击下方按钮打开主页</li>
+            <li>点击"导出PDF"</li>
+            <li>按F12打开开发者工具</li>
+            <li>在Elements标签中找到class="page-num"的元素</li>
+            <li>查看它的HTML结构和内容</li>
+            <li>截图告诉我</li>
+        </ol>
+        <button onclick="window.open('http://localhost:8000/index.html')">打开主页</button>
+    </div>
+
+    <script>
+        function inspectPageNum() {
+            const elem = document.getElementById('testPageNum');
+            const result = document.getElementById('pageNumResult');
+            
+            const info = {
+                'tagName': elem.tagName,
+                'className': elem.className,
+                'textContent': elem.textContent,
+                'innerHTML': elem.innerHTML,
+                'childNodes': elem.childNodes.length,
+                'children': elem.children.length,
+                'nodeType': elem.nodeType,
+                'outerHTML': elem.outerHTML
+            };
+            
+            // 检查子节点
+            const children = [];
+            for (let i = 0; i < elem.childNodes.length; i++) {
+                const child = elem.childNodes[i];
+                children.push({
+                    type: child.nodeType === 1 ? 'ELEMENT' : child.nodeType === 3 ? 'TEXT' : 'OTHER',
+                    name: child.nodeName,
+                    content: child.nodeType === 3 ? child.nodeValue : child.outerHTML
+                });
+            }
+            info.childrenDetails = children;
+            
+            result.textContent = JSON.stringify(info, null, 2);
+            console.log('页码元素信息:', info);
+        }
+
+        function checkAllElements() {
+            const container = document.getElementById('testContainer1');
+            const result = document.getElementById('allElementsResult');
+            
+            function getElementTree(elem, depth = 0) {
+                let output = '  '.repeat(depth) + `<${elem.tagName}`;
+                if (elem.className) output += ` class="${elem.className}"`;
+                output += '>\n';
+                
+                for (let i = 0; i < elem.childNodes.length; i++) {
+                    const child = elem.childNodes[i];
+                    if (child.nodeType === 1) {
+                        output += getElementTree(child, depth + 1);
+                    } else if (child.nodeType === 3 && child.nodeValue.trim()) {
+                        output += '  '.repeat(depth + 1) + `TEXT: "${child.nodeValue.trim()}"\n`;
+                    }
+                }
+                
+                return output;
+            }
+            
+            result.textContent = getElementTree(container);
+        }
+
+        function checkComputedStyle() {
+            const elem = document.getElementById('testPageNum');
+            const result = document.getElementById('styleResult');
+            const computed = window.getComputedStyle(elem);
+            
+            const styles = {
+                'position': computed.position,
+                'bottom': computed.bottom,
+                'left': computed.left,
+                'right': computed.right,
+                'text-align': computed.textAlign,
+                'font-size': computed.fontSize,
+                'color': computed.color,
+                'background': computed.background,
+                'padding': computed.padding,
+                'display': computed.display,
+                'content': computed.content
+            };
+            
+            result.textContent = JSON.stringify(styles, null, 2);
+        }
+
+        function checkPseudoElements() {
+            const elem = document.getElementById('testPageNum');
+            const result = document.getElementById('pseudoResult');
+            
+            const before = window.getComputedStyle(elem, '::before');
+            const after = window.getComputedStyle(elem, '::after');
+            
+            const info = {
+                '::before': {
+                    content: before.content,
+                    display: before.display,
+                    visible: before.content !== 'none' && before.content !== '""'
+                },
+                '::after': {
+                    content: after.content,
+                    display: after.display,
+                    visible: after.content !== 'none' && after.content !== '""'
+                }
+            };
+            
+            result.textContent = JSON.stringify(info, null, 2);
+            console.log('伪元素信息:', info);
+        }
+
+        // 自动运行所有测试
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                console.log('=== 自动运行所有测试 ===');
+                inspectPageNum();
+                checkAllElements();
+                checkComputedStyle();
+                checkPseudoElements();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
+

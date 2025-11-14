@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件历史</title>
+    
+    <!-- 登录检查脚本 -->
+    <script>
+        // 检查登录状态（每次都需要重新登录）
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                // 本次会话未登录，跳转到登录页面
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const userInfo = JSON.parse(sessionInfo);
+                if (!userInfo.isLoggedIn) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                // 保存用户信息到全局变量
+                window.currentUser = userInfo;
+                console.log('✅ 用户已登录:', userInfo.phone);
+            } catch (e) {
+                console.error('解析登录信息失败:', e);
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1f36;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-stats {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: normal;
+        }
+
+        .header-stats strong {
+            color: #00d4ff;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #00d4ff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+        
+        .filter-box {
+            background: white;
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: grid;
+            grid-template-columns: 1fr 200px 200px;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .filter-box input,
+        .filter-box select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #f9fafb;
+            color: #1a1f36;
+            transition: all 0.3s;
+        }
+        
+        .filter-box input:focus,
+        .filter-box select:focus {
+            outline: none;
+            background: white;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
+        }
+
+        .filter-box input::placeholder {
+            color: #9ca3af;
+        }
+
+        .filter-box select {
+            cursor: pointer;
+        }
+        
+        .records {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .record-item {
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+        
+        .record-item:last-child {
+            border-bottom: none;
+        }
+        
+        .record-item:hover {
+            background: #f9fafb;
+        }
+        
+        .record-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .record-name {
+            font-size: 14px;
+            color: #1a1f36;
+            font-weight: 500;
+        }
+        
+        .record-name.excel {
+            color: #52c41a;
+        }
+        
+        .record-name.pdf {
+            color: #ff7875;
+        }
+        
+        .record-name::before {
+            margin-right: 6px;
+        }
+        
+        .record-name.excel::before {
+            content: '📊';
+        }
+        
+        .record-name.pdf::before {
+            content: '📄';
+        }
+        
+        .record-time {
+            font-size: 13px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        
+        .file-size {
+            font-size: 13px;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        
+        .download-btn {
+            padding: 8px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #00d4ff;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            background: white;
+            color: #00d4ff;
+        }
+        
+        .download-btn:hover {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+        
+        .delete-btn {
+            padding: 8px 12px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #9ca3af;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #f3f4f6;
+            border-color: #6b7280;
+            color: #374151;
+        }
+        
+        .empty, .loading, .error {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 文件历史 <span class="header-stats">· 共 <strong id="totalRecords">0</strong> 个文件</span></h1>
+            <div class="header-actions">
+                <button class="btn" onclick="window.close()">← 返回</button>
+                <button class="btn" onclick="refreshData()">🔄 刷新</button>
+            </div>
+        </div>
+        
+        <div class="filter-box">
+            <input type="text" id="searchInput" placeholder="🔍 搜索文件名..." />
+            <select id="typeFilter" aria-label="文件类型筛选">
+                <option value="">全部类型</option>
+                <option value="excel">Excel 文件</option>
+                <option value="pdf">PDF 文件</option>
+            </select>
+            <input type="date" id="dateFilter" placeholder="筛选日期" aria-label="日期筛选" />
+        </div>
+        
+        <div class="records">
+            <div id="recordsList" class="loading">
+                正在加载...
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'https://luckysheet-backend.onrender.com/api/selections';  // 生产环境
+        // const API_BASE_URL = 'http://localhost:8001/api/selections';  // 本地开发环境
+        let allRecords = [];
+        let filteredRecords = [];
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            document.getElementById('searchInput').addEventListener('input', filterRecords);
+            document.getElementById('typeFilter').addEventListener('change', filterRecords);
+            document.getElementById('dateFilter').addEventListener('change', filterRecords);
+        });
+        
+        async function loadData() {
+            try {
+                // 获取当前登录用户信息
+                const currentUser = window.currentUser;
+                if (!currentUser || !currentUser.phone) {
+                    console.error('未找到用户信息');
+                    return;
+                }
+                
+                // 从后端API获取真实数据，添加用户过滤参数
+                const userPhone = currentUser.phone;
+                
+                // 获取统计信息（仅当前用户）
+                const statsRes = await fetch(`${API_BASE_URL}/records/stats/?phone=${encodeURIComponent(userPhone)}`);
+                if (statsRes.ok) {
+                    const stats = await statsRes.json();
+                    document.getElementById('totalRecords').textContent = stats.total_records || 0;
+                }
+                
+                // 获取记录列表（仅当前用户）
+                const recordsRes = await fetch(`${API_BASE_URL}/records/?phone=${encodeURIComponent(userPhone)}`);
+                if (!recordsRes.ok) throw new Error('加载失败');
+                
+                allRecords = await recordsRes.json();
+                
+                // 前端再次过滤，确保安全
+                allRecords = allRecords.filter(record => record.phone === userPhone);
+                
+                filteredRecords = [...allRecords];
+                renderRecords();
+            } catch (error) {
+                console.error('加载失败:', error);
+                document.getElementById('recordsList').innerHTML = '<div class="error">❌ 加载失败，请检查网络</div>';
+            }
+        }
+        
+        function filterRecords() {
+            const search = document.getElementById('searchInput').value.trim().toLowerCase();
+            const typeFilter = document.getElementById('typeFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            filteredRecords = allRecords.filter(record => {
+                // 搜索过滤
+                if (search && !record.project_name.toLowerCase().includes(search)) {
+                    return false;
+                }
+                
+                // 类型过滤
+                if (typeFilter === 'excel' && !record.has_excel) return false;
+                if (typeFilter === 'pdf' && !record.has_pdf) return false;
+                
+                // 日期过滤
+                if (dateFilter) {
+                    const recordDate = new Date(record.created_at).toISOString().split('T')[0];
+                    if (recordDate !== dateFilter) return false;
+                }
+                
+                return true;
+            });
+            
+            filteredRecords.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            renderRecords();
+        }
+        
+        function renderRecords() {
+            const container = document.getElementById('recordsList');
+            
+            if (filteredRecords.length === 0) {
+                container.innerHTML = '<div class="empty">📭 暂无文件</div>';
+                return;
+            }
+            
+            container.innerHTML = filteredRecords.map(record => {
+                // 🔥 修复：明确指定北京时区（Asia/Shanghai）
+                const date = new Date(record.created_at).toLocaleString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false,
+                    timeZone: 'Asia/Shanghai' // 强制使用北京时间
+                });
+                
+                // 🔥 修复：正确判断文件类型 - 优先使用filename而不是has_excel/has_pdf
+                // 如果有filename，使用filename；否则使用project_name + 扩展名
+                let fileName, fileType, downloadFunc, fileSize;
+                
+                if (record.has_excel && record.excel_filename) {
+                    fileName = record.excel_filename;
+                    fileType = 'excel';
+                    downloadFunc = 'downloadExcel';
+                    fileSize = formatSize(record.excel_size);
+                } else if (record.has_pdf && record.pdf_filename) {
+                    fileName = record.pdf_filename;
+                    fileType = 'pdf';
+                    downloadFunc = 'downloadPDF';
+                    fileSize = formatSize(record.pdf_size);
+                } else if (record.has_excel) {
+                    fileName = record.project_name + '.xlsx';
+                    fileType = 'excel';
+                    downloadFunc = 'downloadExcel';
+                    fileSize = formatSize(record.excel_size);
+                } else {
+                    fileName = record.project_name + '.pdf';
+                    fileType = 'pdf';
+                    downloadFunc = 'downloadPDF';
+                    fileSize = formatSize(record.pdf_size);
+                }
+                
+                return `
+                    <div class="record-item">
+                        <div class="record-info">
+                            <div class="record-name ${fileType}">${escapeHtml(fileName)}</div>
+                            <div class="record-time">${date}</div>
+                        </div>
+                        <div class="file-size">${fileSize}</div>
+                        <button class="download-btn" onclick="${downloadFunc}(${record.id})">
+                            📥 下载
+                        </button>
+                        <button class="delete-btn" onclick="deleteRecord(${record.id})" title="删除">
+                            🗑️
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function formatSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        async function downloadExcel(id) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/records/${id}/download_excel/`);
+                if (!res.ok) throw new Error('下载失败');
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `selection_${id}.xlsx`;
+                a.click();
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('下载失败');
+            }
+        }
+        
+        async function downloadPDF(id) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/records/${id}/download_pdf/`);
+                if (!res.ok) throw new Error('下载失败');
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `selection_${id}.pdf`;
+                a.click();
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                alert('下载失败');
+            }
+        }
+        
+        async function deleteRecord(id) {
+            if (!confirm('确定要删除这个文件吗？')) return;
+            try {
+                const res = await fetch(`${API_BASE_URL}/records/${id}/`, { method: 'DELETE' });
+                if (!res.ok) throw new Error('删除失败');
+                await loadData();
+            } catch (error) {
+                alert('删除失败');
+            }
+        }
+        
+        function refreshData() {
+            loadData();
+        }
+    </script>
+</body>
+</html>

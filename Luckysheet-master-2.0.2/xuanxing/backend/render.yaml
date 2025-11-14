@@ -1,0 +1,35 @@
+services:
+  # Django 后端服务
+  - type: web
+    name: cable-selector-backend
+    env: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --no-input
+      python manage.py migrate
+      python manage.py load_initial_data
+    startCommand: gunicorn cable_selector.wsgi:application
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cable-selector-db
+          property: connectionString
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+
+databases:
+  # PostgreSQL 数据库
+  - name: cable-selector-db
+    plan: free
+    databaseName: cable_selector
+    user: cable_selector_user
+

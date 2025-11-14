@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>风量计算 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>🌪️ 风量计算器</h1>
+            <p class="subtitle">根据管道直径和风速计算风量</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="diameter">管道直径 (mm)</label>
+                    <input type="number" id="diameter" placeholder="请输入管道直径" step="0.01">
+                </div>
+
+                <div class="input-group">
+                    <label for="windSpeed">风速 (m/s)</label>
+                    <input type="number" id="windSpeed" placeholder="请输入风速" step="0.01">
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">💨 计算风量</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 计算结果</h3>
+                <div class="result-item">
+                    <span class="result-label">风量：</span>
+                    <span class="result-value" id="airFlow">-</span>
+                    <span class="result-unit">m³/h</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">管道面积：</span>
+                    <span class="result-value" id="area">-</span>
+                    <span class="result-unit">m²</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+                return;
+            }
+        })();
+
+        // 计算风量
+        function calculate() {
+            const diameter = parseFloat(document.getElementById('diameter').value);
+            const windSpeed = parseFloat(document.getElementById('windSpeed').value);
+
+            // 验证输入
+            if (!diameter || diameter <= 0) {
+                alert('请输入有效的管道直径数值');
+                return;
+            }
+
+            if (!windSpeed || windSpeed <= 0) {
+                alert('请输入有效的风速数值');
+                return;
+            }
+
+            // 计算风量
+            // 公式: Q = π * (D/1000)² / 4 * V * 3600
+            // Q: 风量 (m³/h)
+            // D: 直径 (mm)
+            // V: 风速 (m/s)
+            const diameterM = diameter / 1000; // 转换为米
+            const area = Math.PI * Math.pow(diameterM, 2) / 4; // 管道面积 (m²)
+            const airFlow = area * windSpeed * 3600; // 风量 (m³/h)
+
+            // 显示结果
+            document.getElementById('airFlow').textContent = airFlow.toFixed(4);
+            document.getElementById('area').textContent = area.toFixed(6);
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        // 返回主页
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        // 回车键触发计算
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>线缆选型推荐 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>⚡ 线缆选型推荐</h1>
+            <p class="subtitle">电缆截面积智能计算</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="cableLength">电缆长度 (m)</label>
+                    <input type="number" id="cableLength" placeholder="请输入电缆长度" step="1" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="motorPower">电机功率 (kW)</label>
+                    <select id="motorPower">
+                        <option value="">请选择电机功率</option>
+                        <option value="0.75">0.75</option>
+                        <option value="1.1">1.1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2.2">2.2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5.5">5.5</option>
+                        <option value="7.5">7.5</option>
+                        <option value="11">11</option>
+                        <option value="15">15</option>
+                        <option value="18.5">18.5</option>
+                        <option value="22">22</option>
+                        <option value="30">30</option>
+                        <option value="37">37</option>
+                        <option value="45">45</option>
+                        <option value="55">55</option>
+                        <option value="75">75</option>
+                        <option value="90">90</option>
+                        <option value="110">110</option>
+                        <option value="132">132</option>
+                        <option value="160">160</option>
+                        <option value="200">200</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="voltage">电压 (kV)</label>
+                    <select id="voltage">
+                        <option value="0.6" selected>0.6kV (低压)</option>
+                        <option value="6">6kV (高压)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="startMethod">启动方式</label>
+                    <select id="startMethod">
+                        <option value="direct" selected>直接启动</option>
+                        <option value="star-delta">星三角启动</option>
+                        <option value="vfd">变频启动</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="installType">安装方式</label>
+                    <select id="installType">
+                        <option value="bridge" selected>桥架铺设</option>
+                        <option value="pipe-steel">穿线管-钢</option>
+                        <option value="pipe-pvc">穿线管-胶</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="coreType">芯数</label>
+                    <select id="coreType">
+                        <option value="1">1芯</option>
+                        <option value="2">2芯</option>
+                        <option value="3" selected>3芯</option>
+                        <option value="4">4芯</option>
+                        <option value="5">5芯</option>
+                        <option value="31">3+1芯</option>
+                        <option value="32">3+2芯</option>
+                        <option value="41">4+1芯</option>
+                    </select>
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">🔌 计算线缆</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 推荐线缆</h3>
+                <div class="result-item">
+                    <span class="result-label">推荐型号：</span>
+                    <span class="result-value" id="cableModel" style="font-size: 20px;">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">额定电流：</span>
+                    <span class="result-value" id="current">-</span>
+                    <span class="result-unit">A</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">安全载流：</span>
+                    <span class="result-value" id="safeCurrent">-</span>
+                    <span class="result-unit">A</span>
+                </div>
+                <div class="result-item" id="remarkItem" style="display: none;">
+                    <span class="result-label">备注：</span>
+                    <span class="result-value" id="remark" style="font-size: 14px; color: #ff9800;">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const cableLength = parseFloat(document.getElementById('cableLength').value);
+            const motorPower = parseFloat(document.getElementById('motorPower').value);
+            const voltage = parseFloat(document.getElementById('voltage').value);
+            const startMethod = document.getElementById('startMethod').value;
+            const installType = document.getElementById('installType').value;
+            const coreType = parseInt(document.getElementById('coreType').value);
+
+            // 验证输入
+            if (!cableLength || cableLength <= 0) {
+                alert('请输入有效的电缆长度');
+                return;
+            }
+            if (!motorPower) {
+                alert('请选择电机功率');
+                return;
+            }
+
+            // 计算额定电流
+            let ratedCurrent;
+            if (voltage === 0.6) {
+                // 低压: I = P / (√3 × U × cosφ)
+                // cosφ取0.85，效率取0.9
+                ratedCurrent = motorPower / (Math.sqrt(3) * 0.38 * 0.85 * 0.9);
+            } else {
+                // 高压6kV
+                ratedCurrent = motorPower / (Math.sqrt(3) * 6 * 0.85 * 0.9);
+            }
+
+            // 启动电流系数
+            let startCoeff = 1.0;
+            if (startMethod === 'direct') {
+                startCoeff = 1.5; // 直接启动冲击大
+            } else if (startMethod === 'star-delta') {
+                startCoeff = 1.2;
+            } else {
+                startCoeff = 1.1; // 变频启动最小
+            }
+
+            // 安装方式降容系数
+            let installCoeff = 1.0;
+            if (installType === 'pipe-steel') {
+                installCoeff = 0.85;
+            } else if (installType === 'pipe-pvc') {
+                installCoeff = 0.8;
+            }
+
+            // 计算所需电流（考虑裕量1.25倍）
+            const requiredCurrent = ratedCurrent * startCoeff * 1.25 / installCoeff;
+
+            // 选择电缆截面
+            const cableSelection = selectCable(requiredCurrent, voltage, coreType, cableLength);
+
+            // 显示结果
+            displayResult(cableSelection, ratedCurrent, requiredCurrent);
+        }
+
+        function selectCable(current, voltage, coreType, length) {
+            // 铜芯电缆载流量参考表 (YJV电缆)
+            const cableData = [
+                {section: 1.5, current: 18},
+                {section: 2.5, current: 26},
+                {section: 4, current: 35},
+                {section: 6, current: 45},
+                {section: 10, current: 65},
+                {section: 16, current: 85},
+                {section: 25, current: 110},
+                {section: 35, current: 140},
+                {section: 50, current: 180},
+                {section: 70, current: 225},
+                {section: 95, current: 270},
+                {section: 120, current: 320},
+                {section: 150, current: 365},
+                {section: 185, current: 420},
+                {section: 240, current: 500}
+            ];
+
+            // 查找合适的截面
+            let selected = cableData.find(cable => cable.current >= current);
+            if (!selected) {
+                selected = cableData[cableData.length - 1];
+            }
+
+            // 电压降校验（长距离需要放大截面）
+            if (length > 100) {
+                const voltageDrop = (2 * length * current * 0.0175) / (selected.section);
+                if (voltage === 0.6 && voltageDrop > 20) { // 允许压降5%
+                    // 需要放大截面
+                    const minSection = (2 * length * current * 0.0175) / 20;
+                    selected = cableData.find(cable => cable.section >= minSection) || selected;
+                }
+            }
+
+            // 构建电缆型号
+            let coreDesc;
+            if (coreType === 1) coreDesc = '1×';
+            else if (coreType === 2) coreDesc = '2×';
+            else if (coreType === 3) coreDesc = '3×';
+            else if (coreType === 4) coreDesc = '4×';
+            else if (coreType === 5) coreDesc = '5×';
+            else if (coreType === 31) coreDesc = '3×' + selected.section + '+1×';
+            else if (coreType === 32) coreDesc = '3×' + selected.section + '+2×';
+            else if (coreType === 41) coreDesc = '4×' + selected.section + '+1×';
+
+            const voltageType = voltage === 0.6 ? 'YJV-0.6/1kV' : 'YJV-6/10kV';
+            const cableModel = `${voltageType} ${coreDesc}${selected.section}mm²`;
+
+            return {
+                model: cableModel,
+                section: selected.section,
+                safeCurrent: selected.current,
+                needUpgrade: length > 100
+            };
+        }
+
+        function displayResult(cable, ratedCurrent, requiredCurrent) {
+            document.getElementById('cableModel').textContent = cable.model;
+            document.getElementById('current').textContent = ratedCurrent.toFixed(1);
+            document.getElementById('safeCurrent').textContent = cable.safeCurrent;
+
+            if (cable.needUpgrade) {
+                document.getElementById('remark').textContent = '长距离输电，已考虑压降，截面已适当放大';
+                document.getElementById('remarkItem').style.display = 'flex';
+            } else {
+                document.getElementById('remarkItem').style.display = 'none';
+            }
+
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>
+

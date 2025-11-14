@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 设备参数选型系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #00d4ff;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+        }
+
+        h1 {
+            color: #1a1f36;
+            font-size: 28px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-phone {
+            font-size: 22px;
+            color: #1a1f36;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .user-role {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #1a1f36;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            color: #1a1f36;
+            background: #f9fafb;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
+        }
+
+        .form-input:disabled {
+            background: #f0f0f0;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .password-strength {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s ease;
+        }
+
+        .strength-weak {
+            background: #ef4444;
+            width: 33%;
+        }
+
+        .strength-medium {
+            background: #f59e0b;
+            width: 66%;
+        }
+
+        .strength-strong {
+            background: #10b981;
+            width: 100%;
+        }
+
+        .password-tips {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0;
+            }
+
+            .profile-card {
+                border-radius: 12px;
+                padding: 20px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👤 个人中心</h1>
+            <a href="index.html" class="back-btn">← 返回主页</a>
+        </div>
+
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar" id="userAvatar">👤</div>
+                <div class="user-info">
+                    <div class="user-phone" id="userPhone">-</div>
+                    <span class="user-role" id="userRole">用户</span>
+                </div>
+            </div>
+
+            <div id="alertBox" class="alert"></div>
+
+            <form id="changePasswordForm">
+                <div class="form-section">
+                    <h3 class="section-title">🔐 修改密码</h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">当前密码</label>
+                        <input type="password" id="currentPassword" class="form-input" placeholder="请输入当前密码" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">新密码</label>
+                        <input type="password" id="newPassword" class="form-input" placeholder="请输入新密码（至少6位）" required minlength="6">
+                        <div class="password-strength">
+                            <div id="strengthBar" class="password-strength-bar"></div>
+                        </div>
+                        <div class="password-tips">
+                            💡 密码建议：至少6位，包含字母和数字更安全
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">确认新密码</label>
+                        <input type="password" id="confirmNewPassword" class="form-input" placeholder="请再次输入新密码" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        💾 保存修改
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="profile-card">
+            <div class="form-section">
+                <h3 class="section-title">ℹ️ 账户信息</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">手机号</label>
+                    <input type="text" id="phoneDisplay" class="form-input" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">账户类型</label>
+                    <input type="text" id="roleDisplay" class="form-input" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">注册时间</label>
+                    <input type="text" id="registerTime" class="form-input" value="首次登录即为注册" disabled>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        const sessionInfo = sessionStorage.getItem('currentSession');
+        if (!sessionInfo) {
+            alert('请先登录');
+            window.location.href = 'index.html';
+        }
+
+        const currentUser = JSON.parse(sessionInfo);
+        const userPhone = currentUser.phone;
+        const isAdmin = userPhone === '18968563368';
+
+        // 初始化用户信息显示
+        document.getElementById('userPhone').textContent = userPhone;
+        document.getElementById('phoneDisplay').value = userPhone;
+        
+        if (isAdmin) {
+            document.getElementById('userRole').textContent = '👑 管理员';
+            document.getElementById('roleDisplay').value = '管理员（拥有用户管理权限）';
+            document.getElementById('userAvatar').textContent = '👑';
+        } else {
+            document.getElementById('userRole').textContent = '👤 普通用户';
+            document.getElementById('roleDisplay').value = '普通用户';
+        }
+
+        // 密码强度检测
+        const newPasswordInput = document.getElementById('newPassword');
+        const strengthBar = document.getElementById('strengthBar');
+
+        newPasswordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+
+            if (password.length >= 6) strength++;
+            if (password.length >= 10) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[!@#$%^&*]/.test(password)) strength++;
+
+            strengthBar.className = 'password-strength-bar';
+            if (strength <= 2) {
+                strengthBar.classList.add('strength-weak');
+            } else if (strength <= 3) {
+                strengthBar.classList.add('strength-medium');
+            } else {
+                strengthBar.classList.add('strength-strong');
+            }
+        });
+
+        // 显示提示信息
+        function showAlert(message, type = 'info') {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+
+        // 修改密码表单提交
+        document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            // 验证新密码
+            if (newPassword.length < 6) {
+                showAlert('新密码长度至少6位', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmNewPassword) {
+                showAlert('两次输入的新密码不一致', 'error');
+                return;
+            }
+
+            // 获取用户密码存储
+            let userPasswords = localStorage.getItem('userPasswords');
+            if (!userPasswords) {
+                showAlert('密码数据异常，请重新登录', 'error');
+                return;
+            }
+
+            const passwords = JSON.parse(userPasswords);
+
+            // 验证当前密码
+            if (passwords[userPhone] !== currentPassword) {
+                showAlert('当前密码错误', 'error');
+                return;
+            }
+
+            // 更新密码
+            passwords[userPhone] = newPassword;
+            localStorage.setItem('userPasswords', JSON.stringify(passwords));
+
+            // 清空表单
+            document.getElementById('changePasswordForm').reset();
+            strengthBar.className = 'password-strength-bar';
+
+            showAlert('✅ 密码修改成功！下次登录请使用新密码', 'success');
+        });
+    </script>
+</body>
+</html>
+

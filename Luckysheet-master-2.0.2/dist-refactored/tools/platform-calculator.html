@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>钢平台用量计算 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>🏗️ 钢平台用量计算</h1>
+            <p class="subtitle">平台结构材料估算程序</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="length">平台长度 (m)</label>
+                    <input type="number" id="length" placeholder="请输入平台长度" step="0.1" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="width">平台宽度 (m)</label>
+                    <input type="number" id="width" placeholder="请输入平台宽度" step="0.1" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="height">平台高度 (m)</label>
+                    <input type="number" id="height" placeholder="请输入平台高度" step="0.1" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="equipment">设备重量 (kg)</label>
+                    <input type="number" id="equipment" placeholder="0-10000kg" value="0" step="10" min="0" max="10000">
+                </div>
+
+                <div class="input-group radio-group">
+                    <label>主梁类型：</label>
+                    <label><input type="radio" name="beamType" value="channel" checked> 槽钢</label>
+                    <label><input type="radio" name="beamType" value="square"> 方管</label>
+                </div>
+
+                <div class="input-group checkbox-group">
+                    <input type="checkbox" id="hasGuardrail" checked>
+                    <label for="hasGuardrail">需要护栏</label>
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">🔨 计算用量</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 材料明细表</h3>
+                <ul class="result-list" id="resultList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const length = parseFloat(document.getElementById('length').value);
+            const width = parseFloat(document.getElementById('width').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const equipment = parseFloat(document.getElementById('equipment').value) || 0;
+            const isSquareTube = document.querySelector('input[name="beamType"]:checked').value === 'square';
+            const hasGuardrail = document.getElementById('hasGuardrail').checked;
+
+            // 验证输入
+            if (!length || length <= 0) {
+                alert('请输入有效的平台长度');
+                return;
+            }
+            if (!width || width <= 0) {
+                alert('请输入有效的平台宽度');
+                return;
+            }
+            if (!height || height <= 0) {
+                alert('请输入有效的平台高度');
+                return;
+            }
+            if (equipment < 0 || equipment > 10000) {
+                alert('设备重量应在0-10000kg之间');
+                return;
+            }
+
+            const materials = calculatePlatformMaterials(length, width, height, equipment, isSquareTube, hasGuardrail);
+            displayResults(materials);
+        }
+
+        function calculatePlatformMaterials(length, width, height, equipment, isSquareTube, hasGuardrail) {
+            const results = [];
+            
+            // 计算主梁数量（根据宽度，每0.8m一根）
+            const mainBeamCount = Math.ceil(width / 0.8) + 1;
+            
+            // 计算次梁数量（根据长度，每1.2m一根）
+            const secondaryBeamCount = Math.ceil(length / 1.2) + 1;
+            
+            // 立柱数量（四角 + 中间支撑）
+            const columnCount = 4 + Math.floor(length / 3) * Math.floor(width / 3);
+            
+            // 选择型材规格
+            let mainBeamSpec, columnSpec, channelWeight, columnWeight;
+            if (isSquareTube) {
+                mainBeamSpec = '100*100*5方管';
+                columnSpec = '100*100*5方管';
+                channelWeight = 15.0; // kg/m
+                columnWeight = 15.0;
+            } else {
+                mainBeamSpec = '12#槽钢';
+                columnSpec = '10#槽钢';
+                channelWeight = 10.007;
+                columnWeight = 8.007;
+            }
+            
+            // 主梁长度和重量
+            const mainBeamLength = mainBeamCount * length;
+            const mainBeamWeight = mainBeamLength * channelWeight;
+            results.push(['主梁', mainBeamSpec, mainBeamCount + '根 × ' + length.toFixed(2) + 'm', mainBeamWeight.toFixed(2) + ' kg']);
+            
+            // 次梁长度和重量
+            const secondaryBeamLength = secondaryBeamCount * width;
+            const secondaryBeamWeight = secondaryBeamLength * channelWeight * 0.8;
+            results.push(['次梁', mainBeamSpec, secondaryBeamCount + '根 × ' + width.toFixed(2) + 'm', secondaryBeamWeight.toFixed(2) + ' kg']);
+            
+            // 立柱长度和重量
+            const columnTotalLength = columnCount * height;
+            const columnTotalWeight = columnTotalLength * columnWeight;
+            results.push(['立柱', columnSpec, columnCount + '根 × ' + height.toFixed(2) + 'm', columnTotalWeight.toFixed(2) + ' kg']);
+            
+            // 斜拉杆（每个立柱2根，长度约为高度的1.2倍）
+            const diagonalCount = columnCount * 2;
+            const diagonalLength = diagonalCount * height * 1.2;
+            const diagonalWeight = diagonalLength * 3.52; // 40*40*3方管
+            results.push(['斜拉杆', '40*40*3方管', diagonalCount + '根', diagonalWeight.toFixed(2) + ' kg']);
+            
+            // 花纹板（5mm厚）
+            const plateArea = length * width;
+            const plateWeight = plateArea * 0.005 * 7850; // 5mm厚钢板密度
+            results.push(['花纹板', '5mm厚', plateArea.toFixed(2) + ' m²', plateWeight.toFixed(2) + ' kg']);
+            
+            // 角铁加固（周边和内部）
+            const angleIronLength = (length + width) * 2 + mainBeamCount * width;
+            const angleIronWeight = angleIronLength * 2.332; // 50*5角铁
+            results.push(['角铁', '50*5角铁', angleIronLength.toFixed(2) + ' m', angleIronWeight.toFixed(2) + ' kg']);
+            
+            // 结构总重量（不含设备）
+            const structureWeight = mainBeamWeight + secondaryBeamWeight + columnTotalWeight + 
+                                   diagonalWeight + plateWeight + angleIronWeight;
+            
+            results.push(['', '', '', '']);
+            results.push(['结构总重量', '不含设备重量', '', structureWeight.toFixed(2) + ' kg']);
+            
+            // 如果需要护栏
+            if (hasGuardrail) {
+                results.push(['', '', '', '']);
+                results.push(['-----护栏材料-----', '', '', '']);
+                
+                const guardrailLength = (length + width) * 2; // 平台周长
+                const guardrailHeight = 1.05; // 标准护栏高度
+                
+                // 护栏立柱
+                const guardrailPostCount = Math.ceil(guardrailLength / 1.2) + 1;
+                const guardrailPostWeight = guardrailPostCount * guardrailHeight * 5.42;
+                results.push(['护栏立柱', '40*60*3方管', guardrailPostCount + '根', guardrailPostWeight.toFixed(2) + ' kg']);
+                
+                // 护栏扶手
+                const handrailWeight = guardrailLength * 3.52;
+                results.push(['护栏扶手', '40*40*3方管', guardrailLength.toFixed(2) + ' m', handrailWeight.toFixed(2) + ' kg']);
+                
+                // 中横档
+                const midRailWeight = guardrailLength * 2 * 1.963;
+                results.push(['中横档', '50*5扁铁 (2道)', (guardrailLength * 2).toFixed(2) + ' m', midRailWeight.toFixed(2) + ' kg']);
+                
+                // 踢脚线
+                const kickboardWeight = guardrailLength * 3.14;
+                results.push(['踢脚线', '100*4扁铁', guardrailLength.toFixed(2) + ' m', kickboardWeight.toFixed(2) + ' kg']);
+                
+                const guardrailTotalWeight = guardrailPostWeight + handrailWeight + midRailWeight + kickboardWeight;
+                
+                results.push(['', '', '', '']);
+                results.push(['平台+护栏总重', '', '', (structureWeight + guardrailTotalWeight).toFixed(2) + ' kg']);
+            }
+            
+            return results;
+        }
+
+        function displayResults(materials) {
+            const resultList = document.getElementById('resultList');
+            resultList.innerHTML = '';
+            
+            // 添加表头
+            const header = document.createElement('li');
+            header.innerHTML = '<span>材料名称</span><span>规格型号</span><span>数量</span><span>重量</span>';
+            resultList.appendChild(header);
+            
+            // 添加数据
+            materials.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${item[0]}</span><span>${item[1]}</span><span>${item[2]}</span><span>${item[3]}</span>`;
+                resultList.appendChild(li);
+            });
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculate();
+        });
+    </script>
+</body>
+</html>
+

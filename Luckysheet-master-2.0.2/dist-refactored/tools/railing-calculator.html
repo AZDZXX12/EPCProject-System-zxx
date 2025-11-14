@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>护栏计算 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>🛡️ 护栏钢材用量计算</h1>
+            <p class="subtitle">符合 GB4053.3-2009 标准</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="length">护栏长度 (m)</label>
+                    <input type="number" id="length" placeholder="请输入护栏长度" step="0.01" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="height">护栏高度 (m)</label>
+                    <input type="number" id="height" placeholder="请输入护栏高度" step="0.01" value="1.05">
+                </div>
+
+                <div class="input-group radio-group">
+                    <label><input type="radio" name="type" value="platform" checked> 平台护栏</label>
+                    <label><input type="radio" name="type" value="stair"> 楼梯护栏</label>
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">🔨 计算用量</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 材料明细表</h3>
+                <ul class="result-list" id="resultList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const length = parseFloat(document.getElementById('length').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const isPlatform = document.querySelector('input[name="type"]:checked').value === 'platform';
+
+            if (!length || length <= 0) {
+                alert('请输入有效的护栏长度');
+                return;
+            }
+
+            if (!height || height <= 0) {
+                alert('请输入有效的护栏高度');
+                return;
+            }
+
+            // 检查GB4053.3-2009标准
+            if (height < 1.05) {
+                if (!confirm('标准GB4053.3-2009要求护栏高度不应小于1.05m！\n是否继续使用当前高度？')) {
+                    return;
+                }
+            }
+
+            const materials = calculateMaterials(length, height, isPlatform);
+            displayResults(materials);
+        }
+
+        function calculateMaterials(length, height, isPlatform) {
+            const results = [];
+            
+            // 立柱间距(m)
+            const postSpacing = 1.2;
+            const postCount = Math.ceil(length / postSpacing) + 1;
+            
+            // 40*60*3方管立柱
+            const postLength = postCount * height;
+            const postWeight = postLength * 5.42; // kg/m
+            results.push(['立柱', '40*60*3方管', postCount + '根', postWeight.toFixed(2) + ' kg']);
+            
+            // 40*40*3扶手
+            const handrailWeight = length * 3.52;
+            results.push(['扶手', '40*40*3方管', length.toFixed(2) + ' m', handrailWeight.toFixed(2) + ' kg']);
+            
+            // 50*5扁铁中横档(2道)
+            const midRailWeight = length * 2 * 1.963;
+            results.push(['中横档', '50*5扁铁 (2道)', (length * 2).toFixed(2) + ' m', midRailWeight.toFixed(2) + ' kg']);
+            
+            // 踢脚线(仅平台护栏)
+            let kickboardWeight = 0;
+            if (isPlatform) {
+                kickboardWeight = length * 3.14;
+                results.push(['踢脚线', '100*4扁铁', length.toFixed(2) + ' m', kickboardWeight.toFixed(2) + ' kg']);
+            }
+            
+            // 总重量
+            const totalWeight = postWeight + handrailWeight + midRailWeight + kickboardWeight;
+            results.push(['总重量', '-', '-', totalWeight.toFixed(2) + ' kg']);
+            
+            return results;
+        }
+
+        function displayResults(materials) {
+            const resultList = document.getElementById('resultList');
+            resultList.innerHTML = '';
+            
+            // 添加表头
+            const header = document.createElement('li');
+            header.innerHTML = '<span>材料名称</span><span>规格型号</span><span>数量</span><span>重量</span>';
+            resultList.appendChild(header);
+            
+            // 添加数据
+            materials.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${item[0]}</span><span>${item[1]}</span><span>${item[2]}</span><span>${item[3]}</span>`;
+                resultList.appendChild(li);
+            });
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        // 回车键触发计算
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
+

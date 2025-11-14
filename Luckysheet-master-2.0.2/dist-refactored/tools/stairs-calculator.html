@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>楼梯材料表 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>🪜 楼梯材料表计算</h1>
+            <p class="subtitle">钢结构楼梯材料用量计算</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="angle">楼梯角度 (度)</label>
+                    <input type="number" id="angle" placeholder="推荐30-50度" value="45" step="1" min="0" max="90">
+                </div>
+
+                <div class="input-group">
+                    <label for="height">楼梯高度 (mm)</label>
+                    <input type="number" id="height" placeholder="请输入楼梯高度" value="3000" step="1">
+                </div>
+
+                <div class="input-group">
+                    <label for="guardrailHeight">护栏高度 (mm)</label>
+                    <input type="number" id="guardrailHeight" placeholder="建议1200mm" value="1200" step="1">
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">📐 计算材料</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 计算结果</h3>
+                <div class="result-item">
+                    <span class="result-label">踏步数量：</span>
+                    <span class="result-value" id="steps">-</span>
+                    <span class="result-unit">步</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">槽钢用量：</span>
+                    <span class="result-value" id="channel">-</span>
+                    <span class="result-unit">m</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">护栏用量：</span>
+                    <span class="result-value" id="railing">-</span>
+                    <span class="result-unit">m</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">扁铁用量：</span>
+                    <span class="result-value" id="flatIron">-</span>
+                    <span class="result-unit">m</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">总重量：</span>
+                    <span class="result-value" id="weight">-</span>
+                    <span class="result-unit">kg</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const angle = parseFloat(document.getElementById('angle').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const guardrailHeight = parseFloat(document.getElementById('guardrailHeight').value);
+
+            if (!angle || angle <= 0 || angle >= 90) {
+                alert('楼梯角度必须在0-90度之间');
+                return;
+            }
+
+            if (!height || height <= 0) {
+                alert('楼梯高度必须大于0');
+                return;
+            }
+
+            if (!guardrailHeight || guardrailHeight <= 0) {
+                alert('护栏高度必须大于0');
+                return;
+            }
+
+            // 计算楼梯参数
+            const angleRad = angle * Math.PI / 180;
+            const stepHeight = 180; // 标准踏步高度 mm
+            const stepWidth = 300; // 标准踏步宽度 mm
+            
+            // 踏步数量
+            const stepsCount = Math.ceil(height / stepHeight);
+            
+            // 楼梯斜长
+            const slopeLength = height / Math.sin(angleRad) / 1000; // 转换为米
+            
+            // 槽钢用量 (两根主梁)
+            const channelLength = slopeLength * 2;
+            
+            // 护栏用量 (一侧护栏，包含立柱和扶手)
+            const railingLength = slopeLength + guardrailHeight / 1000;
+            
+            // 扁铁用量 (踏步板支撑)
+            const flatIronLength = stepsCount * (stepWidth / 1000) * 2;
+            
+            // 估算总重量
+            // 12#槽钢约10.007kg/m，40*40*3方管约3.52kg/m，50*5扁铁约1.963kg/m
+            const totalWeight = 
+                channelLength * 10.007 +  // 槽钢主梁
+                railingLength * 3.52 +    // 护栏方管
+                flatIronLength * 1.963 +  // 扁铁踏步
+                stepsCount * 0.3 * 0.3 * 0.005 * 7850; // 花纹板(5mm厚)
+
+            // 显示结果
+            document.getElementById('steps').textContent = stepsCount;
+            document.getElementById('channel').textContent = channelLength.toFixed(3);
+            document.getElementById('railing').textContent = railingLength.toFixed(3);
+            document.getElementById('flatIron').textContent = flatIronLength.toFixed(3);
+            document.getElementById('weight').textContent = totalWeight.toFixed(2);
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        // 回车键触发计算
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculate();
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,195 @@
+[
+  {
+    "model": "cables.cablespec",
+    "pk": 1,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "16.00",
+      "current_rating": "85.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "28.50",
+      "voltage_drop_coef": "1.150"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 2,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "25.00",
+      "current_rating": "115.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "42.50",
+      "voltage_drop_coef": "0.727"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 3,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "35.00",
+      "current_rating": "145.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "58.00",
+      "voltage_drop_coef": "0.524"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 4,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "50.00",
+      "current_rating": "180.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "78.00",
+      "voltage_drop_coef": "0.387"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 5,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "70.00",
+      "current_rating": "230.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "105.00",
+      "voltage_drop_coef": "0.268"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 6,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "95.00",
+      "current_rating": "280.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "138.00",
+      "voltage_drop_coef": "0.193"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 7,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "120.00",
+      "current_rating": "330.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "168.00",
+      "voltage_drop_coef": "0.153"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 8,
+    "fields": {
+      "type": "YJV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "150.00",
+      "current_rating": "380.00",
+      "rated_voltage": 380,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "copper",
+      "price_per_meter": "205.00",
+      "voltage_drop_coef": "0.124"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 9,
+    "fields": {
+      "type": "VV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "25.00",
+      "current_rating": "105.00",
+      "rated_voltage": 380,
+      "max_temp": 70,
+      "insulation_material": "PVC",
+      "shield_type": "none",
+      "price_per_meter": "35.00",
+      "voltage_drop_coef": "0.780"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 10,
+    "fields": {
+      "type": "VV-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "35.00",
+      "current_rating": "130.00",
+      "rated_voltage": 380,
+      "max_temp": 70,
+      "insulation_material": "PVC",
+      "shield_type": "none",
+      "price_per_meter": "48.00",
+      "voltage_drop_coef": "0.560"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 11,
+    "fields": {
+      "type": "YJV22-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "50.00",
+      "current_rating": "175.00",
+      "rated_voltage": 600,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "steel_tape",
+      "price_per_meter": "95.00",
+      "voltage_drop_coef": "0.387"
+    }
+  },
+  {
+    "model": "cables.cablespec",
+    "pk": 12,
+    "fields": {
+      "type": "YJV22-0.6/1kV",
+      "core_count": 4,
+      "cross_section": "70.00",
+      "current_rating": "220.00",
+      "rated_voltage": 600,
+      "max_temp": 90,
+      "insulation_material": "XLPE",
+      "shield_type": "steel_tape",
+      "price_per_meter": "128.00",
+      "voltage_drop_coef": "0.268"
+    }
+  }
+]
+

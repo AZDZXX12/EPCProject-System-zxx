@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>风机功率计算 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>💨 风机功率计算</h1>
+            <p class="subtitle">根据风量和压力计算风机功率</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="airflow">风量 (m³/h)</label>
+                    <input type="number" id="airflow" placeholder="请输入风量" step="100" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="pressure">全压 (Pa)</label>
+                    <input type="number" id="pressure" placeholder="请输入全压" step="10" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="efficiency">风机效率 (%)</label>
+                    <input type="number" id="efficiency" placeholder="一般70-85%" value="75" step="1" min="50" max="95">
+                </div>
+
+                <div class="input-group">
+                    <label for="fanType">风机类型</label>
+                    <select id="fanType">
+                        <option value="centrifugal" selected>离心风机</option>
+                        <option value="axial">轴流风机</option>
+                        <option value="mixed">混流风机</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="motorType">电机类型</label>
+                    <select id="motorType">
+                        <option value="normal" selected>普通电机</option>
+                        <option value="frequency">变频电机</option>
+                        <option value="explosion">防爆电机</option>
+                    </select>
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">⚡ 计算功率</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 计算结果</h3>
+                <div class="result-item">
+                    <span class="result-label">轴功率：</span>
+                    <span class="result-value" id="shaftPower">-</span>
+                    <span class="result-unit">kW</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">配用功率：</span>
+                    <span class="result-value" id="motorPower">-</span>
+                    <span class="result-unit">kW</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">推荐型号：</span>
+                    <span class="result-value" id="motorModel" style="font-size: 18px;">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">传动效率：</span>
+                    <span class="result-value" id="transmission">-</span>
+                    <span class="result-unit">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const airflow = parseFloat(document.getElementById('airflow').value);
+            const pressure = parseFloat(document.getElementById('pressure').value);
+            const efficiency = parseFloat(document.getElementById('efficiency').value);
+            const fanType = document.getElementById('fanType').value;
+            const motorType = document.getElementById('motorType').value;
+
+            // 验证输入
+            if (!airflow || airflow <= 0) {
+                alert('请输入有效的风量');
+                return;
+            }
+            if (!pressure || pressure <= 0) {
+                alert('请输入有效的全压');
+                return;
+            }
+            if (!efficiency || efficiency < 50 || efficiency > 95) {
+                alert('风机效率一般在50-95%之间');
+                return;
+            }
+
+            // 计算轴功率
+            // P = (Q × P) / (3600 × η)
+            // Q: 风量 m³/h, P: 全压 Pa, η: 效率
+            const shaftPower = (airflow * pressure) / (3600 * (efficiency / 100));
+
+            // 传动效率系数
+            let transmissionEff = 0.95; // 直联
+            if (fanType === 'centrifugal') {
+                transmissionEff = 0.92; // 皮带传动
+            }
+
+            // 安全系数
+            let safetyFactor = 1.15;
+            if (motorType === 'frequency') {
+                safetyFactor = 1.10; // 变频略低
+            } else if (motorType === 'explosion') {
+                safetyFactor = 1.20; // 防爆略高
+            }
+
+            // 配用电机功率
+            const motorPower = shaftPower / transmissionEff * safetyFactor;
+
+            // 选择标准电机型号
+            const standardPowers = [0.75, 1.1, 1.5, 2.2, 3, 4, 5.5, 7.5, 11, 15, 18.5, 22, 30, 37, 45, 55, 75, 90, 110, 132, 160, 200, 250, 315];
+            const selectedPower = standardPowers.find(p => p >= motorPower) || standardPowers[standardPowers.length - 1];
+
+            // 生成型号
+            let motorModel = '';
+            if (motorType === 'normal') {
+                motorModel = `Y${selectedPower}kW-4P`;
+            } else if (motorType === 'frequency') {
+                motorModel = `YVP${selectedPower}kW-4P`;
+            } else {
+                motorModel = `YB3-${selectedPower}kW-4P`;
+            }
+
+            // 显示结果
+            document.getElementById('shaftPower').textContent = shaftPower.toFixed(2);
+            document.getElementById('motorPower').textContent = selectedPower;
+            document.getElementById('motorModel').textContent = motorModel;
+            document.getElementById('transmission').textContent = (transmissionEff * 100).toFixed(0);
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculate();
+        });
+    </script>
+</body>
+</html>
+

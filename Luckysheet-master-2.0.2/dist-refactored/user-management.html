@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>用户管理 - 设备参数选型系统</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Microsoft YaHei', 'SimSun', sans-serif;
+			background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf3 100%);
+			min-height: 100vh;
+			padding: 20px;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			background: white;
+			border-radius: 16px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+			padding: 40px;
+		}
+
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 30px;
+			padding-bottom: 20px;
+			border-bottom: 2px solid #f0f0f0;
+		}
+
+		.header h1 {
+			font-size: 28px;
+			color: #1a1f36;
+		}
+
+		.back-btn {
+			padding: 10px 20px;
+			background: white;
+			color: #00d4ff;
+			border: 1px solid #e5e7eb;
+			border-radius: 10px;
+			cursor: pointer;
+			font-size: 14px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+
+		.back-btn:hover {
+			background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+			color: white;
+			border-color: transparent;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+		}
+
+		.add-section {
+			margin-bottom: 30px;
+			padding: 25px;
+			background: #f9fafb;
+			border-radius: 12px;
+			border: 1px solid #e5e7eb;
+		}
+
+		.add-section h2 {
+			font-size: 18px;
+			color: #1a1f36;
+			margin-bottom: 15px;
+			font-weight: 600;
+		}
+
+		.input-group {
+			display: flex;
+			gap: 10px;
+		}
+
+		.phone-input {
+			flex: 1;
+			padding: 12px 15px;
+			border: 2px solid #e5e7eb;
+			border-radius: 10px;
+			font-size: 15px;
+			background: white;
+			color: #1a1f36;
+			font-weight: 500;
+			transition: all 0.3s ease;
+		}
+
+		.phone-input:focus {
+			outline: none;
+			border-color: #00d4ff;
+			box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
+		}
+
+		.phone-input::placeholder {
+			color: #9ca3af;
+		}
+
+		.add-btn {
+			padding: 12px 30px;
+			background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+			color: white;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			font-size: 15px;
+			font-weight: 700;
+			transition: all 0.3s ease;
+			white-space: nowrap;
+			box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+		}
+
+		.add-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+		}
+
+		.user-list {
+			margin-top: 20px;
+		}
+
+		.user-list h2 {
+			font-size: 18px;
+			color: #1a1f36;
+			margin-bottom: 15px;
+			font-weight: 600;
+		}
+
+		.user-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 20px;
+			background: #f9fafb;
+			border: 2px solid #e5e7eb;
+			border-radius: 10px;
+			margin-bottom: 10px;
+			transition: all 0.3s ease;
+		}
+
+		.user-item:hover {
+			border-color: #00d4ff;
+			background: white;
+			transform: translateX(5px);
+			box-shadow: 0 2px 8px rgba(0, 212, 255, 0.15);
+		}
+
+		.user-phone {
+			font-size: 16px;
+			color: #1a1f36;
+			font-weight: 500;
+		}
+
+		.user-badge {
+			display: inline-block;
+			padding: 4px 12px;
+			background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+			color: white;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: 600;
+			margin-left: 10px;
+			box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+		}
+
+		.delete-btn {
+			padding: 8px 16px;
+			background: #ff4d4f;
+			color: white;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-size: 13px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+
+		.delete-btn:hover {
+			background: #d32f2f;
+			transform: scale(1.05);
+			box-shadow: 0 2px 8px rgba(255, 77, 79, 0.3);
+		}
+
+		.delete-btn:disabled {
+			background: #e5e7eb;
+			color: #9ca3af;
+			cursor: not-allowed;
+			transform: none;
+			box-shadow: none;
+		}
+
+		.empty-state {
+			text-align: center;
+			padding: 40px;
+			color: #9ca3af;
+		}
+
+		.message {
+			padding: 12px 20px;
+			border-radius: 10px;
+			margin-bottom: 15px;
+			font-size: 14px;
+			font-weight: 500;
+			display: none;
+		}
+
+		.message.show {
+			display: block;
+			animation: slideDown 0.3s ease;
+		}
+
+		.message.success {
+			background: #d4edda;
+			color: #155724;
+			border: 1px solid #c3e6cb;
+		}
+
+		.message.error {
+			background: #f8d7da;
+			color: #721c24;
+			border: 1px solid #f5c6cb;
+		}
+
+		@keyframes slideDown {
+			from {
+				opacity: 0;
+				transform: translateY(-10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.stats {
+			display: flex;
+			gap: 20px;
+			margin-bottom: 20px;
+		}
+
+		.stat-card {
+			flex: 1;
+			padding: 25px;
+			background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+			color: white;
+			border-radius: 12px;
+			text-align: center;
+			box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+		}
+
+		.stat-number {
+			font-size: 36px;
+			font-weight: 700;
+			margin-bottom: 5px;
+		}
+
+		.stat-label {
+			font-size: 14px;
+			opacity: 0.95;
+			font-weight: 500;
+		}
+
+		/* 响应式设计 */
+		@media (max-width: 600px) {
+			.container {
+				padding: 30px 20px;
+			}
+
+			.header h1 {
+				font-size: 24px;
+			}
+
+			.input-group {
+				flex-direction: column;
+			}
+
+			.add-btn {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			<h1>👥 用户管理</h1>
+			<div style="display: flex; align-items: center; gap: 15px;">
+				<span id="adminInfo" style="color: #1a1f36; font-size: 14px; font-weight: 500;">
+					<span style="color: #00d4ff;">👤</span> 当前管理员：<span id="adminPhone">-</span>
+				</span>
+				<button class="back-btn" onclick="window.location.href='index.html'">
+					← 返回主页
+				</button>
+			</div>
+		</div>
+
+		<div id="message" class="message"></div>
+
+		<div class="stats">
+			<div class="stat-card">
+				<div class="stat-number" id="totalUsers">0</div>
+				<div class="stat-label">授权用户</div>
+			</div>
+		</div>
+
+		<div class="add-section">
+			<h2>➕ 添加新用户</h2>
+			<div class="input-group">
+				<input 
+					type="tel" 
+					id="newPhoneInput" 
+					class="phone-input" 
+					placeholder="请输入11位手机号码"
+					maxlength="11"
+				>
+				<button class="add-btn" onclick="addUser()">添加用户</button>
+			</div>
+		</div>
+
+		<div class="user-list">
+			<h2>📋 授权用户列表</h2>
+			<div id="userListContainer"></div>
+		</div>
+
+		<!-- 管理员修改密码区域 -->
+		<div class="add-section" style="margin-top: 30px;">
+			<h2>🔐 修改我的密码</h2>
+			<form id="changePasswordForm" style="display: flex; flex-direction: column; gap: 15px;">
+				<input 
+					type="password" 
+					id="currentPassword" 
+					class="phone-input" 
+					placeholder="请输入当前密码"
+					required
+				>
+				<input 
+					type="password" 
+					id="newPassword" 
+					class="phone-input" 
+					placeholder="请输入新密码（至少6位）"
+					minlength="6"
+					required
+				>
+				<input 
+					type="password" 
+					id="confirmNewPassword" 
+					class="phone-input" 
+					placeholder="请再次输入新密码"
+					required
+				>
+				<button type="submit" class="add-btn">💾 保存新密码</button>
+			</form>
+		</div>
+	</div>
+
+	<!-- 白名单同步模块 -->
+	<script src="js/modules/whitelistSync.js"></script>
+
+	<script>
+		// 显示消息
+		function showMessage(text, type = 'success') {
+			const messageEl = document.getElementById('message');
+			messageEl.textContent = text;
+			messageEl.className = `message ${type} show`;
+			setTimeout(() => {
+				messageEl.classList.remove('show');
+			}, 3000);
+		}
+
+		// 验证手机号
+		function validatePhone(phone) {
+			const phoneRegex = /^1[3-9]\d{9}$/;
+			return phoneRegex.test(phone);
+		}
+
+		// 获取白名单
+		function getWhitelist() {
+			const whitelist = localStorage.getItem('phoneWhitelist');
+			if (!whitelist) {
+				const defaultWhitelist = ['18968563368'];
+				localStorage.setItem('phoneWhitelist', JSON.stringify(defaultWhitelist));
+				return defaultWhitelist;
+			}
+			return JSON.parse(whitelist);
+		}
+
+		// 保存白名单
+		function saveWhitelist(whitelist) {
+			localStorage.setItem('phoneWhitelist', JSON.stringify(whitelist));
+		}
+
+		// 添加用户（使用云端同步）
+		async function addUser() {
+			const phoneInput = document.getElementById('newPhoneInput');
+			const phone = phoneInput.value.trim();
+
+			if (!phone) {
+				showMessage('请输入手机号码', 'error');
+				return;
+			}
+
+			if (!validatePhone(phone)) {
+				showMessage('请输入正确的11位手机号码', 'error');
+				return;
+			}
+
+			// 使用云端同步模块
+			const result = await WhitelistSync.addUser(phone);
+			
+			if (result.success) {
+				phoneInput.value = '';
+				showMessage(`✓ 成功添加用户: ${phone}（已同步到云端）`, 'success');
+				renderUserList();
+			} else {
+				showMessage(result.message, 'error');
+			}
+		}
+
+		// 删除用户（使用云端同步）
+		async function deleteUser(phone) {
+			if (phone === '18968563368') {
+				showMessage('默认管理员账号不能删除', 'error');
+				return;
+			}
+
+			if (!confirm(`确定要删除用户 ${phone} 吗？\n此操作将同步到所有设备`)) {
+				return;
+			}
+
+			// 使用云端同步模块
+			const result = await WhitelistSync.removeUser(phone);
+			
+			if (result.success) {
+				showMessage(`✓ 已删除用户: ${phone}（已同步到云端）`, 'success');
+				renderUserList();
+			} else {
+				showMessage(result.message, 'error');
+			}
+		}
+
+		// 渲染用户列表
+		function renderUserList() {
+			const whitelist = getWhitelist();
+			const container = document.getElementById('userListContainer');
+			const totalUsersEl = document.getElementById('totalUsers');
+
+			totalUsersEl.textContent = whitelist.length;
+
+			if (whitelist.length === 0) {
+				container.innerHTML = '<div class="empty-state">暂无授权用户</div>';
+				return;
+			}
+
+			container.innerHTML = whitelist.map(phone => `
+				<div class="user-item">
+					<div>
+						<span class="user-phone">📱 ${phone}</span>
+						${phone === '18968563368' ? '<span class="user-badge">管理员</span>' : ''}
+					</div>
+					<button 
+						class="delete-btn" 
+						onclick="deleteUser('${phone}')"
+						${phone === '18968563368' ? 'disabled title="默认管理员不能删除"' : ''}
+					>
+						${phone === '18968563368' ? '🔒 锁定' : '🗑️ 删除'}
+					</button>
+				</div>
+			`).join('');
+		}
+
+		// 回车键添加用户
+		document.getElementById('newPhoneInput').addEventListener('keypress', function(e) {
+			if (e.key === 'Enter') {
+				addUser();
+			}
+		});
+
+		// 只允许输入数字
+		document.getElementById('newPhoneInput').addEventListener('input', function(e) {
+			this.value = this.value.replace(/\D/g, '');
+		});
+
+		// 页面加载时从云端同步并渲染列表
+		window.addEventListener('load', async function() {
+			// 显示当前管理员信息
+			try {
+				const sessionInfo = sessionStorage.getItem('currentSession');
+				if (sessionInfo) {
+					const userInfo = JSON.parse(sessionInfo);
+					document.getElementById('adminPhone').textContent = userInfo.phone || '未知';
+				} else {
+					document.getElementById('adminPhone').textContent = '未登录';
+				}
+			} catch (e) {
+				console.error('获取管理员信息失败:', e);
+				document.getElementById('adminPhone').textContent = '读取失败';
+			}
+			
+			// 先从云端同步最新白名单
+			await WhitelistSync.init();
+			// 再渲染列表
+			renderUserList();
+			
+			// 调试信息
+			console.log('📊 当前白名单 (localStorage):', localStorage.getItem('phoneWhitelist'));
+			
+			showMessage('✅ 白名单已加载', 'success');
+		});
+
+		// 修改密码表单提交
+		document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+			e.preventDefault();
+
+			const currentPassword = document.getElementById('currentPassword').value;
+			const newPassword = document.getElementById('newPassword').value;
+			const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+			// 验证新密码
+			if (newPassword.length < 6) {
+				showMessage('新密码长度至少6位', 'error');
+				return;
+			}
+
+			if (newPassword !== confirmNewPassword) {
+				showMessage('两次输入的新密码不一致', 'error');
+				return;
+			}
+
+			// 获取管理员手机号（从sessionStorage）
+			const sessionInfo = sessionStorage.getItem('currentSession');
+			if (!sessionInfo) {
+				showMessage('登录信息异常，请重新登录', 'error');
+				return;
+			}
+
+			const userInfo = JSON.parse(sessionInfo);
+			const adminPhone = userInfo.phone;
+
+			// 获取用户密码存储
+			let userPasswords = localStorage.getItem('userPasswords');
+			if (!userPasswords) {
+				showMessage('密码数据异常，请重新登录', 'error');
+				return;
+			}
+
+			const passwords = JSON.parse(userPasswords);
+
+			// 验证当前密码
+			if (passwords[adminPhone] !== currentPassword) {
+				showMessage('当前密码错误', 'error');
+				return;
+			}
+
+			// 更新密码
+			passwords[adminPhone] = newPassword;
+			localStorage.setItem('userPasswords', JSON.stringify(passwords));
+
+			// 清空表单
+			document.getElementById('changePasswordForm').reset();
+
+			showMessage('✅ 密码修改成功！下次登录请使用新密码', 'success');
+		});
+
+	// 检查登录状态（每次都需要重新登录）
+	const sessionInfo = sessionStorage.getItem('currentSession');
+	if (!sessionInfo) {
+		alert('请先登录');
+		window.location.href = 'login.html';
+	} else {
+		try {
+			const userInfo = JSON.parse(sessionInfo);
+			// 只有管理员可以访问用户管理页面
+			if (userInfo.phone !== '18968563368') {
+				alert('仅管理员可以访问此页面');
+				window.location.href = 'index.html';
+			}
+		} catch (e) {
+			window.location.href = 'login.html';
+		}
+	}
+	</script>
+</body>
+</html>

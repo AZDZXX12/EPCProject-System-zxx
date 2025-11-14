@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热源选型推荐 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>🔥 热源选型推荐</h1>
+            <p class="subtitle">干燥/加热系统热源选型</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="capacity">处理量 (kg/h)</label>
+                    <input type="number" id="capacity" placeholder="每小时处理量" step="10" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="moisture">初始含水率 (%)</label>
+                    <input type="number" id="moisture" placeholder="物料初始含水率" value="30" step="1" min="0" max="100">
+                </div>
+
+                <div class="input-group">
+                    <label for="targetMoisture">目标含水率 (%)</label>
+                    <input type="number" id="targetMoisture" placeholder="目标含水率" value="10" step="1" min="0" max="100">
+                </div>
+
+                <div class="input-group">
+                    <label for="temperature">加热温度 (℃)</label>
+                    <input type="number" id="temperature" placeholder="所需温度" value="120" step="5">
+                </div>
+
+                <div class="input-group">
+                    <label for="fuelType">燃料类型</label>
+                    <select id="fuelType">
+                        <option value="gas" selected>天然气</option>
+                        <option value="diesel">柴油</option>
+                        <option value="coal">煤</option>
+                        <option value="biomass">生物质</option>
+                        <option value="electric">电加热</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="efficiency">热效率 (%)</label>
+                    <input type="number" id="efficiency" placeholder="燃烧效率" value="80" step="1" min="50" max="95">
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">🔥 计算选型</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 热源参数</h3>
+                <div class="result-item">
+                    <span class="result-label">蒸发水量：</span>
+                    <span class="result-value" id="waterEvap">-</span>
+                    <span class="result-unit">kg/h</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">所需热量：</span>
+                    <span class="result-value" id="heatRequired">-</span>
+                    <span class="result-unit">kW</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">推荐功率：</span>
+                    <span class="result-value" id="recommendPower">-</span>
+                    <span class="result-unit">kW</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">燃料消耗：</span>
+                    <span class="result-value" id="fuelConsumption">-</span>
+                    <span class="result-unit" id="fuelUnit">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">运行成本：</span>
+                    <span class="result-value" id="runningCost">-</span>
+                    <span class="result-unit">元/小时</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">推荐型号：</span>
+                    <span class="result-value" id="model" style="font-size: 16px;">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const capacity = parseFloat(document.getElementById('capacity').value);
+            const moisture = parseFloat(document.getElementById('moisture').value);
+            const targetMoisture = parseFloat(document.getElementById('targetMoisture').value);
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const fuelType = document.getElementById('fuelType').value;
+            const efficiency = parseFloat(document.getElementById('efficiency').value);
+
+            // 验证输入
+            if (!capacity || capacity <= 0) {
+                alert('请输入有效的处理量');
+                return;
+            }
+            if (moisture <= targetMoisture) {
+                alert('初始含水率必须大于目标含水率');
+                return;
+            }
+            if (!temperature || temperature <= 0) {
+                alert('请输入有效的加热温度');
+                return;
+            }
+            if (!efficiency || efficiency < 50 || efficiency > 95) {
+                alert('热效率一般在50-95%之间');
+                return;
+            }
+
+            // 计算蒸发水量
+            // 蒸发量 = 物料量 × (初始含水率 - 目标含水率) / (100 - 目标含水率)
+            const waterEvap = capacity * (moisture - targetMoisture) / (100 - targetMoisture);
+
+            // 计算所需热量
+            // Q = Q1 + Q2 + Q3
+            // Q1: 物料升温热量 = m × c × ΔT (假设比热容2kJ/kg·℃)
+            // Q2: 水分蒸发热量 = m_water × 2500kJ/kg
+            // Q3: 热损失（按20%计算）
+            const Q1 = capacity * 2 * (temperature - 20) / 3600; // kW
+            const Q2 = waterEvap * 2500 / 3600; // kW
+            const heatRequired = (Q1 + Q2) * 1.2; // 加上20%热损失
+
+            // 推荐功率（考虑效率）
+            const recommendPower = heatRequired / (efficiency / 100);
+
+            // 计算燃料消耗和成本
+            let fuelConsumption, fuelUnit, unitPrice, runningCost, model;
+
+            switch(fuelType) {
+                case 'gas':
+                    // 天然气热值约8500 kcal/m³ = 35.5 MJ/m³ = 9.86 kWh/m³
+                    fuelConsumption = recommendPower / 9.86;
+                    fuelUnit = 'm³/h';
+                    unitPrice = 3.5; // 元/m³
+                    runningCost = fuelConsumption * unitPrice;
+                    model = `燃气热风炉 ${Math.round(recommendPower)}kW`;
+                    break;
+                case 'diesel':
+                    // 柴油热值约10000 kcal/kg = 11.6 kWh/kg
+                    fuelConsumption = recommendPower / 11.6;
+                    fuelUnit = 'kg/h';
+                    unitPrice = 8; // 元/kg
+                    runningCost = fuelConsumption * unitPrice;
+                    model = `燃油热风炉 ${Math.round(recommendPower)}kW`;
+                    break;
+                case 'coal':
+                    // 煤热值约5000 kcal/kg = 5.8 kWh/kg
+                    fuelConsumption = recommendPower / 5.8;
+                    fuelUnit = 'kg/h';
+                    unitPrice = 1.2; // 元/kg
+                    runningCost = fuelConsumption * unitPrice;
+                    model = `燃煤热风炉 ${Math.round(recommendPower)}kW`;
+                    break;
+                case 'biomass':
+                    // 生物质热值约4000 kcal/kg = 4.6 kWh/kg
+                    fuelConsumption = recommendPower / 4.6;
+                    fuelUnit = 'kg/h';
+                    unitPrice = 0.8; // 元/kg
+                    runningCost = fuelConsumption * unitPrice;
+                    model = `生物质热风炉 ${Math.round(recommendPower)}kW`;
+                    break;
+                case 'electric':
+                    fuelConsumption = recommendPower;
+                    fuelUnit = 'kW';
+                    unitPrice = 0.8; // 元/kWh
+                    runningCost = fuelConsumption * unitPrice;
+                    model = `电加热器 ${Math.round(recommendPower)}kW`;
+                    break;
+            }
+
+            // 显示结果
+            document.getElementById('waterEvap').textContent = waterEvap.toFixed(1);
+            document.getElementById('heatRequired').textContent = heatRequired.toFixed(1);
+            document.getElementById('recommendPower').textContent = Math.round(recommendPower);
+            document.getElementById('fuelConsumption').textContent = fuelConsumption.toFixed(2);
+            document.getElementById('fuelUnit').textContent = fuelUnit;
+            document.getElementById('runningCost').textContent = runningCost.toFixed(2);
+            document.getElementById('model').textContent = model;
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculate();
+        });
+    </script>
+</body>
+</html>
+

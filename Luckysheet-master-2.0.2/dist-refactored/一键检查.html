@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>一键检查乱码</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-top: 0;
+        }
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+            border-radius: 4px;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .code {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔍 一键检查乱码来源</h1>
+        <div class="warning">
+            <strong>⚠️ 当前问题：</strong><br>
+            PDF预览中页码下方出现乱码：<span class="highlight">{ 1 u / Qq 3 u</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📋 操作步骤</h2>
+        
+        <div class="step">
+            <h3>步骤1：打开主页和PDF预览</h3>
+            <button onclick="openMainPage()">1️⃣ 打开主页</button>
+            <p>然后点击主页的"导出PDF"按钮</p>
+        </div>
+
+        <div class="step">
+            <h3>步骤2：在PDF预览对话框中检查</h3>
+            <p>当PDF预览对话框打开后：</p>
+            <ol>
+                <li>按 <code>F12</code> 打开开发者工具</li>
+                <li>点击 <code>Console</code> 标签</li>
+                <li>复制下面的代码</li>
+                <li>粘贴到Console中</li>
+                <li>按 <code>Enter</code> 运行</li>
+            </ol>
+            
+            <button onclick="copyScript()">2️⃣ 复制检查脚本</button>
+            <div class="code" id="scriptCode">
+// 一键检查脚本
+console.log('🔍 开始检查...');
+
+// 查找所有页码元素
+const pageNums = document.querySelectorAll('.page-num');
+console.log(`找到 ${pageNums.length} 个 .page-num 元素`);
+
+pageNums.forEach((elem, i) => {
+    console.log(`\n=== 页码元素 ${i+1} ===`);
+    console.log('textContent:', JSON.stringify(elem.textContent));
+    console.log('innerHTML:', elem.innerHTML);
+    console.log('子节点数:', elem.childNodes.length);
+    
+    elem.childNodes.forEach((child, j) => {
+        if (child.nodeType === 3) {
+            console.log(`  文本节点 ${j}:`, JSON.stringify(child.nodeValue));
+        } else if (child.nodeType === 1) {
+            console.log(`  元素节点 ${j}:`, child.outerHTML);
+        }
+    });
+});
+
+// 查找包含异常字符的元素
+console.log('\n🔍 查找包含异常字符的元素...');
+document.querySelectorAll('*').forEach(elem => {
+    const text = elem.textContent;
+    if ((text.includes('Qq') || text.includes('{ 1') || text.includes(' u /')) && text.length < 100) {
+        console.log('❌ 找到可疑元素:');
+        console.log('  标签:', elem.tagName);
+        console.log('  类名:', elem.className);
+        console.log('  内容:', JSON.stringify(text));
+        console.log('  HTML:', elem.outerHTML);
+        console.log('  位置:', elem.getBoundingClientRect());
+    }
+});
+
+// 检查是否有重叠的文本
+console.log('\n🔍 检查页码文本出现次数...');
+const bodyText = document.body.textContent;
+const matches = bodyText.match(/\d+\s*\/\s*\d+/g);
+if (matches) {
+    console.log('数字格式页码出现次数:', matches.length);
+    console.log('所有匹配:', matches);
+}
+
+console.log('\n✅ 检查完成！请截图上方输出。');
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>步骤3：使用元素检查器</h3>
+            <p>在PDF预览对话框中：</p>
+            <ol>
+                <li>按 <code>F12</code></li>
+                <li>点击 <code>Elements</code> 标签</li>
+                <li>点击左上角的<strong>选择元素图标</strong>（或按 Ctrl+Shift+C）</li>
+                <li>用鼠标<strong>点击那个乱码</strong></li>
+                <li>查看被选中的元素</li>
+                <li><strong>截图告诉我</strong>元素的HTML代码</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📸 需要的截图</h2>
+        <p>请提供以下截图：</p>
+        <ol>
+            <li>✅ PDF预览对话框（显示乱码的地方）</li>
+            <li>✅ Console输出（运行脚本后的结果）</li>
+            <li>✅ Elements标签（用检查器选中乱码后的HTML）</li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>🎯 快速测试</h2>
+        <button onclick="runTest()">3️⃣ 运行测试页面</button>
+        <p>这会打开一个测试页面，模拟页码显示</p>
+    </div>
+
+    <script>
+        function openMainPage() {
+            alert('1️⃣ 即将打开主页\n2️⃣ 请填写数据\n3️⃣ 点击"导出PDF"\n4️⃣ 然后按F12打开Console\n5️⃣ 运行检查脚本');
+            window.open('http://localhost:8000/index.html', '_blank');
+        }
+
+        function copyScript() {
+            const code = document.getElementById('scriptCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ 脚本已复制到剪贴板！\n\n下一步：\n1. 打开PDF预览对话框\n2. 按F12打开Console\n3. 粘贴（Ctrl+V）\n4. 按Enter运行');
+            }).catch(err => {
+                alert('复制失败，请手动复制代码');
+            });
+        }
+
+        function runTest() {
+            window.open('http://localhost:8000/debug-page-structure.html', '_blank');
+        }
+
+        // 页面加载时显示指引
+        window.addEventListener('load', function() {
+            console.log('🎯 一键检查页面已加载');
+            console.log('请点击步骤1的按钮开始');
+        });
+    </script>
+</body>
+</html>
+

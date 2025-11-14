@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>筛分机算料 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>🔄 滚筒筛分机材料计算</h1>
+            <p class="subtitle">筛分机支架及平台材料用量</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="diameter">滚筒直径 (m)</label>
+                    <select id="diameter">
+                        <option value="">请选择滚筒直径</option>
+                        <option value="1.2">1.2m</option>
+                        <option value="1.4">1.4m</option>
+                        <option value="1.6" selected>1.6m</option>
+                        <option value="1.8">1.8m</option>
+                        <option value="2.0">2.0m</option>
+                        <option value="2.2">2.2m</option>
+                        <option value="2.4">2.4m</option>
+                        <option value="2.6">2.6m</option>
+                        <option value="2.8">2.8m</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="length">滚筒长度 (m)</label>
+                    <select id="length">
+                        <option value="">请选择滚筒长度</option>
+                        <option value="4">4m</option>
+                        <option value="5">5m</option>
+                        <option value="6" selected>6m</option>
+                        <option value="7">7m</option>
+                        <option value="8">8m</option>
+                        <option value="9">9m</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="height">架设高度 (mm)</label>
+                    <input type="number" id="height" placeholder="2000-7000mm" value="3500" min="2000" max="7000">
+                </div>
+
+                <div class="input-group">
+                    <label for="angle">架设角度 (度)</label>
+                    <input type="number" id="angle" placeholder="倾斜角度" value="4" min="0" max="15">
+                </div>
+
+                <div class="input-group">
+                    <label for="width">平台宽度 (mm)</label>
+                    <input type="number" id="width" placeholder="工作平台宽度" value="700">
+                </div>
+
+                <div class="input-group">
+                    <label for="legCount">支腿数量</label>
+                    <select id="legCount">
+                        <option value="4" selected>4条</option>
+                        <option value="6">6条</option>
+                        <option value="8">8条</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="guardrail">护栏高度 (mm)</label>
+                    <input type="number" id="guardrail" placeholder="护栏高度" value="1200">
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">🔨 计算用量</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 材料明细表</h3>
+                <ul class="result-list" id="resultList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const diameter = parseFloat(document.getElementById('diameter').value);
+            const length = parseFloat(document.getElementById('length').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const angle = parseFloat(document.getElementById('angle').value);
+            const width = parseFloat(document.getElementById('width').value);
+            const legCount = parseInt(document.getElementById('legCount').value);
+            const guardrailHeight = parseFloat(document.getElementById('guardrail').value);
+
+            // 验证输入
+            if (!diameter) {
+                alert('请选择滚筒直径');
+                return;
+            }
+            if (!length) {
+                alert('请选择滚筒长度');
+                return;
+            }
+            if (!height || height < 2000 || height > 7000) {
+                alert('架设高度需在2000-7000mm之间');
+                return;
+            }
+            if (!width || width <= 0) {
+                alert('请输入有效的工作平台宽度');
+                return;
+            }
+            if (!guardrailHeight || guardrailHeight <= 0) {
+                alert('请输入有效的护栏高度');
+                return;
+            }
+
+            const materials = calculateMaterials(diameter * 1000, length * 1000, height, width, legCount, guardrailHeight, angle);
+            displayResults(materials);
+        }
+
+        function calculateMaterials(diameter, length, height, width, legCount, guardrailHeight, angle) {
+            const results = [];
+            
+            // === 支腿材料 ===
+            results.push(['【支腿材料】', '', '', '']);
+            
+            // 根据高度选择支腿型号
+            let legSpec, legUnitWeight, legLogic;
+            if (height <= 3000) {
+                legSpec = '10#槽钢';
+                legUnitWeight = 8.007;
+                legLogic = '高度≤3m';
+            } else if (height <= 5000) {
+                legSpec = '12#槽钢';
+                legUnitWeight = 10.007;
+                legLogic = '3m<高度≤5m';
+            } else {
+                legSpec = '14#槽钢';
+                legUnitWeight = 12.059;
+                legLogic = '高度>5m';
+            }
+            
+            const legLength = legCount * (height / 1000);
+            const legWeight = legLength * legUnitWeight;
+            
+            results.push(['选型逻辑', legLogic, '', '']);
+            results.push(['型号', legSpec, legCount + '根', '']);
+            results.push(['总长度', '', legLength.toFixed(2) + ' m', '']);
+            results.push(['总重量', '', '', legWeight.toFixed(2) + ' kg']);
+            
+            // === 平台材料 ===
+            results.push(['', '', '', '']);
+            results.push(['【平台材料】', '', '', '']);
+            
+            // 横撑数量（根据长度）
+            const crossBeamCount = Math.ceil(length / 1500);
+            results.push(['横撑数量', '', crossBeamCount + '根', '']);
+            
+            // 两边平台槽钢
+            const sidePlatformLength = 2 * (length / 1000 + 0.4);
+            const sidePlatformWeight = sidePlatformLength * 10.007;
+            results.push(['两边平台槽钢', '12#槽钢', sidePlatformLength.toFixed(2) + ' m', sidePlatformWeight.toFixed(2) + ' kg']);
+            
+            // 两边平台角铁
+            const sideAngleLength = 2 * (length / 1000 + 0.4);
+            const sideAngleWeight = sideAngleLength * 3.77;
+            results.push(['两边平台角铁', '50*50*5角铁', sideAngleLength.toFixed(2) + ' m', sideAngleWeight.toFixed(2) + ' kg']);
+            
+            // 前平台槽钢
+            const frontPlatformLength = (width / 1000) * 2;
+            const frontPlatformWeight = frontPlatformLength * 10.007;
+            results.push(['前平台槽钢', '12#槽钢', frontPlatformLength.toFixed(2) + ' m', frontPlatformWeight.toFixed(2) + ' kg']);
+            
+            // 后平台槽钢（含滚筒直径）
+            const backPlatformLength = (width / 1000 + diameter / 1000) * 2;
+            const backPlatformWeight = backPlatformLength * 10.007;
+            results.push(['后平台槽钢', '12#槽钢', backPlatformLength.toFixed(2) + ' m', backPlatformWeight.toFixed(2) + ' kg']);
+            
+            // 花纹板
+            const plateArea = (length / 1000 + 0.8 + width / 1000 * 4 + diameter / 1000 * 2) * (width / 1000);
+            const plateWeight = plateArea * 0.005 * 7850;
+            results.push(['花纹板', '5mm厚', plateArea.toFixed(2) + ' m²', plateWeight.toFixed(2) + ' kg']);
+            
+            // 平台总重量
+            const platformTotal = sidePlatformWeight + sideAngleWeight + frontPlatformWeight + backPlatformWeight + plateWeight;
+            results.push(['平台总重量', '', '', platformTotal.toFixed(2) + ' kg']);
+            
+            // === 护栏材料 ===
+            results.push(['', '', '', '']);
+            results.push(['【护栏材料】', '', '', '']);
+            
+            const guardrailLength = (length / 1000 + 0.8 + width / 1000 * 4 + diameter / 1000 * 2);
+            const guardrailHeightM = guardrailHeight / 1000;
+            
+            // 护栏立柱
+            const postCount = Math.ceil(guardrailLength / 1.2) + 1;
+            const postWeight = postCount * guardrailHeightM * 5.42;
+            results.push(['立柱', '40*60*3方管', postCount + '根', postWeight.toFixed(2) + ' kg']);
+            
+            // 扶手
+            const handrailWeight = guardrailLength * 3.52;
+            results.push(['扶手', '40*40*3方管', guardrailLength.toFixed(2) + ' m', handrailWeight.toFixed(2) + ' kg']);
+            
+            // 中横档
+            const midRailWeight = guardrailLength * 2 * 1.963;
+            results.push(['中横档', '50*5扁铁 (2道)', (guardrailLength * 2).toFixed(2) + ' m', midRailWeight.toFixed(2) + ' kg']);
+            
+            // 踢脚线
+            const kickboardWeight = guardrailLength * 3.14;
+            results.push(['踢脚线', '100*4扁铁', guardrailLength.toFixed(2) + ' m', kickboardWeight.toFixed(2) + ' kg']);
+            
+            // 护栏总重
+            const guardrailTotal = postWeight + handrailWeight + midRailWeight + kickboardWeight;
+            results.push(['护栏总重量', '', '', guardrailTotal.toFixed(2) + ' kg']);
+            
+            // === 项目总重量 ===
+            results.push(['', '', '', '']);
+            results.push(['【项目总重量】', '', '', '']);
+            results.push(['支腿总重量', '', '', legWeight.toFixed(2) + ' kg']);
+            results.push(['平台总重量', '', '', platformTotal.toFixed(2) + ' kg']);
+            results.push(['护栏总重量', '', '', guardrailTotal.toFixed(2) + ' kg']);
+            
+            const projectTotal = legWeight + platformTotal + guardrailTotal;
+            results.push(['合计总重量', '', '', projectTotal.toFixed(2) + ' kg']);
+            
+            // 安全警告
+            if (guardrailHeightM < 1.05) {
+                results.push(['', '', '', '']);
+                results.push(['【安全警告】', '护栏高度不符合GB4053.3-2009标准要求(≥1050mm)!', '', '']);
+            }
+            
+            return results;
+        }
+
+        function displayResults(materials) {
+            const resultList = document.getElementById('resultList');
+            resultList.innerHTML = '';
+            
+            // 添加表头
+            const header = document.createElement('li');
+            header.innerHTML = '<span>材料名称</span><span>规格/描述</span><span>数量</span><span>重量</span>';
+            resultList.appendChild(header);
+            
+            // 添加数据
+            materials.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${item[0]}</span><span>${item[1]}</span><span>${item[2]}</span><span>${item[3]}</span>`;
+                resultList.appendChild(li);
+            });
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>
+

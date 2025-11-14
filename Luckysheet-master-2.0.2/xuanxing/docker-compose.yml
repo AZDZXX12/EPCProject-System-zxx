@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # 前端服务
+  web:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+    networks:
+      - cable-network
+
+  # 后端API服务
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DB_NAME=cable_selector
+      - DB_USER=postgres
+      - DB_PASSWORD=cable123
+      - DB_HOST=db
+      - DB_PORT=5432
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py load_initial_data &&
+             python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - cable-network
+
+  # PostgreSQL数据库
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=cable_selector
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=cable123
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - cable-network
+
+networks:
+  cable-network:
+    driver: bridge
+
+volumes:
+  pg_data:
+

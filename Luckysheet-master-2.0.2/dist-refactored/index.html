@@ -1,0 +1,2061 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="renderer" content="webkit" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>设备参数选型系统</title>
+	<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+
+	<link rel='stylesheet' href='./plugins/css/pluginsCss.css' />
+	<link rel='stylesheet' href='./plugins/plugins.css' />
+	<link rel='stylesheet' href='./css/luckysheet.css' />
+	<link rel='stylesheet' href='./assets/iconfont/iconfont.css' />
+	
+	<!-- 应用样式 -->
+	<link rel='stylesheet' href='./css/app.css' />
+	
+	<!-- 动画样式 -->
+	<style>
+		@keyframes slideIn {
+			from { transform: translateX(400px); opacity: 0; }
+			to { transform: translateX(0); opacity: 1; }
+		}
+		@keyframes fadeOut {
+			from { opacity: 1; }
+			to { opacity: 0; }
+		}
+		
+		/* Luckysheet工具栏样式增强 - 增大图标和字体 */
+		.luckysheet-wa-editor .luckysheet-toolbar-button {
+			font-size: 15px !important;
+			padding: 6px 8px !important;
+		}
+		
+		.luckysheet-wa-editor .luckysheet-toolbar-button-split-left {
+			font-size: 15px !important;
+			padding: 6px 8px !important;
+		}
+		
+		.luckysheet-wa-editor .luckysheet-toolbar-select,
+		.luckysheet-wa-editor .luckysheet-toolbar-combo-button {
+			font-size: 14px !important;
+			height: 28px !important;
+			line-height: 28px !important;
+		}
+		
+		.luckysheet-wa-editor .luckysheet-icon {
+			font-size: 16px !important;
+		}
+		
+		/* 工具栏整体高度调整 */
+		#luckysheet-wa-editor {
+			min-height: 40px !important;
+		}
+		
+		.luckysheet-wa-editor {
+			padding: 5px 8px !important;
+		}
+		
+	/* 单元格编辑器默认字体 - 不设置固定大小，由动态脚本控制 */
+	#luckysheet-input-box,
+	#luckysheet-rich-text-editor,
+	.luckysheet-cell-flow-text {
+		font-family: 'SimSun', serif !important;
+	}
+	</style>
+	
+	<!-- 登录模态框样式 -->
+	<style>
+		/* 登录模态框覆盖层 */
+		#loginModal {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 9999;
+			background: linear-gradient(135deg, #1a2a44 0%, #2d4263 50%, #1a2a44 100%);
+		}
+
+		#loginModal.show {
+			display: block;
+		}
+
+		/* Canvas粒子背景 */
+		#particles-canvas {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 0;
+		}
+
+		/* 登录容器 */
+		.login-wrapper {
+			position: relative;
+			z-index: 1;
+			width: 100%;
+			height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+		}
+
+	.login-container {
+		position: relative;
+		background: transparent;
+		padding: 50px 45px 40px;
+		width: 420px;
+		max-width: 90%;
+		animation: fadeInUp 0.8s ease-out;
+	}
+
+		@keyframes fadeInUp {
+			from { opacity: 0; transform: translateY(30px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		.login-header {
+			text-align: center;
+			margin-bottom: 40px;
+		}
+
+	.login-title {
+		color: #ffffff;
+		font-size: 32px;
+		font-weight: 700;
+		margin-bottom: 10px;
+		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+	}
+
+	.login-subtitle {
+		color: rgba(255, 255, 255, 0.8);
+		font-size: 14px;
+	}
+
+		.input-group {
+			margin-bottom: 25px;
+		}
+
+	.input-label {
+		display: block;
+		margin-bottom: 10px;
+		color: rgba(255, 255, 255, 0.9);
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	.input-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.input-icon {
+		position: absolute;
+		left: 15px;
+		font-size: 18px;
+		z-index: 1;
+		filter: drop-shadow(0 0 3px rgba(100, 200, 255, 0.5));
+	}
+
+	.login-input {
+		width: 100%;
+		padding: 14px 15px 14px 45px;
+		border: 2px solid rgba(100, 200, 255, 0.3);
+		border-radius: 12px;
+		font-size: 15px;
+		font-weight: 500;
+		color: #ffffff;
+		background: rgba(255, 255, 255, 0.1);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+		transition: all 0.3s ease;
+	}
+
+	.login-input:focus {
+		outline: none;
+		border-color: rgba(100, 200, 255, 0.8);
+		background: rgba(255, 255, 255, 0.15);
+		box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
+	}
+
+	.login-input::placeholder {
+		color: rgba(255, 255, 255, 0.5);
+	}
+
+	.login-btn {
+		width: 100%;
+		padding: 15px;
+		background: linear-gradient(135deg, rgba(100, 200, 255, 0.9) 0%, rgba(0, 153, 255, 0.9) 100%);
+		border: 2px solid rgba(100, 200, 255, 0.5);
+		border-radius: 12px;
+		color: white;
+		font-size: 16px;
+		font-weight: 700;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 20px rgba(100, 200, 255, 0.4);
+		-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(10px);
+	}
+
+	.login-btn:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 30px rgba(100, 200, 255, 0.6);
+		background: linear-gradient(135deg, rgba(100, 200, 255, 1) 0%, rgba(0, 153, 255, 1) 100%);
+	}
+
+		.footer-info {
+			margin-top: 30px;
+			text-align: center;
+		}
+
+		.copyright {
+			font-size: 13px;
+			color: #9ca3af;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+	.company-name {
+		color: rgba(255, 255, 255, 0.7);
+		font-weight: 500;
+	}
+
+	.separator {
+		color: rgba(255, 255, 255, 0.4);
+	}
+
+	.author {
+		font-weight: 600;
+		color: rgba(100, 200, 255, 0.9);
+	}
+
+	.year {
+		color: rgba(255, 255, 255, 0.6);
+	}
+	
+	.toggle-link {
+		color: rgba(100, 200, 255, 0.9);
+		text-decoration: none;
+		font-size: 13px;
+		font-weight: 500;
+		transition: all 0.3s ease;
+		display: inline-block;
+	}
+	
+	.toggle-link:hover {
+		color: rgba(100, 200, 255, 1);
+		text-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
+		transform: translateY(-1px);
+	}
+	</style>
+
+	<!-- jQuery 和依赖库 -->
+	<script>
+		window.module = undefined;
+		window.exports = undefined;
+	</script>
+	<script src="./plugins/js/plugin.js"></script>
+	
+	<!-- 白名单云端同步模块 -->
+	<script src="./js/modules/whitelistSync.js"></script>
+	<script>
+		if (typeof jQuery !== 'undefined') {
+			window.jQuery = jQuery;
+			window.$ = jQuery;
+			console.log('✅ jQuery 已注册到全局:', jQuery.fn.jquery);
+		} else {
+			console.error('❌ jQuery 未定义！');
+		}
+	</script>
+	
+	<!-- Luckysheet 核心 -->
+	<script src="./luckysheet.umd.js"></script>
+	<script>
+		console.log('✅ 所有核心库加载完成');
+		if (typeof $ !== 'undefined') {
+			console.log('✅ jQuery 版本:', $.fn.jquery);
+		}
+		window.luckysheetLoaded = true;
+	</script>
+	
+	<!-- ExcelJS（可选） -->
+	<script>
+		(function() {
+			const script = document.createElement('script');
+			script.src = './libs/exceljs.min.js';
+			script.onload = function() {
+				console.log('✅ ExcelJS 加载成功');
+				window.excelJSLoaded = true;
+			};
+			script.onerror = function() {
+				console.warn('⚠️ ExcelJS未安装');
+				window.excelJSLoaded = false;
+			};
+			document.head.appendChild(script);
+		})();
+	</script>
+	
+	<!-- LuckyExcel - Excel导入导出库，保留样式和格式 -->
+	<script src="./libs/luckyexcel.js" onload="console.log('✅ LuckyExcel 加载成功！'); window.luckyExcelLoaded = true;" onerror="console.warn('⚠️ LuckyExcel 未找到，将使用基础XLSX解析'); window.luckyExcelLoaded = false;"></script>
+	
+	<!-- XLSX 库异步加载 - 使用CDN -->
+	<script>
+		(function() {
+			const script = document.createElement('script');
+			script.src = 'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js';
+			script.onload = function() {
+				console.log('✅ XLSX 加载成功（CDN）');
+				window.xlsxLoaded = true;
+			};
+			script.onerror = function() {
+				console.error('❌ XLSX 加载失败（CDN连接失败）');
+				window.xlsxLoaded = false;
+			};
+			document.head.appendChild(script);
+		})();
+	</script>
+	
+	<script>
+		// 定义空的 LuckyExcel 对象，避免报错
+		window.LuckyExcel = {
+			transformExcelToLucky: function(file, callback) {
+				console.warn('⚠️ LuckyExcel 不可用，使用基础 XLSX 解析');
+				// 直接调用原有的 loadExcelFile 函数
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					try {
+					// 检查 XLSX 是否加载
+					if (typeof XLSX === 'undefined') {
+						console.error('❌ XLSX 库未加载，请等待或刷新页面');
+						return;
+					}
+						const data = new Uint8Array(e.target.result);
+						const workbook = XLSX.read(data, {type: 'array'});
+						const sheetName = workbook.SheetNames[0];
+						const worksheet = workbook.Sheets[sheetName];
+						const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+						
+						// ========== 🔍 识别Excel版本（回退方案也要识别）==========
+						console.log('🔍 开始识别Excel文件版本（基础XLSX解析）...');
+						let hasDeviceNumber = false;
+						// 检查第4-5行（索引3-4）的B列
+						if (jsonData.length > 3) {
+							const row3 = jsonData[3] || [];
+							const row4 = jsonData[4] || [];
+							// 去除所有空格后再判断
+							const b3 = String(row3[1] || '').replace(/\s+/g, '');
+							const b4 = String(row4[1] || '').replace(/\s+/g, '');
+							const b3Original = String(row3[1] || '').trim();
+							const b4Original = String(row4[1] || '').trim();
+							console.log(`  📋 第4行B列: "${b3Original}" (去空格后: "${b3}")`);
+							console.log(`  📋 第5行B列: "${b4Original}" (去空格后: "${b4}")`);
+							// 去除空格后检查，更准确
+							if (b3.includes('设备位号') || b3.includes('位号') || b4.includes('设备位号') || b4.includes('位号')) {
+								hasDeviceNumber = true;
+							}
+						}
+						const isSimplified = !hasDeviceNumber;
+						const version = isSimplified ? '简化版' : '完整版';
+						console.log(`✅ 识别结果: ${version}`);
+						console.log(`  - 是否有设备位号列: ${hasDeviceNumber ? '是' : '否'}`);
+						const versionInfo = { isSimplified, version, expectedColumns: isSimplified ? 14 : 16 };
+						
+						// 裁剪数据：从第5行到"安装费"行之前（表头表尾之间）
+						let endRow = jsonData.length;
+						for (let i = 4; i < jsonData.length; i++) {
+							const row = jsonData[i];
+							if (row && row.some(cell => cell && cell.toString().includes('安装费'))) {
+								endRow = i;
+								break;
+							}
+						}
+						const startRow = 5; // 从第6行开始（包含第6行）
+						const filteredData = jsonData.slice(startRow, endRow);
+						
+						// 转换为Luckysheet celldata格式
+						const celldata = [];
+						const dynamicRowlen = {}; // 动态行高配置
+						const dynamicColumnlen = {}; // 动态列宽配置
+						
+						// 智能计算行高：根据内容和列宽估算
+						filteredData.forEach((row, r) => {
+							let maxRowHeight = 25; // 最小行高25px
+							
+							row.forEach((cell, c) => {
+                                // 跳过A列（序号列）读取，由程序生成
+                                if (c === 0) return;
+								
+								// 读取原始列宽
+								const originalColWidth = worksheet['!cols'] && worksheet['!cols'][c] ? worksheet['!cols'][c].wpx : null;
+								if (originalColWidth && !dynamicColumnlen[c]) {
+									dynamicColumnlen[c] = originalColWidth;
+								}
+								
+								// 根据单元格内容和列宽估算所需行高
+								if (cell !== undefined && cell !== null && cell !== '') {
+									const cellText = String(cell);
+									const textLength = cellText.length;
+									
+									// 获取该列宽度（默认值）
+									const colWidth = dynamicColumnlen[c] || (c === 4 ? 200 : c === 2 ? 140 : 80);
+									
+									// 估算每行能容纳的字符数（中文字符约10px宽）
+									const charsPerLine = Math.floor(colWidth / 10);
+									
+									// 计算需要的行数
+									const linesNeeded = Math.ceil(textLength / charsPerLine);
+									
+									// 每行约20px高度，加上8px的padding
+									const estimatedHeight = Math.max(25, linesNeeded * 20 + 8);
+									
+									maxRowHeight = Math.max(maxRowHeight, estimatedHeight);
+									
+									celldata.push({
+										r: r + startRow, // 数据从第6行开始（索引5）
+										c: c,
+										v: {
+											v: cell,
+											m: cell.toString(),
+											ct: {fa: "General", t: "g"},
+											ff: "SimSun", // 宋体
+											fs: 10, // 数据字体10号
+											ht: (c === 4) ? 1 : 0, // E列左对齐，其他居中
+											vt: 0, // 垂直居中
+											tb: 2 // 自动换行
+										}
+									});
+								}
+							});
+							
+							// 设置该行的行高，最大不超过150px（避免过高）
+							dynamicRowlen[startRow + r] = Math.min(maxRowHeight, 150);
+						});
+						
+						// 重新创建完整的 Luckysheet 实例，保留表头表尾
+						luckysheet.destroy();
+						// 减少延迟，提升加载速度
+						setTimeout(() => {
+							// 根据版本创建对应的表头表尾数据
+							const headerData = versionInfo.isSimplified ? createSimplifiedTableHeader() : createTableHeader();
+							console.log(`📋 使用${versionInfo.version}表头模板`);
+							const allCelldata = [];
+							
+							// 计算表尾位置：表头(5行) + 加载数据行数，表尾紧接数据
+							const dataRowCount = filteredData.length;
+							const footerStartRow = 5 + dataRowCount; // 表尾开始行（数据从第5行开始，表尾紧接数据后）
+							console.log(`🔍 调试信息: 数据行数=${dataRowCount}, 表尾开始行=${footerStartRow}`);
+							
+							// 重新计算表头表尾位置
+							const adjustedHeaderData = [];
+							
+							// 添加表头数据（前5行保持不变）
+							for (let r = 0; r < 5; r++) {
+								adjustedHeaderData[r] = headerData[r];
+							}
+							
+							// 添加表尾数据（根据数据行数调整位置）
+							for (let r = 15; r < 20; r++) {
+								const newRowIndex = footerStartRow + (r - 15);
+								adjustedHeaderData[newRowIndex] = headerData[r];
+							}
+							
+						// 添加表头表尾数据（并设置合并单元格mc属性）
+							adjustedHeaderData.forEach((row, r) => {
+								if (row) {
+									row.forEach((cell, c) => {
+									// 表尾"合计"行即使为空字符串也要添加，因为有合并单元格
+									const isFooterMergeCell = (r === footerStartRow + 4 && (c === 0 || c === 1 || c === 2));
+									if ((cell !== undefined && cell !== null && cell !== '') || isFooterMergeCell) {
+											let fontSize = 12; // 默认12号字体
+										let fontWeight = (r <= 4) ? 1 : 0; // 只有表头粗体，表尾不加粗
+										let horizontalAlign = 0; // 默认居中
+											
+											// 根据特殊位置调整字体大小
+										if (r === 0 && c === 0) { // 公司名称（ABCD合并）
+												fontSize = 14;
+										} else if (r === 0 && c === 4) { // 设备一览表（EFG合并）
+												fontSize = 20;
+											}
+											
+						// E列对齐方式：表头表尾居中，数据区域左对齐
+						if (c === 4) {
+							if (r <= 4 || r >= footerStartRow) {
+								horizontalAlign = 0; // 表头表尾E列居中
+							} else {
+								horizontalAlign = 1; // 数据区域E列左对齐
+							}
+						}
+						
+						// 表尾字体大小特殊处理
+						if (r >= footerStartRow) {
+							fontSize = 10; // 表尾10号字体
+							fontWeight = 0; // 表尾不加粗
+						}
+						
+						// 构建单元格对象
+						const cellValue = (cell === undefined || cell === null) ? '' : cell;
+						const cellObj = {
+												r: r, c: c,
+												v: {
+												v: cellValue, 
+												m: cellValue.toString(), 
+												ct: {fa: "General", t: "g"},
+												bg: null, bl: fontWeight, it: 0, ff: "SimSun", fs: fontSize,
+													fc: "rgb(51, 51, 51)",
+												ht: horizontalAlign,
+													vt: 0, tb: 2
+												}
+										};
+										
+										// 为表尾合计行ABC列添加合并单元格mc属性
+										if (r === footerStartRow + 4 && c === 0) {
+											cellObj.v.mc = {r: footerStartRow + 4, c: 0, rs: 1, cs: 3};
+											cellObj.v.v = '合计'; // 确保显示"合计"
+											cellObj.v.m = '合计';
+										} else if (r === footerStartRow + 4 && (c === 1 || c === 2)) {
+											cellObj.v.mc = {r: footerStartRow + 4, c: 0}; // 被合并的单元格
+										}
+										
+										allCelldata.push(cellObj);
+										}
+									});
+								}
+							});
+							
+							// 添加加载的数据（除E列外居中显示）
+							celldata.forEach(item => {
+								if (item.v) {
+									// 确保数据格式不受表头表尾影响
+									if (item.r >= 5 && item.r < footerStartRow) {
+										item.v.fs = 10; // 数据字体10号
+										item.v.ht = (item.c === 4) ? 1 : 0; // E列左对齐，其他居中
+										item.v.vt = 0;
+										item.v.bl = 0; // 数据区域不加粗
+										item.v.tb = 2; // 自动换行
+										item.v.ff = "SimSun"; // 宋体
+									}
+									// 表尾数据特殊处理
+									else if (item.r >= footerStartRow) {
+										item.v.fs = 10; // 表尾字体10号
+										item.v.ht = 0; // 表尾居中对齐
+										item.v.vt = 0;
+										item.v.bl = 0; // 表尾不加粗
+										item.v.tb = 2; // 自动换行
+										item.v.ff = "SimSun"; // 宋体
+									}
+								}
+								allCelldata.push(item);
+							});
+							
+							// 为A列生成序号：数据区与表尾均排序，合计行不编号
+							let serial = 1;
+							for (let r = 5; r < footerStartRow; r++) {
+								allCelldata.push({
+									r: r,
+									c: 0,
+									v: { v: serial, m: String(serial), ct: {fa: "General", t: "n"},
+										bg: null, bl: 0, it: 0, ff: "SimSun", fs: 10, fc: "rgb(51, 51, 51)", ht: 0, vt: 0, tb: 2 }
+								});
+								serial++;
+							}
+							// 表尾前四行继续编号（安装费/钢材用量/电器材料/电线电缆）
+							for (let i = 0; i < 4; i++) {
+								const r = footerStartRow + i;
+								allCelldata.push({
+									r: r,
+									c: 0,
+									v: { v: serial, m: String(serial), ct: {fa: "General", t: "n"},
+										bg: null, bl: 0, it: 0, ff: "SimSun", fs: 10, fc: "rgb(51, 51, 51)", ht: 0, vt: 0, tb: 2 }
+								});
+								serial++;
+							}
+							
+							// 创建动态合并配置，避免配置错误
+							// 根据版本选择合并配置
+							const dynamicMergeConfig = versionInfo.isSimplified ? {
+						// 简化版（14列）
+						"0_0": {r: 0, c: 0, rs: 3, cs: 3}, "0_3": {r: 0, c: 3, rs: 3, cs: 3},
+						"0_6": {r: 0, c: 6, rs: 1, cs: 2}, "1_6": {r: 1, c: 6, rs: 1, cs: 2}, "2_6": {r: 2, c: 6, rs: 1, cs: 2},
+						"0_8": {r: 0, c: 8, rs: 1, cs: 3}, "1_8": {r: 1, c: 8, rs: 1, cs: 3}, "2_8": {r: 2, c: 8, rs: 1, cs: 3},
+						// L列独立，M/N列不合并（各自独立）
+						"3_0": {r: 3, c: 0, rs: 2, cs: 1}, "3_1": {r: 3, c: 1, rs: 2, cs: 1}, "3_2": {r: 3, c: 2, rs: 2, cs: 1},
+							"3_3": {r: 3, c: 3, rs: 2, cs: 1}, "3_4": {r: 3, c: 4, rs: 2, cs: 1}, "3_5": {r: 3, c: 5, rs: 2, cs: 1},
+						"3_6": {r: 3, c: 6, rs: 1, cs: 2}, "3_8": {r: 3, c: 8, rs: 2, cs: 1}, "3_9": {r: 3, c: 9, rs: 1, cs: 2},
+						"3_11": {r: 3, c: 11, rs: 1, cs: 2}, "3_13": {r: 3, c: 13, rs: 2, cs: 1}
+							} : {
+								// 完整版（16列）
+								"0_0": {r: 0, c: 0, rs: 3, cs: 4}, "0_4": {r: 0, c: 4, rs: 3, cs: 3},
+								"0_7": {r: 0, c: 7, rs: 1, cs: 2}, "1_7": {r: 1, c: 7, rs: 1, cs: 2}, "2_7": {r: 2, c: 7, rs: 1, cs: 2},
+								"0_9": {r: 0, c: 9, rs: 1, cs: 4}, "1_9": {r: 1, c: 9, rs: 1, cs: 4}, "2_9": {r: 2, c: 9, rs: 1, cs: 4},
+								"0_14": {r: 0, c: 14, rs: 1, cs: 2}, "1_14": {r: 1, c: 14, rs: 1, cs: 2}, "2_14": {r: 2, c: 14, rs: 1, cs: 2},
+								"3_0": {r: 3, c: 0, rs: 2, cs: 1}, "3_1": {r: 3, c: 1, rs: 2, cs: 1}, "3_2": {r: 3, c: 2, rs: 2, cs: 1},
+								"3_3": {r: 3, c: 3, rs: 2, cs: 1}, "3_4": {r: 3, c: 4, rs: 2, cs: 1}, "3_5": {r: 3, c: 5, rs: 2, cs: 1},
+								"3_6": {r: 3, c: 6, rs: 2, cs: 1}, "3_7": {r: 3, c: 7, rs: 2, cs: 1}, "3_8": {r: 3, c: 8, rs: 1, cs: 2},
+								"3_10": {r: 3, c: 10, rs: 2, cs: 1}, "3_11": {r: 3, c: 11, rs: 1, cs: 2}, "3_13": {r: 3, c: 13, rs: 1, cs: 2},
+								"3_15": {r: 3, c: 15, rs: 2, cs: 1}
+							};
+							
+							// 表尾合计行ABC动态合并
+							dynamicMergeConfig[`${footerStartRow + 4}_0`] = { r: footerStartRow + 4, c: 0, rs: 1, cs: 3 };
+							
+							// 为表尾行设置适当的行高
+							for (let i = 0; i < 5; i++) {
+								dynamicRowlen[footerStartRow + i] = 28; // 表尾行高28
+							}
+							
+							const totalRows = Math.max(footerStartRow + 5, 84);
+							
+							const options = {
+								container: 'luckysheet', lang: 'zh', title: '设备参数选型',
+								showinfobar: false, showtoolbar: true,
+								showtoolbarConfig: {
+									undoRedo: false, paintFormat: true, currencyFormat: false,
+									percentageFormat: false, numberDecrease: false, numberIncrease: false,
+									moreFormats: true, font: true, fontSize: true, bold: true, italic: true,
+									strikethrough: true, underline: true, textColor: true, fillColor: true,
+									border: true, mergeCell: true, horizontalAlignMode: true, verticalAlignMode: true,
+									textWrapMode: true, textRotateMode: true, image: true, link: true, chart: true,
+									postil: false, pivotTable: false, function: true, frozenMode: true,
+									sortAndFilter: true, conditionalFormat: true, dataVerification: true,
+									splitColumn: false, screenshot: false, findAndReplace: true, protection: true, print: true
+								},
+						data: [
+						// 根据识别结果创建对应版本的sheet
+						{
+				name: `设备参数选型（${versionInfo.version}）`,
+				color: versionInfo.isSimplified ? "#70ad47" : "#5b9bd5",  // 简化版绿色，完整版蓝色
+									config: { 
+										merge: dynamicMergeConfig, 
+										borderInfo: versionInfo.isSimplified ? 
+											[...getSimplifiedBorderConfig(footerStartRow), ...getSimplifiedDataBorderConfig(5, footerStartRow)] : 
+											[...getBorderConfig(footerStartRow), ...getDataBorderConfig(5, footerStartRow)],
+										columnlen: versionInfo.isSimplified ? 
+											{ ...dynamicColumnlen, '0': 35, '1': 115, '2': 80, '3': 200, '4': 50, '5': 50, '6': 40, '7': 40, '8': 60, '9': 60, '10': 60, '11': 60, '12': 60, '13': 60 } :
+											{ ...dynamicColumnlen, '0': 50, '1': 40, '2': 140, '3': 80, '4': 200, '5': 80, '6': 50, '7': 50, '8': 40, '9': 40, '10': 70, '11': 60, '12': 60, '13': 60, '14': 60, '15': 80 },
+										rowlen: {...dynamicRowlen, '0': 35, '1': 35, '2': 35, '3': 28, '4': 28}
+									},
+									index: "0", zoomRatio: 1, order: 0, status: 1, row: totalRows, column: 60,
+									celldata: allCelldata
+								}
+							]
+							};
+							
+							luckysheet.create(options);
+							
+							// 保存表尾位置到全局变量，供序号刷新使用
+							window.currentFooterStartRow = footerStartRow;
+							// 保存版本信息到全局变量，供详情页回写使用
+							window.currentSheetVersion = versionInfo;
+							console.log(`✅ 版本信息已保存到全局变量: ${versionInfo.version}`);
+							
+				// 强制刷新，确保E列左对齐立即生效
+				setTimeout(() => {
+					luckysheet.refresh();
+					console.log('✅ 已强制刷新E列样式');
+				}, 50);
+							
+					// 初始化序号
+					setTimeout(() => {
+						refreshSerialNumbers(5, footerStartRow);
+						
+					// 只监听行的增删事件，不监听单元格更新（避免循环）
+					// 注意：hook已在主初始化中注册，这里不再重复注册
+					console.log('✅ 序号初始化完成（hook已全局注册）');
+					}, 100);
+							
+							console.log(`✅ 数据加载完成，表尾位置：第${footerStartRow + 1}行，总行数：${totalRows}`);
+							
+							// 数据加载完成后，添加公式并更新设备列表
+							setTimeout(() => {
+								// 添加计算公式（只添加一次）
+								if (typeof addFormulasToAllRows === 'function' && !window.formulasAdded) {
+									console.log('📐 Excel数据加载完成，添加计算公式');
+									window.formulasAdded = true;
+									addFormulasToAllRows();
+								}
+								
+								// 更新设备列表
+								if (typeof updateDeviceListFromTable === 'function') {
+									console.log('📊 Excel数据加载完成，更新设备列表');
+									updateDeviceListFromTable();
+								}
+							}, 1000);
+						}, 100);
+					} catch (error) {
+						console.error('Excel解析失败:', error);
+					}
+				};
+				reader.readAsArrayBuffer(file);
+			}
+		};
+	</script>
+	<!-- PDF导出库 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<!-- 登录模态框 -->
+<div id="loginModal" class="show">
+	<!-- Canvas粒子背景 -->
+	<canvas id="particles-canvas"></canvas>
+
+	<!-- 主内容 -->
+	<div class="login-wrapper">
+		<div class="login-container">
+			<div class="login-header">
+				<h1 class="login-title">设备参数选型系统</h1>
+				<p class="login-subtitle">请输入手机号码登录</p>
+			</div>
+
+		<form id="loginForm">
+			<div class="input-group">
+				<label class="input-label">手机号码</label>
+				<div class="input-wrapper">
+					<span class="input-icon">📱</span>
+					<input type="tel" id="phoneInput" class="login-input" placeholder="请输入手机号码" maxlength="11" required>
+				</div>
+			</div>
+
+			<div class="input-group" id="passwordGroup">
+				<label class="input-label">密码</label>
+				<div class="input-wrapper">
+					<span class="input-icon">🔒</span>
+					<input type="password" id="passwordInput" class="login-input" placeholder="请输入密码" required>
+				</div>
+			</div>
+
+			<div class="input-group" id="confirmPasswordGroup" style="display: none;">
+				<label class="input-label">确认密码</label>
+				<div class="input-wrapper">
+					<span class="input-icon">🔑</span>
+					<input type="password" id="confirmPasswordInput" class="login-input" placeholder="请再次输入密码">
+				</div>
+			</div>
+
+			<button type="submit" class="login-btn" id="loginBtn">
+				<span>登 录</span>
+			</button>
+
+			<div style="text-align: center; margin-top: 15px; font-size: 12px;">
+				<span id="loginTip" style="color: rgba(255, 255, 255, 0.7);">请输入密码登录</span>
+			</div>
+			
+		<div style="text-align: center; margin-top: 10px;">
+			<a href="#" id="toggleModeLink" class="toggle-link">
+				还没有密码？点击注册
+			</a>
+		</div>
+	</form>
+
+			<!-- 版权信息 -->
+			<div class="footer-info">
+				<div class="copyright">
+					<span class="company-name">温岭市泽国化工机械有限公司</span>
+					<span class="separator">|</span>
+					<span class="author">ZXX</span>
+					<span class="separator">|</span>
+					<span class="year">© 2025</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<!-- 工具栏 -->
+	<div class="custom-toolbar">
+		<div style="display: flex; gap: 8px; align-items: center;">
+			<!-- 个人中心按钮（仅普通用户可见）-->
+			<button id="userProfileBtn" class="custom-btn" title="个人中心" style="
+				display: none;
+				background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+				color: white;
+				border: none;
+			">👤 个人中心</button>
+			
+			<!-- 管理员按钮（仅管理员可见，是管理员的个人中心）-->
+			<button id="adminPageBtn" class="custom-btn" title="管理员中心" style="
+				display: none;
+				background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+				color: white;
+				border: none;
+			">👑 管理员</button>
+			
+			<button id="openFileBtn" class="custom-btn" title="打开本地表格文件">打开</button>
+			<input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.json" style="display: none;" />
+			<button id="saveFileBtn" class="custom-btn" title="保存表格到本地">保存</button>
+			<button id="newFileBtn" class="custom-btn" title="新建空白表格">新建</button>
+			<button id="exportPdfBtn" class="custom-btn" title="导出为PDF文件">导出PDF</button>
+		</div>
+		<div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+			<span style="font-size: 26px; font-weight: bold; color: #333; letter-spacing: 2px;">设备参数选型系统</span>
+		</div>
+		<div style="display: flex; gap: 8px; align-items: center;">
+			<!-- 实用工具按钮 -->
+			<button id="utilityToolsBtn" class="title-btn" title="实用工具集" onclick="window.location.href='tools/all-tools.html'">🛠️ 实用工具</button>
+			
+			<!-- Word编辑器、风机选型、电缆选型按钮 - 已注释但保留代码 -->
+			<!-- <button id="openWordEditorBtn" class="title-btn" title="打开Word文档编辑器（新窗口）">📝 Word编辑器</button> -->
+			<!-- <button id="openFanSelectorBtn" class="title-btn" title="打开离心风机选型工具（新窗口）">🌀 离心风机选型</button> -->
+			<!-- <button id="openCableSelectorBtn" class="title-btn" title="打开电缆选型工具（新窗口）">⚡ 电缆选型</button> -->
+			
+			<button id="refreshDbBtn" class="refresh-btn" title="刷新表格">🔄 刷新</button>
+			<span style="color: #888; font-size: 12px;">💡 打开加载文件后刷新一下</span>
+		</div>
+	</div>
+	
+	<!-- 主内容区域 -->
+	<div class="main-content">
+		<!-- Luckysheet容器 -->
+		<div class="table-container">
+			<div id="luckysheet"></div>
+		</div>
+		
+		<!-- 设备详情面板 -->
+		<div class="detail-panel-container" id="detailPanel">
+			<button class="collapse-toggle" id="collapseToggle" title="折叠/展开面板">折叠面板</button>
+			
+			<!-- 数据库文件加载区域 -->
+			<div class="database-load-section">
+				<span style="color: #666; font-weight: 500;">数据库:</span>
+				<span id="dbFileStatus" style="color: #666; flex: 1;">未加载</span>
+				<button id="loadDatabaseBtn" class="db-btn" title="加载数据库文件">加载数据库</button>
+				<input type="file" id="databaseFileInput" accept=".xlsx,.xls,.json" style="display: none;" />
+			</div>
+			
+			<div class="detail-panel-header">
+				<button id="deviceTabBtn" class="action-btn">设备详情</button>
+				<button id="projectTabBtn" class="action-btn secondary">项目明细</button>
+				<button id="equipmentDataTabBtn" class="action-btn secondary">设备资料</button>
+				<button id="supplierTabBtn" class="action-btn secondary">配套厂家</button>
+			</div>
+			
+			<div class="detail-body">
+				<div class="device-sidebar">
+					<div style="font-weight:600; margin-bottom:8px;">设备列表</div>
+					<div id="deviceListEmpty" style="font-size:12px; color:#666;">暂无数据</div>
+					<ul id="deviceList" style="list-style:none; padding-left:0; margin:0;"></ul>
+				</div>
+				
+				<div class="device-detail-panel">
+					<!-- 设备详情内容 -->
+					<div id="deviceDetailContent">
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="deviceNumber">设备位号</label>
+								<input type="text" id="deviceNumber" class="detail-input" value="/" placeholder="设备编号">
+							</div>
+							<div class="detail-field">
+								<label for="deviceType">设备类型</label>
+								<select id="deviceType" class="detail-select">
+									<option value="">请选择设备类型</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="deviceName">设备名称</label>
+								<select id="deviceName" class="detail-select">
+									<option value="">请选择设备名称</option>
+								</select>
+							</div>
+							<div class="detail-field">
+								<label for="specification">规格型号</label>
+								<select id="specification" class="detail-select">
+									<option value="">请选择规格型号</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="material">材料</label>
+								<select id="material" class="detail-select">
+									<option value="">请选择材料</option>
+									<option value="钢组件">钢组件</option>
+									<option value="304">304</option>
+									<option value="316L">316L</option>
+									<option value="FRP">FRP</option>
+								</select>
+							</div>
+							<div class="detail-field">
+								<label for="unit">单位</label>
+								<select id="unit" class="detail-select">
+									<option value="">请选择单位</option>
+									<option value="台">台</option>
+									<option value="套">套</option>
+									<option value="个">个</option>
+									<option value="件">件</option>
+									<option value="宗">宗</option>
+									<option value="项">项</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="quantity">设备数量</label>
+								<input type="number" id="quantity" class="detail-input" placeholder="数量">
+							</div>
+							<div class="detail-field">
+								<label for="motorQuantity">单台电机数量</label>
+								<input type="number" id="motorQuantity" class="detail-input" placeholder="电机数量">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="motorPower">电机功率</label>
+								<input type="text" id="motorPower" class="detail-input" placeholder="电机功率，可填 11+44">
+							</div>
+							<div class="detail-field">
+								<label for="singleDevicePower">单台设备功率</label>
+								<input type="number" id="singleDevicePower" class="detail-input" placeholder="单台功率(kW)" readonly style="background-color: #f5f5f5;">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="totalPower">设备总功率</label>
+								<input type="number" id="totalPower" class="detail-input" placeholder="总功率(kW)" readonly style="background-color: #f5f5f5;">
+							</div>
+							<div class="detail-field">
+								<label for="unitPrice">设备单价</label>
+								<input type="number" id="unitPrice" class="detail-input" placeholder="单价(元)">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="totalPrice">设备总价</label>
+								<input type="number" id="totalPrice" class="detail-input" placeholder="总价(元)" readonly style="background-color: #f5f5f5;">
+							</div>
+							<div class="detail-field">
+								<label for="priceIncrease">价格增幅</label>
+								<input type="number" id="priceIncrease" class="detail-input" placeholder="价格增幅(%)" min="0" max="100" step="1">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="installedPower">装机功率</label>
+								<input type="number" id="installedPower" class="detail-input" placeholder="装机功率(kW)" readonly style="background-color: #f5f5f5;">
+							</div>
+							<div class="detail-field">
+								<label for="totalQuotePrice">总报价</label>
+								<input type="number" id="totalQuotePrice" class="detail-input" placeholder="总报价(元)" readonly style="background-color: #f5f5f5;">
+							</div>
+						</div>
+						
+						<div class="detail-row">
+							<label for="technicalParams">技术参数</label>
+							<textarea id="technicalParams" class="detail-textarea" placeholder="技术参数描述"></textarea>
+						</div>
+						
+						<div class="detail-row">
+							<label for="remarks">备注</label>
+							<textarea id="remarks" class="detail-textarea" placeholder="备注信息"></textarea>
+						</div>
+						
+						<div class="detail-separator"></div>
+						
+						<div class="detail-actions">
+							<button id="addDeviceBtn" class="action-btn">添加设备</button>
+							<button id="updateDeviceBtn" class="action-btn">更新设备</button>
+							<button id="clearFormBtn" class="action-btn secondary">清空表单</button>
+						</div>
+					</div>
+					
+					<!-- 项目详情内容 (隐藏) -->
+					<div id="projectDetailContent" style="display: none;">
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="installedCapacity">装机容量</label>
+							<input type="number" id="installedCapacity" class="detail-input" placeholder="装机容量(kW)" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field">
+							<label for="totalQuote">总报价</label>
+							<input type="number" id="totalQuote" class="detail-input" placeholder="总报价(元)" readonly style="background-color: #f5f5f5;">
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="projectPriceIncrease">价格增幅</label>
+							<input type="number" id="projectPriceIncrease" class="detail-input" placeholder="价格增幅(元)" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field">
+							<label for="conveyorCount">输送机数量</label>
+							<input type="number" id="conveyorCount" class="detail-input" placeholder="输送机数量" readonly style="background-color: #f5f5f5;">
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="elevatorCount">提升机数量</label>
+							<input type="number" id="elevatorCount" class="detail-input" placeholder="提升机数量" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field">
+							<label for="scraperCount">刮板机数量</label>
+							<input type="number" id="scraperCount" class="detail-input" placeholder="刮板机数量" readonly style="background-color: #f5f5f5;">
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="steelTonnage">钢材吨数</label>
+							<input type="number" id="steelTonnage" class="detail-input" placeholder="钢材吨数(吨)" readonly style="background-color: #f5f5f5;">
+						</div>
+						<div class="detail-field" style="visibility: hidden;">
+							<!-- 占位，保持布局 -->
+						</div>
+						</div>
+					</div>
+				
+				<!-- 设备资料内容 (隐藏) -->
+				<div id="equipmentDataContent" style="display: none;">
+					<div style="padding: 20px;">
+						<h3 style="margin-bottom: 20px; color: #333;">设备资料库</h3>
+						
+						<div class="detail-row">
+							<label for="equipmentCategory">设备类别</label>
+							<select id="equipmentCategory" class="detail-input">
+								<option value="">请选择设备类别</option>
+							</select>
+				</div>
+						
+						<div class="detail-row">
+							<label for="equipmentModel">设备型号</label>
+							<input type="text" id="equipmentModel" class="detail-input" placeholder="设备型号" readonly>
+				</div>
+						
+						<div class="detail-row">
+							<label for="equipmentManufacturer">制造商</label>
+							<input type="text" id="equipmentManufacturer" class="detail-input" placeholder="制造商">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentPower">额定功率</label>
+							<input type="text" id="equipmentPower" class="detail-input" placeholder="额定功率">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentVoltage">额定电压</label>
+							<input type="text" id="equipmentVoltage" class="detail-input" placeholder="额定电压">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentWeight">设备重量</label>
+							<input type="text" id="equipmentWeight" class="detail-input" placeholder="设备重量(kg)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentDimensions">外形尺寸</label>
+							<input type="text" id="equipmentDimensions" class="detail-input" placeholder="长×宽×高(mm)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentStandard">执行标准</label>
+							<input type="text" id="equipmentStandard" class="detail-input" placeholder="执行标准">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentCertificate">认证证书</label>
+							<input type="text" id="equipmentCertificate" class="detail-input" placeholder="认证证书编号">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentWarranty">质保期</label>
+							<input type="text" id="equipmentWarranty" class="detail-input" placeholder="质保期(月)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentNotes">备注说明</label>
+							<textarea id="equipmentNotes" class="detail-input" placeholder="备注说明" rows="4"></textarea>
+						</div>
+						
+						<div class="detail-separator"></div>
+						
+					<div class="detail-actions">
+						<button id="saveEquipmentDataBtn" class="action-btn">保存资料</button>
+						<button id="clearEquipmentDataBtn" class="action-btn secondary">清空</button>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 配套厂家内容 (隐藏) -->
+			<div id="supplierContent" style="display: none;">
+				<div style="padding: 20px;">
+					<h3 style="margin-bottom: 20px; color: #333;">配套厂家信息</h3>
+					
+					<div class="detail-row">
+						<label for="supplierName">厂家名称</label>
+						<input type="text" id="supplierName" class="detail-input" placeholder="厂家名称">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierContact">联系人</label>
+						<input type="text" id="supplierContact" class="detail-input" placeholder="联系人">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierPhone">联系电话</label>
+						<input type="text" id="supplierPhone" class="detail-input" placeholder="联系电话">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierEmail">电子邮箱</label>
+						<input type="email" id="supplierEmail" class="detail-input" placeholder="电子邮箱">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierAddress">厂家地址</label>
+						<input type="text" id="supplierAddress" class="detail-input" placeholder="厂家地址">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierWebsite">公司网址</label>
+						<input type="text" id="supplierWebsite" class="detail-input" placeholder="公司网址">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierType">厂家类型</label>
+						<select id="supplierType" class="detail-input">
+							<option value="">请选择</option>
+							<option value="制造商">制造商</option>
+							<option value="代理商">代理商</option>
+							<option value="经销商">经销商</option>
+							<option value="贸易商">贸易商</option>
+						</select>
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierLevel">合作等级</label>
+						<select id="supplierLevel" class="detail-input">
+							<option value="">请选择</option>
+							<option value="优选">优选</option>
+							<option value="良好">良好</option>
+							<option value="一般">一般</option>
+						</select>
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierPayment">付款方式</label>
+						<input type="text" id="supplierPayment" class="detail-input" placeholder="付款方式">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierDelivery">交货周期</label>
+						<input type="text" id="supplierDelivery" class="detail-input" placeholder="交货周期(天)">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierWarranty">质保期限</label>
+						<input type="text" id="supplierWarranty" class="detail-input" placeholder="质保期限">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierNotes">备注说明</label>
+						<textarea id="supplierNotes" class="detail-input" placeholder="备注说明" rows="4"></textarea>
+					</div>
+					
+					<div class="detail-separator"></div>
+					
+					<div class="detail-actions">
+						<button id="saveSupplierBtn" class="action-btn">保存厂家</button>
+						<button id="clearSupplierBtn" class="action-btn secondary">清空</button>
+					</div>
+				</div>
+			</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ========== 模块化JavaScript引用（按顺序加载） ========== -->
+<!-- 1. 配置模块 -->
+<script src="./js/config/tableConfig.js"></script>
+
+<!-- 2. 工具模块 -->
+	<script src="./js/utils/cellUtils.js"></script>
+	<script src="./js/utils/versionUtils.js"></script>
+	<script src="./js/utils/alignmentUtils.js"></script>
+	<script src="./js/utils/rowHeightUtils.js"></script>
+	<script src="./js/utils/fileNamePrompt.js"></script>
+
+<!-- 3. 数据模块 -->
+<script src="./js/data/deviceDatabase.js"></script>
+
+<!-- 4. 业务模块 -->
+<script src="./js/modules/formula.js"></script>
+<script src="./js/modules/sheet.js"></script>
+<script src="./js/modules/excel.js"></script>
+<script src="./js/modules/form.js"></script>
+<script src="./js/modules/sync.js"></script>
+<script src="./js/modules/database.js"></script>
+<script src="./js/modules/pdf.js"></script>
+<script src="./js/modules/wordEditor.js"></script>
+
+<!-- 5. 初始化模块 -->
+<script src="./js/init.js"></script>
+
+<!-- 6. 遗留代码模块（临时） -->
+<script src="./js/modules/legacy.js?v=4.6"></script>
+
+<!-- 7. 选型历史记录模块 -->
+<script src="./js/modules/selectionHistory.js?v=3.0"></script>
+
+<script>
+console.log('🎉 所有模块已加载！');
+console.log('📋 已模块化: 配置、工具、公式、初始化、历史记录');
+console.log('⏳ 待提取: 遗留代码（见 js/modules/legacy.js）');
+</script>
+
+<!-- PDF预览模态框 -->
+<div id="pdfPreviewModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; overflow: auto;">
+	<div style="background: white; margin: 20px auto; max-width: 1200px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+		<!-- 模态框头部 -->
+		<div style="padding: 20px; border-bottom: 2px solid #e9ecef; display: flex; justify-content: space-between; align-items: center;">
+			<h2 style="margin: 0; color: #333; font-size: 20px;">📄 PDF导出预览</h2>
+			<button id="closePdfModal" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #666; line-height: 1;">&times;</button>
+		</div>
+		
+		<!-- 选项区域（紧凑布局） -->
+		<div style="padding: 15px; border-bottom: 1px solid #e9ecef; background: #f8f9fa;">
+			<div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center; font-size: 13px;">
+				<div style="display: flex; align-items: center; gap: 8px;">
+					<label style="font-weight: 500; color: #555;">导出范围：</label>
+					<select id="pdfRangeType" style="padding: 5px 10px; border: 1px solid #ddd; border-radius: 3px; font-size: 13px;">
+						<option value="all">全部内容</option>
+						<option value="current">当前选区</option>
+						<option value="custom">自定义范围</option>
+					</select>
+				</div>
+				
+				<div id="customRangeInput" style="display: none; display: flex; align-items: center; gap: 8px;">
+					<label style="font-weight: 500; color: #555;">范围：</label>
+					<input type="text" id="pdfCustomRange" placeholder="例如：A1:O20" style="padding: 5px 10px; border: 1px solid #ddd; border-radius: 3px; width: 120px; font-size: 13px;">
+				</div>
+				
+				<div style="display: flex; align-items: center; gap: 8px;">
+					<label style="font-weight: 500; color: #555;">方向：</label>
+					<select id="pdfOrientation" style="padding: 5px 10px; border: 1px solid #ddd; border-radius: 3px; font-size: 13px;">
+						<option value="landscape">横向</option>
+						<option value="portrait">纵向</option>
+					</select>
+				</div>
+				
+			<div style="display: flex; align-items: center; gap: 8px;">
+				<label style="font-weight: 500; color: #555;">纸张：</label>
+				<select id="pdfPageSize" style="padding: 5px 10px; border: 1px solid #ddd; border-radius: 3px; font-size: 13px;">
+					<option value="a4">A4</option>
+					<option value="a3">A3</option>
+					<option value="letter">Letter</option>
+				</select>
+			</div>
+			
+		<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+			<label style="font-weight: 500; color: #555; cursor: pointer;">
+				<input type="checkbox" id="enableWatermark" style="margin-right: 5px; cursor: pointer;">
+				添加水印
+			</label>
+			
+			<button id="refreshPdfPreview" style="padding: 5px 15px; background: #4285f4; color: white; border: none; border-radius: 3px; cursor: pointer; font-weight: 500; font-size: 13px;">
+				🔄 刷新预览
+			</button>
+		</div>
+		
+		<!-- 水印设置（单行紧凑布局） -->
+		<div id="watermarkSettings" style="display: none; width: 100%; padding: 8px; background: #fff; border: 1px solid #ddd; border-radius: 4px; margin-top: 8px;">
+			<div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px;">
+				<div style="display: flex; align-items: center; gap: 5px;">
+					<label style="color: #666;">文字:</label>
+					<input type="text" id="watermarkText" value="" autocomplete="off" placeholder="水印内容" style="width: 100px; padding: 4px 8px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px;">
+				</div>
+				<div style="display: flex; align-items: center; gap: 5px;">
+					<label style="color: #666;">大小:</label>
+					<input type="number" id="watermarkFontSize" value="40" min="20" max="200" style="width: 50px; padding: 4px 6px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px;">
+					<span style="color: #999;">px</span>
+				</div>
+				<div style="display: flex; align-items: center; gap: 5px;">
+					<label style="color: #666;">角度:</label>
+					<input type="number" id="watermarkRotation" value="-45" min="-180" max="180" style="width: 50px; padding: 4px 6px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px;">
+					<span style="color: #999;">°</span>
+				</div>
+				<div style="display: flex; align-items: center; gap: 5px;">
+					<label style="color: #666;">透明:</label>
+					<input type="number" id="watermarkOpacity" value="0.2" min="0" max="1" step="0.01" style="width: 50px; padding: 4px 6px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px;">
+				</div>
+				<div style="display: flex; align-items: center; gap: 5px;">
+					<label style="color: #666;">密度:</label>
+					<select id="watermarkDensity" style="width: 90px; padding: 4px 6px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px;">
+						<option value="1">单个</option>
+						<option value="4">稀疏(4)</option>
+						<option value="9" selected>适中(9)</option>
+						<option value="16">密集(16)</option>
+						<option value="25">很密(25)</option>
+					</select>
+				</div>
+				<div style="display: flex; align-items: center; gap: 5px;">
+					<label style="color: #666;">颜色:</label>
+					<select id="watermarkColor" style="width: 70px; padding: 4px 6px; border: 1px solid #ddd; border-radius: 3px; font-size: 12px;">
+						<option value="gray">灰色</option>
+						<option value="red">红色</option>
+						<option value="blue">蓝色</option>
+						<option value="green">绿色</option>
+						<option value="black">黑色</option>
+					</select>
+				</div>
+			</div>
+			</div>
+		</div>
+		
+	<!-- 预览区域 -->
+	<div style="padding: 20px; max-height: calc(100vh - 280px); min-height: 500px; overflow-y: auto; overflow-x: auto; background: #e9ecef;">
+		<div id="pdfPreviewContent" style="display: flex; flex-direction: column; align-items: center; gap: 20px; min-height: 400px; margin: 0 auto; padding: 0;">
+			<p style="text-align: center; color: #999; padding: 50px 0;">正在加载预览...</p>
+		</div>
+	</div>
+		
+		<!-- 底部操作按钮 -->
+		<div style="padding: 20px; border-top: 2px solid #e9ecef; display: flex; justify-content: flex-end; gap: 12px;">
+			<button id="cancelPdfExport" style="padding: 10px 24px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500;">
+				取消
+			</button>
+			<button id="confirmPdfExport" style="padding: 10px 24px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500;">
+				📥 确认导出
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- 版权信息 - 最左侧底部 -->
+<div style="position: fixed; bottom: 3px; left: 10px; font-size: 11px; color: #666; z-index: 100; font-family: 'Microsoft YaHei', SimSun, sans-serif; white-space: nowrap;">
+	设备参数选型系统 v1.0.2 | © 2025 ZXX
+</div>
+
+<!-- 用户信息和退出登录 - 右下角 -->
+<div id="userInfoPanel" style="position: fixed; bottom: 3px; right: 10px; font-size: 11px; color: #666; z-index: 100; font-family: 'Microsoft YaHei', SimSun, sans-serif; display: flex; align-items: center; gap: 10px;">
+	<span id="userPhoneDisplay" style="color: #555;">
+		<span style="color: #999;">👤</span> <span id="phoneNumber">--</span>
+	</span>
+	<!-- 用户管理按钮（仅管理员可见）-->
+	<button id="userManagementBtn" style="
+		padding: 4px 12px;
+		background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 11px;
+		font-family: inherit;
+		transition: all 0.3s ease;
+		box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
+		display: none;
+	" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(76, 175, 80, 0.4)'" 
+	   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(76, 175, 80, 0.3)'">
+		👥 用户管理
+	</button>
+	<button id="logoutBtn" style="
+		padding: 4px 12px;
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 11px;
+		font-family: inherit;
+		transition: all 0.3s ease;
+		box-shadow: 0 2px 5px rgba(102, 126, 234, 0.3);
+	" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(102, 126, 234, 0.4)'" 
+	   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(102, 126, 234, 0.3)'">
+		🚪 退出登录
+	</button>
+</div>
+
+<!-- 退出登录脚本 -->
+<script>
+(function() {
+	// 退出登录按钮事件
+	document.getElementById('logoutBtn').addEventListener('click', function() {
+		if (confirm('确定要退出登录吗？')) {
+			// 清除当前会话信息
+			sessionStorage.removeItem('currentSession');
+			
+			// 显示退出提示
+			this.textContent = '✓ 已退出';
+			this.style.background = '#4caf50';
+			
+			// 延迟跳转到登录页
+			setTimeout(() => {
+				window.location.href = 'login.html';
+			}, 500);
+		}
+	});
+	
+	// 实用工具按钮已改为直接跳转，下拉菜单代码已移除
+})();
+</script>
+
+<!-- 动态调整编辑器字体大小 -->
+<script>
+(function() {
+	// 监听编辑器出现并动态调整字体大小
+	function adjustEditorFontSize() {
+		try {
+			// 获取当前选中单元格的信息
+			if (typeof luckysheet === 'undefined' || !luckysheet.getRange) {
+				return;
+			}
+			
+			const range = luckysheet.getRange();
+			if (!range || range.length === 0) {
+				return;
+			}
+			
+			const sel = range[0];
+			const row = Array.isArray(sel.row) ? sel.row[0] : sel.r;
+			const col = Array.isArray(sel.column) ? sel.column[0] : sel.c;
+			
+			if (row === undefined || col === undefined) {
+				return;
+			}
+			
+			// 从Luckysheet数据中获取单元格字体大小
+			const sheet = luckysheet.getAllSheets()[0];
+			if (!sheet || !sheet.data || !sheet.data[row] || !sheet.data[row][col]) {
+				return;
+			}
+			
+			const cellData = sheet.data[row][col];
+			let fontSize = 12; // 默认12px
+			
+			// 获取字体大小（可能在v对象中，也可能直接在单元格数据中）
+			if (cellData && typeof cellData === 'object') {
+				if (cellData.fs) {
+					fontSize = cellData.fs;
+				} else if (cellData.v && cellData.v.fs) {
+					fontSize = cellData.v.fs;
+				}
+			}
+			
+			console.log(`📝 编辑器字体调整: 行${row+1}列${col+1}, 字体大小=${fontSize}px`);
+			
+			// 设置编辑器字体
+			const inputBox = document.getElementById('luckysheet-input-box');
+			const richTextEditor = document.getElementById('luckysheet-rich-text-editor');
+			
+			if (inputBox && inputBox.style.display !== 'none') {
+				inputBox.style.fontSize = fontSize + 'px';
+				inputBox.style.fontFamily = 'SimSun, serif';
+			}
+			
+			if (richTextEditor && richTextEditor.style.display !== 'none') {
+				richTextEditor.style.fontSize = fontSize + 'px';
+				richTextEditor.style.fontFamily = 'SimSun, serif';
+			}
+		} catch (error) {
+			console.warn('⚠️ 调整编辑器字体失败:', error);
+		}
+	}
+	
+	// 使用MutationObserver监听编辑器的显示
+	const observer = new MutationObserver(function(mutations) {
+		mutations.forEach(function(mutation) {
+			if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+				setTimeout(adjustEditorFontSize, 10);
+			}
+		});
+	});
+	
+	// 等待DOM加载完成后开始监听
+	document.addEventListener('DOMContentLoaded', function() {
+		setTimeout(function() {
+			const inputBox = document.getElementById('luckysheet-input-box');
+			const richTextEditor = document.getElementById('luckysheet-rich-text-editor');
+			
+			if (inputBox) {
+				observer.observe(inputBox, { attributes: true });
+			}
+			if (richTextEditor) {
+				observer.observe(richTextEditor, { attributes: true });
+			}
+			
+			// 监听双击和单击事件
+			document.addEventListener('dblclick', function() {
+				setTimeout(adjustEditorFontSize, 100);
+			});
+			
+			document.addEventListener('click', function() {
+				setTimeout(adjustEditorFontSize, 50);
+			});
+		}, 2000); // 增加延迟确保Luckysheet已完全加载
+	});
+})();
+</script>
+
+<!-- 协议检测提示 -->
+<script>
+(function() {
+	// 检测是否在Electron环境
+	const isElectron = typeof window !== 'undefined' && 
+	                   window.process && 
+	                   window.process.type === 'renderer';
+	
+	if (window.location.protocol === 'file:' && !isElectron) {
+		// 只在非Electron环境下显示警告
+		const warning = document.createElement('div');
+		// 🔥 修复：电缆选型已注释，改为友好提示而非警告
+		warning.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%); color: white; padding: 10px 20px; text-align: center; z-index: 10000; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);';
+		warning.innerHTML = `
+			<strong>💡 提示：</strong> 当前使用本地文件访问。建议使用HTTP服务器以获得最佳体验。
+			<span style="font-size: 12px; opacity: 0.9; margin-left: 10px;">可双击运行 <code style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 3px;">启动.bat</code></span>
+			<span style="margin-left: 10px; cursor: pointer; opacity: 0.8;" onclick="this.parentElement.remove()">✕</span>
+		`;
+		document.body.insertBefore(warning, document.body.firstChild);
+		console.info('ℹ️ 当前使用 file:// 协议，建议使用HTTP服务器以获得最佳体验。');
+	} else if (window.location.protocol.startsWith('http')) {
+		if (isElectron) {
+			console.log('✅ Electron内置HTTP服务器运行中，所有功能正常。');
+		} else {
+			console.log('✅ 正在通过HTTP服务器访问，所有功能正常。');
+		}
+	}
+})();
+</script>
+
+<!-- 登录系统和粒子动画 -->
+<script>
+(function() {
+	const loginModal = document.getElementById('loginModal');
+	const canvas = document.getElementById('particles-canvas');
+	const ctx = canvas ? canvas.getContext('2d') : null;
+	
+	// 检查登录状态
+	function checkLoginStatus() {
+		const sessionInfo = sessionStorage.getItem('currentSession');
+		if (!sessionInfo) {
+			// 未登录，显示登录窗口
+			loginModal.classList.add('show');
+			return false;
+		}
+		
+		try {
+			const userInfo = JSON.parse(sessionInfo);
+			if (!userInfo.isLoggedIn) {
+				loginModal.classList.add('show');
+				return false;
+			}
+			// 已登录
+			loginModal.classList.remove('show');
+			window.currentUser = userInfo;
+			console.log('✅ 用户已登录:', userInfo.phone);
+			
+			// 显示用户信息
+			const phoneNumber = document.getElementById('phoneNumber');
+			if (phoneNumber) {
+				const phone = userInfo.phone;
+				const maskedPhone = phone.substring(0, 3) + '****' + phone.substring(7);
+				phoneNumber.textContent = maskedPhone;
+			}
+			
+			// 根据用户类型显示对应按钮
+			const adminPageBtn = document.getElementById('adminPageBtn');
+			const userProfileBtn = document.getElementById('userProfileBtn');
+			
+			if (userInfo.phone === '18968563368') {
+				// 管理员：显示管理员按钮（就是管理员的个人中心）
+				const userManagementBtn = document.getElementById('userManagementBtn');
+				if (userManagementBtn) {
+					userManagementBtn.style.display = 'block';
+					if (!userManagementBtn.onclick) {
+						userManagementBtn.addEventListener('click', function() {
+							window.location.href = 'user-management.html';
+						});
+					}
+				}
+				
+				if (adminPageBtn) {
+					adminPageBtn.style.display = 'inline-block';
+					if (!adminPageBtn.onclick) {
+						adminPageBtn.addEventListener('click', function() {
+							window.location.href = 'user-management.html';
+						});
+					}
+				}
+				
+				// 隐藏普通用户的个人中心按钮
+				if (userProfileBtn) {
+					userProfileBtn.style.display = 'none';
+				}
+			} else {
+				// 普通用户：显示个人中心按钮
+				if (userProfileBtn) {
+					userProfileBtn.style.display = 'inline-block';
+					if (!userProfileBtn.onclick) {
+						userProfileBtn.addEventListener('click', function() {
+							window.location.href = 'user-profile.html';
+						});
+					}
+				}
+				
+				// 隐藏管理员按钮
+				if (adminPageBtn) {
+					adminPageBtn.style.display = 'none';
+				}
+			}
+			
+			return true;
+		} catch (e) {
+			console.error('解析登录信息失败:', e);
+			loginModal.classList.add('show');
+			return false;
+		}
+	}
+	
+	// 粒子动画系统
+	if (canvas && ctx) {
+		const mouse = {
+			x: null,
+			y: null,
+			radius: 150
+		};
+		
+		window.addEventListener('mousemove', function(event) {
+			mouse.x = event.x;
+			mouse.y = event.y;
+		});
+		
+		window.addEventListener('mouseout', function() {
+			mouse.x = null;
+			mouse.y = null;
+		});
+		
+		function resizeCanvas() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+		}
+		resizeCanvas();
+		window.addEventListener('resize', resizeCanvas);
+		
+		class Particle {
+			constructor() {
+				this.x = Math.random() * canvas.width;
+				this.y = Math.random() * canvas.height;
+				this.baseX = this.x;
+				this.baseY = this.y;
+				// 大幅增加速度，让粒子明显移动
+				this.vx = (Math.random() - 0.5) * 8;
+				this.vy = (Math.random() - 0.5) * 8;
+				// 增大粒子尺寸，更容易看到
+				this.radius = Math.random() * 3 + 1.5;
+				// 提高不透明度，让粒子更清晰
+				this.opacity = Math.random() * 0.5 + 0.5; // 0.5-1.0范围
+			}
+			
+			update() {
+				this.x += this.vx;
+				this.y += this.vy;
+				
+				if (this.x < -50 || this.x > canvas.width + 50) {
+					this.vx *= -1;
+					this.x = Math.max(-50, Math.min(canvas.width + 50, this.x));
+				}
+				if (this.y < -50 || this.y > canvas.height + 50) {
+					this.vy *= -1;
+					this.y = Math.max(-50, Math.min(canvas.height + 50, this.y));
+				}
+				
+				if (mouse.x != null && mouse.y != null) {
+					const dx = mouse.x - this.x;
+					const dy = mouse.y - this.y;
+					const distance = Math.sqrt(dx * dx + dy * dy);
+					
+					if (distance < mouse.radius) {
+						const force = (mouse.radius - distance) / mouse.radius;
+						const angle = Math.atan2(dy, dx);
+						this.x -= Math.cos(angle) * force * 5;
+						this.y -= Math.sin(angle) * force * 5;
+					}
+				}
+				
+				const dxBase = this.baseX - this.x;
+				const dyBase = this.baseY - this.y;
+				this.x += dxBase * 0.005;
+				this.y += dyBase * 0.005;
+			}
+			
+			draw() {
+				// 绘制发光效果
+				const gradient = ctx.createRadialGradient(
+					this.x, this.y, 0,
+					this.x, this.y, this.radius * 2
+				);
+				gradient.addColorStop(0, `rgba(100, 200, 255, ${this.opacity})`);
+				gradient.addColorStop(0.5, `rgba(100, 200, 255, ${this.opacity * 0.5})`);
+				gradient.addColorStop(1, `rgba(100, 200, 255, 0)`);
+				
+				ctx.fillStyle = gradient;
+				ctx.beginPath();
+				ctx.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);
+				ctx.fill();
+				
+				// 绘制实心核心，更清晰
+				ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * 0.8})`;
+				ctx.beginPath();
+				ctx.arc(this.x, this.y, this.radius * 0.6, 0, Math.PI * 2);
+				ctx.fill();
+			}
+		}
+		
+		const particles = [];
+		const particleCount = 200; // 增加粒子数量
+		
+		for (let i = 0; i < particleCount; i++) {
+			particles.push(new Particle());
+		}
+		
+		function drawLines() {
+			const maxDistance = 150; // 增加连线距离
+			for (let i = 0; i < particles.length; i++) {
+				for (let j = i + 1; j < particles.length; j++) {
+					const dx = particles[i].x - particles[j].x;
+					const dy = particles[i].y - particles[j].y;
+					const distance = Math.sqrt(dx * dx + dy * dy);
+					
+					if (distance < maxDistance) {
+						// 增加连线不透明度
+						const opacity = 0.4 * (1 - distance / maxDistance);
+						ctx.strokeStyle = `rgba(100, 200, 255, ${opacity})`;
+						ctx.lineWidth = 1.5; // 增加线宽
+						ctx.beginPath();
+						ctx.moveTo(particles[i].x, particles[i].y);
+						ctx.lineTo(particles[j].x, particles[j].y);
+						ctx.stroke();
+					}
+				}
+				
+				if (mouse.x != null && mouse.y != null) {
+					const dx = mouse.x - particles[i].x;
+					const dy = mouse.y - particles[i].y;
+					const distance = Math.sqrt(dx * dx + dy * dy);
+					
+					if (distance < mouse.radius) {
+						const opacity = 0.4 * (1 - distance / mouse.radius);
+						ctx.strokeStyle = `rgba(100, 200, 255, ${opacity})`;
+						ctx.lineWidth = 1.5;
+						ctx.beginPath();
+						ctx.moveTo(particles[i].x, particles[i].y);
+						ctx.lineTo(mouse.x, mouse.y);
+						ctx.stroke();
+					}
+				}
+			}
+		}
+		
+		function animate() {
+			if (!loginModal.classList.contains('show')) return;
+			
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			
+			particles.forEach(particle => {
+				particle.update();
+				particle.draw();
+			});
+			
+			drawLines();
+			
+			requestAnimationFrame(animate);
+		}
+		
+		animate();
+	}
+	
+	// 登录逻辑
+	const phoneInput = document.getElementById('phoneInput');
+	const passwordInput = document.getElementById('passwordInput');
+	const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+	const confirmPasswordGroup = document.getElementById('confirmPasswordGroup');
+	const loginBtn = document.getElementById('loginBtn');
+	const loginTip = document.getElementById('loginTip');
+	const loginForm = document.getElementById('loginForm');
+	const toggleModeLink = document.getElementById('toggleModeLink');
+	
+	let isRegistering = false; // 是否处于注册模式
+	let manualMode = false; // 用户是否手动切换了模式
+	
+	if (phoneInput && loginForm) {
+		// 自动填充上次登录的手机号
+		const lastPhone = localStorage.getItem('lastLoginPhone');
+		if (lastPhone) {
+			phoneInput.value = lastPhone;
+			console.log('✅ 自动填充上次登录号码:', lastPhone);
+		}
+		
+		// 初始化用户密码存储
+		function initUserPasswords() {
+			let userPasswords = localStorage.getItem('userPasswords');
+			if (!userPasswords) {
+				// 默认管理员密码为 'admin123'（实际应用中应该加密）
+				userPasswords = JSON.stringify({
+					'18968563368': 'admin123'
+				});
+				localStorage.setItem('userPasswords', userPasswords);
+				console.log('💡 提示：默认管理员账号 18968563368，密码 admin123');
+			}
+			return JSON.parse(userPasswords);
+		}
+		
+		// 切换登录/注册模式
+		function switchMode(toRegister, isManual = false) {
+			isRegistering = toRegister;
+			if (isManual) {
+				manualMode = true;
+			}
+			
+			if (isRegistering) {
+				// 注册模式
+				confirmPasswordGroup.style.display = 'block';
+				confirmPasswordInput.required = true;
+				loginBtn.querySelector('span').textContent = '注 册';
+				loginTip.textContent = '请设置您的登录密码';
+				loginTip.style.color = 'rgba(100, 200, 255, 0.9)';
+				toggleModeLink.textContent = '已有密码？点击登录';
+			} else {
+				// 登录模式
+				confirmPasswordGroup.style.display = 'none';
+				confirmPasswordInput.required = false;
+				loginBtn.querySelector('span').textContent = '登 录';
+				loginTip.textContent = '请输入密码登录';
+				loginTip.style.color = 'rgba(255, 255, 255, 0.7)';
+				toggleModeLink.textContent = '还没有密码？点击注册';
+			}
+		}
+		
+	// 切换链接点击事件
+	if (toggleModeLink) {
+		toggleModeLink.addEventListener('click', function(e) {
+			e.preventDefault();
+			switchMode(!isRegistering, true); // true表示手动切换
+		});
+	}
+		
+		// 当用户修改手机号时，重置手动模式标记
+		phoneInput.addEventListener('input', function() {
+			manualMode = false;
+		});
+		
+		// 检查用户状态（白名单、是否已注册）
+		phoneInput.addEventListener('blur', async function() {
+			const phone = phoneInput.value.trim();
+			if (!/^1[3-9]\d{9}$/.test(phone)) {
+				return;
+			}
+			
+			// 从云端同步最新白名单
+			const phoneList = await WhitelistSync.syncFromCloud();
+			const userPasswords = initUserPasswords();
+			
+			if (!phoneList.includes(phone)) {
+				loginTip.textContent = '该手机号未授权，请联系管理员';
+				loginTip.style.color = '#ff4d4f';
+				passwordInput.disabled = true;
+				toggleModeLink.style.display = 'none';
+				return;
+			}
+			
+			passwordInput.disabled = false;
+			toggleModeLink.style.display = 'block';
+			
+			// 如果用户已手动切换模式，则不自动切换
+			if (manualMode) {
+				return;
+			}
+			
+			// 自动检查是否已注册并切换模式
+			if (!userPasswords[phone]) {
+				// 未注册，自动切换到注册模式
+				switchMode(true);
+			} else {
+				// 已注册，自动切换到登录模式
+				switchMode(false);
+			}
+		});
+		
+		// 表单提交处理（改为异步）
+		loginForm.addEventListener('submit', async function(e) {
+			e.preventDefault();
+			
+			const phone = phoneInput.value.trim();
+			const password = passwordInput.value;
+			const confirmPassword = confirmPasswordInput.value;
+			
+			// 验证手机号格式
+			if (!/^1[3-9]\d{9}$/.test(phone)) {
+				alert('请输入有效的手机号码（11位数字）');
+				phoneInput.focus();
+				return;
+			}
+			
+			// 验证密码
+			if (!password) {
+				alert('请输入密码');
+				passwordInput.focus();
+				return;
+			}
+			
+			if (password.length < 6) {
+				alert('密码长度不能少于6位');
+				passwordInput.focus();
+				return;
+			}
+			
+			// 🔥 修复：从云端同步最新白名单（添加加载提示）
+			loginTip.textContent = '正在验证授权...';
+			loginTip.style.color = '#00d4ff';
+			const phoneList = await WhitelistSync.syncFromCloud();
+			loginTip.textContent = ''; // 清空提示
+			
+			try {
+				if (!phoneList.includes(phone)) {
+					alert('该手机号未授权，请联系管理员');
+					return;
+				}
+				
+				const userPasswords = initUserPasswords();
+				
+				if (isRegistering) {
+					// 注册模式
+					if (password !== confirmPassword) {
+						alert('两次输入的密码不一致');
+						confirmPasswordInput.focus();
+						return;
+					}
+					
+					// 保存密码
+					userPasswords[phone] = password;
+					localStorage.setItem('userPasswords', JSON.stringify(userPasswords));
+					
+					console.log('✅ 注册成功:', phone);
+					alert('注册成功！');
+				} else {
+					// 登录模式 - 验证密码
+					if (userPasswords[phone] !== password) {
+						alert('密码错误');
+						passwordInput.focus();
+						return;
+					}
+					
+					console.log('✅ 密码验证通过:', phone);
+				}
+				
+			// 保存登录状态
+			const userInfo = {
+				phone: phone,
+				isLoggedIn: true,
+				loginTime: new Date().toISOString()
+			};
+			
+			sessionStorage.setItem('currentSession', JSON.stringify(userInfo));
+			localStorage.setItem('lastLoginPhone', phone);
+			
+			// 隐藏登录窗口
+			loginModal.classList.remove('show');
+			window.currentUser = userInfo;
+			
+			console.log('✅ 登录成功:', phone);
+			
+			// 显示用户信息
+			const phoneNumber = document.getElementById('phoneNumber');
+			if (phoneNumber) {
+				const maskedPhone = phone.substring(0, 3) + '****' + phone.substring(7);
+				phoneNumber.textContent = maskedPhone;
+			}
+			
+			// 根据用户类型显示对应按钮
+			const adminPageBtn = document.getElementById('adminPageBtn');
+			const userProfileBtn = document.getElementById('userProfileBtn');
+			
+			if (phone === '18968563368') {
+				// 管理员：显示管理员按钮（就是管理员的个人中心）
+				const userManagementBtn = document.getElementById('userManagementBtn');
+				if (userManagementBtn) {
+					userManagementBtn.style.display = 'block';
+					if (!userManagementBtn.hasAttribute('data-click-bound')) {
+						userManagementBtn.setAttribute('data-click-bound', 'true');
+						userManagementBtn.addEventListener('click', function() {
+							window.location.href = 'user-management.html';
+						});
+					}
+				}
+				
+				if (adminPageBtn) {
+					adminPageBtn.style.display = 'inline-block';
+					if (!adminPageBtn.hasAttribute('data-click-bound')) {
+						adminPageBtn.setAttribute('data-click-bound', 'true');
+						adminPageBtn.addEventListener('click', function() {
+							window.location.href = 'user-management.html';
+						});
+					}
+				}
+				
+				// 隐藏普通用户的个人中心按钮
+				if (userProfileBtn) {
+					userProfileBtn.style.display = 'none';
+				}
+			} else {
+				// 普通用户：显示个人中心按钮
+				if (userProfileBtn) {
+					userProfileBtn.style.display = 'inline-block';
+					if (!userProfileBtn.hasAttribute('data-click-bound')) {
+						userProfileBtn.setAttribute('data-click-bound', 'true');
+						userProfileBtn.addEventListener('click', function() {
+							window.location.href = 'user-profile.html';
+						});
+					}
+				}
+				
+				// 隐藏管理员按钮
+				if (adminPageBtn) {
+					adminPageBtn.style.display = 'none';
+				}
+			}
+			
+			// 不刷新页面，直接显示主界面
+				
+			} catch (e) {
+				console.error('登录失败:', e);
+				alert('登录失败，请重试');
+			}
+		});
+		
+		// 只允许输入数字
+		phoneInput.addEventListener('input', function(e) {
+			this.value = this.value.replace(/\D/g, '');
+		});
+		
+		// 初始化密码状态
+		passwordInput.disabled = false;
+	}
+	
+	// 页面加载时检查登录状态
+	checkLoginStatus();
+})();
+</script>
+
+</body>
+</html>
+

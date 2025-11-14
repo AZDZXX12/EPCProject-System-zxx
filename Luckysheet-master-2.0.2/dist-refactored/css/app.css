@@ -1,0 +1,321 @@
+/* 设备参数选型系统 - 应用样式 */
+
+/* 全局样式 - 去除滚动条 */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 容器布局 */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: "SimSun", "宋体", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* 工具栏 */
+.custom-toolbar {
+    display: flex;
+    align-items: center;
+    padding: 6px 15px;
+    background: linear-gradient(to bottom, #f7f8fa 0%, #e9ebed 100%);
+    border-bottom: 1px solid #d0d5dd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    gap: 8px;
+    flex-shrink: 0;
+    height: 42px;
+    z-index: 100;
+}
+
+.custom-btn {
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    color: #333;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.custom-btn:hover {
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    border-color: #999;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.refresh-btn, .db-btn, .title-btn {
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #2a8be8 0%, #1a73e8 100%);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.refresh-btn:hover, .db-btn:hover, .title-btn:hover {
+    background: linear-gradient(135deg, #1a73e8 0%, #4a90e2 100%);
+    transform: translateY(-2px);
+}
+
+/* 主内容区 */
+.main-content {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+    gap: 0;
+}
+
+.table-container {
+    flex: 1;
+    overflow: hidden;
+    margin-right: 25px;
+    position: relative;
+    z-index: 10;
+}
+
+#luckysheet {
+    width: 100%;
+    height: 100%;
+}
+
+/* 设备详情面板 */
+.detail-panel-container {
+    width: 650px !important;
+    min-width: 650px !important;
+    max-width: 650px !important;
+    background-color: #fafafa;
+    border-left: 1px solid #dee2e6;
+    display: flex !important;
+    flex-direction: column;
+    overflow: visible !important;
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.detail-panel-container.collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    border-left: none !important;
+}
+
+.collapse-toggle {
+    position: absolute;
+    left: -20px;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    padding: 0;
+    border: none;
+    border-left: 1px solid #e0e0e0;
+    background: linear-gradient(to bottom, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+    cursor: pointer;
+    z-index: 9999 !important;
+    writing-mode: vertical-lr;
+}
+
+.collapse-toggle:hover {
+    background: linear-gradient(to bottom, #e9ecef 0%, #dee2e6 50%, #ced4da 100%);
+}
+
+.database-load-section {
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-panel-header {
+    padding: 0;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.detail-body {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.device-sidebar {
+    width: 130px;
+    border-right: 1px solid #ddd;
+    background-color: #f7f7f7;
+    padding: 8px;
+    overflow-y: auto;
+}
+
+.device-detail-panel {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* 详情表单 */
+.detail-row {
+    margin-bottom: 10px;
+}
+
+.detail-row label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.detail-row-pair {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.detail-field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-field label {
+    font-size: 14px;
+    white-space: nowrap;
+    min-width: 80px;
+}
+
+.detail-input, .detail-select {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.detail-input:focus, .detail-select:focus {
+    border-color: #4285f4;
+    outline: none;
+}
+
+.detail-textarea {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 60px;
+    box-sizing: border-box;
+}
+
+#technicalParams {
+    min-height: 200px;
+}
+
+.detail-separator {
+    height: 1px;
+    background-color: #ddd;
+    margin: 15px 0;
+}
+
+.detail-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    border: 1px solid #007bff;
+    border-radius: 3px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+
+.action-btn.secondary {
+    background-color: white;
+    color: #333;
+    border-color: #ddd;
+}
+
+.action-btn.secondary:hover {
+    background-color: #f5f5f5;
+}
+
+/* Luckysheet 样式覆盖 */
+#luckysheet {
+    font-family: "SimSun", "宋体", sans-serif;
+}
+
+.luckysheet-info {
+    display: none !important;
+}
+
+.luckysheet-toolbar .iconfont {
+    font-size: 20px !important;
+}
+
+.luckysheet-sheets-item.luckysheet-sheets-item-active {
+    filter: brightness(0.75) !important;
+    font-weight: bold !important;
+}
+
+.luckysheet-sheets-item-color {
+    display: none !important;
+}
+
+/* 🔥 修复：Luckysheet编辑器字体大小 - 双击单元格编辑时字体正常显示 */
+#luckysheet-input-box,
+#luckysheet-input-box *,
+#luckysheet-input-box textarea,
+#luckysheet-input-box input,
+.luckysheet-input-box,
+.luckysheet-input-box *,
+.luckysheet-cell-input,
+.luckysheet-cell-input *,
+.luckysheet-rich-text-editor,
+.luckysheet-rich-text-editor *,
+.luckysheet-formula-text-color,
+.luckysheet-formula-text-color *,
+.luckysheet-cell-input-canvas,
+.fortune-editor,
+.fortune-editor *,
+#luckysheet-rich-text-editor,
+#luckysheet-rich-text-editor * {
+    font-size: 12pt !important;
+    font-family: "宋体", "SimSun", sans-serif !important;
+}
+
+/* 确保所有可编辑元素的行高 */
+#luckysheet-input-box textarea,
+.luckysheet-rich-text-editor,
+.fortune-editor {
+    line-height: 1.5 !important;
+    min-height: 18pt !important;
+}
+

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爬梯材料表 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>🪜 爬梯钢材用量计算</h1>
+            <p class="subtitle">符合 GB4053.1-2009 标准</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="height">爬梯高度 (mm)</label>
+                    <input type="number" id="height" placeholder="请输入爬梯高度" step="1" value="">
+                </div>
+
+                <div class="input-group">
+                    <label for="width">梯宽 (mm)</label>
+                    <input type="number" id="width" placeholder="标准400-600mm" step="1" value="500">
+                </div>
+
+                <div class="input-group checkbox-group">
+                    <input type="checkbox" id="hasCage" checked>
+                    <label for="hasCage">设置护笼（高度>3m必需）</label>
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">🔨 计算材料</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 爬梯参数</h3>
+                <div class="result-item">
+                    <span class="result-label">平台数量：</span>
+                    <span class="result-value" id="platformCount">-</span>
+                    <span class="result-unit">个</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">平台高度：</span>
+                    <span class="result-value" id="platformHeights" style="font-size: 16px;">-</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">踏棍间距：</span>
+                    <span class="result-value" id="rungSpacing">-</span>
+                    <span class="result-unit">mm</span>
+                </div>
+
+                <h3>📊 材料明细表</h3>
+                <ul class="result-list" id="resultList"></ul>
+                
+                <div class="result-item">
+                    <span class="result-label">总重量：</span>
+                    <span class="result-value" id="totalWeight">-</span>
+                    <span class="result-unit">kg</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        function calculate() {
+            const height = parseFloat(document.getElementById('height').value);
+            const width = parseFloat(document.getElementById('width').value);
+            let hasCage = document.getElementById('hasCage').checked;
+
+            // 验证输入
+            if (!height || height <= 0) {
+                alert('请输入有效的爬梯高度');
+                return;
+            }
+            if (!width || width <= 0) {
+                alert('请输入有效的梯宽');
+                return;
+            }
+
+            // GB4053.1-2009要求梯宽在400-600mm之间
+            if (width < 400 || width > 600) {
+                if (!confirm('标准GB4053.1-2009要求梯宽在400-600mm之间，是否继续使用当前值？')) {
+                    return;
+                }
+            }
+
+            // 检查护笼要求（高度>3m必须设置）
+            if (height > 3000 && !hasCage) {
+                if (confirm('根据GB4053.1-2009标准，爬梯高度超过3m应设置护笼！\n是否要添加护笼？')) {
+                    hasCage = true;
+                    document.getElementById('hasCage').checked = true;
+                }
+            }
+
+            // 计算平台数量（每6m一个）
+            const platformCount = Math.floor(height / 6000);
+            document.getElementById('platformCount').textContent = platformCount;
+
+            // 计算平台高度
+            if (platformCount > 0) {
+                const heights = [];
+                for (let i = 1; i <= platformCount; i++) {
+                    heights.push((i * 6).toFixed(1) + 'm');
+                }
+                document.getElementById('platformHeights').textContent = heights.join(', ');
+            } else {
+                document.getElementById('platformHeights').textContent = '无';
+            }
+
+            // 计算踏棍间距（GB4053.1-2009标准：250-300mm）
+            const rungSpacing = 300; // 标准间距
+            document.getElementById('rungSpacing').textContent = rungSpacing;
+
+            // 计算材料
+            const materials = calculateMaterials(height, width, hasCage, platformCount);
+            displayResults(materials);
+        }
+
+        function calculateMaterials(height, width, hasCage, platformCount) {
+            const results = [];
+            const heightM = height / 1000;
+            const widthM = width / 1000;
+            
+            // 踏棍数量（间距300mm）
+            const rungCount = Math.ceil(height / 300);
+            const rungWeight = rungCount * widthM * 1.58; // Φ25圆钢1.58kg/m
+            results.push(['踏棍', 'Φ25圆钢', rungCount + '根 × ' + widthM.toFixed(2) + 'm', rungWeight.toFixed(2) + ' kg']);
+            
+            // 主立柱（2根）
+            const columnWeight = 2 * heightM * 5.42; // 40*60*3方管
+            results.push(['主立柱', '40*60*3方管', '2根 × ' + heightM.toFixed(2) + 'm', columnWeight.toFixed(2) + ' kg']);
+            
+            // 护笼材料
+            let cageWeight = 0;
+            if (hasCage) {
+                // 护笼圆环（Φ800mm，间距600mm）
+                const cageRingCount = Math.ceil((height - 2000) / 600); // 从2m开始设置
+                const cageRingLength = cageRingCount * Math.PI * 0.8; // 周长
+                cageWeight = cageRingLength * 1.58; // Φ25圆钢
+                results.push(['护笼圆环', 'Φ25圆钢 Φ800mm', cageRingCount + '个', cageWeight.toFixed(2) + ' kg']);
+                
+                // 护笼竖杆（6根）
+                const verticalRodLength = 6 * (heightM - 2); // 从2m开始
+                const verticalRodWeight = verticalRodLength * 1.21; // Φ20圆钢
+                cageWeight += verticalRodWeight;
+                results.push(['护笼竖杆', 'Φ20圆钢', '6根 × ' + (heightM - 2).toFixed(2) + 'm', verticalRodWeight.toFixed(2) + ' kg']);
+            }
+            
+            // 平台材料（如果有）
+            let platformWeight = 0;
+            if (platformCount > 0) {
+                // 每个平台：1m×0.8m
+                const platformArea = platformCount * 1.0 * 0.8;
+                platformWeight = platformArea * 0.005 * 7850; // 5mm花纹板
+                results.push(['平台板', '5mm花纹板', platformCount + '个 (1m×0.8m)', platformWeight.toFixed(2) + ' kg']);
+                
+                // 平台框架
+                const frameLength = platformCount * ((1.0 + 0.8) * 2);
+                const frameWeight = frameLength * 3.52; // 40*40*3方管
+                platformWeight += frameWeight;
+                results.push(['平台框架', '40*40*3方管', frameLength.toFixed(2) + ' m', frameWeight.toFixed(2) + ' kg']);
+            }
+            
+            // 焊条估算
+            const weldingRodWeight = (rungWeight + columnWeight + cageWeight + platformWeight) * 0.02;
+            results.push(['焊条', '估算用量', '', weldingRodWeight.toFixed(2) + ' kg']);
+            
+            // 总重量
+            const totalWeight = rungWeight + columnWeight + cageWeight + platformWeight + weldingRodWeight;
+            
+            return {materials: results, totalWeight: totalWeight};
+        }
+
+        function displayResults(data) {
+            const resultList = document.getElementById('resultList');
+            resultList.innerHTML = '';
+            
+            // 添加表头
+            const header = document.createElement('li');
+            header.innerHTML = '<span>材料名称</span><span>规格型号</span><span>数量</span><span>重量</span>';
+            resultList.appendChild(header);
+            
+            // 添加数据
+            data.materials.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${item[0]}</span><span>${item[1]}</span><span>${item[2]}</span><span>${item[3]}</span>`;
+                resultList.appendChild(li);
+            });
+            
+            document.getElementById('totalWeight').textContent = data.totalWeight.toFixed(2);
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculate();
+        });
+    </script>
+</body>
+</html>
+

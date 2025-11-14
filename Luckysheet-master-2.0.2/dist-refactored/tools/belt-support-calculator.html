@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>带架算料 - 设备参数选型系统</title>
+    <link rel="stylesheet" href="../css/tool-common.css">
+</head>
+<body>
+    <div class="tool-container">
+        <div class="tool-header">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1>📐 皮带支架算料</h1>
+            <p class="subtitle">皮带输送机支架材料计算</p>
+        </div>
+
+        <div class="tool-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="angle">皮带倾斜角度 (度)</label>
+                    <input type="number" id="angle" placeholder="0-45度" value="0" step="1" min="0" max="45">
+                </div>
+
+                <div class="input-group">
+                    <label for="width">皮带宽度 (mm)</label>
+                    <select id="width">
+                        <option value="500" selected>B500</option>
+                        <option value="650">B650</option>
+                        <option value="800">B800</option>
+                        <option value="1000">B1000</option>
+                        <option value="1200">B1200</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="minHeight">最低点高度 (m)</label>
+                    <input type="number" id="minHeight" placeholder="皮带最低点高度" value="0.5" step="0.1">
+                </div>
+
+                <div class="input-group">
+                    <label for="length">皮带长度 (m)</label>
+                    <input type="number" id="length" placeholder="输送带总长度" value="10" step="1">
+                </div>
+
+                <div class="input-group checkbox-group">
+                    <input type="checkbox" id="hasOverlap">
+                    <label for="hasOverlap">有重叠段</label>
+                </div>
+
+                <div class="input-group" id="overlapGroup" style="display: none;">
+                    <label for="overlap">重叠距离 (m)</label>
+                    <input type="number" id="overlap" placeholder="重叠段距离" value="0" step="0.1">
+                </div>
+
+                <div class="input-group" id="edgeCountGroup" style="display: none;">
+                    <label for="edgeCount">挡边数量</label>
+                    <select id="edgeCount">
+                        <option value="1" selected>1道</option>
+                        <option value="2">2道</option>
+                    </select>
+                </div>
+
+                <button class="calc-btn" onclick="calculate()">🔨 计算材料</button>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <h3>📊 计算结果</h3>
+                <ul class="result-list" id="resultList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        (function() {
+            const sessionInfo = sessionStorage.getItem('currentSession');
+            if (!sessionInfo) {
+                window.location.href = '../login.html';
+            }
+        })();
+
+        // 切换重叠段控件显示
+        document.getElementById('hasOverlap').addEventListener('change', function() {
+            const display = this.checked ? 'block' : 'none';
+            document.getElementById('overlapGroup').style.display = display;
+            document.getElementById('edgeCountGroup').style.display = display;
+        });
+
+        function calculate() {
+            const angle = parseFloat(document.getElementById('angle').value);
+            const width = parseInt(document.getElementById('width').value);
+            const minHeight = parseFloat(document.getElementById('minHeight').value);
+            const length = parseFloat(document.getElementById('length').value);
+            const hasOverlap = document.getElementById('hasOverlap').checked;
+            const overlap = hasOverlap ? parseFloat(document.getElementById('overlap').value) || 0 : 0;
+            const edgeCount = hasOverlap ? parseInt(document.getElementById('edgeCount').value) : 0;
+
+            // 验证输入
+            if (angle < 0 || angle > 45) {
+                alert('皮带角度必须在0-45度之间');
+                return;
+            }
+            if (!minHeight || minHeight <= 0) {
+                alert('请输入有效的最低点高度');
+                return;
+            }
+            if (!length || length <= 0) {
+                alert('请输入有效的皮带长度');
+                return;
+            }
+            if (hasOverlap && overlap <= 0) {
+                alert('请输入有效的重叠距离');
+                return;
+            }
+
+            const results = calculateBeltSupport(angle, width, minHeight, length, hasOverlap, overlap, edgeCount);
+            displayResults(results, width, length, angle);
+        }
+
+        function calculateBeltSupport(angle, width, minHeight, length, hasOverlap, overlap, edgeCount) {
+            const results = [];
+            
+            // 计算末端高度
+            const angleRad = angle * Math.PI / 180;
+            const endHeight = minHeight + length * Math.tan(angleRad);
+            results.push(['皮带末端高度', endHeight.toFixed(2) + ' m', '', '']);
+            
+            // 支腿间距（标准1.2m）
+            const legSpacing = 1.2;
+            const legCount = Math.ceil(length / legSpacing) + 1;
+            const avgSpacing = length / (legCount - 1);
+            results.push(['支腿平均间距', avgSpacing.toFixed(1) + ' m', '', '']);
+            results.push(['支腿数量', legCount + '根', '', '']);
+            
+            // 支腿详情
+            let legDetails = [];
+            let totalChannelSteel = 0;
+            for (let i = 0; i < legCount; i++) {
+                const position = i * avgSpacing;
+                const legHeight = minHeight + position * Math.tan(angleRad);
+                legDetails.push(`L${i + 1}=${legHeight.toFixed(2)}m`);
+                totalChannelSteel += legHeight * 2; // 每根支腿2根槽钢
+            }
+            results.push(['支腿详情', legDetails.join(', '), '', '']);
+            
+            // 斜拉杆（每根支腿2根）
+            const diagonalCount = legCount * 2;
+            const avgDiagonalLength = Math.sqrt(Math.pow(avgSpacing, 2) + Math.pow(avgSpacing * Math.tan(angleRad), 2));
+            const totalAngleIron = diagonalCount * avgDiagonalLength;
+            results.push(['斜拉杆数量', diagonalCount + '根', '', '']);
+            
+            // 挡边支腿
+            let edgeLegCount = 0;
+            let edgeBeamLength = 0;
+            if (hasOverlap && overlap > 0) {
+                edgeLegCount = Math.ceil(overlap / legSpacing) + 2; // 额外2个
+                edgeBeamLength = overlap * edgeCount;
+                results.push(['挡边支腿数量', edgeLegCount + ' (含额外2个)', '', '']);
+                results.push(['挡边横梁长度', edgeBeamLength.toFixed(2) + ' m (角铁)', '', '']);
+            }
+            
+            // 总槽钢长度（支腿 + 主梁）
+            const mainBeamLength = length * 2; // 2根主梁
+            totalChannelSteel += mainBeamLength;
+            results.push(['槽钢总长度', totalChannelSteel.toFixed(2) + ' m', '', '']);
+            
+            // 总角铁长度
+            const totalAngleIronLength = totalAngleIron + edgeBeamLength;
+            results.push(['角铁总长度', totalAngleIronLength.toFixed(2) + ' m', '', '']);
+            
+            // 重量计算
+            const channelWeight = totalChannelSteel * 8.007; // 10#槽钢
+            const angleWeight = totalAngleIronLength * 2.332; // 50*5角铁
+            const weldingRod = (channelWeight + angleWeight) * 0.015; // 焊条1.5%
+            
+            results.push(['槽钢总重量', channelWeight.toFixed(2) + ' kg', '', '']);
+            results.push(['角铁总重量', angleWeight.toFixed(2) + ' kg', '', '']);
+            results.push(['焊条预估用量', weldingRod.toFixed(2) + ' kg', '', '']);
+            results.push(['钢材总重量', (channelWeight + angleWeight).toFixed(2) + ' kg', '', '']);
+            
+            return results;
+        }
+
+        // 获取皮带价格（简化版本）
+        function getBeltPrice(width, length) {
+            const priceTable = {
+                500: 180, 650: 230, 800: 280, 1000: 380, 1200: 480
+            };
+            const unitPrice = priceTable[width] || 200;
+            return unitPrice * length;
+        }
+
+        // 获取皮带功率
+        function getBeltPower(width, length, angle) {
+            const powerTable = {
+                500: 1.5, 650: 2.2, 800: 3, 1000: 4, 1200: 5.5
+            };
+            let basePower = powerTable[width] || 3;
+            
+            // 长度调整
+            if (width === 1000 && length > 30) {
+                basePower = basePower * (length / 30);
+            }
+            
+            // 角度调整
+            if (angle > 15) {
+                basePower = basePower * 1.2;
+            }
+            
+            return basePower;
+        }
+
+        function displayResults(results, width, length, angle) {
+            const resultList = document.getElementById('resultList');
+            resultList.innerHTML = '';
+            
+            // 添加表头
+            const header = document.createElement('li');
+            header.innerHTML = '<span>项目</span><span>数值</span><span></span><span></span>';
+            resultList.appendChild(header);
+            
+            // 添加计算结果
+            results.forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span>${item[0]}</span><span>${item[1]}</span><span>${item[2]}</span><span>${item[3]}</span>`;
+                resultList.appendChild(li);
+            });
+            
+            // 添加皮带价格和功率
+            const beltPrice = getBeltPrice(width, length);
+            const beltPower = getBeltPower(width, length, angle);
+            
+            const priceLi = document.createElement('li');
+            priceLi.innerHTML = `<span>皮带价格</span><span>￥${beltPrice.toLocaleString()}</span><span></span><span></span>`;
+            resultList.appendChild(priceLi);
+            
+            const powerLi = document.createElement('li');
+            powerLi.innerHTML = `<span>皮带功率</span><span>${beltPower.toFixed(1)} KW</span><span></span><span></span>`;
+            resultList.appendChild(powerLi);
+            
+            // 功率说明
+            if (angle > 15) {
+                const basePower = getBeltPower(width, length, 0);
+                const remarkLi = document.createElement('li');
+                remarkLi.innerHTML = `<span>功率说明</span><span>因角度>15°，功率从${basePower.toFixed(1)}KW调整为${beltPower.toFixed(1)}KW</span><span></span><span></span>`;
+                resultList.appendChild(remarkLi);
+            }
+            
+            document.getElementById('resultSection').style.display = 'block';
+        }
+
+        function goBack() {
+            window.location.href = '../index.html';
+        }
+    </script>
+</body>
+</html>
+

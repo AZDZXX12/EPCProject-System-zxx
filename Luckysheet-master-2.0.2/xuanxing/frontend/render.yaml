@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: luckysheet-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_API_URL
+        value: https://luckysheet-selection-system.onrender.com/api
+

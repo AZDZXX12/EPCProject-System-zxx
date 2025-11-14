@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PDF修复测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        .test-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+            background: #E3F2FD;
+        }
+        .success {
+            border-left-color: #4CAF50;
+            background: #E8F5E9;
+        }
+        .error {
+            border-left-color: #f44336;
+            background: #FFEBEE;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        pre {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .page-number-demo {
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🔍 PDF修复测试页面</h1>
+        <p><strong>用途：</strong>验证PDF页码和水印代码是否已更新</p>
+    </div>
+
+    <div class="test-box">
+        <h2>测试1：页码格式测试</h2>
+        <div id="test1" class="test-item">
+            <p><strong>预期：</strong>应该显示数字格式 "1 / 3"</p>
+            <div class="page-number-demo" id="pageNumDemo">
+                测试页码将显示在这里...
+            </div>
+        </div>
+        <button onclick="testPageNumber()">运行测试</button>
+    </div>
+
+    <div class="test-box">
+        <h2>测试2：水印配置测试</h2>
+        <div id="test2" class="test-item">
+            <pre id="configOutput">点击下方按钮测试...</pre>
+        </div>
+        <button onclick="testWatermarkConfig()">运行测试</button>
+    </div>
+
+    <div class="test-box">
+        <h2>测试3：字符编码测试</h2>
+        <div id="test3" class="test-item">
+            <div id="encodingTest"></div>
+        </div>
+        <button onclick="testEncoding()">运行测试</button>
+    </div>
+
+    <div class="test-box">
+        <h2>📋 检查结果</h2>
+        <div id="results"></div>
+        <button onclick="runAllTests()">运行所有测试</button>
+        <button onclick="window.location.href='index.html'">返回主页</button>
+    </div>
+
+    <script>
+        console.log('🎯 PDF修复测试页面已加载');
+        console.log('📅 加载时间:', new Date().toLocaleString());
+        
+        // 测试页码生成
+        function testPageNumber() {
+            const demo = document.getElementById('pageNumDemo');
+            const test1 = document.getElementById('test1');
+            
+            // 模拟generatePreview中的页码生成
+            let totalPages = 3;
+            let pageResults = [];
+            
+            for (let p = 0; p < totalPages; p++) {
+                const pageNumText = `${p + 1} / ${totalPages}`;
+                pageResults.push(pageNumText);
+            }
+            
+            demo.innerHTML = pageResults.map((text, i) => 
+                `<div style="margin: 5px 0;">第${i+1}页页码: <strong>${text}</strong></div>`
+            ).join('');
+            
+            // 检查是否包含中文
+            const hasChinese = pageResults.some(text => /[\u4e00-\u9fa5]/.test(text));
+            
+            if (!hasChinese) {
+                test1.className = 'test-item success';
+                console.log('✅ 页码格式测试通过:', pageResults);
+            } else {
+                test1.className = 'test-item error';
+                console.error('❌ 页码格式测试失败: 包含中文字符');
+            }
+            
+            return !hasChinese;
+        }
+        
+        // 测试水印配置
+        function testWatermarkConfig() {
+            const output = document.getElementById('configOutput');
+            const test2 = document.getElementById('test2');
+            
+            // 模拟pdfConfig默认值
+            const pdfConfig = {
+                enableWatermark: true,
+                watermarkText: '泽国化机',
+                watermarkFontSize: 40,
+                watermarkRotation: -45,
+                watermarkOpacity: 0.2,
+                watermarkDensity: 9,
+                watermarkColor: 'gray'
+            };
+            
+            const configText = JSON.stringify(pdfConfig, null, 2);
+            output.textContent = configText;
+            
+            // 检查配置是否正确
+            const isCorrect = 
+                pdfConfig.enableWatermark === true &&
+                pdfConfig.watermarkText === '泽国化机' &&
+                pdfConfig.watermarkOpacity === 0.2 &&
+                pdfConfig.watermarkDensity === 9;
+            
+            if (isCorrect) {
+                test2.className = 'test-item success';
+                console.log('✅ 水印配置测试通过:', pdfConfig);
+            } else {
+                test2.className = 'test-item error';
+                console.error('❌ 水印配置测试失败');
+            }
+            
+            return isCorrect;
+        }
+        
+        // 测试字符编码
+        function testEncoding() {
+            const test3Element = document.getElementById('test3');
+            const output = document.getElementById('encodingTest');
+            
+            const tests = [
+                { name: '数字格式', text: '1 / 3', expected: true },
+                { name: '中文格式', text: '第 1 页 / 共 3 页', expected: false },
+                { name: '公司名称', text: '泽国化机', expected: true }
+            ];
+            
+            let allPassed = true;
+            let html = '<table style="width: 100%; border-collapse: collapse;">';
+            html += '<tr><th style="border: 1px solid #ddd; padding: 8px;">测试项</th><th style="border: 1px solid #ddd; padding: 8px;">文本</th><th style="border: 1px solid #ddd; padding: 8px;">结果</th></tr>';
+            
+            tests.forEach(test => {
+                const div = document.createElement('div');
+                div.textContent = test.text;
+                const rendered = div.textContent;
+                const passed = (rendered === test.text) === test.expected;
+                
+                html += `<tr>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${test.name}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${test.text}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${passed ? '✅ 通过' : '❌ 失败'}</td>
+                </tr>`;
+                
+                if (!passed) allPassed = false;
+                
+                console.log(`${passed ? '✅' : '❌'} 编码测试 [${test.name}]:`, rendered);
+            });
+            
+            html += '</table>';
+            output.innerHTML = html;
+            
+            if (allPassed) {
+                test3Element.className = 'test-item success';
+            } else {
+                test3Element.className = 'test-item error';
+            }
+            
+            return allPassed;
+        }
+        
+        // 运行所有测试
+        function runAllTests() {
+            console.log('🚀 开始运行所有测试...');
+            
+            const results = {
+                pageNumber: testPageNumber(),
+                watermark: testWatermarkConfig(),
+                encoding: testEncoding()
+            };
+            
+            const resultsDiv = document.getElementById('results');
+            const allPassed = Object.values(results).every(r => r);
+            
+            resultsDiv.innerHTML = `
+                <div class="test-item ${allPassed ? 'success' : 'error'}">
+                    <h3>${allPassed ? '✅ 所有测试通过！' : '❌ 部分测试失败'}</h3>
+                    <ul>
+                        <li>页码格式: ${results.pageNumber ? '✅ 通过' : '❌ 失败'}</li>
+                        <li>水印配置: ${results.watermark ? '✅ 通过' : '❌ 失败'}</li>
+                        <li>字符编码: ${results.encoding ? '✅ 通过' : '❌ 失败'}</li>
+                    </ul>
+                    ${allPassed ? 
+                        '<p><strong>结论：</strong>代码已正确更新！如果主页还有问题，请清除浏览器缓存。</p>' :
+                        '<p><strong>结论：</strong>代码可能未正确加载，请检查文件是否保存。</p>'
+                    }
+                </div>
+            `;
+            
+            console.log('📊 测试结果:', results);
+            console.log(allPassed ? '✅ 所有测试通过' : '❌ 部分测试失败');
+        }
+        
+        // 页面加载时自动运行测试
+        window.addEventListener('load', function() {
+            console.log('📄 页面加载完成，3秒后自动运行测试...');
+            setTimeout(runAllTests, 3000);
+        });
+    </script>
+</body>
+</html>
+

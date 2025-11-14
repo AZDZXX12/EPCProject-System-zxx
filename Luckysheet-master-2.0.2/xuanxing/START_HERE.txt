@@ -1,0 +1,40 @@
+=====================================
+电缆选型工具 - 启动说明
+=====================================
+
+方式1：使用启动脚本（推荐）
+--------------------------
+双击文件： start-frontend-only.bat
+
+方式2：手动启动
+--------------------------
+1. 打开 PowerShell 或 命令提示符
+2. 运行以下命令：
+
+   cd c:\Users\Administrator\Desktop\xuanxing\frontend
+   npm run dev
+
+3. 等待启动完成（约10-20秒）
+4. 在浏览器中打开： http://localhost:3000
+
+常见问题
+--------------------------
+Q: 启动失败？
+A: 检查是否已安装 Node.js，运行: node --version
+
+Q: 端口被占用？
+A: 运行: netstat -ano | findstr "3000"
+   找到占用的进程并关闭
+
+Q: 编译错误？
+A: 删除缓存后重试:
+   cd frontend
+   rmdir /s /q node_modules\.vite
+   npm run dev
+
+更多帮助
+--------------------------
+查看文档： README-FRONTEND-ONLY.md
+=====================================
+
+
