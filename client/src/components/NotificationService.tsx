@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { message, Badge } from 'antd';
 
 const NotificationService: React.FC = () => {
-  const [ws, setWs] = useState<WebSocket | null>(null);
+  const [, setWs] = useState<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const NotificationService: React.FC = () => {
 
     websocket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      
+
       // 根据消息类型显示不同的通知
       if (data.type === 'task_update') {
         message.info(`任务更新: ${data.message}`);
@@ -52,9 +52,3 @@ const NotificationService: React.FC = () => {
 };
 
 export default NotificationService;
-
-
-
-
-
-

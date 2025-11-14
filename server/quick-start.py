@@ -88,6 +88,14 @@ async def get_tasks(project_id: Optional[str] = None):
         return [t for t in tasks_db if t.get("project_id") == project_id]
     return tasks_db
 
+@app.get("/api/v1/tasks/{task_id}")
+async def get_task(task_id: str):
+    """获取单个任务详情"""
+    for task in tasks_db:
+        if task.get("id") == task_id:
+            return task
+    raise HTTPException(status_code=404, detail="Task not found")
+
 @app.post("/api/v1/tasks/")
 async def create_task(task: Task):
     task.id = f"TASK-{len(tasks_db) + 1:03d}"

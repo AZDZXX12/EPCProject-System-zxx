@@ -8,13 +8,7 @@ interface CommandPaletteProps {
 
 const CommandPalette: React.FC<CommandPaletteProps> = ({ visible, onClose }) => {
   return (
-    <Modal
-      title="快捷命令"
-      open={visible}
-      onCancel={onClose}
-      footer={null}
-      width={600}
-    >
+    <Modal title="快捷命令" open={visible} onCancel={onClose} footer={null} width={600}>
       <div style={{ padding: '20px', textAlign: 'center' }}>
         命令面板功能暂时禁用，正在修复中...
       </div>
@@ -23,4 +17,3 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ visible, onClose }) => 
 };
 
 export default CommandPalette;
-

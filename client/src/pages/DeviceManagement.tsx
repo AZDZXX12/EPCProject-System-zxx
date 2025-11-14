@@ -1,10 +1,26 @@
-
 import React, { useEffect, useState } from 'react';
-import { Card, Table, Button, Space, Tag, Progress, Modal, Form, Input, Select, DatePicker, Badge, Statistic, Row, Col, Alert } from 'antd';
-import { 
-  PlusOutlined, 
-  EditOutlined, 
-  DeleteOutlined, 
+import {
+  Card,
+  Table,
+  Button,
+  Space,
+  Tag,
+  Progress,
+  Modal,
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  Badge,
+  Statistic,
+  Row,
+  Col,
+  Alert,
+} from 'antd';
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
   WarningOutlined,
   CheckCircleOutlined,
   ToolOutlined,
@@ -13,6 +29,9 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useProject } from '../contexts/ProjectContext';
+import { logger } from '../utils/logger';
+import { deviceApi } from '../services/api';
+import { USE_MOCK_DATA } from '../config';
 
 const { Option } = Select;
 
@@ -46,7 +65,7 @@ const DeviceManagement: React.FC = () => {
   // 监听项目切换
   useEffect(() => {
     if (currentProject) {
-      console.log(`🔄 项目切换至: ${currentProject.name}，重新加载设备...`);
+      logger.info(`🔄 项目切换至: ${currentProject.name}，重新加载设备...`);
       loadDevices();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,30 +76,14 @@ const DeviceManagement: React.FC = () => {
       setDevices([]);
       return;
     }
-    
+
     try {
       setLoading(true);
-      const token = localStorage.getItem('access_token');
-      // 🔧 修复：直接按项目ID过滤
-      const url = `http://localhost:8000/api/v1/devices/?project_id=${currentProject.id}`;
-      
-      console.log(`🔄 加载设备中... URL: ${url}`);
-      console.log(`📌 当前项目: ${currentProject.name} (ID: ${currentProject.id})`);
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log(`📦 收到后端数据: ${data.length} 条`, data);
-        
-        if (data.length === 0) {
-          console.log('⚠️ 没有设备数据，使用演示数据');
-          // 使用演示数据（添加project_id字段）
-          setDevices([
+      logger.debug(`🔄 加载设备中... 项目: ${currentProject.name} (ID: ${currentProject.id})`);
+
+      // 开发模式且后端不可用：直接使用演示数据，避免连接错误
+      if (USE_MOCK_DATA) {
+        setDevices([
           {
             id: 1,
             device_id: `${currentProject.id}-DEV-001`,
@@ -196,10 +199,12 @@ const DeviceManagement: React.FC = () => {
         ]);
         console.log('✅ 演示数据已加载: 8 个设备');
       } else {
-        setDevices(Array.isArray(data) ? data : []);
-        console.log(`✅ 设备已加载: ${data.length} 个`);
+        // 真实后端
+        const data = await deviceApi.getAll();
+        const list = Array.isArray(data) ? data : [];
+        setDevices(list.filter((d: any) => !d.project_id || d.project_id === currentProject.id));
+        console.log(`✅ 设备已加载: ${list.length} 个`);
       }
-    }
     } catch (err) {
       console.error('⚠️ 连接失败:', err);
       // 使用演示数据
@@ -276,9 +281,11 @@ const DeviceManagement: React.FC = () => {
     }
   };
 
-  const installedDevices = devices.filter(d => d.installation_progress === 100).length;
-  const inProgressDevices = devices.filter(d => d.installation_progress > 0 && d.installation_progress < 100).length;
-  const delayedDevices = devices.filter(d => {
+  const installedDevices = devices.filter((d) => d.installation_progress === 100).length;
+  const inProgressDevices = devices.filter(
+    (d) => d.installation_progress > 0 && d.installation_progress < 100
+  ).length;
+  const delayedDevices = devices.filter((d) => {
     const expected = new Date(d.expected_completion);
     const today = new Date();
     return d.installation_progress < 100 && expected < today;
@@ -304,13 +311,13 @@ const DeviceManagement: React.FC = () => {
       width: 120,
       render: (type: string) => {
         const colorMap: any = {
-          '反应设备': 'red',
-          '换热设备': 'orange',
-          '泵类设备': 'blue',
-          '储罐设备': 'purple',
-          '压缩设备': 'cyan',
-          '分离设备': 'green',
-          '塔类设备': 'magenta',
+          反应设备: 'red',
+          换热设备: 'orange',
+          泵类设备: 'blue',
+          储罐设备: 'purple',
+          压缩设备: 'cyan',
+          分离设备: 'green',
+          塔类设备: 'magenta',
         };
         return <Tag color={colorMap[type] || 'default'}>{type}</Tag>;
       },
@@ -324,11 +331,11 @@ const DeviceManagement: React.FC = () => {
         const expected = new Date(record.expected_completion);
         const today = new Date();
         const isDelayed = progress < 100 && expected < today;
-        
+
         return (
           <Space direction="vertical" size={0} style={{ width: '100%' }}>
-            <Progress 
-              percent={progress} 
+            <Progress
+              percent={progress}
               size="small"
               status={isDelayed ? 'exception' : progress === 100 ? 'success' : 'active'}
             />
@@ -352,9 +359,7 @@ const DeviceManagement: React.FC = () => {
       dataIndex: 'assigned_task',
       key: 'assigned_task',
       width: 180,
-      render: (task: string) => (
-        <Tag color="processing">{task}</Tag>
-      ),
+      render: (task: string) => <Tag color="processing">{task}</Tag>,
     },
     {
       title: '负责人',
@@ -389,7 +394,7 @@ const DeviceManagement: React.FC = () => {
       key: 'action',
       width: 150,
       fixed: 'right' as const,
-      render: (_: any, record: Device) => (
+      render: (_: any, _record: Device) => (
         <Space size="small">
           <Button type="link" size="small" icon={<EditOutlined />}>
             编辑
@@ -404,10 +409,19 @@ const DeviceManagement: React.FC = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div
+        style={{
+          marginBottom: 24,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>设备安装管理 (C)</h1>
         <Space>
-          <Button icon={<SyncOutlined />} onClick={loadDevices}>刷新</Button>
+          <Button icon={<SyncOutlined />} onClick={loadDevices}>
+            刷新
+          </Button>
           <Button type="primary" icon={<PlusOutlined />} onClick={() => setModalVisible(true)}>
             添加设备
           </Button>
@@ -420,7 +434,9 @@ const DeviceManagement: React.FC = () => {
           message={
             <Space>
               <ProjectOutlined />
-              <span>当前项目: <strong>{currentProject.name}</strong></span>
+              <span>
+                当前项目: <strong>{currentProject.name}</strong>
+              </span>
               <Tag color={currentProject.status === 'in_progress' ? 'green' : 'blue'}>
                 {currentProject.status === 'in_progress' ? '进行中' : '规划中'}
               </Tag>
@@ -483,7 +499,7 @@ const DeviceManagement: React.FC = () => {
         </Col>
       </Row>
 
-      <Card 
+      <Card
         title={
           <Space>
             <span style={{ fontSize: 16, fontWeight: 600 }}>设备清单</span>
@@ -496,7 +512,7 @@ const DeviceManagement: React.FC = () => {
           dataSource={devices}
           rowKey="id"
           loading={loading}
-          pagination={{ 
+          pagination={{
             pageSize: 10,
             showTotal: (total) => `共 ${total} 台设备`,
             showSizeChanger: true,
@@ -509,7 +525,7 @@ const DeviceManagement: React.FC = () => {
         title="添加设备"
         open={modalVisible}
         onOk={() => {
-          form.validateFields().then(values => {
+          form.validateFields().then((values) => {
             console.log('添加设备:', values);
             setModalVisible(false);
             form.resetFields();

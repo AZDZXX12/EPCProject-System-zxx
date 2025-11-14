@@ -7,26 +7,12 @@ interface TaskDetailProps {
   taskId?: string;
 }
 
-const TaskDetail: React.FC<TaskDetailProps> = ({ visible, onClose, taskId }) => {
+const TaskDetail: React.FC<TaskDetailProps> = ({ visible, onClose }) => {
   return (
-    <Modal
-      title="任务详情"
-      open={visible}
-      onCancel={onClose}
-      footer={null}
-      width={800}
-    >
-      <div style={{ padding: '20px' }}>
-        任务详情功能开发中...
-      </div>
+    <Modal title="任务详情" open={visible} onCancel={onClose} footer={null} width={800}>
+      <div style={{ padding: '20px' }}>任务详情功能开发中...</div>
     </Modal>
   );
 };
 
 export default TaskDetail;
-
-
-
-
-
-

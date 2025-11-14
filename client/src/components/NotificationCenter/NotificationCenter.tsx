@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Badge, Drawer, List, Button, Tabs, Tag, Space, Empty, Tooltip } from 'antd';
-import { 
-  BellOutlined, 
-  CheckCircleOutlined, 
+import {
+  BellOutlined,
+  CheckCircleOutlined,
   CloseCircleOutlined,
   ClockCircleOutlined,
   WarningOutlined,
   InfoCircleOutlined,
   DeleteOutlined,
-  CheckOutlined
+  CheckOutlined,
 } from '@ant-design/icons';
 import { useProject } from '../../contexts/ProjectContext';
 import './NotificationCenter.css';
@@ -92,13 +92,15 @@ const NotificationCenter: React.FC = () => {
     setNotifications(mockNotifications);
   };
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
-  const getIcon = (type: string, level: string) => {
+  const getIcon = (level: string) => {
     const iconStyle = { fontSize: 20 };
-    if (level === 'error') return <CloseCircleOutlined style={{ ...iconStyle, color: '#ff4d4f' }} />;
+    if (level === 'error')
+      return <CloseCircleOutlined style={{ ...iconStyle, color: '#ff4d4f' }} />;
     if (level === 'warning') return <WarningOutlined style={{ ...iconStyle, color: '#faad14' }} />;
-    if (level === 'success') return <CheckCircleOutlined style={{ ...iconStyle, color: '#52c41a' }} />;
+    if (level === 'success')
+      return <CheckCircleOutlined style={{ ...iconStyle, color: '#52c41a' }} />;
     return <InfoCircleOutlined style={{ ...iconStyle, color: '#1890ff' }} />;
   };
 
@@ -126,21 +128,21 @@ const NotificationCenter: React.FC = () => {
   };
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+    setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
   const deleteNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
   const filterNotifications = () => {
     if (activeTab === 'all') return notifications;
-    if (activeTab === 'unread') return notifications.filter(n => !n.read);
-    return notifications.filter(n => n.type === activeTab);
+    if (activeTab === 'unread') return notifications.filter((n) => !n.read);
+    return notifications.filter((n) => n.type === activeTab);
   };
 
   const filteredNotifications = filterNotifications();
@@ -162,12 +164,7 @@ const NotificationCenter: React.FC = () => {
         title={
           <Space style={{ width: '100%', justifyContent: 'space-between' }}>
             <span>消息通知</span>
-            <Button 
-              type="link" 
-              size="small" 
-              onClick={markAllAsRead}
-              disabled={unreadCount === 0}
-            >
+            <Button type="link" size="small" onClick={markAllAsRead} disabled={unreadCount === 0}>
               全部标为已读
             </Button>
           </Space>
@@ -221,7 +218,7 @@ const NotificationCenter: React.FC = () => {
                 ].filter(Boolean)}
               >
                 <List.Item.Meta
-                  avatar={getIcon(item.type, item.level)}
+                  avatar={getIcon(item.level)}
                   title={
                     <Space>
                       {item.title}
@@ -248,5 +245,3 @@ const NotificationCenter: React.FC = () => {
 };
 
 export default NotificationCenter;
-
-

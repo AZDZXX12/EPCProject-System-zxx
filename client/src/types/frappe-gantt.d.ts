@@ -36,7 +36,3 @@ declare module 'frappe-gantt' {
     clear(): void;
   }
 }
-
-
-
-

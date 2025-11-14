@@ -1,0 +1,9 @@
+node_modules
+build
+dist
+.git
+.trae
+.log
+.figma
+Luckysheet-master-2.0.2/release/
+Luckysheet-master-2.0.2/win-unpacked/

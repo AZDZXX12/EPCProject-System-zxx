@@ -1,25 +1,43 @@
-
 import React, { useState, useEffect } from 'react';
-import { 
-  Card, Table, Button, Space, Modal, Form, Input, DatePicker, 
-  Select, message, Tag, Upload, Row, Col, Statistic
+import {
+  Card,
+  Table,
+  Button,
+  Space,
+  Modal,
+  Form,
+  Input,
+  DatePicker,
+  Select,
+  App,
+  Tag,
+  Upload,
+  Row,
+  Col,
+  Statistic,
 } from 'antd';
-import { 
-  PlusOutlined, EditOutlined, DeleteOutlined, 
-  UploadOutlined, FileImageOutlined,
-  CheckCircleOutlined, ClockCircleOutlined, 
-  ToolOutlined, SafetyOutlined
+import {
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  UploadOutlined,
+  FileImageOutlined,
+  CheckCircleOutlined,
+  ClockCircleOutlined,
+  ToolOutlined,
+  SafetyOutlined,
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { useProject } from '../contexts/ProjectContext';
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, USE_MOCK_DATA } from '../config';
+import { taskApi } from '../services/api';
 import { eventBus, EVENTS, LogEventData } from '../utils/EventBus';
 import { StorageManager } from '../utils/StorageManager';
 
 const { TextArea } = Input;
 
-interface ConstructionLog {
+interface ConstructionLogItem {
   id: string;
   log_id?: string;
   date: string;
@@ -40,16 +58,19 @@ interface ConstructionLog {
 }
 
 const ConstructionLog: React.FC = () => {
-  const [logs, setLogs] = useState<ConstructionLog[]>([]);
+  const { message } = App.useApp(); // 使用App hook获取message，避免静态方法warning
+  const [logs, setLogs] = useState<ConstructionLogItem[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedLog, setSelectedLog] = useState<ConstructionLog | null>(null);
+  const [selectedLog, setSelectedLog] = useState<ConstructionLogItem | null>(null);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const { currentProject } = useProject();
-  
+
   // 🆕 任务列表（从甘特图加载）
-  const [availableTasks, setAvailableTasks] = useState<Array<{id: string; name: string; progress: number}>>([]);
+  const [availableTasks, setAvailableTasks] = useState<
+    Array<{ id: string; name: string; progress: number }>
+  >([]);
 
   useEffect(() => {
     loadLogs();
@@ -63,38 +84,31 @@ const ConstructionLog: React.FC = () => {
       setAvailableTasks([]);
       return;
     }
-    
+
     try {
       // 尝试从LocalStorage加载甘特图任务
       const cacheKey = `gantt_tasks_${currentProject.id}`;
       const cachedData = StorageManager.load(cacheKey);
-      
+
       if (cachedData && cachedData.data) {
         const tasks = cachedData.data.map((task: any) => ({
           id: task.id,
           name: task.text || task.name,
-          progress: Math.round((task.progress || 0) * 100)
+          progress: Math.round((task.progress || 0) * 100),
         }));
         setAvailableTasks(tasks);
       } else {
-        // 尝试从API加载
-        const response = await fetch(`${API_BASE_URL}/api/v1/tasks?project_id=${currentProject.id}`);
-        if (response.ok) {
-          const tasks = await response.json();
-          setAvailableTasks(tasks.map((t: any) => ({
-            id: t.id,
-            name: t.name,
-            progress: t.progress || 0
-          })));
-        }
+        const tasks = await taskApi.getAll(currentProject.id);
+        setAvailableTasks(
+          (tasks as any[]).map((t: any) => ({ id: t.id, name: t.name, progress: t.progress || 0 }))
+        );
       }
     } catch (error) {
-      console.warn('加载任务列表失败:', error);
       // 使用模拟数据
       setAvailableTasks([
         { id: `${currentProject.id}-TASK-1`, name: '项目启动', progress: 100 },
         { id: `${currentProject.id}-TASK-2`, name: '需求分析', progress: 80 },
-        { id: `${currentProject.id}-TASK-3`, name: '概要设计', progress: 60 }
+        { id: `${currentProject.id}-TASK-3`, name: '概要设计', progress: 60 },
       ]);
     }
   };
@@ -104,25 +118,37 @@ const ConstructionLog: React.FC = () => {
       setLogs([]);
       return;
     }
-    
+
     setLoading(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const response = await fetch(`${API_BASE_URL}/api/v1/construction-logs/?project_id=${currentProject.id}`, {
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
+      // 开发环境后端未启动：直接使用本地缓存或演示数据
+      if (USE_MOCK_DATA) {
+        const cached = StorageManager.load<ConstructionLogItem[]>('construction_logs');
+        if (cached && Array.isArray(cached)) {
+          setLogs(cached);
+        } else {
+          setDemoData();
         }
-      });
-      
+        return;
+      }
+
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(
+        `/api/v1/construction-logs/?project_id=${currentProject.id}`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
+        }
+      );
+
       if (response.ok) {
         const data = await response.json();
         setLogs(data);
       } else {
-        // 使用演示数据
         setDemoData();
       }
     } catch (error) {
-      console.error('加载施工日志失败:', error);
       setDemoData();
     } finally {
       setLoading(false);
@@ -131,7 +157,7 @@ const ConstructionLog: React.FC = () => {
 
   const setDemoData = () => {
     const today = dayjs();
-    const demoLogs: ConstructionLog[] = [
+    const demoLogs: ConstructionLogItem[] = [
       {
         id: 'LOG-001',
         date: today.format('YYYY-MM-DD'),
@@ -147,7 +173,7 @@ const ConstructionLog: React.FC = () => {
         safety_check: '已完成安全检查，无隐患',
         photos: [],
         reporter: '张工',
-        project_id: currentProject?.id || 'CHEM-2024-001'
+        project_id: currentProject?.id || 'CHEM-2024-001',
       },
       {
         id: 'LOG-002',
@@ -164,7 +190,7 @@ const ConstructionLog: React.FC = () => {
         safety_check: '已完成，提醒高空作业注意安全',
         photos: [],
         reporter: '李工',
-        project_id: currentProject?.id || 'CHEM-2024-001'
+        project_id: currentProject?.id || 'CHEM-2024-001',
       },
       {
         id: 'LOG-003',
@@ -181,8 +207,8 @@ const ConstructionLog: React.FC = () => {
         safety_check: '已完成，焊接作业安全措施到位',
         photos: [],
         reporter: '王工',
-        project_id: currentProject?.id || 'CHEM-2024-001'
-      }
+        project_id: currentProject?.id || 'CHEM-2024-001',
+      },
     ];
     setLogs(demoLogs);
   };
@@ -201,32 +227,32 @@ const ConstructionLog: React.FC = () => {
       equipment_used: '',
       material_used: '',
       issues: '无',
-      safety_check: '已完成安全检查，无隐患'
+      safety_check: '已完成安全检查，无隐患',
     });
     setIsEditMode(false);
     setSelectedLog(null);
     setIsModalVisible(true);
   };
 
-  const handleEdit = (log: ConstructionLog) => {
+  const handleEdit = (log: ConstructionLogItem) => {
     setSelectedLog(log);
     setIsEditMode(true);
     form.setFieldsValue({
       ...log,
-      date: dayjs(log.date)
+      date: dayjs(log.date),
     });
     setIsModalVisible(true);
   };
 
   const handleDelete = async (logId: string) => {
-    setLogs(logs.filter(l => l.id !== logId));
+    setLogs(logs.filter((l) => l.id !== logId));
     message.success('删除成功');
   };
 
   const handleModalOk = async () => {
     try {
       const values = await form.validateFields();
-      const logData: ConstructionLog = {
+      const logData: ConstructionLogItem = {
         id: isEditMode && selectedLog ? selectedLog.id : `LOG-${Date.now()}`,
         date: values.date.format('YYYY-MM-DD'),
         task_id: values.task_id, // 关联的任务ID
@@ -242,16 +268,16 @@ const ConstructionLog: React.FC = () => {
         safety_check: values.safety_check || '已完成',
         photos: [],
         reporter: values.reporter,
-        project_id: currentProject?.id || 'CHEM-2024-001'
+        project_id: currentProject?.id || 'CHEM-2024-001',
       };
 
       if (isEditMode && selectedLog) {
-        const updatedLogs = logs.map(l => l.id === selectedLog.id ? logData : l);
+        const updatedLogs = logs.map((l) => (l.id === selectedLog.id ? logData : l));
         setLogs(updatedLogs);
-        
+
         // 💾 持久化到本地存储
         StorageManager.save('construction_logs', updatedLogs);
-        
+
         // 🔗 联动：发布日志更新事件
         eventBus.emit(EVENTS.LOG_UPDATED, {
           id: logData.id,
@@ -259,17 +285,17 @@ const ConstructionLog: React.FC = () => {
           taskId: logData.task_id,
           date: logData.date,
           progress: logData.progress_today,
-          content: logData.work_content
+          content: logData.work_content,
         } as LogEventData);
-        
+
         message.success('修改成功');
       } else {
         const updatedLogs = [logData, ...logs];
         setLogs(updatedLogs);
-        
+
         // 💾 持久化到本地存储
         StorageManager.save('construction_logs', updatedLogs);
-        
+
         // 🔗 联动：发布日志创建事件
         eventBus.emit(EVENTS.LOG_CREATED, {
           id: logData.id,
@@ -277,20 +303,20 @@ const ConstructionLog: React.FC = () => {
           taskId: logData.task_id,
           date: logData.date,
           progress: logData.progress_today,
-          content: logData.work_content
+          content: logData.work_content,
         } as LogEventData);
-        
+
         message.success('添加成功');
       }
 
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {
-      console.error('表单验证失败:', error);
+      message.error('表单验证失败，请检查输入');
     }
   };
 
-  const columns: ColumnsType<ConstructionLog> = [
+  const columns: ColumnsType<ConstructionLogItem> = [
     {
       title: '日期',
       dataIndex: 'date',
@@ -303,14 +329,14 @@ const ConstructionLog: React.FC = () => {
           <div style={{ fontWeight: 500 }}>{dayjs(date).format('YYYY-MM-DD')}</div>
           <div style={{ fontSize: 12, color: '#999' }}>{dayjs(date).format('dddd')}</div>
         </div>
-      )
+      ),
     },
     {
       title: '任务名称',
       dataIndex: 'task_name',
       key: 'task_name',
       width: 150,
-      ellipsis: true
+      ellipsis: true,
     },
     {
       title: '天气',
@@ -319,34 +345,38 @@ const ConstructionLog: React.FC = () => {
       width: 80,
       render: (weather) => {
         const weatherIcons: Record<string, string> = {
-          '晴': '☀️',
-          '多云': '⛅',
-          '阴': '☁️',
-          '雨': '🌧️',
-          '雪': '❄️'
+          晴: '☀️',
+          多云: '⛅',
+          阴: '☁️',
+          雨: '🌧️',
+          雪: '❄️',
         };
-        return <span>{weatherIcons[weather] || '🌤️'} {weather}</span>;
-      }
+        return (
+          <span>
+            {weatherIcons[weather] || '🌤️'} {weather}
+          </span>
+        );
+      },
     },
     {
       title: '温度',
       dataIndex: 'temperature',
       key: 'temperature',
-      width: 100
+      width: 100,
     },
     {
       title: '工作内容',
       dataIndex: 'work_content',
       key: 'work_content',
       width: 250,
-      ellipsis: true
+      ellipsis: true,
     },
     {
       title: '人员',
       dataIndex: 'worker_count',
       key: 'worker_count',
       width: 80,
-      render: (count) => <Tag color="blue">{count}人</Tag>
+      render: (count) => <Tag color="blue">{count}人</Tag>,
     },
     {
       title: '进度',
@@ -358,7 +388,7 @@ const ConstructionLog: React.FC = () => {
         <Tag color={progress >= 80 ? 'green' : progress >= 50 ? 'blue' : 'orange'}>
           +{progress}%
         </Tag>
-      )
+      ),
     },
     {
       title: '问题',
@@ -370,13 +400,13 @@ const ConstructionLog: React.FC = () => {
         <span style={{ color: issues === '无' ? '#52c41a' : '#fa8c16' }}>
           {issues === '无' ? '✓ 无' : '⚠ ' + issues}
         </span>
-      )
+      ),
     },
     {
       title: '记录人',
       dataIndex: 'reporter',
       key: 'reporter',
-      width: 100
+      width: 100,
     },
     {
       title: '操作',
@@ -385,17 +415,17 @@ const ConstructionLog: React.FC = () => {
       fixed: 'right',
       render: (_, record) => (
         <Space size="small">
-          <Button 
-            type="link" 
-            size="small" 
+          <Button
+            type="link"
+            size="small"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
           >
             编辑
           </Button>
-          <Button 
-            type="link" 
-            danger 
+          <Button
+            type="link"
+            danger
             size="small"
             icon={<DeleteOutlined />}
             onClick={() => handleDelete(record.id)}
@@ -403,22 +433,25 @@ const ConstructionLog: React.FC = () => {
             删除
           </Button>
         </Space>
-      )
-    }
+      ),
+    },
   ];
 
   // 统计数据
-  const avgProgress = logs.length > 0 ? Math.round(logs.reduce((sum, log) => sum + log.progress_today, 0) / logs.length) : 0;
-  const issueCount = logs.filter(log => log.issues !== '无').length;
+  const avgProgress =
+    logs.length > 0
+      ? Math.round(logs.reduce((sum, log) => sum + log.progress_today, 0) / logs.length)
+      : 0;
+  const issueCount = logs.filter((log) => log.issues !== '无').length;
 
   return (
     <div style={{ padding: 24 }}>
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col span={6}>
           <Card>
-            <Statistic 
-              title="今日施工记录" 
-              value={logs.filter(l => l.date === dayjs().format('YYYY-MM-DD')).length}
+            <Statistic
+              title="今日施工记录"
+              value={logs.filter((l) => l.date === dayjs().format('YYYY-MM-DD')).length}
               prefix={<FileImageOutlined />}
               suffix="条"
             />
@@ -426,8 +459,8 @@ const ConstructionLog: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card>
-            <Statistic 
-              title="累计施工天数" 
+            <Statistic
+              title="累计施工天数"
               value={logs.length}
               prefix={<ClockCircleOutlined />}
               suffix="天"
@@ -436,8 +469,8 @@ const ConstructionLog: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card>
-            <Statistic 
-              title="平均日进度" 
+            <Statistic
+              title="平均日进度"
               value={avgProgress}
               prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
               suffix="%"
@@ -446,8 +479,8 @@ const ConstructionLog: React.FC = () => {
         </Col>
         <Col span={6}>
           <Card>
-            <Statistic 
-              title="问题数量" 
+            <Statistic
+              title="问题数量"
               value={issueCount}
               prefix={<SafetyOutlined style={{ color: issueCount > 0 ? '#fa8c16' : '#52c41a' }} />}
               suffix="项"
@@ -457,7 +490,7 @@ const ConstructionLog: React.FC = () => {
         </Col>
       </Row>
 
-      <Card 
+      <Card
         title={
           <Space>
             <ToolOutlined />
@@ -466,17 +499,13 @@ const ConstructionLog: React.FC = () => {
         }
         extra={
           <Space>
-            <Button 
-              type="primary" 
-              icon={<PlusOutlined />}
-              onClick={handleAdd}
-            >
+            <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
               添加日志
             </Button>
           </Space>
         }
       >
-        <Table 
+        <Table
           columns={columns}
           dataSource={logs}
           rowKey="id"
@@ -484,7 +513,7 @@ const ConstructionLog: React.FC = () => {
           pagination={{
             pageSize: 10,
             showSizeChanger: true,
-            showTotal: (total) => `共 ${total} 条记录`
+            showTotal: (total) => `共 ${total} 条记录`,
           }}
           scroll={{ x: 1600 }}
         />
@@ -507,14 +536,14 @@ const ConstructionLog: React.FC = () => {
                 label="施工日期"
                 rules={[{ required: true, message: '请选择日期' }]}
               >
-                <DatePicker 
-                  style={{ width: '100%' }} 
+                <DatePicker
+                  style={{ width: '100%' }}
                   format="YYYY-MM-DD"
                   disabledDate={(current) => current && current > dayjs().endOf('day')}
                   presets={[
                     { label: '今天', value: dayjs() },
                     { label: '昨天', value: dayjs().add(-1, 'd') },
-                    { label: '前天', value: dayjs().add(-2, 'd') }
+                    { label: '前天', value: dayjs().add(-2, 'd') },
                   ]}
                 />
               </Form.Item>
@@ -540,15 +569,21 @@ const ConstructionLog: React.FC = () => {
                     (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                   }
                 >
-                  {availableTasks.map(task => (
-                    <Select.Option 
-                      key={task.id} 
-                      value={task.id}
-                      label={task.name}
-                    >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  {availableTasks.map((task) => (
+                    <Select.Option key={task.id} value={task.id} label={task.name}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
+                      >
                         <span>{task.name}</span>
-                        <Tag color={task.progress === 100 ? 'green' : task.progress > 0 ? 'blue' : 'default'}>
+                        <Tag
+                          color={
+                            task.progress === 100 ? 'green' : task.progress > 0 ? 'blue' : 'default'
+                          }
+                        >
                           {task.progress}%
                         </Tag>
                       </div>
@@ -658,10 +693,7 @@ const ConstructionLog: React.FC = () => {
           </Form.Item>
 
           <Form.Item label="现场照片">
-            <Upload
-              listType="picture-card"
-              beforeUpload={() => false}
-            >
+            <Upload listType="picture-card" beforeUpload={() => false}>
               <div>
                 <UploadOutlined />
                 <div style={{ marginTop: 8 }}>上传照片</div>
@@ -675,4 +707,3 @@ const ConstructionLog: React.FC = () => {
 };
 
 export default ConstructionLog;
-

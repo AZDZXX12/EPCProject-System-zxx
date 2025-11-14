@@ -1,0 +1,90 @@
+module.exports = {
+  root: true,
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+  },
+  extends: [
+    'eslint:recommended',
+    // '@typescript-eslint/recommended', // 暂时注释掉
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: './tsconfig.json',
+  },
+  plugins: [
+    'react',
+    'react-hooks',
+    '@typescript-eslint',
+    'jsx-a11y',
+    'import',
+  ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json',
+      },
+    },
+  },
+  rules: {
+    // React 相关规则
+    'react/react-in-jsx-scope': 'off', // React 17+ 不需要导入 React
+    'react/prop-types': 'off', // 使用 TypeScript，不需要 prop-types
+    'react/jsx-uses-react': 'off',
+    'react/jsx-uses-vars': 'off',
+    'react/jsx-key': 'warn',
+    'react/no-array-index-key': 'off',
+    'react/jsx-no-bind': 'off',
+    'react/jsx-no-literals': 'off',
+    'react/jsx-pascal-case': 'off',
+    
+    // React Hooks 规则
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'off',
+    
+    // 通用规则 (放宽限制)
+    'no-console': 'off',
+    'no-debugger': 'off',
+    'no-unused-vars': 'off',
+    'prefer-const': 'off',
+    'no-var': 'off',
+    'object-shorthand': 'off',
+    'prefer-template': 'off',
+    'template-curly-spacing': 'off',
+    'arrow-spacing': 'off',
+    'comma-dangle': 'off',
+    'semi': 'off',
+    'quotes': 'off',
+    'jsx-quotes': 'off',
+  },
+  overrides: [
+    {
+      files: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+      env: {
+        jest: true,
+      },
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+    },
+  ],
+  ignorePatterns: [
+    'build/',
+    'dist/',
+    'node_modules/',
+    '*.config.js',
+    'public/',
+  ],
+};

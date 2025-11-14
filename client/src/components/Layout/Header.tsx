@@ -25,9 +25,7 @@ const AppHeader: React.FC = () => {
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div className="header-logo-container">
           <SafetyOutlined className="header-logo-icon" />
-          <span className="header-logo-text">
-            EPC项目管理系统
-          </span>
+          <span className="header-logo-text">EPC项目管理系统</span>
         </div>
         {currentProject && (
           <>
@@ -36,13 +34,13 @@ const AppHeader: React.FC = () => {
               value={currentProject?.id}
               style={{ width: 220 }}
               onChange={(value) => {
-                const project = projects.find(p => p.id === value);
+                const project = projects.find((p) => p.id === value);
                 if (project) setCurrentProject(project);
               }}
-              options={projects.map(p => ({ label: p.name, value: p.id }))}
+              options={projects.map((p) => ({ label: p.name, value: p.id }))}
             />
-            <Button 
-              type="default" 
+            <Button
+              type="default"
               icon={<ReloadOutlined />}
               onClick={loadProjects}
               className="header-refresh-button"
@@ -58,16 +56,16 @@ const AppHeader: React.FC = () => {
         menu={{
           items: [
             { key: 'profile', label: '个人设置' },
-            { key: 'logout', label: '退出登录' }
+            { key: 'logout', label: '退出登录' },
           ],
-          onClick: handleMenuClick
+          onClick: handleMenuClick,
         }}
       >
-        <div className="header-user-container" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Avatar 
-            icon={<UserOutlined />} 
-            className="header-user-avatar"
-          />
+        <div
+          className="header-user-container"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+        >
+          <Avatar icon={<UserOutlined />} className="header-user-avatar" />
           <span className="header-user-name">管理员</span>
         </div>
       </Dropdown>
@@ -76,4 +74,3 @@ const AppHeader: React.FC = () => {
 };
 
 export default AppHeader;
-

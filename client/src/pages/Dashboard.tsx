@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, Statistic, Progress, Timeline, List, Tag, Alert, Divider } from 'antd';
-import { API_ENDPOINTS } from '../config';
+import { projectApi, taskApi, deviceApi } from '../services/api';
 import {
   ProjectOutlined,
   CheckCircleOutlined,
@@ -39,14 +39,7 @@ const Dashboard: React.FC = () => {
 
     const fetchTaskStats = async () => {
       try {
-        const token = localStorage.getItem('access_token');
-        const url = `${API_ENDPOINTS.tasks}/?project_id=${currentProject.id}`;
-        const response = await fetch(url, {
-          headers: { 'Authorization': token ? `Bearer ${token}` : '' }
-        });
-
-        if (response.ok) {
-          const tasks = await response.json();
+        const tasks = (await taskApi.getAll(currentProject.id)) as any[];
           const stats = {
             total: tasks.length,
             completed: tasks.filter((t: any) => t.status === 'completed').length,
@@ -54,10 +47,6 @@ const Dashboard: React.FC = () => {
             pending: tasks.filter((t: any) => t.status === 'pending').length,
           };
           setTaskStats(stats);
-        } else {
-          // 使用演示数据
-          setTaskStats({ total: 15, completed: 5, inProgress: 7, pending: 3 });
-        }
       } catch (error) {
         setTaskStats({ total: 15, completed: 5, inProgress: 7, pending: 3 });
       }
@@ -72,23 +61,14 @@ const Dashboard: React.FC = () => {
 
     const fetchDeviceStats = async () => {
       try {
-        const token = localStorage.getItem('access_token');
-        const url = `${API_ENDPOINTS.devices}/?project_id=${currentProject.id}`;
-        const response = await fetch(url, {
-          headers: { 'Authorization': token ? `Bearer ${token}` : '' }
-        });
-
-        if (response.ok) {
-          const devices = await response.json();
+        const devices = (await deviceApi.getAll()) as any[];
           const stats = {
             total: devices.length,
             installed: devices.filter((d: any) => d.status === 'installed').length,
-            pending: devices.filter((d: any) => d.status === 'pending' || d.status === 'ordered').length,
+            pending: devices.filter((d: any) => d.status === 'pending' || d.status === 'ordered')
+              .length,
           };
           setDeviceStats(stats);
-        } else {
-          setDeviceStats({ total: 25, installed: 18, pending: 7 });
-        }
       } catch (error) {
         setDeviceStats({ total: 25, installed: 18, pending: 7 });
       }
@@ -98,24 +78,15 @@ const Dashboard: React.FC = () => {
   }, [currentProject]);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINTS.projects}/`)
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error('API request failed');
-      })
-      .then(data => {
-        // 确保数据是数组
+    projectApi
+      .getAll()
+      .then((data) => {
         if (Array.isArray(data)) {
-          setProjects(data);
-        } else {
-          throw new Error('Invalid data format');
+          setProjects(data as any);
         }
         setLoading(false);
       })
       .catch(() => {
-        // API未连接或数据格式错误，静默使用演示数据
         setProjects([
           {
             id: 1,
@@ -152,25 +123,31 @@ const Dashboard: React.FC = () => {
       });
   }, []);
 
-  const activeProjects = Array.isArray(projects) 
-    ? projects.filter(p => p.status === 'active').length 
+  const activeProjects = Array.isArray(projects)
+    ? projects.filter((p) => p.status === 'active').length
     : 0;
   const completedProjects = Array.isArray(projects)
-    ? projects.filter(p => p.status === 'completed').length
+    ? projects.filter((p) => p.status === 'completed').length
     : 0;
-  const avgProgress = Array.isArray(projects) && projects.length > 0 
-    ? Math.round(projects.reduce((sum, p) => sum + p.progress, 0) / projects.length)
-    : 0;
+  const avgProgress =
+    Array.isArray(projects) && projects.length > 0
+      ? Math.round(projects.reduce((sum, p) => sum + p.progress, 0) / projects.length)
+      : 0;
 
   return (
     <div>
       <h1 style={{ marginBottom: 8, fontSize: 28, fontWeight: 600 }}>EPC工程概览</h1>
-      <p style={{ color: '#666', marginBottom: 24 }}>Engineering · Procurement · Construction 项目管理平台</p>
+      <p style={{ color: '#666', marginBottom: 24 }}>
+        Engineering · Procurement · Construction 项目管理平台
+      </p>
 
       {/* 当前项目信息卡片 */}
       {currentProject && (
-        <Card 
-          style={{ marginBottom: 24, background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+        <Card
+          style={{
+            marginBottom: 24,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          }}
           styles={{ body: { padding: 20 } }}
         >
           <Row gutter={16} align="middle">
@@ -178,16 +155,18 @@ const Dashboard: React.FC = () => {
               <div style={{ color: '#fff' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
                   <ProjectOutlined style={{ fontSize: 24, marginRight: 12 }} />
-                  <h2 style={{ color: '#fff', margin: 0, fontSize: 20 }}>
-                    {currentProject.name}
-                  </h2>
-                  <Tag 
-                    color={currentProject.status === 'in_progress' ? 'green' : 'blue'} 
+                  <h2 style={{ color: '#fff', margin: 0, fontSize: 20 }}>{currentProject.name}</h2>
+                  <Tag
+                    color={currentProject.status === 'in_progress' ? 'green' : 'blue'}
                     style={{ marginLeft: 12 }}
                   >
-                    {currentProject.status === 'in_progress' ? '进行中' : 
-                     currentProject.status === 'planning' ? '规划中' : 
-                     currentProject.status === 'completed' ? '已完成' : '已暂停'}
+                    {currentProject.status === 'in_progress'
+                      ? '进行中'
+                      : currentProject.status === 'planning'
+                        ? '规划中'
+                        : currentProject.status === 'completed'
+                          ? '已完成'
+                          : '已暂停'}
                   </Tag>
                 </div>
                 <p style={{ color: 'rgba(255,255,255,0.8)', margin: 0, fontSize: 14 }}>
@@ -197,9 +176,9 @@ const Dashboard: React.FC = () => {
             </Col>
             <Col>
               <div style={{ textAlign: 'center' }}>
-                <Progress 
-                  type="circle" 
-                  percent={currentProject.progress || 0} 
+                <Progress
+                  type="circle"
+                  percent={currentProject.progress || 0}
                   size={80}
                   strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
                 />
@@ -230,7 +209,9 @@ const Dashboard: React.FC = () => {
             <Col span={6}>
               <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12 }}>项目预算</div>
               <div style={{ color: '#fff', fontSize: 14, fontWeight: 500 }}>
-                {currentProject.budget ? `¥${(currentProject.budget / 10000).toFixed(0)}万` : '未设置'}
+                {currentProject.budget
+                  ? `¥${(currentProject.budget / 10000).toFixed(0)}万`
+                  : '未设置'}
               </div>
             </Col>
           </Row>
@@ -246,7 +227,7 @@ const Dashboard: React.FC = () => {
         closable
         style={{ marginBottom: 24 }}
       />
-      
+
       {/* 当前项目统计数据 */}
       {currentProject && (
         <>
@@ -328,7 +309,11 @@ const Dashboard: React.FC = () => {
               <Card hoverable>
                 <Statistic
                   title={<span style={{ fontSize: 14, color: '#666' }}>安装率</span>}
-                  value={deviceStats.total > 0 ? Math.round((deviceStats.installed / deviceStats.total) * 100) : 0}
+                  value={
+                    deviceStats.total > 0
+                      ? Math.round((deviceStats.installed / deviceStats.total) * 100)
+                      : 0
+                  }
                   suffix="%"
                   prefix={<RiseOutlined style={{ color: '#13c2c2' }} />}
                   valueStyle={{ color: '#13c2c2', fontSize: 28 }}
@@ -339,7 +324,7 @@ const Dashboard: React.FC = () => {
           <Divider />
         </>
       )}
-      
+
       <h3 style={{ marginBottom: 16, fontSize: 18 }}>
         <TeamOutlined /> 全局项目统计
       </h3>
@@ -392,7 +377,10 @@ const Dashboard: React.FC = () => {
 
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={16}>
-          <Card title={<span style={{ fontSize: 16, fontWeight: 600 }}>项目进度概况</span>} loading={loading}>
+          <Card
+            title={<span style={{ fontSize: 16, fontWeight: 600 }}>项目进度概况</span>}
+            loading={loading}
+          >
             <List
               dataSource={projects}
               renderItem={(project) => (
@@ -401,8 +389,8 @@ const Dashboard: React.FC = () => {
                     title={
                       <span style={{ fontSize: 16, fontWeight: 500 }}>
                         {project.name}
-                        <Tag 
-                          color={project.status === 'completed' ? 'success' : 'processing'} 
+                        <Tag
+                          color={project.status === 'completed' ? 'success' : 'processing'}
                           style={{ marginLeft: 12 }}
                         >
                           {project.status === 'completed' ? '已完成' : '进行中'}
@@ -414,8 +402,8 @@ const Dashboard: React.FC = () => {
                         <div style={{ marginBottom: 4, color: '#666' }}>
                           项目编号: {project.project_id}
                         </div>
-                        <Progress 
-                          percent={project.progress} 
+                        <Progress
+                          percent={project.progress}
                           strokeColor={{
                             '0%': '#108ee9',
                             '100%': '#87d068',
@@ -430,9 +418,12 @@ const Dashboard: React.FC = () => {
             />
           </Card>
         </Col>
-        
+
         <Col xs={24} lg={8}>
-          <Card title={<span style={{ fontSize: 16, fontWeight: 600 }}>最新动态</span>} style={{ marginBottom: 16 }}>
+          <Card
+            title={<span style={{ fontSize: 16, fontWeight: 600 }}>最新动态</span>}
+            style={{ marginBottom: 16 }}
+          >
             <Timeline
               items={[
                 {
@@ -477,14 +468,20 @@ const Dashboard: React.FC = () => {
           <Card>
             <Row gutter={16}>
               <Col span={12}>
-                <Card.Grid hoverable={false} style={{ width: '100%', textAlign: 'center', padding: 16 }}>
+                <Card.Grid
+                  hoverable={false}
+                  style={{ width: '100%', textAlign: 'center', padding: 16 }}
+                >
                   <SafetyOutlined style={{ fontSize: 32, color: '#52c41a', marginBottom: 8 }} />
                   <div style={{ fontSize: 24, fontWeight: 'bold', color: '#52c41a' }}>15</div>
                   <div style={{ color: '#666', fontSize: 12 }}>安全天数</div>
                 </Card.Grid>
               </Col>
               <Col span={12}>
-                <Card.Grid hoverable={false} style={{ width: '100%', textAlign: 'center', padding: 16 }}>
+                <Card.Grid
+                  hoverable={false}
+                  style={{ width: '100%', textAlign: 'center', padding: 16 }}
+                >
                   <ExperimentOutlined style={{ fontSize: 32, color: '#1890ff', marginBottom: 8 }} />
                   <div style={{ fontSize: 24, fontWeight: 'bold', color: '#1890ff' }}>98%</div>
                   <div style={{ color: '#666', fontSize: 12 }}>质量合格率</div>

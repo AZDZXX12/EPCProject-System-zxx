@@ -1,16 +1,34 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
-  Card, Button, Space, message, Modal, Form, DatePicker,
-  InputNumber, Select, Table, Popconfirm, Row, Col, Tag, Spin, Input
+  Card,
+  Button,
+  Space,
+  message,
+  Modal,
+  Form,
+  DatePicker,
+  InputNumber,
+  Select,
+  Table,
+  Popconfirm,
+  Row,
+  Col,
+  Tag,
+  Spin,
+  Input,
 } from 'antd';
 import {
-  PlusOutlined, EditOutlined, DeleteOutlined,
-  ReloadOutlined, DownloadOutlined,
-  UploadOutlined
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  ReloadOutlined,
+  DownloadOutlined,
+  UploadOutlined,
 } from '@ant-design/icons';
 import Gantt from 'frappe-gantt';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
+import { taskApi } from '../services/api';
 import { useProject } from '../contexts/ProjectContext';
 import './GanttChart.css';
 
@@ -58,7 +76,7 @@ const InteractiveGanttChart: React.FC = () => {
         priority: 'high',
         assignee: '张工',
         project_id: currentProject?.id || 'CHEM-2024-001',
-        dependencies: ''
+        dependencies: '',
       },
       {
         id: 'T-002',
@@ -70,7 +88,7 @@ const InteractiveGanttChart: React.FC = () => {
         priority: 'high',
         assignee: '李工',
         project_id: currentProject?.id || 'CHEM-2024-001',
-        dependencies: 'T-001'
+        dependencies: 'T-001',
       },
       {
         id: 'T-003',
@@ -82,7 +100,7 @@ const InteractiveGanttChart: React.FC = () => {
         priority: 'medium',
         assignee: '王工',
         project_id: currentProject?.id || 'CHEM-2024-001',
-        dependencies: ''
+        dependencies: '',
       },
       {
         id: 'T-004',
@@ -94,7 +112,7 @@ const InteractiveGanttChart: React.FC = () => {
         priority: 'high',
         assignee: '赵工',
         project_id: currentProject?.id || 'CHEM-2024-001',
-        dependencies: 'T-002'
+        dependencies: 'T-002',
       },
     ];
     setTasks(demoTasks);
@@ -103,37 +121,25 @@ const InteractiveGanttChart: React.FC = () => {
   const loadTasks = useCallback(async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem('access_token');
-      const url = 'http://localhost:8000/api/v1/tasks/';
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': token ? `Bearer ${token}` : '',
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
+      const data = (await taskApi.getAll(currentProject?.id)) as any[];
         let tasksData = data.map((task: any) => ({
           ...task,
           id: task.task_id || task.id?.toString() || `T-${task.id}`,
           task_id: task.task_id || `TASK-${task.id}`,
           project_id: task.project_id || 'CHEM-2024-001',
-          dependencies: Array.isArray(task.dependencies) ? task.dependencies.join(', ') : ''
+          dependencies: Array.isArray(task.dependencies) ? task.dependencies.join(', ') : '',
         }));
-        
+
         if (currentProject) {
           tasksData = tasksData.filter((t: any) => t.project_id === currentProject.id);
         }
-        
-        if (tasksData.length === 0) {
+
+        if (!Array.isArray(data) || tasksData.length === 0) {
           setDemoData();
         } else {
           setTasks(tasksData);
         }
-      } else {
-        setDemoData();
-      }
+      
     } catch (error) {
       console.error('加载失败:', error);
       setDemoData();
@@ -144,7 +150,10 @@ const InteractiveGanttChart: React.FC = () => {
 
   const renderGantt = useCallback(() => {
     if (!ganttRef.current || tasks.length === 0) {
-      console.log('Gantt渲染条件不满足:', { hasRef: !!ganttRef.current, tasksLength: tasks.length });
+      console.log('Gantt渲染条件不满足:', {
+        hasRef: !!ganttRef.current,
+        tasksLength: tasks.length,
+      });
       return;
     }
 
@@ -152,10 +161,10 @@ const InteractiveGanttChart: React.FC = () => {
       // 过滤任务
       let filteredTasks = tasks;
       if (filterStatus !== 'all') {
-        filteredTasks = filteredTasks.filter(t => t.status === filterStatus);
+        filteredTasks = filteredTasks.filter((t) => t.status === filterStatus);
       }
       if (filterPriority !== 'all') {
-        filteredTasks = filteredTasks.filter(t => t.priority === filterPriority);
+        filteredTasks = filteredTasks.filter((t) => t.priority === filterPriority);
       }
 
       if (filteredTasks.length === 0) {
@@ -164,14 +173,14 @@ const InteractiveGanttChart: React.FC = () => {
       }
 
       // 转换为Frappe Gantt格式
-      const ganttTasks = filteredTasks.map(task => ({
+      const ganttTasks = filteredTasks.map((task) => ({
         id: task.id,
         name: task.name,
         start: task.start_date,
         end: task.end_date,
         progress: task.progress,
         dependencies: task.dependencies || '',
-        custom_class: `status-${task.status}`
+        custom_class: `status-${task.status}`,
       }));
 
       // 清空旧实例
@@ -186,7 +195,7 @@ const InteractiveGanttChart: React.FC = () => {
 
       // 确保容器干净
       ganttRef.current.innerHTML = '';
-      
+
       // 创建新实例
       ganttInstance.current = new Gantt(ganttRef.current, ganttTasks, {
         header_height: 60,
@@ -201,14 +210,20 @@ const InteractiveGanttChart: React.FC = () => {
         date_format: 'YYYY-MM-DD',
         language: 'zh',
         popup_trigger: 'click',
-        custom_popup_html: function(task: any) {
-          const taskData = tasks.find(t => t.id === task.id);
-          const statusText = taskData?.status === 'completed' ? '✅ 已完成' : 
-                            taskData?.status === 'in_progress' ? '🔄 进行中' : 
-                            '⏸️ 待开始';
-          const priorityText = taskData?.priority === 'high' ? '🔴 高' : 
-                              taskData?.priority === 'medium' ? '🟡 中' : 
-                              '🟢 低';
+        custom_popup_html: function (task: any) {
+          const taskData = tasks.find((t) => t.id === task.id);
+          const statusText =
+            taskData?.status === 'completed'
+              ? '✅ 已完成'
+              : taskData?.status === 'in_progress'
+                ? '🔄 进行中'
+                : '⏸️ 待开始';
+          const priorityText =
+            taskData?.priority === 'high'
+              ? '🔴 高'
+              : taskData?.priority === 'medium'
+                ? '🟡 中'
+                : '🟢 低';
           return `
             <div style="padding: 10px; font-family: Arial, sans-serif;">
               <div style="font-size: 14px; font-weight: bold; color: #262626; margin-bottom: 8px;">
@@ -225,9 +240,9 @@ const InteractiveGanttChart: React.FC = () => {
               </div>
             </div>
           `;
-        }
+        },
       });
-      
+
       console.log('✅ Gantt图渲染成功');
     } catch (error) {
       console.error('❌ Gantt图渲染失败:', error);
@@ -254,9 +269,10 @@ const InteractiveGanttChart: React.FC = () => {
           renderGantt();
         });
       }, 200);
-      
+
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [tasks, renderGantt]);
 
   const handleAddTask = () => {
@@ -267,7 +283,7 @@ const InteractiveGanttChart: React.FC = () => {
       status: 'pending',
       priority: 'medium',
       progress: 0,
-      dateRange: [dayjs(), dayjs().add(7, 'day')]
+      dateRange: [dayjs(), dayjs().add(7, 'day')],
     });
     setIsModalVisible(true);
   };
@@ -282,13 +298,13 @@ const InteractiveGanttChart: React.FC = () => {
       status: task.status,
       progress: task.progress,
       dateRange: [dayjs(task.start_date), dayjs(task.end_date)],
-      dependencies: task.dependencies
+      dependencies: task.dependencies,
     });
     setIsModalVisible(true);
   };
 
   const handleDeleteTask = async (taskId: string) => {
-    const updatedTasks = tasks.filter(t => t.id !== taskId);
+    const updatedTasks = tasks.filter((t) => t.id !== taskId);
     setTasks(updatedTasks);
     message.success('任务已删除');
   };
@@ -307,11 +323,11 @@ const InteractiveGanttChart: React.FC = () => {
         status: values.status,
         progress: Number(values.progress) || 0,
         project_id: currentProject?.id || 'CHEM-2024-001',
-        dependencies: values.dependencies || ''
+        dependencies: values.dependencies || '',
       };
 
       if (isEditMode && selectedTask) {
-        const updatedTasks = tasks.map(t =>
+        const updatedTasks = tasks.map((t) =>
           t.id === selectedTask.id ? { ...t, ...taskData } : t
         );
         setTasks(updatedTasks);
@@ -319,7 +335,7 @@ const InteractiveGanttChart: React.FC = () => {
       } else {
         const newTask: Task = {
           id: `T-${Date.now()}`,
-          ...taskData
+          ...taskData,
         };
         setTasks([...tasks, newTask]);
         message.success('任务已添加');
@@ -356,7 +372,7 @@ const InteractiveGanttChart: React.FC = () => {
         status: row['状态'] || 'pending',
         progress: Number(row['进度']) || 0,
         project_id: currentProject?.id || 'CHEM-2024-001',
-        dependencies: ''
+        dependencies: '',
       }));
 
       setTasks([...tasks, ...importedTasks]);
@@ -401,10 +417,14 @@ const InteractiveGanttChart: React.FC = () => {
         const colorMap: Record<string, string> = {
           high: 'red',
           medium: 'orange',
-          low: 'default'
+          low: 'default',
         };
-        return <Tag color={colorMap[priority]}>{priority === 'high' ? '高' : priority === 'medium' ? '中' : '低'}</Tag>;
-      }
+        return (
+          <Tag color={colorMap[priority]}>
+            {priority === 'high' ? '高' : priority === 'medium' ? '中' : '低'}
+          </Tag>
+        );
+      },
     },
     {
       title: '状态',
@@ -415,18 +435,18 @@ const InteractiveGanttChart: React.FC = () => {
         const statusMap: Record<string, { text: string; color: string }> = {
           pending: { text: '待开始', color: 'default' },
           in_progress: { text: '进行中', color: 'processing' },
-          completed: { text: '已完成', color: 'success' }
+          completed: { text: '已完成', color: 'success' },
         };
         const s = statusMap[status] || statusMap.pending;
         return <Tag color={s.color}>{s.text}</Tag>;
-      }
+      },
     },
     {
       title: '进度',
       dataIndex: 'progress',
       key: 'progress',
       width: 100,
-      render: (progress: number) => `${progress}%`
+      render: (progress: number) => `${progress}%`,
     },
     {
       title: '操作',
@@ -435,7 +455,12 @@ const InteractiveGanttChart: React.FC = () => {
       fixed: 'right' as const,
       render: (_: any, record: Task) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEditTask(record)} />
+          <Button
+            type="link"
+            size="small"
+            icon={<EditOutlined />}
+            onClick={() => handleEditTask(record)}
+          />
           <Popconfirm title="确定删除？" onConfirm={() => handleDeleteTask(record.id)}>
             <Button type="link" danger size="small" icon={<DeleteOutlined />} />
           </Popconfirm>
@@ -455,16 +480,30 @@ const InteractiveGanttChart: React.FC = () => {
                   📊 施工甘特图 {currentProject && `- ${currentProject.name}`}
                 </span>
                 <Space size="middle">
-                  <span>总数 <Tag color="blue">{tasks.length}</Tag></span>
-                  <span>进行中 <Tag color="orange">{tasks.filter(t => t.status === 'in_progress').length}</Tag></span>
-                  <span>已完成 <Tag color="green">{tasks.filter(t => t.status === 'completed').length}</Tag></span>
+                  <span>
+                    总数 <Tag color="blue">{tasks.length}</Tag>
+                  </span>
+                  <span>
+                    进行中{' '}
+                    <Tag color="orange">
+                      {tasks.filter((t) => t.status === 'in_progress').length}
+                    </Tag>
+                  </span>
+                  <span>
+                    已完成{' '}
+                    <Tag color="green">{tasks.filter((t) => t.status === 'completed').length}</Tag>
+                  </span>
                 </Space>
               </Space>
             </Col>
             <Col>
               <Space size="small">
-                <Button icon={<UploadOutlined />} onClick={handleImportExcel}>导入Excel</Button>
-                <Button icon={<DownloadOutlined />} type="primary">导出PDF</Button>
+                <Button icon={<UploadOutlined />} onClick={handleImportExcel}>
+                  导入Excel
+                </Button>
+                <Button icon={<DownloadOutlined />} type="primary">
+                  导出PDF
+                </Button>
               </Space>
             </Col>
           </Row>
@@ -480,7 +519,9 @@ const InteractiveGanttChart: React.FC = () => {
         <Card style={{ marginBottom: 16 }} styles={{ body: { padding: 16 } }}>
           <Row align="middle" gutter={8} style={{ marginBottom: 16 }}>
             <Col>
-              <Button type="primary" icon={<PlusOutlined />} onClick={handleAddTask}>添加任务</Button>
+              <Button type="primary" icon={<PlusOutlined />} onClick={handleAddTask}>
+                添加任务
+              </Button>
             </Col>
             <Col>
               <Select value={filterStatus} onChange={setFilterStatus} style={{ width: 100 }}>
@@ -500,21 +541,21 @@ const InteractiveGanttChart: React.FC = () => {
             </Col>
             <Col>
               <Space.Compact>
-                <Button 
+                <Button
                   type={viewMode === 'Day' ? 'primary' : 'default'}
                   size="small"
                   onClick={() => handleViewModeChange('Day')}
                 >
                   日
                 </Button>
-                <Button 
+                <Button
                   type={viewMode === 'Week' ? 'primary' : 'default'}
                   size="small"
                   onClick={() => handleViewModeChange('Week')}
                 >
                   周
                 </Button>
-                <Button 
+                <Button
                   type={viewMode === 'Month' ? 'primary' : 'default'}
                   size="small"
                   onClick={() => handleViewModeChange('Month')}
@@ -528,16 +569,16 @@ const InteractiveGanttChart: React.FC = () => {
             </Col>
           </Row>
 
-          <div 
-            ref={ganttRef} 
-            className="gantt-container" 
-            style={{ 
-              minHeight: 500, 
+          <div
+            ref={ganttRef}
+            className="gantt-container"
+            style={{
+              minHeight: 500,
               border: '1px solid #e8e8e8',
               borderRadius: 4,
               background: '#fff',
-              padding: 20
-            }} 
+              padding: 20,
+            }}
           />
         </Card>
 
@@ -552,7 +593,7 @@ const InteractiveGanttChart: React.FC = () => {
         </Card>
 
         <Modal
-          title={isEditMode ? "编辑任务" : "添加任务"}
+          title={isEditMode ? '编辑任务' : '添加任务'}
           open={isModalVisible}
           onOk={handleModalOk}
           onCancel={() => setIsModalVisible(false)}
@@ -608,4 +649,3 @@ const InteractiveGanttChart: React.FC = () => {
 };
 
 export default InteractiveGanttChart;
-

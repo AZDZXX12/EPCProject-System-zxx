@@ -1,6 +1,6 @@
 /**
  * 💾 本地存储管理器
- * 
+ *
  * 职责：
  * 1. 封装LocalStorage操作
  * 2. 提供类型安全的存储接口
@@ -33,11 +33,11 @@ export class StorageManager {
   static save<T = any>(key: string, value: T, options: StorageOptions = {}): boolean {
     try {
       const fullKey = this.prefix + key;
-      
+
       const storageData: StorageData<T> = {
         value,
         timestamp: Date.now(),
-        ttl: options.ttl
+        ttl: options.ttl,
       };
 
       const serialized = JSON.stringify(storageData);
@@ -50,13 +50,13 @@ export class StorageManager {
       return true;
     } catch (error) {
       console.error(`[Storage] 保存失败: ${key}`, error);
-      
+
       // 如果是配额超限，尝试清理
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
         this.cleanup();
         console.warn('[Storage] 存储空间不足，已清理过期数据');
       }
-      
+
       return false;
     }
   }
@@ -104,11 +104,11 @@ export class StorageManager {
     try {
       const fullKey = this.prefix + key;
       localStorage.removeItem(fullKey);
-      
+
       if (process.env.NODE_ENV === 'development') {
         console.log(`[Storage] 删除成功: ${key}`);
       }
-      
+
       return true;
     } catch (error) {
       console.error(`[Storage] 删除失败: ${key}`, error);
@@ -122,10 +122,10 @@ export class StorageManager {
   static clear(): boolean {
     try {
       const keys = this.getAllKeys();
-      keys.forEach(key => {
+      keys.forEach((key) => {
         localStorage.removeItem(key);
       });
-      
+
       console.log(`[Storage] 清理完成，共删除 ${keys.length} 项`);
       return true;
     } catch (error) {
@@ -142,12 +142,12 @@ export class StorageManager {
       const keys = this.getAllKeys();
       let cleanedCount = 0;
 
-      keys.forEach(fullKey => {
+      keys.forEach((fullKey) => {
         try {
           const item = localStorage.getItem(fullKey);
           if (item) {
             const storageData: StorageData = JSON.parse(item);
-            
+
             if (storageData.ttl) {
               const isExpired = Date.now() - storageData.timestamp > storageData.ttl;
               if (isExpired) {
@@ -179,14 +179,14 @@ export class StorageManager {
    */
   static getAllKeys(): string[] {
     const keys: string[] = [];
-    
+
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith(this.prefix)) {
         keys.push(key);
       }
     }
-    
+
     return keys;
   }
 
@@ -202,7 +202,7 @@ export class StorageManager {
     const items: { key: string; size: number; age: number }[] = [];
     let totalSize = 0;
 
-    keys.forEach(fullKey => {
+    keys.forEach((fullKey) => {
       const item = localStorage.getItem(fullKey);
       if (item) {
         const size = item.length;
@@ -214,13 +214,13 @@ export class StorageManager {
           items.push({
             key: fullKey.replace(this.prefix, ''),
             size,
-            age
+            age,
           });
         } catch (e) {
           items.push({
             key: fullKey.replace(this.prefix, ''),
             size,
-            age: 0
+            age: 0,
           });
         }
       }
@@ -229,7 +229,7 @@ export class StorageManager {
     return {
       totalItems: items.length,
       totalSize,
-      items: items.sort((a, b) => b.size - a.size) // 按大小降序
+      items: items.sort((a, b) => b.size - a.size), // 按大小降序
     };
   }
 
@@ -273,8 +273,8 @@ export class StorageManager {
    */
   static loadMultiple<T = any>(keys: string[]): Record<string, T | null> {
     const result: Record<string, T | null> = {};
-    
-    keys.forEach(key => {
+
+    keys.forEach((key) => {
       result[key] = this.load<T>(key);
     });
 
@@ -287,10 +287,8 @@ export class StorageManager {
   static searchKeys(pattern: string): string[] {
     const keys = this.getAllKeys();
     const regex = new RegExp(pattern, 'i');
-    
-    return keys
-      .map(k => k.replace(this.prefix, ''))
-      .filter(k => regex.test(k));
+
+    return keys.map((k) => k.replace(this.prefix, '')).filter((k) => regex.test(k));
   }
 
   /**
@@ -300,7 +298,7 @@ export class StorageManager {
     const keys = this.getAllKeys();
     const data: Record<string, any> = {};
 
-    keys.forEach(fullKey => {
+    keys.forEach((fullKey) => {
       const key = fullKey.replace(this.prefix, '');
       const value = this.load(key);
       if (value !== null) {
@@ -320,6 +318,3 @@ export class StorageManager {
 }
 
 export default StorageManager;
-
-
-

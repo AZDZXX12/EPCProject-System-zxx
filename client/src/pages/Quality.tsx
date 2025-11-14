@@ -1,10 +1,23 @@
-
 import React, { useState } from 'react';
-import { Card, Table, Tag, Progress, Button, Space, Row, Col, Statistic, Select, DatePicker, Input, Typography } from 'antd';
-import { 
-  ExperimentOutlined, 
-  CheckCircleOutlined, 
-  CloseCircleOutlined, 
+import {
+  Card,
+  Table,
+  Tag,
+  Progress,
+  Button,
+  Space,
+  Row,
+  Col,
+  Statistic,
+  Select,
+  DatePicker,
+  Input,
+  Typography,
+} from 'antd';
+import {
+  ExperimentOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
   WarningOutlined,
   FileSearchOutlined,
   RiseOutlined,
@@ -19,7 +32,7 @@ const { Title, Text } = Typography;
 
 const Quality: React.FC = () => {
   const [filterType, setFilterType] = useState<string>('全部');
-  
+
   const qualityRecords = [
     {
       id: 1,
@@ -111,13 +124,12 @@ const Quality: React.FC = () => {
     },
   ];
 
-  const filteredRecords = filterType === '全部' 
-    ? qualityRecords 
-    : qualityRecords.filter(r => r.result === filterType);
+  const filteredRecords =
+    filterType === '全部' ? qualityRecords : qualityRecords.filter((r) => r.result === filterType);
 
   const totalTests = qualityRecords.length;
-  const passedTests = qualityRecords.filter(r => r.result === '合格').length;
-  const failedTests = qualityRecords.filter(r => r.result === '不合格').length;
+  const passedTests = qualityRecords.filter((r) => r.result === '合格').length;
+  const failedTests = qualityRecords.filter((r) => r.result === '不合格').length;
   const passRate = ((passedTests / totalTests) * 100).toFixed(1);
 
   const columns = [
@@ -179,10 +191,10 @@ const Quality: React.FC = () => {
       key: 'score',
       width: 150,
       render: (score: number) => (
-        <Progress 
-          percent={score} 
+        <Progress
+          percent={score}
           size={['100%', 12]}
-          status={score >= 90 ? 'success' : score >= 60 ? 'normal' : 'exception'} 
+          status={score >= 90 ? 'success' : score >= 60 ? 'normal' : 'exception'}
         />
       ),
     },
@@ -198,8 +210,12 @@ const Quality: React.FC = () => {
       width: 180,
       render: () => (
         <Space>
-          <Button type="link" size="small">查看详情</Button>
-          <Button type="link" size="small">下载报告</Button>
+          <Button type="link" size="small">
+            查看详情
+          </Button>
+          <Button type="link" size="small">
+            下载报告
+          </Button>
         </Space>
       ),
     },
@@ -210,7 +226,10 @@ const Quality: React.FC = () => {
       <div>
         {/* 页面标题 */}
         <div style={{ marginBottom: 24 }}>
-          <Title level={2} style={{ margin: 0, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Title
+            level={2}
+            style={{ margin: 0, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12 }}
+          >
             <SafetyCertificateOutlined style={{ color: '#722ed1' }} />
             质量检测记录
           </Title>
@@ -222,12 +241,12 @@ const Quality: React.FC = () => {
         {/* 统计卡片 */}
         <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
           <Col xs={24} sm={12} lg={6}>
-            <Card 
+            <Card
               hoverable
-              style={{ 
+              style={{
                 borderRadius: 12,
                 borderTop: '3px solid #1890ff',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
               styles={{ body: { padding: '20px' } }}
             >
@@ -241,12 +260,12 @@ const Quality: React.FC = () => {
             </Card>
           </Col>
           <Col xs={24} sm={12} lg={6}>
-            <Card 
+            <Card
               hoverable
-              style={{ 
+              style={{
                 borderRadius: 12,
                 borderTop: '3px solid #52c41a',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
               styles={{ body: { padding: '20px' } }}
             >
@@ -260,12 +279,12 @@ const Quality: React.FC = () => {
             </Card>
           </Col>
           <Col xs={24} sm={12} lg={6}>
-            <Card 
+            <Card
               hoverable
-              style={{ 
+              style={{
                 borderRadius: 12,
                 borderTop: '3px solid #ff4d4f',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
               styles={{ body: { padding: '20px' } }}
             >
@@ -279,12 +298,12 @@ const Quality: React.FC = () => {
             </Card>
           </Col>
           <Col xs={24} sm={12} lg={6}>
-            <Card 
+            <Card
               hoverable
-              style={{ 
+              style={{
                 borderRadius: 12,
                 borderTop: '3px solid #52c41a',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
               styles={{ body: { padding: '20px' } }}
             >
@@ -300,7 +319,7 @@ const Quality: React.FC = () => {
         </Row>
 
         {/* 检测记录表格 */}
-        <Card 
+        <Card
           title={
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <ExperimentOutlined style={{ color: '#1890ff', fontSize: 20 }} />
@@ -330,15 +349,15 @@ const Quality: React.FC = () => {
           style={{ borderRadius: 12 }}
           styles={{ body: { padding: '24px' } }}
         >
-          <Table 
-            columns={columns} 
-            dataSource={filteredRecords} 
+          <Table
+            columns={columns}
+            dataSource={filteredRecords}
             rowKey="id"
-            pagination={{ 
+            pagination={{
               pageSize: 10,
               showSizeChanger: true,
               showQuickJumper: true,
-              showTotal: (total) => `共 ${total} 条记录`
+              showTotal: (total) => `共 ${total} 条记录`,
             }}
             scroll={{ x: 1200 }}
           />
@@ -349,5 +368,3 @@ const Quality: React.FC = () => {
 };
 
 export default Quality;
-
-

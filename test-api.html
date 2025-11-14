@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #40a9ff;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success { background: #f6ffed; border-left: 3px solid #52c41a; }
+        .error { background: #fff2f0; border-left: 3px solid #ff4d4f; }
+        h1 { color: #1890ff; }
+        h3 { color: #333; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>🧪 EPC系统 API测试</h1>
+    
+    <div class="test-box">
+        <h3>1. 测试后端根路径</h3>
+        <button onclick="testRoot()">测试 GET /</button>
+        <div id="result-root" class="result"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>2. 测试登录API</h3>
+        <button onclick="testLogin()">测试登录 (admin/admin123)</button>
+        <div id="result-login" class="result"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>3. 测试CSRF Token</h3>
+        <button onclick="testCsrf()">获取CSRF Token</button>
+        <div id="result-csrf" class="result"></div>
+    </div>
+
+    <div class="test-box">
+        <h3>4. 测试项目列表API</h3>
+        <button onclick="testProjects()">获取项目列表</button>
+        <div id="result-projects" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function testRoot() {
+            const resultDiv = document.getElementById('result-root');
+            resultDiv.textContent = '⏳ 测试中...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE}/`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                resultDiv.textContent = `✅ 成功!\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 失败!\n${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('result-login');
+            resultDiv.textContent = '⏳ 测试中...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/auth/login`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'admin',
+                        password: 'admin123'
+                    })
+                });
+                const data = await response.json();
+                resultDiv.textContent = `✅ 登录成功!\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 登录失败!\n${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testCsrf() {
+            const resultDiv = document.getElementById('result-csrf');
+            resultDiv.textContent = '⏳ 测试中...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/auth/csrf`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                resultDiv.textContent = `✅ 成功!\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 失败!\n${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testProjects() {
+            const resultDiv = document.getElementById('result-projects');
+            resultDiv.textContent = '⏳ 测试中...';
+            resultDiv.className = 'result';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/projects/`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'include',
+                });
+                const data = await response.json();
+                resultDiv.textContent = `✅ 成功!\n找到 ${data.length} 个项目\n${JSON.stringify(data, null, 2)}`;
+                resultDiv.className = 'result success';
+            } catch (error) {
+                resultDiv.textContent = `❌ 失败!\n${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        // 页面加载时自动测试根路径
+        window.onload = () => {
+            testRoot();
+        };
+    </script>
+</body>
+</html>

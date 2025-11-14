@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -20,7 +20,7 @@ import {
   MenuUnfoldOutlined,
   BarChartOutlined,
   BuildOutlined,
-  SettingOutlined
+  SettingOutlined,
 } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -75,16 +75,6 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       label: '施工日志',
     },
     {
-      key: '/utilities',
-      icon: <ToolOutlined />,
-      label: '实用工具',
-      style: {
-        background: 'linear-gradient(135deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%)',
-        borderLeft: '3px solid #667eea',
-        fontWeight: 500,
-      },
-    },
-    {
       key: '/devices',
       icon: <ToolOutlined />,
       label: '设备安装管理',
@@ -98,6 +88,17 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       key: '/selection',
       icon: <AppstoreOutlined />,
       label: '设备选型系统',
+      style: {
+        background:
+          'linear-gradient(135deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%)',
+        borderLeft: '3px solid #667eea',
+        fontWeight: 500,
+      },
+    },
+    {
+      key: '/utilities',
+      icon: <ToolOutlined />,
+      label: '实用工具',
     },
     {
       key: 'quality-safety',
@@ -165,14 +166,14 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
   };
 
   return (
-    <Sider 
+    <Sider
       collapsible
       collapsed={collapsed}
       onCollapse={onCollapse}
       width={200}
       collapsedWidth={60}
       trigger={null}
-      style={{ 
+      style={{
         background: '#fff',
         boxShadow: '2px 0 8px rgba(0,0,0,0.06)',
         position: 'fixed',
@@ -185,17 +186,20 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       }}
     >
       {/* Logo区域 - 精简版 */}
-      <div style={{
-        height: 48,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderBottom: '1px solid #f0f0f0',
-        background: 'linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%)',
-        fontSize: collapsed ? 18 : 16,
-        fontWeight: 600,
-        color: '#667eea',
-      }}>
+      <div
+        style={{
+          height: 48,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderBottom: '1px solid #f0f0f0',
+          background:
+            'linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%)',
+          fontSize: collapsed ? 18 : 16,
+          fontWeight: 600,
+          color: '#667eea',
+        }}
+      >
         {collapsed ? <RocketOutlined /> : '项目管理'}
       </div>
 
@@ -215,20 +219,22 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       </div>
 
       {/* 折叠按钮 */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        height: 48,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderTop: '2px solid #e0e0e0',
-        background: 'linear-gradient(to bottom, #fafafa, #f0f0f0)',
-        boxShadow: '0 -2px 8px rgba(0,0,0,0.05)',
-        zIndex: 10,
-      }}>
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: '100%',
+          height: 48,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderTop: '2px solid #e0e0e0',
+          background: 'linear-gradient(to bottom, #fafafa, #f0f0f0)',
+          boxShadow: '0 -2px 8px rgba(0,0,0,0.05)',
+          zIndex: 10,
+        }}
+      >
         <Button
           type="text"
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}

@@ -205,7 +205,14 @@ const SystemManagement: React.FC = () => {
       </Card>
 
       <Card title="系统配置" style={{ marginTop: 16 }}>
-        <div style={{ padding: '16px', background: '#f5f5f5', borderRadius: 4, fontFamily: 'monospace' }}>
+        <div
+          style={{
+            padding: '16px',
+            background: '#f5f5f5',
+            borderRadius: 4,
+            fontFamily: 'monospace',
+          }}
+        >
           <div style={{ marginBottom: 8 }}>
             <strong>前端地址:</strong> http://localhost:3000
           </div>
@@ -228,5 +235,3 @@ const SystemManagement: React.FC = () => {
 };
 
 export default SystemManagement;
-
-

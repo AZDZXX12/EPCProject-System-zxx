@@ -1,37 +1,42 @@
 /**
  * 应用配置文件
- * 根据环境自动选择 API 地址
+ * 智能切换本地开发和生产部署环境
  */
 
-// 🔧 智能判断：如果在浏览器中访问的是 Render 域名，则使用生产后端
-const isRenderDeployment = typeof window !== 'undefined' && 
-  (window.location.hostname.includes('onrender.com') || window.location.hostname.includes('render.com'));
+// 🔍 检测运行环境
+const isLocalhost =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '[::1]');
 
-// 开发环境 API 地址（直接连接后端）
-const DEV_API_URL = 'http://localhost:8000';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
-// 生产环境 API 地址（从环境变量读取，或使用默认值）
-const PROD_API_URL = process.env.REACT_APP_API_URL || 'https://epc-backend.onrender.com';
+// 📍 API地址配置
+const DEV_API_URL = 'http://localhost:8000'; // 本地开发后端
+const PROD_API_URL = process.env.REACT_APP_API_URL || 'https://chemical-backend.onrender.com'; // 生产后端
 
-// 🔧 调试：打印环境信息
-console.log('[Config] NODE_ENV:', process.env.NODE_ENV);
-console.log('[Config] REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-console.log('[Config] isRenderDeployment:', isRenderDeployment);
-console.log('[Config] window.location.hostname:', typeof window !== 'undefined' ? window.location.hostname : 'N/A');
+// 🎯 智能选择API地址
+// 规则：
+// 1. 本地开发环境(localhost) -> 使用本地后端
+// 2. 生产环境但有环境变量 -> 使用环境变量指定的后端
+// 3. 生产环境无环境变量 -> 使用默认生产后端
+export const API_BASE_URL = isLocalhost ? DEV_API_URL : PROD_API_URL;
 
-// 根据环境选择 API 地址
-// 优先级：1. Render部署检测 2. NODE_ENV 3. 环境变量
-export const API_BASE_URL = isRenderDeployment 
-  ? PROD_API_URL 
-  : (process.env.NODE_ENV === 'production' ? PROD_API_URL : DEV_API_URL);
-
-console.log('[Config] Final API_BASE_URL:', API_BASE_URL);
-
-// 开发环境提示
-if (process.env.NODE_ENV === 'development') {
-  console.log('%c[EPC系统] 使用代理模式连接后端 (package.json proxy -> http://localhost:8000)', 'color: #1890ff; font-weight: bold;');
-  console.log('%c[EPC系统] API请求将通过React开发服务器代理转发', 'color: #52c41a;');
+// 🐛 调试信息（开发环境）
+if (isDevelopment && typeof window !== 'undefined') {
+  console.log('🔧 [Config] Environment Detection:', {
+    hostname: window.location.hostname,
+    isLocalhost,
+    isDevelopment,
+    API_BASE_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+  });
 }
+
+// 🔧 Mock数据配置（仅在本地开发且后端不可用时使用）
+export const USE_MOCK_DATA = isDevelopment && isLocalhost;
 
 // API 端点
 export const API_ENDPOINTS = {
@@ -55,4 +60,3 @@ const config = {
 };
 
 export default config;
-

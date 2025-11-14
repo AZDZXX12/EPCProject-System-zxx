@@ -84,11 +84,9 @@
   .gantt-container {
     height: calc(100vh - 250px) !important;
   }
-  
+
   /* 移动端增大拖拽区域 */
   .gantt_task_drag {
     width: 12px !important;
   }
 }
-
-

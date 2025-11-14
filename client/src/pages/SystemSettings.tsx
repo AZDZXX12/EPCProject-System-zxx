@@ -1,9 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Tabs, Row, Col, Statistic, Button, Space, message, Descriptions, Table, Tag, Alert, Switch, Form, Select } from 'antd';
 import {
-  SettingOutlined, DatabaseOutlined, SafetyOutlined, 
-  BellOutlined, ApiOutlined, FolderOpenOutlined, SaveOutlined, 
-  ReloadOutlined, InfoCircleOutlined, CloudServerOutlined
+  Card,
+  Tabs,
+  Row,
+  Col,
+  Statistic,
+  Button,
+  Space,
+  message,
+  Descriptions,
+  Table,
+  Tag,
+  Alert,
+  Switch,
+  Form,
+  Select,
+} from 'antd';
+import {
+  SettingOutlined,
+  DatabaseOutlined,
+  SafetyOutlined,
+  BellOutlined,
+  ApiOutlined,
+  FolderOpenOutlined,
+  SaveOutlined,
+  ReloadOutlined,
+  InfoCircleOutlined,
+  CloudServerOutlined,
 } from '@ant-design/icons';
 import PageContainer from '../components/Layout/PageContainer';
 import { API_BASE_URL } from '../config';
@@ -36,7 +59,7 @@ const SystemSettings: React.FC = () => {
   const loadDatabaseInfo = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/database/info`);
+      const response = await fetch(`/api/v1/database/info`);
       if (response.ok) {
         const data = await response.json();
         setDbInfo(data);
@@ -63,10 +86,10 @@ const SystemSettings: React.FC = () => {
   const backupDatabase = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/database/backup`, {
-        method: 'POST'
+      const response = await fetch(`/api/v1/database/backup`, {
+        method: 'POST',
       });
-      
+
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
@@ -88,9 +111,11 @@ const SystemSettings: React.FC = () => {
     <div>
       <Alert
         message={`数据库模式: ${dbInfo?.mode === 'memory' ? '内存模式' : 'SQLite模式'}`}
-        description={dbInfo?.mode === 'memory' 
-          ? '当前使用内存数据库，数据在程序重启后会丢失。建议切换到SQLite模式以持久化存储。' 
-          : '数据已持久化存储到本地SQLite数据库。'}
+        description={
+          dbInfo?.mode === 'memory'
+            ? '当前使用内存数据库，数据在程序重启后会丢失。建议切换到SQLite模式以持久化存储。'
+            : '数据已持久化存储到本地SQLite数据库。'
+        }
         type={dbInfo?.mode === 'memory' ? 'warning' : 'info'}
         showIcon
         style={{ marginBottom: 24 }}
@@ -157,14 +182,16 @@ const SystemSettings: React.FC = () => {
 
       <Card title="数据表统计">
         <Table
-          dataSource={dbInfo?.tables?.map(table => ({
-            key: table,
-            name: table,
-            count: dbInfo.table_counts?.[table] || 0
-          })) || []}
+          dataSource={
+            dbInfo?.tables?.map((table) => ({
+              key: table,
+              name: table,
+              count: dbInfo.table_counts?.[table] || 0,
+            })) || []
+          }
           columns={[
             { title: '表名', dataIndex: 'name', key: 'name' },
-            { title: '记录数', dataIndex: 'count', key: 'count', align: 'right' }
+            { title: '记录数', dataIndex: 'count', key: 'count', align: 'right' },
           ]}
           pagination={false}
           size="small"
@@ -189,10 +216,7 @@ const SystemSettings: React.FC = () => {
           >
             备份数据库
           </Button>
-          <Button
-            icon={<FolderOpenOutlined />}
-            onClick={openDatabaseFolder}
-          >
+          <Button icon={<FolderOpenOutlined />} onClick={openDatabaseFolder}>
             打开数据库文件夹
           </Button>
         </Space>
@@ -281,33 +305,51 @@ const SystemSettings: React.FC = () => {
         }
         styles={{ body: { padding: '24px' } }}
       >
-        <Tabs 
-          activeKey={activeTab} 
+        <Tabs
+          activeKey={activeTab}
           onChange={setActiveTab}
           items={[
             {
               key: 'database',
-              label: <span><DatabaseOutlined />数据库管理</span>,
+              label: (
+                <span>
+                  <DatabaseOutlined />
+                  数据库管理
+                </span>
+              ),
               children: renderDatabaseTab(),
             },
             {
               key: 'system',
-              label: <span><CloudServerOutlined />系统配置</span>,
+              label: (
+                <span>
+                  <CloudServerOutlined />
+                  系统配置
+                </span>
+              ),
               children: renderSystemTab(),
             },
             {
               key: 'notification',
-              label: <span><BellOutlined />通知设置</span>,
+              label: (
+                <span>
+                  <BellOutlined />
+                  通知设置
+                </span>
+              ),
               children: renderNotificationTab(),
             },
             {
               key: 'security',
-              label: <span><SafetyOutlined />安全设置</span>,
+              label: (
+                <span>
+                  <SafetyOutlined />
+                  安全设置
+                </span>
+              ),
               children: (
                 <Card>
-                  <Paragraph>
-                    安全设置功能开发中...
-                  </Paragraph>
+                  <Paragraph>安全设置功能开发中...</Paragraph>
                 </Card>
               ),
             },
@@ -319,4 +361,3 @@ const SystemSettings: React.FC = () => {
 };
 
 export default SystemSettings;
-

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Card, Select, Button, Space, Tag, Input, message, Tooltip } from 'antd';
-import { 
-  ReloadOutlined, 
-  ZoomInOutlined, 
+import {
+  ReloadOutlined,
+  ZoomInOutlined,
   ZoomOutOutlined,
   ClockCircleOutlined,
   ThunderboltOutlined,
@@ -48,12 +48,36 @@ const EnhancedGanttChart: React.FC = () => {
 
   useEffect(() => {
     loadTasks();
-    
+
     // 初始化施工日志
     setLogs([
-      { id: 1, time: '10:32', taskId: 'T-003', operator: '王五', action: '完成安装', device: '反应釜', status: 'success' },
-      { id: 2, time: '10:15', taskId: 'T-004', operator: '赵六', action: '开始调试', device: '换热器', status: 'info' },
-      { id: 3, time: '09:48', taskId: 'T-005', operator: '孙七', action: '管道焊接', device: '管道系统', status: 'info' },
+      {
+        id: 1,
+        time: '10:32',
+        taskId: 'T-003',
+        operator: '王五',
+        action: '完成安装',
+        device: '反应釜',
+        status: 'success',
+      },
+      {
+        id: 2,
+        time: '10:15',
+        taskId: 'T-004',
+        operator: '赵六',
+        action: '开始调试',
+        device: '换热器',
+        status: 'info',
+      },
+      {
+        id: 3,
+        time: '09:48',
+        taskId: 'T-005',
+        operator: '孙七',
+        action: '管道焊接',
+        device: '管道系统',
+        status: 'info',
+      },
     ]);
 
     // 模拟实时日志更新
@@ -63,7 +87,7 @@ const EnhancedGanttChart: React.FC = () => {
       const actions = ['完成安装', '开始调试', '质量检测', '维护记录', '进度更新'];
       const devices = ['反应釜', '换热器', '离心泵', '储罐', '管道系统'];
       const statuses: Array<'success' | 'info' | 'warning'> = ['success', 'info', 'warning'];
-      
+
       const newLog: ConstructionLog = {
         id: Date.now(),
         time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
@@ -74,7 +98,7 @@ const EnhancedGanttChart: React.FC = () => {
         status: statuses[Math.floor(Math.random() * statuses.length)],
       };
 
-      setLogs(prev => [newLog, ...prev].slice(0, 15));
+      setLogs((prev) => [newLog, ...prev].slice(0, 15));
     }, 6000);
 
     return () => clearInterval(logInterval);
@@ -92,7 +116,7 @@ const EnhancedGanttChart: React.FC = () => {
 
   const loadTasks = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/tasks/');
+      const response = await fetch('/api/v1/tasks/');
       if (response.ok) {
         const data = await response.json();
         setTasks(Array.isArray(data) ? data : []);
@@ -188,20 +212,21 @@ const EnhancedGanttChart: React.FC = () => {
 
   const filterTasks = useCallback(() => {
     let filtered = [...tasks];
-    
+
     if (statusFilter !== 'all') {
-      filtered = filtered.filter(t => t.status === statusFilter);
+      filtered = filtered.filter((t) => t.status === statusFilter);
     }
-    
+
     if (searchText) {
       const searchLower = searchText.toLowerCase();
-      filtered = filtered.filter(t => 
-        t.name.toLowerCase().includes(searchLower) ||
-        t.assignee.toLowerCase().includes(searchLower) ||
-        t.id.toLowerCase().includes(searchLower)
+      filtered = filtered.filter(
+        (t) =>
+          t.name.toLowerCase().includes(searchLower) ||
+          t.assignee.toLowerCase().includes(searchLower) ||
+          t.id.toLowerCase().includes(searchLower)
       );
     }
-    
+
     setFilteredTasks(filtered);
   }, [tasks, searchText, statusFilter]);
 
@@ -224,9 +249,9 @@ const EnhancedGanttChart: React.FC = () => {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // 获取日期范围
-    const dates = filteredTasks.flatMap(t => [new Date(t.start_date), new Date(t.end_date)]);
-    const minDate = new Date(Math.min(...dates.map(d => d.getTime())));
-    const maxDate = new Date(Math.max(...dates.map(d => d.getTime())));
+    const dates = filteredTasks.flatMap((t) => [new Date(t.start_date), new Date(t.end_date)]);
+    const minDate = new Date(Math.min(...dates.map((d) => d.getTime())));
+    const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
     const daysDiff = Math.ceil((maxDate.getTime() - minDate.getTime()) / (1000 * 60 * 60 * 24));
 
     const chartStartX = 280;
@@ -248,14 +273,14 @@ const EnhancedGanttChart: React.FC = () => {
     ctx.strokeStyle = 'rgba(0, 255, 136, 0.3)';
     ctx.lineWidth = 1;
     const monthWidth = dayWidth * 30;
-    
+
     for (let i = 0; i <= daysDiff / 30; i++) {
       const x = chartStartX + i * monthWidth;
       ctx.beginPath();
       ctx.moveTo(x, 80);
       ctx.lineTo(x, canvas.height);
       ctx.stroke();
-      
+
       const month = new Date(minDate);
       month.setMonth(month.getMonth() + i);
       ctx.fillStyle = '#00bfff';
@@ -271,7 +296,7 @@ const EnhancedGanttChart: React.FC = () => {
     const today = new Date();
     const todayDiff = Math.ceil((today.getTime() - minDate.getTime()) / (1000 * 60 * 60 * 24));
     const todayX = chartStartX + todayDiff * dayWidth;
-    
+
     ctx.strokeStyle = '#ff00ff';
     ctx.lineWidth = 3;
     ctx.setLineDash([8, 4]);
@@ -288,7 +313,7 @@ const EnhancedGanttChart: React.FC = () => {
     // 绘制任务条
     filteredTasks.forEach((task, index) => {
       const y = 120 + index * 80;
-      
+
       // 背景行
       if (index % 2 === 0) {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
@@ -299,16 +324,20 @@ const EnhancedGanttChart: React.FC = () => {
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 15px Arial';
       ctx.fillText(task.name, 15, y + 25);
-      
+
       // 负责人
       ctx.fillStyle = '#00bfff';
       ctx.font = '12px Arial';
       ctx.fillText(`${task.assignee}`, 15, y + 45);
 
       // 计算任务条位置
-      const startDiff = Math.ceil((new Date(task.start_date).getTime() - minDate.getTime()) / (1000 * 60 * 60 * 24));
-      const endDiff = Math.ceil((new Date(task.end_date).getTime() - minDate.getTime()) / (1000 * 60 * 60 * 24));
-      
+      const startDiff = Math.ceil(
+        (new Date(task.start_date).getTime() - minDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      const endDiff = Math.ceil(
+        (new Date(task.end_date).getTime() - minDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
       const barX = chartStartX + startDiff * dayWidth;
       const barWidth = (endDiff - startDiff) * dayWidth;
       const barY = y;
@@ -321,7 +350,7 @@ const EnhancedGanttChart: React.FC = () => {
       // 进度条
       const progressWidth = barWidth * (task.progress / 100);
       const gradient = ctx.createLinearGradient(barX, 0, barX + barWidth, 0);
-      
+
       if (task.status === 'completed') {
         gradient.addColorStop(0, '#00ff88');
         gradient.addColorStop(1, '#00bfff');
@@ -332,7 +361,7 @@ const EnhancedGanttChart: React.FC = () => {
         gradient.addColorStop(0, '#f093fb');
         gradient.addColorStop(1, '#f5576c');
       }
-      
+
       ctx.fillStyle = gradient;
       ctx.fillRect(barX, barY, progressWidth, barHeight);
 
@@ -349,16 +378,17 @@ const EnhancedGanttChart: React.FC = () => {
       ctx.textAlign = 'left';
 
       // 日志标记
-      const taskLogs = logs.filter(log => log.taskId === task.id).slice(0, 3);
+      const taskLogs = logs.filter((log) => log.taskId === task.id).slice(0, 3);
       taskLogs.forEach((log, logIndex) => {
         const dotX = barX + progressWidth + 10 + logIndex * 25;
         const dotY = barY + barHeight / 2;
-        
+
         ctx.beginPath();
         ctx.arc(dotX, dotY, 8, 0, Math.PI * 2);
-        ctx.fillStyle = log.status === 'success' ? '#00ff88' : log.status === 'warning' ? '#ff9800' : '#00bfff';
+        ctx.fillStyle =
+          log.status === 'success' ? '#00ff88' : log.status === 'warning' ? '#ff9800' : '#00bfff';
         ctx.fill();
-        
+
         ctx.beginPath();
         ctx.arc(dotX, dotY, 10, 0, Math.PI * 2);
         ctx.strokeStyle = ctx.fillStyle;
@@ -383,11 +413,11 @@ const EnhancedGanttChart: React.FC = () => {
       const canvas = canvasRef.current;
       const imgWidth = 297;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
+
       const pdf = new jsPDF({
         orientation: 'landscape',
         unit: 'mm',
-        format: 'a4'
+        format: 'a4',
       });
 
       const imgData = canvas.toDataURL('image/png', 1.0);
@@ -395,7 +425,7 @@ const EnhancedGanttChart: React.FC = () => {
 
       const fileName = `施工进度甘特图_${selectedProject}_${dayjs().format('YYYYMMDD_HHmmss')}.pdf`;
       pdf.save(fileName);
-      
+
       message.success({ content: 'PDF导出成功！', key: 'pdf-export', duration: 2 });
     } catch (error) {
       message.error({ content: 'PDF导出失败，请重试', key: 'pdf-export' });
@@ -404,37 +434,44 @@ const EnhancedGanttChart: React.FC = () => {
     }
   };
 
-  const completedTasks = filteredTasks.filter(t => t.status === 'completed').length;
-  const inProgressTasks = filteredTasks.filter(t => t.status === 'in_progress').length;
+  const completedTasks = filteredTasks.filter((t) => t.status === 'completed').length;
+  const inProgressTasks = filteredTasks.filter((t) => t.status === 'in_progress').length;
 
   return (
-    <div className="enhanced-gantt-page" style={{ height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
+    <div
+      className="enhanced-gantt-page"
+      style={{ height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}
+    >
       {/* 顶部工具栏 */}
-      <div style={{ 
-        padding: '16px 24px', 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: '#fff',
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)'
-      }}>
+      <div
+        style={{
+          padding: '16px 24px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: '#fff',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <ThunderboltOutlined style={{ fontSize: 24 }} />
           <h1 style={{ margin: 0, fontSize: 20, fontWeight: 600, color: '#fff' }}>
             施工进度甘特图
           </h1>
-          <Tag color="magenta" style={{ marginLeft: 8 }}>实时联动</Tag>
+          <Tag color="magenta" style={{ marginLeft: 8 }}>
+            实时联动
+          </Tag>
           <span style={{ fontSize: 13, opacity: 0.9 }}>
             {filteredTasks.length} 个任务 · {inProgressTasks} 进行中
           </span>
         </div>
         <Space size="middle">
           <Tooltip title="导出高清PDF">
-            <Button 
+            <Button
               type="primary"
               ghost
-              icon={<FilePdfOutlined />} 
+              icon={<FilePdfOutlined />}
               onClick={exportToPDF}
               loading={isExporting}
             >
@@ -450,9 +487,15 @@ const EnhancedGanttChart: React.FC = () => {
               { label: '催化裂化', value: 'PRJ-002' },
             ]}
           />
-          <Button icon={<ZoomOutOutlined />} onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}>缩小</Button>
-          <Button icon={<ZoomInOutlined />} onClick={() => setZoom(Math.min(2, zoom + 0.1))}>放大</Button>
-          <Button icon={<ReloadOutlined />} onClick={loadTasks}>刷新</Button>
+          <Button icon={<ZoomOutOutlined />} onClick={() => setZoom(Math.max(0.5, zoom - 0.1))}>
+            缩小
+          </Button>
+          <Button icon={<ZoomInOutlined />} onClick={() => setZoom(Math.min(2, zoom + 0.1))}>
+            放大
+          </Button>
+          <Button icon={<ReloadOutlined />} onClick={loadTasks}>
+            刷新
+          </Button>
         </Space>
       </div>
 
@@ -484,51 +527,55 @@ const EnhancedGanttChart: React.FC = () => {
 
       {/* 甘特图主体 */}
       <div style={{ flex: 1, padding: '16px', background: '#f0f2f5', overflow: 'auto' }}>
-        <Card 
-          className="cyber-card" 
+        <Card
+          className="cyber-card"
           variant="borderless"
-          style={{ 
+          style={{
             height: '100%',
             boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
-            borderRadius: '8px'
+            borderRadius: '8px',
           }}
-          styles={{ 
+          styles={{
             body: {
               height: '100%',
               padding: '24px',
               display: 'flex',
-              flexDirection: 'column'
-            }
+              flexDirection: 'column',
+            },
           }}
         >
-          <div style={{ 
-            marginBottom: '16px', 
-            paddingBottom: '12px', 
-            borderBottom: '2px solid rgba(102, 126, 234, 0.2)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
+          <div
+            style={{
+              marginBottom: '16px',
+              paddingBottom: '12px',
+              borderBottom: '2px solid rgba(102, 126, 234, 0.2)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <Space size="large">
               <span style={{ fontSize: 16, fontWeight: 600 }}>任务时间线</span>
-              <Tag color="red" icon={<ClockCircleOutlined />}>今日标记</Tag>
+              <Tag color="red" icon={<ClockCircleOutlined />}>
+                今日标记
+              </Tag>
               <Tag color="processing">{inProgressTasks} 进行中</Tag>
               <Tag color="success">{completedTasks} 已完成</Tag>
             </Space>
-            <span style={{ fontSize: 13, color: '#8c8c8c' }}>
-              拖拽查看 · 实时日志联动
-            </span>
+            <span style={{ fontSize: 13, color: '#8c8c8c' }}>拖拽查看 · 实时日志联动</span>
           </div>
-          
-          <div style={{ 
-            flex: 1,
-            overflowX: 'auto', 
-            overflowY: 'auto',
-            background: 'linear-gradient(180deg, #f5f7fa 0%, #c3cfe2 100%)',
-            borderRadius: '8px',
-            padding: '20px',
-            boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.1)'
-          }}>
+
+          <div
+            style={{
+              flex: 1,
+              overflowX: 'auto',
+              overflowY: 'auto',
+              background: 'linear-gradient(180deg, #f5f7fa 0%, #c3cfe2 100%)',
+              borderRadius: '8px',
+              padding: '20px',
+              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.1)',
+            }}
+          >
             <canvas ref={canvasRef} style={{ display: 'block' }} />
           </div>
         </Card>

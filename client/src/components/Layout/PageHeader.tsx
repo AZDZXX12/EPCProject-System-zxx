@@ -18,23 +18,27 @@ const PageHeader: React.FC = () => {
   };
 
   return (
-    <div style={{
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '12px 24px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
-      borderRadius: '8px',
-      margin: '16px 24px 0 24px'
-    }}>
+    <div
+      style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '12px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
+        borderRadius: '8px',
+        margin: '16px 24px 0 24px',
+      }}
+    >
       {/* 左侧：标题和项目选择器 */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+          }}
+        >
           <SafetyOutlined style={{ fontSize: 20, color: '#fff' }} />
           <Text strong style={{ color: '#fff', fontSize: 16 }}>
             EPC项目管理系统
@@ -46,21 +50,21 @@ const PageHeader: React.FC = () => {
           placeholder="请选择项目"
           style={{ width: 220 }}
           onChange={(value) => {
-            const project = projects.find(p => p.id === value);
+            const project = projects.find((p) => p.id === value);
             if (project) setCurrentProject(project);
           }}
-          options={projects.map(p => ({ label: p.name, value: p.id }))}
+          options={projects.map((p) => ({ label: p.name, value: p.id }))}
           allowClear
         />
-        <Button 
-          type="default" 
+        <Button
+          type="default"
           icon={<ReloadOutlined />}
           onClick={loadProjects}
           size="small"
           style={{
             background: 'rgba(255, 255, 255, 0.2)',
             border: '1px solid rgba(255, 255, 255, 0.3)',
-            color: '#fff'
+            color: '#fff',
           }}
         >
           刷新
@@ -72,27 +76,29 @@ const PageHeader: React.FC = () => {
         menu={{
           items: [
             { key: 'profile', label: '个人设置' },
-            { key: 'logout', label: '退出登录' }
+            { key: 'logout', label: '退出登录' },
           ],
-          onClick: handleMenuClick
+          onClick: handleMenuClick,
         }}
       >
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          cursor: 'pointer',
-          padding: '4px 12px',
-          borderRadius: '16px',
-          background: 'rgba(255, 255, 255, 0.15)',
-          transition: 'all 0.3s'
-        }}>
-          <Avatar 
-            icon={<UserOutlined />} 
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            cursor: 'pointer',
+            padding: '4px 12px',
+            borderRadius: '16px',
+            background: 'rgba(255, 255, 255, 0.15)',
+            transition: 'all 0.3s',
+          }}
+        >
+          <Avatar
+            icon={<UserOutlined />}
             size="small"
             style={{
               background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              border: '2px solid #fff'
+              border: '2px solid #fff',
             }}
           />
           <span style={{ color: '#fff', fontSize: 14 }}>管理员</span>
@@ -103,4 +109,3 @@ const PageHeader: React.FC = () => {
 };
 
 export default PageHeader;
-

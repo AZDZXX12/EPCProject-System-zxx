@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Card, List, Tag, Button, Space, Row, Col, Tabs, Typography, Divider, Badge } from 'antd';
-import { 
-  FileTextOutlined, 
-  FileWordOutlined, 
+import {
+  FileTextOutlined,
+  FileWordOutlined,
   FolderOutlined,
   EyeOutlined,
   DownloadOutlined,
   SafetyOutlined,
   ToolOutlined,
-  FileDoneOutlined
+  FileDoneOutlined,
 } from '@ant-design/icons';
 import PageContainer from '../components/Layout/PageContainer';
 
@@ -27,7 +27,7 @@ const Documents: React.FC = () => {
       file: '总包流程.docx',
       category: '流程文档',
       size: '250 KB',
-      importance: 'high'
+      importance: 'high',
     },
     {
       id: 'construction-design',
@@ -37,7 +37,7 @@ const Documents: React.FC = () => {
       file: '施工组织设计(样板文件）.docx',
       category: '技术文档',
       size: '180 KB',
-      importance: 'high'
+      importance: 'high',
     },
     {
       id: 'construction-rules',
@@ -47,7 +47,7 @@ const Documents: React.FC = () => {
       file: '化工设备生产线安装工程项目施工规程.docx',
       category: '技术文档',
       size: '320 KB',
-      importance: 'high'
+      importance: 'high',
     },
     {
       id: 'general-disclosure',
@@ -57,7 +57,7 @@ const Documents: React.FC = () => {
       file: '总技术交底书（样板）.docx',
       category: '技术交底',
       size: '150 KB',
-      importance: 'normal'
+      importance: 'normal',
     },
     {
       id: 'single-disclosure',
@@ -67,8 +67,8 @@ const Documents: React.FC = () => {
       file: '单项技术交底书（样板）.docx',
       category: '技术交底',
       size: '120 KB',
-      importance: 'normal'
-    }
+      importance: 'normal',
+    },
   ];
 
   const safetyDocs = [
@@ -80,7 +80,7 @@ const Documents: React.FC = () => {
       file: '化工施工安装工人安全协议.docx',
       category: '安全文档',
       size: '100 KB',
-      importance: 'high'
+      importance: 'high',
     },
     {
       id: 'safety-management',
@@ -90,7 +90,7 @@ const Documents: React.FC = () => {
       file: '设备安装安全管理制度.docx',
       category: '安全文档',
       size: '160 KB',
-      importance: 'high'
+      importance: 'high',
     },
     {
       id: 'emergency-plan',
@@ -100,7 +100,7 @@ const Documents: React.FC = () => {
       file: '设备安装施工应急处理预案.docx',
       category: '安全文档',
       size: '200 KB',
-      importance: 'high'
+      importance: 'high',
     },
     {
       id: 'safety-training',
@@ -110,7 +110,7 @@ const Documents: React.FC = () => {
       file: '施工安全培训表.docx',
       category: '安全表单',
       size: '80 KB',
-      importance: 'normal'
+      importance: 'normal',
     },
     {
       id: 'safety-education',
@@ -120,8 +120,8 @@ const Documents: React.FC = () => {
       file: '安全意识教育搞​.docx',
       category: '安全表单',
       size: '90 KB',
-      importance: 'normal'
-    }
+      importance: 'normal',
+    },
   ];
 
   const formsDocs = [
@@ -133,7 +133,7 @@ const Documents: React.FC = () => {
       file: '工程联络单.docx',
       category: '工作表单',
       size: '60 KB',
-      importance: 'normal'
+      importance: 'normal',
     },
     {
       id: 'environment-check',
@@ -143,7 +143,7 @@ const Documents: React.FC = () => {
       file: '环境确认表单.docx',
       category: '工作表单',
       size: '70 KB',
-      importance: 'normal'
+      importance: 'normal',
     },
     {
       id: 'test-inspection',
@@ -153,7 +153,7 @@ const Documents: React.FC = () => {
       file: '试车前设备点检表.docx',
       category: '工作表单',
       size: '85 KB',
-      importance: 'normal'
+      importance: 'normal',
     },
     {
       id: 'test-plan',
@@ -163,7 +163,7 @@ const Documents: React.FC = () => {
       file: '试车方案（初定搞）.docx',
       category: '工作表单',
       size: '110 KB',
-      importance: 'normal'
+      importance: 'normal',
     },
     {
       id: 'tracking-content',
@@ -173,7 +173,7 @@ const Documents: React.FC = () => {
       file: '跟踪人员工作内容.docx',
       category: '工作表单',
       size: '75 KB',
-      importance: 'normal'
+      importance: 'normal',
     },
     {
       id: 'tracking-form',
@@ -183,8 +183,8 @@ const Documents: React.FC = () => {
       file: '跟踪人员工作表.docx',
       category: '工作表单',
       size: '65 KB',
-      importance: 'normal'
-    }
+      importance: 'normal',
+    },
   ];
 
   const handleDocView = (doc: any) => {
@@ -207,17 +207,17 @@ const Documents: React.FC = () => {
       renderItem={(item) => (
         <List.Item
           actions={[
-            <Button 
-              type="link" 
-              icon={<EyeOutlined />} 
+            <Button
+              type="link"
+              icon={<EyeOutlined />}
               size="small"
               onClick={() => handleDocView(item)}
             >
               查看
             </Button>,
-            <Button 
-              type="primary" 
-              icon={<DownloadOutlined />} 
+            <Button
+              type="primary"
+              icon={<DownloadOutlined />}
               size="small"
               onClick={() => handleDocDownload(item)}
             >
@@ -231,16 +231,15 @@ const Documents: React.FC = () => {
               <span style={{ fontSize: 16, fontWeight: 500 }}>
                 {item.title}
                 {item.importance === 'high' && (
-                  <Tag color="red" style={{ marginLeft: 8 }}>重要</Tag>
+                  <Tag color="red" style={{ marginLeft: 8 }}>
+                    重要
+                  </Tag>
                 )}
               </span>
             }
             description={
               <div>
-                <Paragraph 
-                  type="secondary" 
-                  style={{ marginBottom: 8, fontSize: 13 }}
-                >
+                <Paragraph type="secondary" style={{ marginBottom: 8, fontSize: 13 }}>
                   {item.description}
                 </Paragraph>
                 <Space size={12}>
@@ -261,13 +260,15 @@ const Documents: React.FC = () => {
     <PageContainer>
       <div style={{ padding: '32px 24px' }}>
         {/* 页面标题 */}
-        <div style={{ 
-          marginBottom: 32,
-          padding: '24px 32px',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          borderRadius: 12,
-          color: '#fff'
-        }}>
+        <div
+          style={{
+            marginBottom: 32,
+            padding: '24px 32px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            borderRadius: 12,
+            color: '#fff',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
             <FolderOutlined style={{ fontSize: 28 }} />
             <Title level={2} style={{ margin: 0, color: '#fff' }}>
@@ -277,79 +278,71 @@ const Documents: React.FC = () => {
           <Paragraph style={{ margin: 0, color: 'rgba(255,255,255,0.9)', fontSize: 15 }}>
             EPC项目总包施工全套文档，包含流程、技术、安全、表单等16个文件
           </Paragraph>
-      </div>
+        </div>
 
         {/* 统计卡片 */}
         <Row gutter={16} style={{ marginBottom: 24 }}>
           <Col xs={24} sm={6}>
-          <Card>
+            <Card>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 32, fontWeight: 700, color: '#1890ff' }}>
                   {constructionDocs.length + safetyDocs.length + formsDocs.length}
                 </div>
                 <div style={{ color: '#8c8c8c', marginTop: 4 }}>总文档数</div>
               </div>
-          </Card>
-        </Col>
+            </Card>
+          </Col>
           <Col xs={24} sm={6}>
-          <Card>
+            <Card>
               <div style={{ textAlign: 'center' }}>
                 <Badge count={constructionDocs.length} showZero color="#52c41a">
                   <div style={{ fontSize: 24, fontWeight: 600, color: '#52c41a' }}>施工文档</div>
                 </Badge>
               </div>
-          </Card>
-        </Col>
+            </Card>
+          </Col>
           <Col xs={24} sm={6}>
-          <Card>
+            <Card>
               <div style={{ textAlign: 'center' }}>
                 <Badge count={safetyDocs.length} showZero color="#ff4d4f">
                   <div style={{ fontSize: 24, fontWeight: 600, color: '#ff4d4f' }}>安全文档</div>
                 </Badge>
               </div>
-          </Card>
-        </Col>
+            </Card>
+          </Col>
           <Col xs={24} sm={6}>
-          <Card>
+            <Card>
               <div style={{ textAlign: 'center' }}>
                 <Badge count={formsDocs.length} showZero color="#faad14">
                   <div style={{ fontSize: 24, fontWeight: 600, color: '#faad14' }}>表单文档</div>
                 </Badge>
               </div>
-          </Card>
-        </Col>
-      </Row>
+            </Card>
+          </Col>
+        </Row>
 
-      <Tabs
-        activeKey={activeTab}
-        onChange={setActiveTab}
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
           size="large"
-        items={[
-          {
+          items={[
+            {
               key: 'construction',
               label: (
                 <span style={{ fontSize: 16 }}>
                   <ToolOutlined /> 施工技术文档 ({constructionDocs.length})
                 </span>
               ),
-              children: (
-                <Card>
-                  {renderDocList(constructionDocs)}
-                </Card>
-              )
+              children: <Card>{renderDocList(constructionDocs)}</Card>,
             },
             {
               key: 'safety',
-            label: (
+              label: (
                 <span style={{ fontSize: 16 }}>
                   <SafetyOutlined /> 安全管理文档 ({safetyDocs.length})
-              </span>
-            ),
-            children: (
-                <Card>
-                  {renderDocList(safetyDocs)}
-              </Card>
-              )
+                </span>
+              ),
+              children: <Card>{renderDocList(safetyDocs)}</Card>,
             },
             {
               key: 'forms',
@@ -358,20 +351,16 @@ const Documents: React.FC = () => {
                   <FileDoneOutlined /> 工作表单 ({formsDocs.length})
                 </span>
               ),
-              children: (
-                <Card>
-                  {renderDocList(formsDocs)}
-                </Card>
-              )
+              children: <Card>{renderDocList(formsDocs)}</Card>,
             },
             {
               key: 'usage',
-            label: (
+              label: (
                 <span style={{ fontSize: 16 }}>
                   <FileTextOutlined /> 使用说明
-              </span>
-            ),
-            children: (
+                </span>
+              ),
+              children: (
                 <Card>
                   <Row gutter={[24, 24]}>
                     <Col xs={24} md={12}>
@@ -379,9 +368,15 @@ const Documents: React.FC = () => {
                         <Title level={4}>📋 文档分类</Title>
                         <Paragraph style={{ fontSize: 14 }}>
                           <ul style={{ paddingLeft: 20 }}>
-                            <li><strong>施工技术文档</strong>: 施工流程、组织设计、技术规程、技术交底</li>
-                            <li><strong>安全管理文档</strong>: 安全协议、管理制度、应急预案、培训教育</li>
-                            <li><strong>工作表单</strong>: 联络单、确认表、检查表、跟踪记录</li>
+                            <li>
+                              <strong>施工技术文档</strong>: 施工流程、组织设计、技术规程、技术交底
+                            </li>
+                            <li>
+                              <strong>安全管理文档</strong>: 安全协议、管理制度、应急预案、培训教育
+                            </li>
+                            <li>
+                              <strong>工作表单</strong>: 联络单、确认表、检查表、跟踪记录
+                            </li>
                           </ul>
                         </Paragraph>
                       </div>
@@ -404,9 +399,9 @@ const Documents: React.FC = () => {
                         <Title level={4}>📖 使用指南</Title>
                         <Paragraph style={{ fontSize: 14 }}>
                           <strong>查看文档:</strong> 点击"查看"按钮在浏览器中打开Word文档预览。
-                          <br/>
+                          <br />
                           <strong>下载文档:</strong> 点击"下载"按钮将文档保存到本地。
-                          <br/>
+                          <br />
                           <strong>编辑文档:</strong> 下载后使用Microsoft Word或WPS进行编辑。
                         </Paragraph>
                       </div>
@@ -415,21 +410,31 @@ const Documents: React.FC = () => {
                         <Title level={4}>🔗 相关模块</Title>
                         <Paragraph style={{ fontSize: 14 }}>
                           <ul style={{ paddingLeft: 20 }}>
-                            <li><strong>工作台</strong>: 查看EPC项目执行阶段流程图</li>
-                            <li><strong>总包施工管理</strong>: EPC全流程管理</li>
-                            <li><strong>施工日志</strong>: 记录施工进度</li>
-                            <li><strong>安全规章</strong>: 安全管理系统</li>
+                            <li>
+                              <strong>工作台</strong>: 查看EPC项目执行阶段流程图
+                            </li>
+                            <li>
+                              <strong>总包施工管理</strong>: EPC全流程管理
+                            </li>
+                            <li>
+                              <strong>施工日志</strong>: 记录施工进度
+                            </li>
+                            <li>
+                              <strong>安全规章</strong>: 安全管理系统
+                            </li>
                           </ul>
                         </Paragraph>
                       </div>
                     </Col>
                     <Col span={24}>
-                      <div style={{
-                        background: '#e6f7ff',
-                        border: '1px solid #91d5ff',
-                        borderRadius: 8,
-                        padding: 16
-                      }}>
+                      <div
+                        style={{
+                          background: '#e6f7ff',
+                          border: '1px solid #91d5ff',
+                          borderRadius: 8,
+                          padding: 16,
+                        }}
+                      >
                         <Title level={5} style={{ color: '#0050b3', marginTop: 0 }}>
                           💡 温馨提示
                         </Title>
@@ -437,15 +442,15 @@ const Documents: React.FC = () => {
                           这些文档是EPC项目总包施工的标准文件，包含完整的流程、规范和表单。
                           建议在项目启动前仔细阅读"总包流程"和"施工组织设计"文档。
                         </Paragraph>
-                          </div>
+                      </div>
                     </Col>
-                </Row>
-              </Card>
-              )
-            }
-        ]}
-      />
-    </div>
+                  </Row>
+                </Card>
+              ),
+            },
+          ]}
+        />
+      </div>
     </PageContainer>
   );
 };

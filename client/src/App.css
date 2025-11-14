@@ -69,3 +69,28 @@ body {
   font-size: 28px;
   font-weight: bold;
 }
+
+/* 加载容器样式 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 24px;
+}
+
+/* 主内容区域样式 */
+.main-content {
+  padding: 0;
+  background: #f0f2f5;
+  min-height: 100vh;
+  transition: all 0.2s ease;
+}
+
+.main-content.collapsed {
+  margin-left: 60px;
+}
+
+.main-content.expanded {
+  margin-left: 200px;
+}

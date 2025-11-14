@@ -8,17 +8,21 @@ interface PageContainerProps {
 
 const PageContainer: React.FC<PageContainerProps> = ({ children, showHeader = true }) => {
   return (
-    <div style={{ 
-      display: 'flex', 
-      flexDirection: 'column',
-      minHeight: '100vh',
-      background: '#f0f2f5'
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        background: '#f0f2f5',
+      }}
+    >
       {showHeader && <PageHeader />}
-      <div style={{ 
-        flex: 1,
-        padding: showHeader ? '24px' : '0'
-      }}>
+      <div
+        style={{
+          flex: 1,
+          padding: showHeader ? '24px' : '0',
+        }}
+      >
         {children}
       </div>
     </div>
@@ -26,8 +30,3 @@ const PageContainer: React.FC<PageContainerProps> = ({ children, showHeader = tr
 };
 
 export default PageContainer;
-
-
-
-
-

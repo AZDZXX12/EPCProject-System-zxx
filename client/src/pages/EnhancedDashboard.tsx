@@ -1,16 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Statistic, Progress, Timeline, Table, Tag, Space, Divider, Typography, List, Badge } from 'antd';
+import React, { useState } from 'react';
+import {
+  Row,
+  Col,
+  Card,
+  Statistic,
+  Progress,
+  Timeline,
+  Table,
+  Tag,
+  Space,
+  Divider,
+  Typography,
+  List,
+} from 'antd';
 import {
   ProjectOutlined,
   RiseOutlined,
-  FallOutlined,
   DollarOutlined,
   TeamOutlined,
   ToolOutlined,
   SafetyOutlined,
   ClockCircleOutlined,
   CheckCircleOutlined,
-  WarningOutlined,
   TrophyOutlined,
   ThunderboltOutlined,
 } from '@ant-design/icons';
@@ -20,7 +31,7 @@ const { Title, Text } = Typography;
 
 const EnhancedDashboard: React.FC = () => {
   const { currentProject } = useProject();
-  const [loading, setLoading] = useState(false);
+  // 移除未使用的loading状态
 
   // 模拟数据
   const stats = {
@@ -91,7 +102,10 @@ const EnhancedDashboard: React.FC = () => {
       {/* 核心指标卡片 */}
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24} sm={12} md={6}>
-          <Card variant="borderless" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+          <Card
+            variant="borderless"
+            style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+          >
             <Statistic
               title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>总体进度</span>}
               value={currentProject?.progress || 0}
@@ -99,19 +113,22 @@ const EnhancedDashboard: React.FC = () => {
               prefix={<TrophyOutlined />}
               valueStyle={{ color: '#fff', fontSize: 32 }}
             />
-            <Progress 
-              percent={currentProject?.progress || 0} 
-              showInfo={false} 
+            <Progress
+              percent={currentProject?.progress || 0}
+              showInfo={false}
               strokeColor="#fff"
               style={{ marginTop: 8 }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card variant="borderless" style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
+          <Card
+            variant="borderless"
+            style={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}
+          >
             <Statistic
               title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>任务完成率</span>}
-              value={(stats.completedTasks / stats.totalTasks * 100).toFixed(1)}
+              value={((stats.completedTasks / stats.totalTasks) * 100).toFixed(1)}
               suffix="%"
               prefix={<CheckCircleOutlined />}
               valueStyle={{ color: '#fff', fontSize: 32 }}
@@ -122,21 +139,28 @@ const EnhancedDashboard: React.FC = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card variant="borderless" style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
+          <Card
+            variant="borderless"
+            style={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}
+          >
             <Statistic
               title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>预算使用</span>}
-              value={(stats.usedBudget / stats.totalBudget * 100).toFixed(1)}
+              value={((stats.usedBudget / stats.totalBudget) * 100).toFixed(1)}
               suffix="%"
               prefix={<DollarOutlined />}
               valueStyle={{ color: '#fff', fontSize: 32 }}
             />
             <Text style={{ color: 'rgba(255,255,255,0.85)', fontSize: 12 }}>
-              ¥{(stats.usedBudget / 10000).toFixed(0)}万 / ¥{(stats.totalBudget / 10000).toFixed(0)}万
+              ¥{(stats.usedBudget / 10000).toFixed(0)}万 / ¥{(stats.totalBudget / 10000).toFixed(0)}
+              万
             </Text>
           </Card>
         </Col>
         <Col xs={24} sm={12} md={6}>
-          <Card variant="borderless" style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}>
+          <Card
+            variant="borderless"
+            style={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' }}
+          >
             <Statistic
               title={<span style={{ color: 'rgba(255,255,255,0.85)' }}>安全评分</span>}
               value={stats.safetyScore}
@@ -156,12 +180,12 @@ const EnhancedDashboard: React.FC = () => {
           <Card>
             <Statistic
               title="设备安装进度"
-              value={(stats.installedDevices / stats.totalDevices * 100).toFixed(1)}
+              value={((stats.installedDevices / stats.totalDevices) * 100).toFixed(1)}
               suffix="%"
               prefix={<ToolOutlined style={{ color: '#1890ff' }} />}
             />
-            <Progress 
-              percent={Number(((stats.installedDevices / stats.totalDevices * 100).toFixed(1)))} 
+            <Progress
+              percent={Number(((stats.installedDevices / stats.totalDevices) * 100).toFixed(1))}
               strokeColor={{ '0%': '#108ee9', '100%': '#87d068' }}
               style={{ marginTop: 8 }}
             />
@@ -226,16 +250,21 @@ const EnhancedDashboard: React.FC = () => {
               renderItem={(item) => (
                 <List.Item>
                   <div style={{ width: '100%' }}>
-                    <Space style={{ width: '100%', justifyContent: 'space-between', marginBottom: 8 }}>
+                    <Space
+                      style={{ width: '100%', justifyContent: 'space-between', marginBottom: 8 }}
+                    >
                       <Text strong>{item.phase}</Text>
                       <Text>{item.progress}%</Text>
                     </Space>
-                    <Progress 
-                      percent={item.progress} 
+                    <Progress
+                      percent={item.progress}
                       status={item.status as any}
                       strokeColor={
-                        item.status === 'success' ? '#52c41a' :
-                        item.status === 'active' ? '#1890ff' : '#d9d9d9'
+                        item.status === 'success'
+                          ? '#52c41a'
+                          : item.status === 'active'
+                            ? '#1890ff'
+                            : '#d9d9d9'
                       }
                     />
                   </div>
@@ -249,12 +278,18 @@ const EnhancedDashboard: React.FC = () => {
         <Col xs={24} lg={12}>
           <Card title="近期活动" variant="borderless">
             <Timeline
-              items={recentActivities.map(activity => ({
-                color: activity.type === 'success' ? 'green' : 
-                       activity.type === 'warning' ? 'orange' : 'blue',
+              items={recentActivities.map((activity) => ({
+                color:
+                  activity.type === 'success'
+                    ? 'green'
+                    : activity.type === 'warning'
+                      ? 'orange'
+                      : 'blue',
                 children: (
                   <>
-                    <Text type="secondary" style={{ fontSize: 12 }}>{activity.time}</Text>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      {activity.time}
+                    </Text>
                     <div>{activity.content}</div>
                   </>
                 ),
@@ -293,9 +328,7 @@ const EnhancedDashboard: React.FC = () => {
                   dataIndex: 'priority',
                   key: 'priority',
                   render: (priority) => (
-                    <Tag color={getPriorityColor(priority)}>
-                      {getPriorityText(priority)}
-                    </Tag>
+                    <Tag color={getPriorityColor(priority)}>{getPriorityText(priority)}</Tag>
                   ),
                 },
                 {
@@ -313,5 +346,3 @@ const EnhancedDashboard: React.FC = () => {
 };
 
 export default EnhancedDashboard;
-
-

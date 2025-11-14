@@ -2,21 +2,34 @@
 EPC项目管理系统 - SQLite数据库后端
 真正的数据持久化方案
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
 import uvicorn
+import logging
+import time
 
 # 导入数据库模块
 from database import db
+
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="EPC项目管理系统 (SQLite版)",
     version="2.0.0",
     description="支持真实数据持久化的企业级后端"
 )
+
+# 添加Gzip压缩中间件
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # CORS配置
 app.add_middleware(
@@ -26,6 +39,20 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# 性能监控中间件
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    
+    # 记录慢查询
+    if process_time > 1.0:
+        logger.warning(f"Slow request: {request.method} {request.url} - {process_time:.2f}s")
+    
+    return response
 
 
 # ==================== 数据模型 ====================
@@ -53,7 +80,9 @@ class Task(BaseModel):
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     assignee: Optional[str] = ""
-    dependencies: Optional[List[str]] = []
+    dependencies: Optional[List[str]] = None
+    
+    model_config = {"from_attributes": True}
 
 
 class Device(BaseModel):
@@ -216,10 +245,21 @@ async def create_task(task: Task):
         if not task.id:
             task.id = f"TASK-{int(datetime.now().timestamp() * 1000)}"
         
-        task_data = task.dict()
+        # 兼容 Pydantic V1 和 V2
+        try:
+            task_data = task.model_dump()  # Pydantic V2
+        except AttributeError:
+            task_data = task.dict()  # Pydantic V1
+        
+        # 确保dependencies正确处理
+        if task_data.get('dependencies') is None:
+            task_data['dependencies'] = []
+        
         new_task = db.create_task(task_data)
+        logger.info(f"成功创建任务: {task_data['id']}")
         return new_task
     except Exception as e:
+        logger.error(f"创建任务失败: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"创建任务失败: {str(e)}")
 
 
@@ -227,16 +267,29 @@ async def create_task(task: Task):
 async def update_task(task_id: str, task: Task):
     """更新任务"""
     try:
+        # 检查任务是否存在
         existing = db.get_task_by_id(task_id)
         if not existing:
+            logger.warning(f"尝试更新不存在的任务: {task_id}")
             raise HTTPException(status_code=404, detail=f"任务 {task_id} 不存在")
         
-        task_data = task.dict()
+        # 兼容 Pydantic V1 和 V2
+        try:
+            task_data = task.model_dump()  # Pydantic V2
+        except AttributeError:
+            task_data = task.dict()  # Pydantic V1
+        
+        # 确保dependencies正确处理
+        if task_data.get('dependencies') is None:
+            task_data['dependencies'] = []
+        
         updated_task = db.update_task(task_id, task_data)
+        logger.info(f"成功更新任务: {task_id}")
         return updated_task
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"更新任务失败 {task_id}: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"更新任务失败: {str(e)}")
 
 

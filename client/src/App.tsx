@@ -1,31 +1,35 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout, App as AntdApp } from 'antd';
+import { Layout, App as AntdApp, Spin } from 'antd';
 import { ProjectProvider } from './contexts/ProjectContext';
 import AppSider from './components/Layout/Sider';
 import CommandPalette from './components/CommandPalette';
 import Login from './pages/Login';
-import DigitalTwinDashboard from './pages/DigitalTwinDashboard';
-import DhtmlxGanttChart from './pages/DhtmlxGanttChart';
-import KanbanBoard from './pages/KanbanBoard';
-import TaskList from './pages/TaskList';
-import DeviceManagement from './pages/DeviceManagement';
-import Safety from './pages/Safety';
-import Quality from './pages/Quality';
-import Personnel from './pages/Personnel';
-import Documents from './pages/Documents';
-import LuckysheetTable from './pages/LuckysheetTable';
-import Settings from './pages/Settings';
-import SystemManagement from './pages/SystemManagement';
-import ReportGenerator from './pages/ReportGenerator';
-import ProcurementManagement from './pages/ProcurementManagement';
 import Workspace from './pages/Workspace';
-import ConstructionLog from './pages/ConstructionLog';
-import ConstructionManagement from './pages/ConstructionManagement';
-import Utilities from './pages/Utilities';
-import SystemSettings from './pages/SystemSettings';
+import { lazyWithRetry, preloadComponents } from './utils/lazyLoader';
+import { usePerformance } from './hooks/usePerformance';
 import './App.css';
+
+// 使用优化的懒加载
+const DigitalTwinDashboard = lazyWithRetry(() => import('./pages/DigitalTwinDashboard'));
+const DhtmlxGanttChart = lazyWithRetry(() => import('./pages/DhtmlxGanttChart'));
+const KanbanBoard = lazyWithRetry(() => import('./pages/KanbanBoard'));
+const TaskList = lazyWithRetry(() => import('./pages/TaskList'));
+const DeviceManagement = lazyWithRetry(() => import('./pages/DeviceManagement'));
+const Safety = lazyWithRetry(() => import('./pages/Safety'));
+const ProjectLifecycleManager = lazyWithRetry(() => import('./pages/ProjectLifecycleManager'));
+const ProcurementManagement = lazyWithRetry(() => import('./pages/ProcurementManagement'));
+const ConstructionManagement = lazyWithRetry(() => import('./pages/ConstructionManagement'));
+const ConstructionLog = lazyWithRetry(() => import('./pages/ConstructionLog'));
+const Utilities = lazyWithRetry(() => import('./pages/Utilities'));
+const Quality = lazyWithRetry(() => import('./pages/Quality'));
+const LuckysheetSelection = lazyWithRetry(() => import('./pages/LuckysheetSelection'));
+const Personnel = lazyWithRetry(() => import('./pages/Personnel'));
+const Documents = lazyWithRetry(() => import('./pages/Documents'));
+const ReportGenerator = lazyWithRetry(() => import('./pages/ReportGenerator'));
+const Settings = lazyWithRetry(() => import('./pages/Settings'));
+const SystemManagement = lazyWithRetry(() => import('./pages/SystemManagement'));
+const SystemSettings = lazyWithRetry(() => import('./pages/SystemSettings'));
 
 // 扩展Window接口
 declare global {
@@ -52,18 +56,18 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
       const user = sessionStorage.getItem('isAuthenticated');
       setIsAuthenticated(user === 'true');
     };
-    
+
     checkAuthentication();
     setLoading(false);
-    
+
     // 定期检查认证状态，防止会话过期
     const checkInterval = setInterval(() => {
       checkAuthentication();
     }, 300000); // 每5分钟检查一次
-    
+
     return () => clearInterval(checkInterval);
   }, []);
-  
+
   // 导出的登出函数供其他组件使用
   React.useEffect(() => {
     window.handleLogout = () => {
@@ -74,22 +78,23 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
       localStorage.removeItem('chemical_user'); // 兼容性清理
       setIsAuthenticated(false);
     };
-    
+
     return () => {
       delete window.handleLogout;
     };
   }, []);
-  
+
   if (loading) {
     return null; // 或者返回一个加载指示器
   }
-  
+
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 const App: React.FC = () => {
   const [commandPaletteVisible, setCommandPaletteVisible] = React.useState(false);
   const [siderCollapsed, setSiderCollapsed] = React.useState(false);
+  const { measureAsync } = usePerformance('App');
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -103,69 +108,89 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // 预加载常用组件
+  React.useEffect(() => {
+    const preloadCommonComponents = async () => {
+      await measureAsync(async () => {
+        await preloadComponents([
+          () => import('./pages/TaskList'),
+          () => import('./pages/DeviceManagement'),
+          () => import('./pages/KanbanBoard'),
+        ]);
+      }, 'Preload Common Components');
+    };
+
+    // 延迟预加载，避免阻塞初始渲染
+    const timer = setTimeout(preloadCommonComponents, 2000);
+    return () => clearTimeout(timer);
+  }, [measureAsync]);
+
   return (
     <AntdApp>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           {/* 登录页面路由 */}
           <Route path="/login" element={<Login />} />
-        
-        {/* 受保护的主应用路由 */}
-        <Route
-          path="/*"
-          element={
-            <PrivateRoute>
-              <ProjectProvider>
-                <Layout style={{ minHeight: '100vh' }}>
-                  <Layout>
-                    <AppSider collapsed={siderCollapsed} onCollapse={setSiderCollapsed} />
-                    <Content
-                      style={{
-                        padding: 0,
-                        marginLeft: siderCollapsed ? 60 : 200, // 根据折叠状态动态调整
-                        background: '#f0f2f5',
-                        minHeight: '100vh',
-                        transition: 'all 0.2s ease' // 平滑过渡
-                      }}
-                    >
-                        <Routes>
-                          <Route path="/" element={<Navigate to="/workspace" replace />} />
-                          <Route path="/workspace" element={<Workspace />} />
-                          <Route path="/digital-twin" element={<DigitalTwinDashboard />} />
-                          <Route path="/procurement" element={<ProcurementManagement />} />
-                          <Route path="/tasks" element={<TaskList />} />
-                          <Route path="/gantt" element={<DhtmlxGanttChart />} />
-                          <Route path="/kanban" element={<KanbanBoard />} />
-                          <Route path="/construction-management" element={<ConstructionManagement />} />
-                          <Route path="/construction-log" element={<ConstructionLog />} />
-                          <Route path="/utilities" element={<Utilities />} />
-                          <Route path="/devices" element={<DeviceManagement />} />
-                          <Route path="/safety" element={<Safety />} />
-                          <Route path="/quality" element={<Quality />} />
-                          <Route path="/selection" element={<LuckysheetTable />} />
-                          <Route path="/personnel" element={<Personnel />} />
-                          <Route path="/documents" element={<Documents />} />
-                          <Route path="/reports" element={<ReportGenerator />} />
-                          <Route path="/settings" element={<Settings />} />
-                          <Route path="/system-management" element={<SystemManagement />} />
-                          <Route path="/system-settings" element={<SystemSettings />} />
-                        </Routes>
-                    </Content>
+
+          {/* 受保护的主应用路由 */}
+          <Route
+            path="/*"
+            element={
+              <PrivateRoute>
+                <ProjectProvider>
+                  <Layout style={{ minHeight: '100vh' }}>
+                    <Layout>
+                      <AppSider collapsed={siderCollapsed} onCollapse={setSiderCollapsed} />
+                      <Content
+                        className={`main-content ${siderCollapsed ? 'collapsed' : 'expanded'}`}
+                      >
+                        <Suspense fallback={
+                          <div className="loading-container">
+                            <Spin size="large" />
+                          </div>
+                        }>
+                          <Routes>
+                            <Route path="/" element={<Navigate to="/workspace" replace />} />
+                            <Route path="/workspace" element={<Workspace />} />
+                            <Route path="/project-lifecycle" element={<ProjectLifecycleManager />} />
+                            <Route path="/digital-twin" element={<DigitalTwinDashboard />} />
+                            <Route path="/procurement" element={<ProcurementManagement />} />
+                            <Route path="/tasks" element={<TaskList />} />
+                            <Route path="/gantt" element={<DhtmlxGanttChart />} />
+                            <Route path="/kanban" element={<KanbanBoard />} />
+                            <Route
+                              path="/construction-management"
+                              element={<ConstructionManagement />}
+                            />
+                            <Route path="/construction-log" element={<ConstructionLog />} />
+                            <Route path="/utilities" element={<Utilities />} />
+                            <Route path="/devices" element={<DeviceManagement />} />
+                            <Route path="/safety" element={<Safety />} />
+                            <Route path="/quality" element={<Quality />} />
+                            <Route path="/selection" element={<LuckysheetSelection />} />
+                            <Route path="/personnel" element={<Personnel />} />
+                            <Route path="/documents" element={<Documents />} />
+                            <Route path="/reports" element={<ReportGenerator />} />
+                            <Route path="/settings" element={<Settings />} />
+                            <Route path="/system-management" element={<SystemManagement />} />
+                            <Route path="/system-settings" element={<SystemSettings />} />
+                          </Routes>
+                        </Suspense>
+                      </Content>
+                    </Layout>
                   </Layout>
-                </Layout>
-              </ProjectProvider>
-            </PrivateRoute>
-          }
+                </ProjectProvider>
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+        <CommandPalette
+          visible={commandPaletteVisible}
+          onClose={() => setCommandPaletteVisible(false)}
         />
-      </Routes>
-      <CommandPalette 
-        visible={commandPaletteVisible} 
-        onClose={() => setCommandPaletteVisible(false)} 
-      />
       </Router>
     </AntdApp>
   );
 };
 
 export default App;
-

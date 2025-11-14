@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { API_ENDPOINTS } from '../config';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useCallback,
+} from 'react';
+import { projectApi } from '../services/api';
 
 export interface Project {
   id: string;
@@ -40,13 +47,10 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({ children })
         }
       }
 
-      // 从后端加载（使用统一配置）
-      const response = await fetch(`${API_ENDPOINTS.projects}/`);
-      if (response.ok) {
-        const data = await response.json();
+      const data = (await projectApi.getAll()) as Project[];
+      if (Array.isArray(data)) {
         setProjects(data);
         localStorage.setItem('projects_cache', JSON.stringify(data));
-        
         if (data.length > 0 && !currentProject) {
           setCurrentProject(data[0]);
         }

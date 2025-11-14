@@ -1,6 +1,6 @@
-﻿/**
+/**
  * 馃啍 ID鐢熸垚鍣?
- * 
+ *
  * 鍔熻兘锛?
  * 1. UUID v4鐢熸垚
  * 2. 鐭璉D鐢熸垚锛圢anoID椋庢牸锛?
@@ -19,8 +19,8 @@ export function generateUUID(): string {
 
   // 鍥為€€鏂规
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
@@ -32,12 +32,12 @@ export function generateUUID(): string {
 export function generateShortId(length: number = 12): string {
   const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
   let id = '';
-  
+
   // 浣跨敤crypto.getRandomValues纭繚闅忔満鎬?
   if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
     const randomValues = new Uint8Array(length);
     crypto.getRandomValues(randomValues);
-    
+
     for (let i = 0; i < length; i++) {
       id += chars[randomValues[i] % chars.length];
     }
@@ -47,7 +47,7 @@ export function generateShortId(length: number = 12): string {
       id += chars[Math.floor(Math.random() * chars.length)];
     }
   }
-  
+
   return id;
 }
 
@@ -89,7 +89,7 @@ export function generateProjectId(existingProjects: Array<{ id: string }>): stri
     }
     return max;
   }, 0);
-  
+
   return `PROJ-${String(maxId + 1).padStart(3, '0')}`;
 }
 
@@ -119,7 +119,7 @@ export function generateUniqueId(
       return id;
     }
   }
-  
+
   // 濡傛灉10娆￠兘鍐茬獊锛屼娇鐢║UID锛堝嚑涔庝笉鍙兘鍐茬獊锛?
   return `${prefix}-${generateUUID()}`;
 }
@@ -172,10 +172,10 @@ export const IdValidator = {
    */
   isValidUUID(id: string): boolean {
     return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
-  }
+  },
 };
 
-export default {
+const IdGenerator = {
   generateUUID,
   generateShortId,
   generateTaskId,
@@ -185,5 +185,7 @@ export default {
   generateUniqueId,
   parseProjectNumber,
   parseTaskNumber,
-  IdValidator
+  IdValidator,
 };
+
+export default IdGenerator;

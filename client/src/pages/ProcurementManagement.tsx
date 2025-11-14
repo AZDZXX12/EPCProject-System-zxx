@@ -121,7 +121,7 @@ const ProcurementManagement: React.FC = () => {
       title: '确认删除',
       content: '确定要删除这条设备记录吗？',
       onOk: () => {
-        setEquipments(prev => prev.filter(e => e.id !== id));
+        setEquipments((prev) => prev.filter((e) => e.id !== id));
         message.success('删除成功');
       },
     });
@@ -132,8 +132,8 @@ const ProcurementManagement: React.FC = () => {
       const values = await form.validateFields();
       if (editingEquipment) {
         // 编辑
-        setEquipments(prev =>
-          prev.map(e =>
+        setEquipments((prev) =>
+          prev.map((e) =>
             e.id === editingEquipment.id
               ? { ...e, ...values, totalPrice: values.unitPrice * values.quantity }
               : e
@@ -147,7 +147,7 @@ const ProcurementManagement: React.FC = () => {
           id: `EQ-${Date.now()}`,
           totalPrice: values.unitPrice * values.quantity,
         };
-        setEquipments(prev => [...prev, newEquipment]);
+        setEquipments((prev) => [...prev, newEquipment]);
         message.success('添加成功');
       }
       setIsModalVisible(false);
@@ -180,14 +180,14 @@ const ProcurementManagement: React.FC = () => {
             status: 'pending',
           },
         ];
-        setEquipments(prev => [...prev, ...importedEquipments]);
+        setEquipments((prev) => [...prev, ...importedEquipments]);
         message.success('导入成功');
       },
     });
   };
 
   const handleExportExcel = () => {
-    const data = equipments.map(e => ({
+    const data = equipments.map((e) => ({
       设备编号: e.id,
       设备名称: e.name,
       规格型号: e.model,
@@ -206,7 +206,10 @@ const ProcurementManagement: React.FC = () => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, '设备采购清单');
-    XLSX.writeFile(wb, `设备采购清单_${currentProject?.name || '项目'}_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(
+      wb,
+      `设备采购清单_${currentProject?.name || '项目'}_${new Date().toISOString().split('T')[0]}.xlsx`
+    );
     message.success('导出成功');
   };
 
@@ -303,7 +306,11 @@ const ProcurementManagement: React.FC = () => {
       key: 'totalPrice',
       width: 120,
       align: 'right' as const,
-      render: (price: number) => <Text strong style={{ color: '#1890ff' }}>¥{price.toLocaleString()}</Text>,
+      render: (price: number) => (
+        <Text strong style={{ color: '#1890ff' }}>
+          ¥{price.toLocaleString()}
+        </Text>
+      ),
     },
     {
       title: '交货期',
@@ -317,9 +324,7 @@ const ProcurementManagement: React.FC = () => {
       key: 'status',
       width: 90,
       align: 'center' as const,
-      render: (status: string) => (
-        <Tag color={getStatusColor(status)}>{getStatusText(status)}</Tag>
-      ),
+      render: (status: string) => <Tag color={getStatusColor(status)}>{getStatusText(status)}</Tag>,
     },
     {
       title: '操作',
@@ -328,10 +333,21 @@ const ProcurementManagement: React.FC = () => {
       fixed: 'right' as const,
       render: (_: any, record: Equipment) => (
         <Space size="small">
-          <Button type="link" size="small" icon={<EditOutlined />} onClick={() => handleEdit(record)}>
+          <Button
+            type="link"
+            size="small"
+            icon={<EditOutlined />}
+            onClick={() => handleEdit(record)}
+          >
             编辑
           </Button>
-          <Button type="link" size="small" danger icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)}>
+          <Button
+            type="link"
+            size="small"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => handleDelete(record.id)}
+          >
             删除
           </Button>
         </Space>
@@ -346,208 +362,208 @@ const ProcurementManagement: React.FC = () => {
 
   return (
     <PageContainer>
-    <div>
-      <Title level={2}>
-        <ShoppingCartOutlined /> 设备采购管理 (P)
-      </Title>
-      <Text type="secondary">
-        {currentProject ? `当前项目: ${currentProject.name}` : '请选择项目'}
-      </Text>
+      <div>
+        <Title level={2}>
+          <ShoppingCartOutlined /> 设备采购管理 (P)
+        </Title>
+        <Text type="secondary">
+          {currentProject ? `当前项目: ${currentProject.name}` : '请选择项目'}
+        </Text>
 
-      <Divider />
+        <Divider />
 
-      {/* 统计卡片 */}
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
-        <Col xs={24} sm={12} md={6}>
-          <Card>
-            <Statistic
-              title="设备总数"
-              value={totalQuantity}
-              suffix="件"
-              prefix={<ShoppingCartOutlined style={{ color: '#1890ff' }} />}
-              valueStyle={{ color: '#1890ff' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Card>
-            <Statistic
-              title="采购总额"
-              value={totalAmount}
-              prefix="¥"
-              precision={0}
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Card>
-            <Statistic
-              title="已到货"
-              value={deliveredCount}
-              suffix={`/ ${equipments.length}`}
-              prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
-              valueStyle={{ color: '#52c41a' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <Card>
-            <Statistic
-              title="运输中"
-              value={orderedCount}
-              suffix={`/ ${equipments.length}`}
-              prefix={<ClockCircleOutlined style={{ color: '#faad14' }} />}
-              valueStyle={{ color: '#faad14' }}
-            />
-          </Card>
-        </Col>
-      </Row>
+        {/* 统计卡片 */}
+        <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="设备总数"
+                value={totalQuantity}
+                suffix="件"
+                prefix={<ShoppingCartOutlined style={{ color: '#1890ff' }} />}
+                valueStyle={{ color: '#1890ff' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="采购总额"
+                value={totalAmount}
+                prefix="¥"
+                precision={0}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="已到货"
+                value={deliveredCount}
+                suffix={`/ ${equipments.length}`}
+                prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Card>
+          </Col>
+          <Col xs={24} sm={12} md={6}>
+            <Card>
+              <Statistic
+                title="运输中"
+                value={orderedCount}
+                suffix={`/ ${equipments.length}`}
+                prefix={<ClockCircleOutlined style={{ color: '#faad14' }} />}
+                valueStyle={{ color: '#faad14' }}
+              />
+            </Card>
+          </Col>
+        </Row>
 
-      {/* 操作栏和表格 */}
-      <Card
-        title="设备采购清单"
-        extra={
-          <Space wrap>
-            <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-              添加设备
-            </Button>
-            <Button icon={<ImportOutlined />} onClick={handleImportFromSelection}>
-              从选型系统导入
-            </Button>
-            <Button icon={<FileExcelOutlined />} onClick={handleExportExcel}>
-              导出Excel
-            </Button>
-          </Space>
-        }
-      >
-        <Table
-          columns={columns}
-          dataSource={equipments}
-          rowKey="id"
-          scroll={{ x: 1800 }}
-          pagination={{
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total) => `共 ${total} 条记录`,
-          }}
-        />
-      </Card>
+        {/* 操作栏和表格 */}
+        <Card
+          title="设备采购清单"
+          extra={
+            <Space wrap>
+              <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+                添加设备
+              </Button>
+              <Button icon={<ImportOutlined />} onClick={handleImportFromSelection}>
+                从选型系统导入
+              </Button>
+              <Button icon={<FileExcelOutlined />} onClick={handleExportExcel}>
+                导出Excel
+              </Button>
+            </Space>
+          }
+        >
+          <Table
+            columns={columns}
+            dataSource={equipments}
+            rowKey="id"
+            scroll={{ x: 1800 }}
+            pagination={{
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total) => `共 ${total} 条记录`,
+            }}
+          />
+        </Card>
 
-      {/* 添加/编辑对话框 */}
-      <Modal
-        title={editingEquipment ? '编辑设备' : '添加设备'}
-        open={isModalVisible}
-        onOk={handleOk}
-        onCancel={() => setIsModalVisible(false)}
-        width={800}
-        okText="确定"
-        cancelText="取消"
-      >
-        <Form form={form} layout="vertical">
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="name"
-                label="设备名称"
-                rules={[{ required: true, message: '请输入设备名称' }]}
-              >
-                <Input placeholder="例如：离心泵" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="model"
-                label="规格型号"
-                rules={[{ required: true, message: '请输入规格型号' }]}
-              >
-                <Input placeholder="例如：IS80-50-200" />
-              </Form.Item>
-            </Col>
-          </Row>
+        {/* 添加/编辑对话框 */}
+        <Modal
+          title={editingEquipment ? '编辑设备' : '添加设备'}
+          open={isModalVisible}
+          onOk={handleOk}
+          onCancel={() => setIsModalVisible(false)}
+          width={800}
+          okText="确定"
+          cancelText="取消"
+        >
+          <Form form={form} layout="vertical">
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="name"
+                  label="设备名称"
+                  rules={[{ required: true, message: '请输入设备名称' }]}
+                >
+                  <Input placeholder="例如：离心泵" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="model"
+                  label="规格型号"
+                  rules={[{ required: true, message: '请输入规格型号' }]}
+                >
+                  <Input placeholder="例如：IS80-50-200" />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Form.Item
-            name="spec"
-            label="技术规格"
-            rules={[{ required: true, message: '请输入技术规格' }]}
-          >
-            <TextArea rows={2} placeholder="例如：流量50m³/h，扬程32m" />
-          </Form.Item>
+            <Form.Item
+              name="spec"
+              label="技术规格"
+              rules={[{ required: true, message: '请输入技术规格' }]}
+            >
+              <TextArea rows={2} placeholder="例如：流量50m³/h，扬程32m" />
+            </Form.Item>
 
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="quantity"
-                label="数量"
-                rules={[{ required: true, message: '请输入数量' }]}
-              >
-                <InputNumber min={1} style={{ width: '100%' }} placeholder="1" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="unit"
-                label="单位"
-                rules={[{ required: true, message: '请输入单位' }]}
-              >
-                <Input placeholder="台/套/件" />
-              </Form.Item>
-            </Col>
-          </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="quantity"
+                  label="数量"
+                  rules={[{ required: true, message: '请输入数量' }]}
+                >
+                  <InputNumber min={1} style={{ width: '100%' }} placeholder="1" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="unit"
+                  label="单位"
+                  rules={[{ required: true, message: '请输入单位' }]}
+                >
+                  <Input placeholder="台/套/件" />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Form.Item
-            name="manufacturer"
-            label="制造厂家"
-            rules={[{ required: true, message: '请输入制造厂家' }]}
-          >
-            <Input placeholder="厂家名称" />
-          </Form.Item>
+            <Form.Item
+              name="manufacturer"
+              label="制造厂家"
+              rules={[{ required: true, message: '请输入制造厂家' }]}
+            >
+              <Input placeholder="厂家名称" />
+            </Form.Item>
 
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="contact" label="联系人">
-                <Input placeholder="联系人姓名" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name="phone" label="联系电话">
-                <Input placeholder="联系电话" />
-              </Form.Item>
-            </Col>
-          </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item name="contact" label="联系人">
+                  <Input placeholder="联系人姓名" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name="phone" label="联系电话">
+                  <Input placeholder="联系电话" />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                name="unitPrice"
-                label="单价(元)"
-                rules={[{ required: true, message: '请输入单价' }]}
-              >
-                <InputNumber min={0} style={{ width: '100%' }} placeholder="0" precision={2} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name="deliveryTime" label="交货期">
-                <Input type="date" />
-              </Form.Item>
-            </Col>
-          </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name="unitPrice"
+                  label="单价(元)"
+                  rules={[{ required: true, message: '请输入单价' }]}
+                >
+                  <InputNumber min={0} style={{ width: '100%' }} placeholder="0" precision={2} />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name="deliveryTime" label="交货期">
+                  <Input type="date" />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Form.Item name="status" label="状态" initialValue="pending">
-            <Select>
-              <Select.Option value="pending">待询价</Select.Option>
-              <Select.Option value="quoted">已报价</Select.Option>
-              <Select.Option value="ordered">已下单</Select.Option>
-              <Select.Option value="delivered">已到货</Select.Option>
-            </Select>
-          </Form.Item>
+            <Form.Item name="status" label="状态" initialValue="pending">
+              <Select>
+                <Select.Option value="pending">待询价</Select.Option>
+                <Select.Option value="quoted">已报价</Select.Option>
+                <Select.Option value="ordered">已下单</Select.Option>
+                <Select.Option value="delivered">已到货</Select.Option>
+              </Select>
+            </Form.Item>
 
-          <Form.Item name="remarks" label="备注">
-            <TextArea rows={2} placeholder="备注信息" />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+            <Form.Item name="remarks" label="备注">
+              <TextArea rows={2} placeholder="备注信息" />
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
     </PageContainer>
   );
 };

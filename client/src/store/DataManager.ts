@@ -1,16 +1,23 @@
 /**
  * 🗂️ 统一数据管理器
- * 
+ *
  * 职责：
  * 1. 集中管理所有模块的数据
  * 2. 实现模块间的联动逻辑
  * 3. 提供统一的数据计算方法
  * 4. 处理数据持久化
- * 
+ *
  * 参考：单一数据源原则（Single Source of Truth）
  */
 
-import { eventBus, EVENTS, TaskEventData, LogEventData, PhaseEventData, ProgressEventData } from '../utils/EventBus';
+import {
+  eventBus,
+  EVENTS,
+  TaskEventData,
+  LogEventData,
+  PhaseEventData,
+  ProgressEventData,
+} from '../utils/EventBus';
 import { StorageManager } from '../utils/StorageManager';
 
 // ============ 类型定义 ============
@@ -60,17 +67,6 @@ interface Device {
   related_task_id?: string;
 }
 
-interface Project {
-  id: string;
-  name: string;
-  progress: number;
-  status: string;
-  start_date: string;
-  end_date: string;
-  budget?: number;
-  spent?: number;
-}
-
 // ============ 数据管理器 ============
 
 class DataManager {
@@ -108,7 +104,7 @@ class DataManager {
 
   /**
    * 📊 计算项目总进度（多数据源加权平均）
-   * 
+   *
    * 策略：
    * - 任务进度（甘特图）: 40%
    * - 阶段进度（总包管理）: 40%
@@ -130,16 +126,14 @@ class DataManager {
 
       // 4. 权重配置
       const weights = {
-        task: 0.4,    // 任务进度权重 40%
-        phase: 0.4,   // 阶段进度权重 40%
-        log: 0.2      // 日志进度权重 20%
+        task: 0.4, // 任务进度权重 40%
+        phase: 0.4, // 阶段进度权重 40%
+        log: 0.2, // 日志进度权重 20%
       };
 
       // 5. 加权平均
-      const totalProgress = 
-        taskProgress * weights.task +
-        phaseProgress * weights.phase +
-        logProgress * weights.log;
+      const totalProgress =
+        taskProgress * weights.task + phaseProgress * weights.phase + logProgress * weights.log;
 
       const finalProgress = Math.round(totalProgress);
 
@@ -149,7 +143,7 @@ class DataManager {
           taskProgress: Math.round(taskProgress),
           phaseProgress: Math.round(phaseProgress),
           logProgress: Math.round(logProgress),
-          finalProgress
+          finalProgress,
         });
       }
 
@@ -167,12 +161,12 @@ class DataManager {
     if (!tasks || tasks.length === 0) return 0;
 
     // 过滤掉父任务（避免重复计算）
-    const leafTasks = tasks.filter(t => !tasks.some(child => child.parent === t.id));
-    
+    const leafTasks = tasks.filter((t) => !tasks.some((child) => child.parent === t.id));
+
     if (leafTasks.length === 0) return 0;
 
     const totalProgress = leafTasks.reduce((sum, task) => {
-      return sum + (task.progress * 100); // progress是0-1，转为0-100
+      return sum + task.progress * 100; // progress是0-1，转为0-100
     }, 0);
 
     return totalProgress / leafTasks.length;
@@ -186,16 +180,16 @@ class DataManager {
 
     // EPC阶段权重
     const weights: Record<string, number> = {
-      design: 0.15,          // 设计阶段 15%
-      procurement: 0.20,     // 采购阶段 20%
-      construction: 0.40,    // 施工阶段 40%
-      commissioning: 0.15,   // 调试阶段 15%
-      acceptance: 0.10       // 验收阶段 10%
+      design: 0.15, // 设计阶段 15%
+      procurement: 0.2, // 采购阶段 20%
+      construction: 0.4, // 施工阶段 40%
+      commissioning: 0.15, // 调试阶段 15%
+      acceptance: 0.1, // 验收阶段 10%
     };
 
     const totalProgress = phases.reduce((total, phase) => {
-      const weight = weights[phase.key] || (1 / phases.length);
-      return total + (phase.progress * weight);
+      const weight = weights[phase.key] || 1 / phases.length;
+      return total + phase.progress * weight;
     }, 0);
 
     return totalProgress;
@@ -215,7 +209,8 @@ class DataManager {
     if (recentLogs.length === 0) return 0;
 
     // 计算平均进度
-    const avgProgress = recentLogs.reduce((sum, log) => sum + log.progress_today, 0) / recentLogs.length;
+    const avgProgress =
+      recentLogs.reduce((sum, log) => sum + log.progress_today, 0) / recentLogs.length;
 
     return avgProgress;
   }
@@ -234,13 +229,13 @@ class DataManager {
       // 1. 更新关联的施工日志
       const relatedLogs = this.getLogsByTask(taskData.id);
       if (relatedLogs.length > 0) {
-        relatedLogs.forEach(log => {
+        relatedLogs.forEach((log) => {
           // 如果任务进度更新，同步日志
           if (taskData.progress > log.progress_today) {
             eventBus.emit(EVENTS.LOG_UPDATED, {
               ...log,
               progress_today: taskData.progress,
-              updated_from_task: true
+              updated_from_task: true,
             });
           }
         });
@@ -249,13 +244,13 @@ class DataManager {
       // 2. 更新关联的设备状态
       const relatedDevices = this.getDevicesByTask(taskData.id);
       if (relatedDevices.length > 0) {
-        relatedDevices.forEach(device => {
+        relatedDevices.forEach((device) => {
           const newStatus = this.calculateDeviceStatus(taskData.progress);
           if (newStatus !== device.status) {
             eventBus.emit(EVENTS.DEVICE_STATUS_CHANGED, {
               deviceId: device.device_id,
               status: newStatus,
-              progress: taskData.progress
+              progress: taskData.progress,
             });
           }
         });
@@ -267,12 +262,11 @@ class DataManager {
         projectId: taskData.projectId,
         progress: newProgress,
         source: 'task',
-        metadata: { taskId: taskData.id }
+        metadata: { taskId: taskData.id },
       } as ProgressEventData);
 
       // 4. 更新相关阶段
       await this.updatePhaseProgress(taskData.projectId, taskData);
-
     } catch (error) {
       console.error('[DataManager] 任务更新联动失败:', error);
     }
@@ -296,7 +290,7 @@ class DataManager {
             projectId: task.project_id,
             name: task.text,
             progress: logData.progress,
-            updated_from_log: true
+            updated_from_log: true,
           } as TaskEventData);
         }
       }
@@ -307,7 +301,7 @@ class DataManager {
         projectId: logData.projectId,
         progress: newProgress,
         source: 'log',
-        metadata: { logId: logData.id }
+        metadata: { logId: logData.id },
       } as ProgressEventData);
 
       // 3. 显示通知
@@ -315,9 +309,8 @@ class DataManager {
         type: 'info',
         message: '施工日志已创建',
         description: `进度: ${logData.progress}%`,
-        duration: 3
+        duration: 3,
       });
-
     } catch (error) {
       console.error('[DataManager] 施工日志创建联动失败:', error);
     }
@@ -334,27 +327,26 @@ class DataManager {
 
       // 1. 重新计算项目进度
       const newProgress = this.calculateProjectProgress(phaseData.projectId);
-      
+
       // 2. 触发进度变更事件
       eventBus.emit(EVENTS.PROGRESS_CHANGED, {
         projectId: phaseData.projectId,
         progress: newProgress,
         source: 'phase',
-        metadata: { phaseKey: phaseData.key }
+        metadata: { phaseKey: phaseData.key },
       } as ProgressEventData);
 
       // 3. 如果阶段完成，触发完成事件
       if (phaseData.progress === 100) {
         eventBus.emit(EVENTS.PHASE_COMPLETED, phaseData);
-        
+
         eventBus.emit(EVENTS.NOTIFICATION_SHOW, {
           type: 'success',
           message: `${phaseData.name}阶段已完成`,
           description: '项目进度已自动更新',
-          duration: 5
+          duration: 5,
         });
       }
-
     } catch (error) {
       console.error('[DataManager] 阶段更新联动失败:', error);
     }
@@ -382,21 +374,22 @@ class DataManager {
 
     if (phaseKey) {
       const phases = this.getPhasesByProject(projectId);
-      const phase = phases.find(p => p.key === phaseKey);
-      
+      const phase = phases.find((p) => p.key === phaseKey);
+
       if (phase) {
         // 获取该阶段所有任务的平均进度
         const phaseTasks = this.getTasksByPhase(projectId, phaseKey);
         if (phaseTasks.length > 0) {
-          const avgProgress = phaseTasks.reduce((sum, t) => sum + t.progress * 100, 0) / phaseTasks.length;
-          
+          const avgProgress =
+            phaseTasks.reduce((sum, t) => sum + t.progress * 100, 0) / phaseTasks.length;
+
           if (avgProgress !== phase.progress) {
             eventBus.emit(EVENTS.PHASE_UPDATED, {
               key: phaseKey,
               projectId,
               name: phase.name,
               progress: Math.round(avgProgress),
-              auto_calculated: true
+              auto_calculated: true,
             } as PhaseEventData);
           }
         }
@@ -423,11 +416,11 @@ class DataManager {
     try {
       const cacheKey = `gantt_tasks_${projectId}`;
       const cachedData = StorageManager.load(cacheKey);
-      
+
       if (cachedData && cachedData.data) {
         return cachedData.data.filter((t: Task) => t.project_id === projectId);
       }
-      
+
       return [];
     } catch (error) {
       console.error('[DataManager] 获取任务失败:', error);
@@ -498,13 +491,11 @@ class DataManager {
       procurement: ['采购', '设备'],
       construction: ['施工', '安装'],
       commissioning: ['调试', '测试'],
-      acceptance: ['验收']
+      acceptance: ['验收'],
     };
 
     const phaseKeywords = keywords[phaseKey] || [];
-    return allTasks.filter(task => 
-      phaseKeywords.some(keyword => task.text.includes(keyword))
-    );
+    return allTasks.filter((task) => phaseKeywords.some((keyword) => task.text.includes(keyword)));
   }
 
   /**
@@ -530,7 +521,7 @@ class DataManager {
     eventBus.emit(EVENTS.PROGRESS_CHANGED, {
       projectId,
       progress,
-      source: 'manual'
+      source: 'manual',
     } as ProgressEventData);
     return progress;
   }
@@ -545,11 +536,11 @@ class DataManager {
 
     return {
       totalTasks: tasks.length,
-      completedTasks: tasks.filter(t => t.progress === 1).length,
+      completedTasks: tasks.filter((t) => t.progress === 1).length,
       totalLogs: logs.length,
-      completedPhases: phases.filter(p => p.progress === 100).length,
+      completedPhases: phases.filter((p) => p.progress === 100).length,
       totalPhases: phases.length,
-      progress: this.calculateProjectProgress(projectId)
+      progress: this.calculateProjectProgress(projectId),
     };
   }
 }
@@ -558,6 +549,3 @@ class DataManager {
 export const dataManager = new DataManager();
 
 export default dataManager;
-
-
-

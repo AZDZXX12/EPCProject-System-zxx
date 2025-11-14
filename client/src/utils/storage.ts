@@ -1,4 +1,4 @@
-﻿/**
+/**
  * LocalStorage 工具函数
  * 用于管理任务、项目、用户偏好设置等本地数据
  */
@@ -11,7 +11,7 @@ export const STORAGE_KEYS = {
   PROJECTS: 'epc_projects',
   CURRENT_PROJECT: 'epc_current_project',
   USER_PREFERENCES: 'epc_user_preferences',
-  VERSION: 'epc_storage_version'
+  VERSION: 'epc_storage_version',
 };
 
 /**
@@ -86,17 +86,19 @@ export const saveUserPreferences = (preferences: any) => {
 export const loadUserPreferences = (): any => {
   try {
     const preferencesStr = localStorage.getItem(STORAGE_KEYS.USER_PREFERENCES);
-    return preferencesStr ? JSON.parse(preferencesStr) : {
-      theme: 'light',
-      language: 'zh-CN',
-      notifications: true
-    };
+    return preferencesStr
+      ? JSON.parse(preferencesStr)
+      : {
+          theme: 'light',
+          language: 'zh-CN',
+          notifications: true,
+        };
   } catch (error) {
     console.error('Failed to load user preferences:', error);
     return {
       theme: 'light',
       language: 'zh-CN',
-      notifications: true
+      notifications: true,
     };
   }
 };
@@ -106,7 +108,7 @@ export const loadUserPreferences = (): any => {
  */
 export const clearAllStorage = () => {
   try {
-    Object.values(STORAGE_KEYS).forEach(key => {
+    Object.values(STORAGE_KEYS).forEach((key) => {
       localStorage.removeItem(key);
     });
     return true;
@@ -122,7 +124,7 @@ export const clearAllStorage = () => {
 export const getStorageInfo = () => {
   const total = JSON.stringify(localStorage).length;
   const byKey: { [key: string]: number } = {};
-  
+
   Object.entries(STORAGE_KEYS).forEach(([name, key]) => {
     const value = localStorage.getItem(key);
     byKey[name] = value ? value.length : 0;
@@ -131,11 +133,11 @@ export const getStorageInfo = () => {
   return {
     total,
     byKey,
-    version: localStorage.getItem(STORAGE_KEYS.VERSION) || 'unknown'
+    version: localStorage.getItem(STORAGE_KEYS.VERSION) || 'unknown',
   };
 };
 
-export default {
+const StorageUtils = {
   saveTasks,
   loadTasks,
   saveCurrentProject,
@@ -143,11 +145,7 @@ export default {
   saveUserPreferences,
   loadUserPreferences,
   clearAllStorage,
-  getStorageInfo
+  getStorageInfo,
 };
 
-
-
-
-
-
+export default StorageUtils;

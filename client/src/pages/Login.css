@@ -28,7 +28,7 @@
   width: 100%;
   height: 100%;
   z-index: 2;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 217, 255, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 217, 255, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -37,8 +37,12 @@
 }
 
 @keyframes gridMove {
-  0% { background-position: 0 0; }
-  100% { background-position: 50px 50px; }
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
 }
 
 /* ========== 扫描线效果 ========== */
@@ -56,9 +60,17 @@
 }
 
 @keyframes scan {
-  0% { top: 0; opacity: 0; }
-  50% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
 }
 
 /* ========== 顶部系统信息栏 ========== */
@@ -93,8 +105,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.1); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
 }
 
 .system-name {
@@ -175,7 +194,7 @@
   font-weight: 900;
   color: #fff;
   margin: 0;
-  text-shadow: 
+  text-shadow:
     0 0 20px rgba(0, 217, 255, 0.8),
     0 0 40px rgba(0, 217, 255, 0.5);
   position: relative;
@@ -205,23 +224,48 @@
 }
 
 @keyframes glitchText {
-  0%, 100% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
 }
 
 @keyframes glitchTop {
-  0%, 100% { transform: translateX(0); }
-  33% { transform: translateX(-3px); }
-  66% { transform: translateX(3px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(-3px);
+  }
+  66% {
+    transform: translateX(3px);
+  }
 }
 
 @keyframes glitchBottom {
-  0%, 100% { transform: translateX(0); }
-  33% { transform: translateX(3px); }
-  66% { transform: translateX(-3px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(3px);
+  }
+  66% {
+    transform: translateX(-3px);
+  }
 }
 
 .subtitle {
@@ -304,8 +348,15 @@
 }
 
 @keyframes dotPulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.3); opacity: 0.7; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
 }
 
 /* ========== 右侧登录区 ========== */
@@ -333,7 +384,7 @@
   border: 2px solid rgba(0, 217, 255, 0.3);
   border-radius: 16px;
   padding: 40px;
-  box-shadow: 
+  box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.5),
     0 0 40px rgba(0, 217, 255, 0.2),
     inset 0 0 60px rgba(0, 217, 255, 0.05);
@@ -348,18 +399,17 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(0, 217, 255, 0.1),
-    transparent
-  );
+  background: linear-gradient(45deg, transparent, rgba(0, 217, 255, 0.1), transparent);
   animation: shimmer 3s infinite;
 }
 
 @keyframes shimmer {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .card-header {
@@ -471,8 +521,8 @@
 
 .cyber-input.ant-input-affix-wrapper input,
 .ant-input-affix-wrapper.cyber-input input,
-.cyber-input input[type="text"],
-.cyber-input input[type="password"] {
+.cyber-input input[type='text'],
+.cyber-input input[type='password'] {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -523,23 +573,23 @@
 }
 
 /* 覆盖Ant Design动态生成的css-dev-only类 - 使用深蓝色背景 */
-.login-container [class*="css-dev-only-do-not-override"].ant-input-affix-wrapper,
-.login-form [class*="css-dev-only-do-not-override"].ant-input-affix-wrapper,
-.login-card [class*="css-dev-only-do-not-override"].ant-input-affix-wrapper {
+.login-container [class*='css-dev-only-do-not-override'].ant-input-affix-wrapper,
+.login-form [class*='css-dev-only-do-not-override'].ant-input-affix-wrapper,
+.login-card [class*='css-dev-only-do-not-override'].ant-input-affix-wrapper {
   background: rgba(15, 25, 45, 0.6) !important;
   background-color: rgba(15, 25, 45, 0.6) !important;
 }
 
-.login-container [class*="css-dev-only-do-not-override"] input,
-.login-form [class*="css-dev-only-do-not-override"] input {
+.login-container [class*='css-dev-only-do-not-override'] input,
+.login-form [class*='css-dev-only-do-not-override'] input {
   background: transparent !important;
   background-color: transparent !important;
   color: #fff !important;
 }
 
 /* 确保cyber-input使用深蓝色背景 */
-.cyber-input[class*="ant-"],
-.cyber-input[class*="css-"] {
+.cyber-input[class*='ant-'],
+.cyber-input[class*='css-'] {
   background: rgba(15, 25, 45, 0.6) !important;
   background-color: rgba(15, 25, 45, 0.6) !important;
 }
@@ -654,13 +704,21 @@
 }
 
 @keyframes lineMoveV {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
 }
 
 @keyframes lineMoveH {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* ========== 底部信息栏 ========== */
@@ -736,7 +794,7 @@
     padding: 100px 40px 80px;
     gap: 40px;
   }
-  
+
   .main-title {
     font-size: 60px;
   }
@@ -748,21 +806,21 @@
     justify-content: center;
     gap: 40px;
   }
-  
+
   .title-section {
     max-width: 100%;
     text-align: center;
   }
-  
+
   .main-title {
     font-size: 48px;
   }
-  
+
   .login-section {
     width: 100%;
     max-width: 480px;
   }
-  
+
   .features-list {
     align-items: center;
   }
@@ -772,21 +830,20 @@
   .system-header {
     padding: 0 20px;
   }
-  
+
   .system-name {
     font-size: 11px;
   }
-  
+
   .main-title {
     font-size: 36px;
   }
-  
+
   .login-card {
     padding: 30px 20px;
   }
-  
+
   .content-wrapper {
     padding: 100px 20px 80px;
   }
 }
-

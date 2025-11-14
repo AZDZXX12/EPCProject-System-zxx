@@ -21,22 +21,26 @@ const LuckysheetTable: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ 
-      width: '100%',
-      height: '100vh',
-      overflow: 'hidden'
-    }}>
+    <div
+      style={{
+        width: '100%',
+        height: '100vh',
+        overflow: 'hidden',
+      }}
+    >
       {loading && (
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          textAlign: 'center',
-          zIndex: 1000,
-          fontSize: '14px',
-          color: '#999'
-        }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
+            zIndex: 1000,
+            fontSize: '14px',
+            color: '#999',
+          }}
+        >
           加载中...
         </div>
       )}
@@ -47,7 +51,7 @@ const LuckysheetTable: React.FC = () => {
           width: '100%',
           height: '100vh',
           border: 'none',
-          display: 'block'
+          display: 'block',
         }}
         title="设备选型系统"
         onLoad={() => setLoading(false)}
@@ -61,4 +65,3 @@ const LuckysheetTable: React.FC = () => {
 };
 
 export default LuckysheetTable;
-

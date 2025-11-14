@@ -1,5 +1,17 @@
 import React from 'react';
-import { Card, List, Tag, Alert, Button, Space, Descriptions, Row, Col, Statistic, Typography } from 'antd';
+import {
+  Card,
+  List,
+  Tag,
+  Alert,
+  Button,
+  Space,
+  Descriptions,
+  Row,
+  Col,
+  Statistic,
+  Typography,
+} from 'antd';
 import {
   SafetyOutlined,
   WarningOutlined,
@@ -63,7 +75,10 @@ const Safety: React.FC = () => {
       <div>
         {/* 页面标题 */}
         <div style={{ marginBottom: 24 }}>
-          <Title level={2} style={{ margin: 0, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Title
+            level={2}
+            style={{ margin: 0, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12 }}
+          >
             <SafetyOutlined style={{ color: '#ff4d4f' }} />
             安全规章制度
           </Title>
@@ -84,10 +99,10 @@ const Safety: React.FC = () => {
           icon={<WarningOutlined />}
           showIcon
           closable
-          style={{ 
+          style={{
             marginBottom: 24,
             borderRadius: 12,
-            border: '2px solid #faad14'
+            border: '2px solid #faad14',
           }}
         />
 
@@ -96,10 +111,10 @@ const Safety: React.FC = () => {
           <Col xs={24} sm={8}>
             <Card
               hoverable
-              style={{ 
+              style={{
                 borderRadius: 12,
                 borderTop: '3px solid #52c41a',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
               styles={{ body: { padding: '20px' } }}
             >
@@ -115,10 +130,10 @@ const Safety: React.FC = () => {
           <Col xs={24} sm={8}>
             <Card
               hoverable
-              style={{ 
+              style={{
                 borderRadius: 12,
                 borderTop: '3px solid #1890ff',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
               styles={{ body: { padding: '20px' } }}
             >
@@ -134,10 +149,10 @@ const Safety: React.FC = () => {
           <Col xs={24} sm={8}>
             <Card
               hoverable
-              style={{ 
+              style={{
                 borderRadius: 12,
                 borderTop: '3px solid #52c41a',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
               styles={{ body: { padding: '20px' } }}
             >
@@ -153,7 +168,7 @@ const Safety: React.FC = () => {
         </Row>
 
         {/* 安全规章制度列表 */}
-        <Card 
+        <Card
           title={
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <SafetyOutlined style={{ color: '#ff4d4f', fontSize: 20 }} />
@@ -178,9 +193,7 @@ const Safety: React.FC = () => {
                     <Button type="primary" icon={<DownloadOutlined />}>
                       下载PDF
                     </Button>
-                    <Button icon={<EyeOutlined />}>
-                      查看详情
-                    </Button>
+                    <Button icon={<EyeOutlined />}>查看详情</Button>
                   </Space>
                 }
                 style={{
@@ -188,21 +201,23 @@ const Safety: React.FC = () => {
                   marginBottom: 16,
                   padding: 20,
                   background: '#fafafa',
-                  border: '1px solid #f0f0f0'
+                  border: '1px solid #f0f0f0',
                 }}
               >
                 <List.Item.Meta
                   avatar={
-                    <div style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: '50%',
-                      background: '#fff',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
-                    }}>
+                    <div
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: '50%',
+                        background: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                      }}
+                    >
                       {item.icon}
                     </div>
                   }
@@ -216,14 +231,16 @@ const Safety: React.FC = () => {
                   }
                   description={
                     <div style={{ marginTop: 16 }}>
-                      <ul style={{ 
-                        background: '#fff', 
-                        padding: '20px 20px 20px 40px',
-                        borderRadius: 8,
-                        lineHeight: 2,
-                        margin: 0,
-                        boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.05)'
-                      }}>
+                      <ul
+                        style={{
+                          background: '#fff',
+                          padding: '20px 20px 20px 40px',
+                          borderRadius: 8,
+                          lineHeight: 2,
+                          margin: 0,
+                          boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.05)',
+                        }}
+                      >
                         {item.content.map((line, idx) => (
                           <li key={idx} style={{ fontSize: 15, color: '#333', marginBottom: 8 }}>
                             {line}
@@ -239,7 +256,7 @@ const Safety: React.FC = () => {
         </Card>
 
         {/* 应急联系方式 */}
-        <Card 
+        <Card
           title={
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <ThunderboltOutlined style={{ color: '#faad14', fontSize: 20 }} />
@@ -249,25 +266,31 @@ const Safety: React.FC = () => {
           style={{ borderRadius: 12 }}
           styles={{ body: { padding: '24px' } }}
         >
-          <Descriptions 
-            column={{ xs: 1, sm: 2 }} 
+          <Descriptions
+            column={{ xs: 1, sm: 2 }}
             bordered
             size="middle"
-            labelStyle={{ 
-              fontWeight: 600,
-              fontSize: 15,
-              background: '#fafafa'
-            }}
-            contentStyle={{
-              fontSize: 16,
-              fontWeight: 500
+            styles={{
+              label: {
+                fontWeight: 600,
+                fontSize: 15,
+                background: '#fafafa',
+              },
+              content: {
+                fontSize: 16,
+                fontWeight: 500,
+              },
             }}
           >
             <Descriptions.Item label="🔥 火警">
-              <Text strong style={{ color: '#ff4d4f', fontSize: 18 }}>119</Text>
+              <Text strong style={{ color: '#ff4d4f', fontSize: 18 }}>
+                119
+              </Text>
             </Descriptions.Item>
             <Descriptions.Item label="🚑 急救">
-              <Text strong style={{ color: '#ff4d4f', fontSize: 18 }}>120</Text>
+              <Text strong style={{ color: '#ff4d4f', fontSize: 18 }}>
+                120
+              </Text>
             </Descriptions.Item>
             <Descriptions.Item label="👨‍💼 项目经理">
               <Text copyable>138-0000-0001</Text>

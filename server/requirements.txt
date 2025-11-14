@@ -47,10 +47,8 @@ pytz==2023.3
 pytest==7.4.3
 pytest-asyncio==0.21.1
 pytest-cov==4.1.0
-httpx==0.25.2
 
-# CORS
-python-cors==1.0.0
+# CORS已内置于FastAPI，无需额外安装
 
 # 日志
 loguru==0.7.2

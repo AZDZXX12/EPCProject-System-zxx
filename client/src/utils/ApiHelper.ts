@@ -1,6 +1,6 @@
-﻿/**
+/**
  * 🌐 API请求助手
- * 
+ *
  * 功能：
  * 1. 智能重试机制（指数退避）
  * 2. 超时控制
@@ -29,10 +29,7 @@ const responseCache = new Map<string, CachedResponse>();
 /**
  * 智能Fetch（带重试、超时、缓存）
  */
-export async function smartFetch<T = any>(
-  url: string,
-  options: FetchOptions = {}
-): Promise<T> {
+export async function smartFetch<T = any>(url: string, options: FetchOptions = {}): Promise<T> {
   const {
     timeout = 5000,
     retries = 3,
@@ -67,7 +64,7 @@ export async function smartFetch<T = any>(
 
       const response = await fetch(url, {
         ...fetchOptions,
-        signal: controller.signal
+        signal: controller.signal,
       });
 
       clearTimeout(timeoutId);
@@ -87,12 +84,11 @@ export async function smartFetch<T = any>(
         responseCache.set(url, {
           data,
           timestamp: Date.now(),
-          ttl: cacheTTL
+          ttl: cacheTTL,
         });
       }
 
       return data as T;
-
     } catch (error: any) {
       lastError = error;
 
@@ -150,7 +146,7 @@ function shouldRetry(error: any, attempt: number, maxRetries: number): boolean {
  * 延迟函数
  */
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -177,12 +173,12 @@ export async function batchFetch<T = any>(
 
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
-    
+
     const promise = smartFetch<T>(url, options)
-      .then(data => {
+      .then((data) => {
         results[i] = data;
       })
-      .catch(error => {
+      .catch((error) => {
         results[i] = error;
       })
       .then(() => {
@@ -203,13 +199,10 @@ export async function batchFetch<T = any>(
 /**
  * GET请求（简化版）
  */
-export async function get<T = any>(
-  url: string,
-  options: FetchOptions = {}
-): Promise<T> {
+export async function get<T = any>(url: string, options: FetchOptions = {}): Promise<T> {
   return smartFetch<T>(url, {
     ...options,
-    method: 'GET'
+    method: 'GET',
   });
 }
 
@@ -226,41 +219,34 @@ export async function post<T = any>(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      ...options.headers
+      ...options.headers,
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 }
 
 /**
  * PUT请求（简化版）
  */
-export async function put<T = any>(
-  url: string,
-  data: any,
-  options: FetchOptions = {}
-): Promise<T> {
+export async function put<T = any>(url: string, data: any, options: FetchOptions = {}): Promise<T> {
   return smartFetch<T>(url, {
     ...options,
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      ...options.headers
+      ...options.headers,
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 }
 
 /**
  * DELETE请求（简化版）
  */
-export async function del<T = any>(
-  url: string,
-  options: FetchOptions = {}
-): Promise<T> {
+export async function del<T = any>(url: string, options: FetchOptions = {}): Promise<T> {
   return smartFetch<T>(url, {
     ...options,
-    method: 'DELETE'
+    method: 'DELETE',
   });
 }
 
@@ -271,7 +257,7 @@ export async function healthCheck(url: string): Promise<boolean> {
   try {
     await smartFetch(url, {
       timeout: 2000,
-      retries: 0
+      retries: 0,
     });
     return true;
   } catch {
@@ -289,16 +275,16 @@ export function getCacheStats(): {
   const entries = Array.from(responseCache.entries()).map(([url, cached]) => ({
     url,
     age: Date.now() - cached.timestamp,
-    size: JSON.stringify(cached.data).length
+    size: JSON.stringify(cached.data).length,
   }));
 
   return {
     size: responseCache.size,
-    entries
+    entries,
   };
 }
 
-export default {
+const ApiHelper = {
   smartFetch,
   get,
   post,
@@ -307,5 +293,7 @@ export default {
   batchFetch,
   healthCheck,
   clearCache,
-  getCacheStats
+  getCacheStats,
 };
+
+export default ApiHelper;

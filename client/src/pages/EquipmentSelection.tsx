@@ -1,6 +1,11 @@
 import React from 'react';
 import { Card, Row, Col, Typography, Tag } from 'antd';
-import { ToolOutlined, ThunderboltOutlined, TableOutlined, RocketOutlined } from '@ant-design/icons';
+import {
+  ToolOutlined,
+  ThunderboltOutlined,
+  TableOutlined,
+  RocketOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import './EquipmentSelection.css';
 
@@ -48,7 +53,9 @@ const EquipmentSelection: React.FC = () => {
         <div className="header-content">
           <RocketOutlined style={{ fontSize: 40, color: '#1890ff', marginRight: 16 }} />
           <div>
-            <Title level={2} style={{ margin: 0 }}>⚙️ 设备选型工具</Title>
+            <Title level={2} style={{ margin: 0 }}>
+              ⚙️ 设备选型工具
+            </Title>
             <Paragraph style={{ fontSize: 16, color: '#666', margin: '8px 0 0 0' }}>
               提供化工设备选型、电缆选型等专业工具，帮助快速完成设备选型计算
             </Paragraph>
@@ -57,7 +64,7 @@ const EquipmentSelection: React.FC = () => {
       </div>
 
       <Row gutter={[24, 24]}>
-        {tools.map(tool => (
+        {tools.map((tool) => (
           <Col xs={24} sm={24} md={8} key={tool.id}>
             <Card
               hoverable
@@ -76,28 +83,30 @@ const EquipmentSelection: React.FC = () => {
                   {tool.title}
                 </Title>
               </div>
-              
-              <Paragraph 
-                style={{ 
-                  color: '#666', 
-                  textAlign: 'center', 
+
+              <Paragraph
+                style={{
+                  color: '#666',
+                  textAlign: 'center',
                   marginBottom: 24,
                   minHeight: 60,
                   fontSize: 14,
-                  lineHeight: '1.6'
+                  lineHeight: '1.6',
                 }}
               >
                 {tool.description}
               </Paragraph>
-              
+
               <div className="features-list">
-                <div style={{ 
-                  fontSize: 13, 
-                  fontWeight: 600, 
-                  color: '#1890ff', 
-                  marginBottom: 12,
-                  textAlign: 'center'
-                }}>
+                <div
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 600,
+                    color: '#1890ff',
+                    marginBottom: 12,
+                    textAlign: 'center',
+                  }}
+                >
                   核心功能
                 </div>
                 {tool.features.map((feature, index) => (
@@ -108,17 +117,21 @@ const EquipmentSelection: React.FC = () => {
                 ))}
               </div>
 
-              <div style={{ 
-                marginTop: 20, 
-                paddingTop: 16, 
-                borderTop: '1px solid #f0f0f0',
-                textAlign: 'center'
-              }}>
-                <span style={{ 
-                  color: '#1890ff', 
-                  fontSize: 14,
-                  fontWeight: 500
-                }}>
+              <div
+                style={{
+                  marginTop: 20,
+                  paddingTop: 16,
+                  borderTop: '1px solid #f0f0f0',
+                  textAlign: 'center',
+                }}
+              >
+                <span
+                  style={{
+                    color: '#1890ff',
+                    fontSize: 14,
+                    fontWeight: 500,
+                  }}
+                >
                   点击进入 →
                 </span>
               </div>
@@ -127,13 +140,15 @@ const EquipmentSelection: React.FC = () => {
         ))}
       </Row>
 
-      <div style={{ 
-        marginTop: 40, 
-        padding: '24px', 
-        background: 'linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%)',
-        borderRadius: '12px',
-        border: '1px solid #bbdefb'
-      }}>
+      <div
+        style={{
+          marginTop: 40,
+          padding: '24px',
+          background: 'linear-gradient(135deg, #e3f2fd 0%, #e8eaf6 100%)',
+          borderRadius: '12px',
+          border: '1px solid #bbdefb',
+        }}
+      >
         <Title level={4} style={{ color: '#1976d2', marginBottom: 16 }}>
           💡 使用提示
         </Title>
@@ -169,4 +184,3 @@ const EquipmentSelection: React.FC = () => {
 };
 
 export default EquipmentSelection;
-
