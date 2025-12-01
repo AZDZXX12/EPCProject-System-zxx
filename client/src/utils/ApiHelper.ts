@@ -8,7 +8,11 @@
  * 4. 请求缓存
  * 5. 请求取消
  */
+import { logger } from './logger';
 
+/**
+ * Fetch选项
+ */
 export interface FetchOptions extends Omit<RequestInit, 'cache'> {
   timeout?: number;
   retries?: number;
@@ -43,7 +47,7 @@ export async function smartFetch<T = any>(url: string, options: FetchOptions = {
   if (cache) {
     const cached = responseCache.get(url);
     if (cached && Date.now() - cached.timestamp < cached.ttl) {
-      console.log(`[ApiHelper] 使用缓存: ${url}`);
+      logger.debug(`[ApiHelper] 使用缓存: ${url}`);
       return cached.data as T;
     }
   }
@@ -55,7 +59,7 @@ export async function smartFetch<T = any>(url: string, options: FetchOptions = {
       if (attempt > 0) {
         // 指数退避：1s, 2s, 4s...
         const delay = retryDelay * Math.pow(2, attempt - 1);
-        console.log(`[ApiHelper] 重试 ${attempt}/${retries}，延迟${delay}ms: ${url}`);
+        logger.warn(`[ApiHelper] 重试 ${attempt}/${retries}，延迟${delay}ms: ${url}`);
         await sleep(delay);
       }
 
@@ -100,7 +104,7 @@ export async function smartFetch<T = any>(url: string, options: FetchOptions = {
   }
 
   // 所有重试都失败了
-  console.error(`[ApiHelper] 请求失败（${retries + 1}次尝试）: ${url}`, lastError);
+  logger.error(`[ApiHelper] 请求失败（${retries + 1}次尝试）: ${url}`, lastError);
   throw lastError || new Error('Unknown error');
 }
 
@@ -172,7 +176,7 @@ export async function batchFetch<T = any>(
   const executing: Promise<void>[] = [];
 
   for (let i = 0; i < urls.length; i++) {
-    const url = urls[i];
+    const url = urls[i]!;
 
     const promise = smartFetch<T>(url, options)
       .then((data) => {

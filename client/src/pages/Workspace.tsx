@@ -17,7 +17,10 @@ import {
   Statistic,
   Table,
   App,
+  Drawer,
+  Tooltip
 } from 'antd';
+// 移除外部拖拽库，使用自定义实现
 import {
   PlusOutlined,
   ProjectOutlined,
@@ -28,19 +31,61 @@ import {
   CalendarOutlined,
   DollarOutlined,
   FileTextOutlined,
+  AlertOutlined,
+  DashboardOutlined,
+  RocketOutlined,
+  TrophyOutlined,
+  FireOutlined,
+  ThunderboltOutlined,
+  CrownOutlined,
+  StarOutlined,
+  RiseOutlined,
+  FallOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  FundProjectionScreenOutlined,
+  WarningOutlined,
+  UserOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  SettingOutlined,
+  SearchOutlined,
+  FilterOutlined,
+  DownloadOutlined,
+  UploadOutlined,
+  SyncOutlined,
+  HeartOutlined,
+  LikeOutlined,
+  MessageOutlined,
+  ShareAltOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  GlobalOutlined,
+  HomeOutlined,
+  ShopOutlined,
+  CarOutlined,
+  ToolOutlined,
+  BugOutlined,
+  CodeOutlined,
+  DatabaseOutlined,
+  CloudOutlined,
+  SecurityScanOutlined,
+  SafetyOutlined,
+  GiftOutlined,
+  
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { StorageManager } from '../utils/StorageManager';
 import { useProject } from '../contexts/ProjectContext';
 import { projectApi } from '../services/api';
-
 import { handleError } from '../utils/errorHandler';
-import { useNavigate } from 'react-router-dom';
 import PageContainer from '../components/Layout/PageContainer';
 import { eventBus, EVENTS, ProgressEventData } from '../utils/EventBus';
 import './Workspace.css';
 
-const { Text, Title } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 interface LocalProject {
   id: string;
@@ -55,6 +100,9 @@ interface LocalProject {
 }
 
 const Workspace: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [animateCards, setAnimateCards] = useState(false);
   const { message } = App.useApp(); // 使用App hook获取message，避免静态方法warning
   const { currentProject, setCurrentProject } = useProject();
   const [projects, setProjects] = useState<LocalProject[]>([]);
@@ -62,6 +110,8 @@ const Workspace: React.FC = () => {
   const [editingProject, setEditingProject] = useState<LocalProject | null>(null);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+
+  // 本页不再管理本地AI浮窗（已迁移到App.tsx）
 
   // 加载项目列表
   const loadProjects = async () => {
@@ -111,6 +161,17 @@ const Workspace: React.FC = () => {
   useEffect(() => {
     loadProjects();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => setAnimateCards(true), 100);
   }, []);
 
   // 🔗 联动：监听进度变更事件，自动更新项目进度
@@ -484,354 +545,436 @@ const Workspace: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
-      <div style={{ padding: '24px' }}>
-        {/* 项目概览统计 */}
-        <Card
-          title={
-            <Space>
-              <ProjectOutlined style={{ fontSize: 20, color: '#1890ff' }} />
-              <span style={{ fontSize: 18, fontWeight: 600 }}>项目管理中心</span>
+    <div className="workspace-page">
+      {/* 顶部欢迎区域 - 全新设计 */}
+      <Card 
+        className={`welcome-card ${animateCards ? 'animate-in' : ''}`}
+      >
+        <Row align="middle">
+          <Col span={16}>
+            <Title level={2} className="welcome-title">
+              <RocketOutlined /> 欢迎回来，管理员！
+            </Title>
+            <Paragraph className="welcome-subtitle">
+              今天是 {currentTime.toLocaleDateString('zh-CN', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long'
+              })} {currentTime.toLocaleTimeString('zh-CN')}
+            </Paragraph>
+            <Space className="welcome-badges">
+              <Badge status="processing" text={<span className="text-white">系统运行正常</span>} />
+              <Badge status="success" text={<span className="text-white">AI助手在线</span>} />
+              <Badge status="warning" text={<span className="text-white">3个待办事项</span>} />
             </Space>
-          }
-          extra={
-            <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateProject}>
-              新建项目
-            </Button>
-          }
-          style={{ marginBottom: 24 }}
-        >
-          <Row gutter={16}>
-            <Col xs={12} sm={12} md={6}>
-              <Card hoverable>
-                <Statistic
-                  title="项目总数"
-                  value={projectStats.total}
-                  prefix={<ProjectOutlined />}
-                  valueStyle={{ color: '#1890ff' }}
-                />
-              </Card>
-            </Col>
-            <Col xs={12} sm={12} md={6}>
-              <Card hoverable>
-                <Statistic
-                  title="进行中"
-                  value={projectStats.inProgress}
-                  prefix={<ClockCircleOutlined />}
-                  valueStyle={{ color: '#faad14' }}
-                />
-              </Card>
-            </Col>
-            <Col xs={12} sm={12} md={6}>
-              <Card hoverable>
-                <Statistic
-                  title="已完成"
-                  value={projectStats.completed}
-                  prefix={<CheckCircleOutlined />}
-                  valueStyle={{ color: '#52c41a' }}
-                />
-              </Card>
-            </Col>
-            <Col xs={12} sm={12} md={6}>
-              <Card hoverable>
-                <Statistic
-                  title="平均进度"
-                  value={projectStats.avgProgress}
-                  suffix="%"
-                  prefix={<DollarOutlined />}
-                  valueStyle={{ color: '#722ed1' }}
-                />
-              </Card>
-            </Col>
-          </Row>
-        </Card>
-
-        {/* 当前项目快捷信息 */}
-        {currentProject && (
-          <Card
-            title={
+          </Col>
+          <Col span={8} className="align-right">
+            <Space direction="vertical" align="end">
               <Space>
-                <FileTextOutlined style={{ color: '#1890ff' }} />
-                <span>当前项目</span>
+                <Tooltip title="新建项目">
+                  <Button type="primary" size="large" icon={<ProjectOutlined />} className="btn-white-primary">
+                    新建项目
+                  </Button>
+                </Tooltip>
+                <Tooltip title="智能仪表盘">
+                  <Button size="large" icon={<DashboardOutlined />} className="btn-glass">
+                    智能分析
+                  </Button>
+                </Tooltip>
               </Space>
-            }
-            extra={
-              <Button type="primary" onClick={() => navigate('/construction-management')}>
-                进入施工管理
-              </Button>
-            }
-            style={{ marginBottom: 24 }}
-          >
-            <Row gutter={16}>
-              <Col span={18}>
-                <Title level={4} style={{ marginTop: 0 }}>
-                  {currentProject.name}
-                </Title>
-                <Text type="secondary">{currentProject.description}</Text>
-                <div style={{ marginTop: 16 }}>
-                  <Space size="large">
-                    <Space direction="vertical" size={0}>
-                      <Text type="secondary" style={{ fontSize: 12 }}>
-                        项目编号
-                      </Text>
-                      <Text strong>{currentProject.id}</Text>
-                    </Space>
-                    <Space direction="vertical" size={0}>
-                      <Text type="secondary" style={{ fontSize: 12 }}>
-                        开始日期
-                      </Text>
-                      <Text strong>
-                        <CalendarOutlined /> {currentProject.start_date}
-                      </Text>
-                    </Space>
-                    <Space direction="vertical" size={0}>
-                      <Text type="secondary" style={{ fontSize: 12 }}>
-                        结束日期
-                      </Text>
-                      <Text strong>
-                        <CalendarOutlined /> {currentProject.end_date}
-                      </Text>
-                    </Space>
-                    <Space direction="vertical" size={0}>
-                      <Text type="secondary" style={{ fontSize: 12 }}>
-                        项目状态
-                      </Text>
-                      <Tag color="processing">进行中</Tag>
-                    </Space>
-                  </Space>
-                </div>
-              </Col>
-              <Col span={6} style={{ textAlign: 'center' }}>
-                <Progress
-                  type="circle"
-                  percent={currentProject.progress}
-                  strokeColor={{
-                    '0%': '#108ee9',
-                    '100%': '#87d068',
-                  }}
-                  size={120}
-                />
-                <div style={{ marginTop: 12 }}>
-                  <Text type="secondary" style={{ fontSize: 12 }}>
-                    项目进度
-                  </Text>
-                </div>
-              </Col>
-            </Row>
+              <div className="welcome-tags">
+                <Tag color="gold" icon={<TrophyOutlined />}>高级版</Tag>
+                <Tag color="cyan" icon={<ThunderboltOutlined />}>性能优化</Tag>
+              </div>
+            </Space>
+          </Col>
+        </Row>
+      </Card>
+
+      {/* 核心指标卡片 - 动画效果 */}
+      <Row gutter={16} className="mb-24">
+        <Col span={6}>
+          <Card 
+            hoverable
+            className={`stat-card ${animateCards ? 'animate-in-up' : ''}`}
+            style={{ 
+              background: 'linear-gradient(135deg, #1890ff 0%, #52c41a 100%)',
+              border: 'none',
+              color: 'white',
+              transform: animateCards ? 'translateY(0)' : 'translateY(20px)',
+              opacity: animateCards ? 1 : 0,
+              transition: 'all 0.5s ease',
+              transitionDelay: '0.1s'
+            }}>
+            <Statistic
+              title={<span style={{ color: 'rgba(255,255,255,0.8)' }}>活跃项目</span>}
+              value={12}
+              prefix={<ProjectOutlined style={{ color: 'white' }} />}
+              suffix="个"
+              valueStyle={{ color: 'white' }}
+            />
+            <Progress percent={75} strokeColor="white" trailColor="rgba(255,255,255,0.2)" />
+            <div style={{ marginTop: 8, color: 'rgba(255,255,255,0.9)' }}>
+              <ArrowUpOutlined /> 较上周 +15%
+            </div>
           </Card>
-        )}
+        </Col>
+        <Col span={6}>
+          <Card 
+            hoverable
+            className={`stat-card ${animateCards ? 'animate-in-up' : ''}`}
+            style={{ 
+              background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
+              border: 'none',
+              transform: animateCards ? 'translateY(0)' : 'translateY(20px)',
+              opacity: animateCards ? 1 : 0,
+              transition: 'all 0.5s ease',
+              transitionDelay: '0.4s'
+            }}>
+            <Statistic
+              title={<span style={{ color: '#666' }}>待处理</span>}
+              value={15}
+              prefix={<ClockCircleOutlined style={{ color: '#faad14' }} />}
+              suffix="项"
+              valueStyle={{ color: '#333' }}
+            />
+            <Progress percent={35} strokeColor="#faad14" />
+            <div style={{ marginTop: 8, color: '#666' }}>
+              <WarningOutlined style={{ color: '#ff4d4f' }} /> 3项紧急
+            </div>
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card 
+            hoverable
+            className={`stat-card ${animateCards ? 'animate-in-up' : ''}`}
+            style={{ 
+              background: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+              border: 'none',
+              transform: animateCards ? 'translateY(0)' : 'translateY(20px)',
+              opacity: animateCards ? 1 : 0,
+              transition: 'all 0.5s ease',
+              transitionDelay: '0.3s'
+            }}>
+            <Statistic
+              title={<span style={{ color: '#666' }}>本月完成</span>}
+              value={28}
+              prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
+              suffix="项"
+              valueStyle={{ color: '#333' }}
+            />
+            <Progress percent={93} strokeColor="#52c41a" />
+            <div style={{ marginTop: 8, color: '#666' }}>
+              <CrownOutlined style={{ color: '#faad14' }} /> 超额完成
+            </div>
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card 
+            hoverable
+            className={`stat-card ${animateCards ? 'animate-in-up' : ''}`}
+            style={{ 
+              background: 'linear-gradient(135deg, #1890ff 0%, #52c41a 100%)',
+              border: 'none',
+              color: 'white',
+              transform: animateCards ? 'translateY(0)' : 'translateY(20px)',
+              opacity: animateCards ? 1 : 0,
+              transition: 'all 0.5s ease',
+              transitionDelay: '0.2s'
+            }}>
+            <Statistic
+              title={<span style={{ color: 'rgba(255,255,255,0.8)' }}>项目总数</span>}
+              value={50}
+              prefix={<ProjectOutlined style={{ color: 'white' }} />}
+              suffix="个"
+              valueStyle={{ color: 'white' }}
+            />
+            <Progress percent={50} strokeColor="white" trailColor="rgba(255,255,255,0.2)" />
+            <div style={{ marginTop: 8, color: 'rgba(255,255,255,0.9)' }}>
+              <ArrowUpOutlined /> 较上周 +10%
+            </div>
+          </Card>
+        </Col>
+      </Row>
 
-        <Row gutter={[16, 16]}>
-          {/* 所有项目列表 */}
-          <Col xs={24} lg={16}>
-            <Card
-              title={
-                <Space>
-                  <ProjectOutlined style={{ color: '#1890ff' }} />
-                  <span>所有项目</span>
-                </Space>
-              }
-            >
-              <Table
-                dataSource={projects}
-                columns={projectColumns}
-                rowKey="id"
-                pagination={{ pageSize: 5, size: 'small' }}
-                size="small"
-              />
-            </Card>
-
-            {/* 待办事项 */}
-            <Card
-              title={
-                <Space>
-                  <CheckCircleOutlined style={{ color: '#faad14' }} />
-                  <span>待办事项</span>
-                  <Badge count={todoItems.length} />
-                </Space>
-              }
-              style={{ marginTop: 16 }}
-            >
-              <List
-                dataSource={todoItems}
-                renderItem={(item: any) => (
-                  <List.Item
-                    actions={[
-                      <Tag
-                        color={
-                          item.priority === 'high'
-                            ? 'red'
-                            : item.priority === 'medium'
-                              ? 'orange'
-                              : 'blue'
-                        }
-                      >
-                        {item.priority === 'high' ? '高' : item.priority === 'medium' ? '中' : '低'}
-                      </Tag>,
-                      <Text type="secondary" style={{ fontSize: 12 }}>
-                        <ClockCircleOutlined /> {item.deadline}
-                      </Text>,
-                    ]}
-                  >
-                    <List.Item.Meta
-                      title={<Text strong>{item.title}</Text>}
-                      description={
-                        <Text type="secondary" style={{ fontSize: 12 }}>
-                          {item.project}
-                        </Text>
-                      }
-                    />
-                  </List.Item>
-                )}
+      {/* 项目概览统计 */}
+      <Card
+        title={
+          <Space>
+            <ProjectOutlined className="project-icon" />
+            <span className="project-title">项目管理中心</span>
+          </Space>
+        }
+        extra={
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleCreateProject}>
+            新建项目
+          </Button>
+        }
+        className="project-header-card"
+      >
+        <Row gutter={16}>
+          <Col xs={12} sm={12} md={6}>
+            <Card hoverable>
+              <Statistic
+                title="项目总数"
+                value={projectStats.total}
+                prefix={<ProjectOutlined />}
+                className="stat-value-primary"
               />
             </Card>
           </Col>
+          <Col xs={12} sm={12} md={6}>
+            <Card hoverable>
+              <Statistic
+                title="进行中"
+                value={projectStats.inProgress}
+                prefix={<ClockCircleOutlined />}
+                className="stat-value-warning"
+              />
+            </Card>
+          </Col>
+          <Col xs={12} sm={12} md={6}>
+            <Card hoverable>
+              <Statistic
+                title="已完成"
+                value={projectStats.completed}
+                prefix={<CheckCircleOutlined />}
+                className="stat-value-success"
+              />
+            </Card>
+          </Col>
+          <Col xs={12} sm={12} md={6}>
+            <Card hoverable>
+              <Statistic
+                title="平均进度"
+                value={projectStats.avgProgress}
+                suffix="%"
+                prefix={<DollarOutlined />}
+                className="stat-value-purple"
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Card>
 
-          {/* 右侧栏 */}
-          <Col xs={24} lg={8}>
-            {/* 通知中心 */}
-            <Card
-              title={
-                <Space>
-                  <BellOutlined style={{ color: '#1890ff' }} />
-                  <span>通知中心</span>
-                  <Badge count={notifications.length} />
+      {/* 当前项目快捷信息 */}
+      {currentProject && (
+        <Card
+          title={
+            <Space>
+              <FileTextOutlined className="project-list-icon" />
+              <span>当前项目</span>
+            </Space>
+          }
+          extra={
+            <Button type="primary" onClick={() => navigate('/construction-management')}>
+              进入施工管理
+            </Button>
+          }
+          className="current-project-card"
+        >
+          <Row gutter={16}>
+            <Col span={18}>
+              <Title level={4} className="project-title-main">
+                {currentProject.name}
+              </Title>
+              <Text type="secondary">{currentProject.description}</Text>
+              <div className="project-info-section">
+                <Space size="large">
+                  <Space direction="vertical" size={0}>
+                    <Text type="secondary" className="project-info-label">
+                      项目编号
+                    </Text>
+                    <Text strong>{currentProject.id}</Text>
+                  </Space>
+                  <Space direction="vertical" size={0}>
+                    <Text type="secondary" className="project-info-label">
+                      开始日期
+                    </Text>
+                    <Text strong>
+                      <CalendarOutlined /> {currentProject.start_date}
+                    </Text>
+                  </Space>
+                  <Space direction="vertical" size={0}>
+                    <Text type="secondary" className="project-info-label">
+                      结束日期
+                    </Text>
+                    <Text strong>
+                      <CalendarOutlined /> {currentProject.end_date}
+                    </Text>
+                  </Space>
+                  <Space direction="vertical" size={0}>
+                    <Text type="secondary" className="project-info-label">
+                      项目状态
+                    </Text>
+                    <Tag color="processing">进行中</Tag>
+                  </Space>
                 </Space>
-              }
-              extra={
-                <Button type="link" size="small">
-                  查看全部
-                </Button>
-              }
-            >
-              <List
-                dataSource={notifications}
-                renderItem={(item: any) => (
-                  <List.Item style={{ padding: '12px 0', border: 'none' }}>
-                    <div style={{ width: '100%' }}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          marginBottom: 4,
-                        }}
-                      >
-                        <Text strong style={{ fontSize: 13 }}>
-                          {item.title}
-                        </Text>
-                        <Text type="secondary" style={{ fontSize: 11 }}>
-                          {item.time}
-                        </Text>
-                      </div>
-                      <Text type="secondary" style={{ fontSize: 12 }}>
-                        {item.message}
+              </div>
+            </Col>
+            <Col span={6} className="progress-col-center">
+              <Progress
+                type="circle"
+                percent={currentProject.progress}
+                strokeColor={{
+                  '0%': '#108ee9',
+                  '100%': '#87d068',
+                }}
+                size={120}
+              />
+              <div className="progress-label-container">
+                <Text type="secondary" className="progress-label">
+                  项目进度
+                </Text>
+              </div>
+            </Col>
+          </Row>
+        </Card>
+      )}
+
+      <Row gutter={[16, 16]}>
+        {/* 所有项目列表 */}
+        <Col xs={24} lg={16}>
+          <Card
+            title={
+              <Space>
+                <ProjectOutlined className="project-list-icon" />
+                <span>所有项目</span>
+              </Space>
+            }
+          >
+            <Table
+              dataSource={projects}
+              columns={projectColumns}
+              rowKey="id"
+              pagination={{ pageSize: 5, size: 'small' }}
+              size="small"
+            />
+          </Card>
+
+          {/* 待办事项 */}
+          <Card
+            title={
+              <Space>
+                <CheckCircleOutlined className="todo-title-icon" />
+                <span>待办事项</span>
+                <Badge count={todoItems.length} />
+              </Space>
+            }
+            className="ws-mt-16"
+          >
+            <List
+              dataSource={todoItems}
+              renderItem={(item: any) => (
+                <List.Item
+                  actions={[
+                    <Tag
+                      color={
+                        item.priority === 'high'
+                          ? 'red'
+                          : item.priority === 'medium'
+                            ? 'orange'
+                            : 'blue'
+                      }
+                    >
+                      {item.priority === 'high' ? '高' : item.priority === 'medium' ? '中' : '低'}
+                    </Tag>,
+                    <Text type="secondary" className="project-info-label">
+                      <ClockCircleOutlined /> {item.deadline}
+                    </Text>,
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={<Text strong>{item.title}</Text>}
+                    description={
+                      <Text type="secondary" className="project-info-label">
+                        {item.project}
+                      </Text>
+                    }
+                  />
+                </List.Item>
+              )}
+            />
+          </Card>
+        </Col>
+
+        {/* 右侧栏 */}
+        <Col xs={24} lg={8}>
+          {/* 通知中心 */}
+          <Card
+            title={
+              <Space>
+                <BellOutlined className="notification-icon" />
+                <span>通知中心</span>
+                <Badge count={notifications.length} />
+              </Space>
+            }
+            extra={
+              <Button type="link" size="small">
+                查看全部
+              </Button>
+            }
+          >
+            <List
+              dataSource={notifications}
+              renderItem={(item: any) => (
+                <List.Item className="notification-list-item">
+                  <div className="notification-item-wrapper">
+                    <div className="notification-item-header">
+                      <Text strong className="notification-title">
+                        {item.title}
+                      </Text>
+                      <Text type="secondary" className="notification-time">
+                        {item.time}
                       </Text>
                     </div>
-                  </List.Item>
-                )}
-              />
+                    <Text type="secondary" className="project-info-label">
+                      {item.message}
+                    </Text>
+                  </div>
+                </List.Item>
+              )}
+            />
             </Card>
 
             {/* 团队成员 */}
             <Card
               title={
                 <Space>
-                  <TeamOutlined style={{ color: '#1890ff' }} />
+                  <TeamOutlined className="team-title-icon" />
                   <span>项目团队</span>
                 </Space>
               }
-              style={{ marginTop: 16 }}
+              className="ws-mt-16"
             >
-              <Space direction="vertical" style={{ width: '100%' }} size="middle">
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                >
+              <Space direction="vertical" className="w-100" size="middle">
+                <div className="team-item">
                   <Space>
-                    <div
-                      style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        background: '#1890ff',
-                        color: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 14,
-                        fontWeight: 600,
-                      }}
-                    >
-                      张
-                    </div>
+                    <div className="team-avatar avatar-primary">张</div>
                     <div>
-                      <Text strong style={{ display: 'block', fontSize: 13 }}>
-                        张工程师
-                      </Text>
-                      <Text type="secondary" style={{ fontSize: 11 }}>
-                        项目经理
-                      </Text>
+                      <Text strong className="team-name">张工程师</Text>
+                      <Text type="secondary" className="team-role">项目经理</Text>
                     </div>
                   </Space>
                   <Tag color="success">在线</Tag>
                 </div>
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                >
+                <div className="team-item">
                   <Space>
-                    <div
-                      style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        background: '#52c41a',
-                        color: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 14,
-                        fontWeight: 600,
-                      }}
-                    >
-                      李
-                    </div>
+                    <div className="team-avatar avatar-success">李</div>
                     <div>
-                      <Text strong style={{ display: 'block', fontSize: 13 }}>
-                        李工
-                      </Text>
-                      <Text type="secondary" style={{ fontSize: 11 }}>
-                        施工负责人
-                      </Text>
+                      <Text strong className="team-name">李工</Text>
+                      <Text type="secondary" className="team-role">施工负责人</Text>
                     </div>
                   </Space>
                   <Tag color="success">在线</Tag>
                 </div>
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                >
+                <div className="team-item">
                   <Space>
-                    <div
-                      style={{
-                        width: 36,
-                        height: 36,
-                        borderRadius: '50%',
-                        background: '#faad14',
-                        color: '#fff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: 14,
-                        fontWeight: 600,
-                      }}
-                    >
-                      王
-                    </div>
+                    <div className="team-avatar avatar-warning">王</div>
                     <div>
-                      <Text strong style={{ display: 'block', fontSize: 13 }}>
-                        王主管
-                      </Text>
-                      <Text type="secondary" style={{ fontSize: 11 }}>
-                        质检主管
-                      </Text>
+                      <Text strong className="team-name">王主管</Text>
+                      <Text type="secondary" className="team-role">质检主管</Text>
                     </div>
                   </Space>
                   <Tag color="default">离线</Tag>
@@ -881,8 +1024,8 @@ const Workspace: React.FC = () => {
             </Form.Item>
           </Form>
         </Modal>
+        {/* 全局AI窗口与按钮已移至 App.tsx */}
       </div>
-    </PageContainer>
   );
 };
 

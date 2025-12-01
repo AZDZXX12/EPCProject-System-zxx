@@ -1,0 +1,138 @@
+/* 快捷操作面板样式 */
+
+.quick-actions-drawer .ant-drawer-body {
+  padding: 16px;
+  background: #f5f7fa;
+}
+
+/* 今日概览卡片 */
+.today-overview-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.today-overview-card .ant-statistic-title {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 快捷操作标题 */
+.quick-actions-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+  padding-left: 8px;
+  border-left: 3px solid #1890ff;
+}
+
+/* 快捷操作网格 */
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* 快捷操作卡片 */
+.quick-action-card {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.quick-action-card .ant-card-body {
+  padding: 16px;
+}
+
+/* 快捷操作内容 */
+.quick-action-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quick-action-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.quick-action-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.quick-action-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.quick-action-description {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 底部提示 */
+.quick-actions-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e8e8e8;
+  text-align: center;
+}
+
+.quick-actions-footer .ant-btn-link {
+  color: #666;
+}
+
+.quick-actions-footer .ant-btn-link:hover {
+  color: #1890ff;
+}
+
+/* HOT标签 */
+.ant-badge-ribbon-wrapper .quick-action-card {
+  margin-top: 8px;
+}
+
+/* 响应式 */
+@media (min-width: 768px) {
+  .quick-actions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .quick-actions-drawer {
+    width: 100% !important;
+  }
+  
+  .quick-action-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+  
+  .quick-action-title {
+    font-size: 13px;
+  }
+  
+  .quick-action-description {
+    font-size: 11px;
+  }
+}

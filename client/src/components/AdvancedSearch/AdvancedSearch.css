@@ -1,0 +1,56 @@
+/* 高级搜索组件样式 */
+
+.search-conditions {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.search-condition-row {
+  margin-bottom: 12px;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.search-condition-row:hover {
+  background: #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.saved-search-item {
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.saved-search-item:hover {
+  background: #e6f7ff;
+}
+
+.search-history-item {
+  font-size: 12px;
+  color: #666;
+}
+
+.condition-tag {
+  margin: 2px;
+}
+
+.search-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.advanced-search-trigger {
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.advanced-search-trigger:hover {
+  background: #f0f0f0;
+}

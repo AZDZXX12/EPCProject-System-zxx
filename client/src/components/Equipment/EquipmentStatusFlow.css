@@ -1,0 +1,54 @@
+.equipment-status-flow {
+  padding: 0;
+}
+
+.equipment-status-flow .stats-row {
+  margin-bottom: 24px;
+}
+
+.equipment-status-flow .ant-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.equipment-status-flow .ant-statistic-title {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.equipment-status-flow .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.equipment-status-flow .equipment-table-card,
+.equipment-status-flow .chart-card,
+.equipment-status-flow .records-card {
+  margin-bottom: 16px;
+}
+
+.equipment-status-flow .current-status-info {
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.equipment-status-flow .status-change-form {
+  margin-top: 16px;
+}
+
+.equipment-status-flow .ant-progress-line {
+  margin-bottom: 0;
+}
+
+.equipment-status-flow .ant-badge-count {
+  box-shadow: none;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .equipment-status-flow .ant-statistic-content {
+    font-size: 20px;
+  }
+}

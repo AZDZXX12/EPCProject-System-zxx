@@ -1,0 +1,101 @@
+.equipment-charts {
+  margin-bottom: 16px;
+}
+
+.charts-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.charts-card .ant-card-head {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-bottom: 2px solid #e2e8f0;
+  font-weight: 600;
+}
+
+.chart-controls {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.metric-select {
+  min-width: 160px;
+}
+
+.chart-container {
+  margin: 20px 0;
+  padding: 0 16px;
+}
+
+.chart-stats {
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 12px;
+  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  border-radius: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+}
+
+.stat-value-primary {
+  color: #1890ff;
+}
+
+.stat-unit {
+  font-size: 16px;
+  font-weight: 500;
+  color: #8c8c8c;
+  margin-left: 4px;
+}
+
+/* Metric option colors */
+.metric-option-dot-efficiency {
+  color: #1890ff;
+}
+
+.metric-option-dot-temperature {
+  color: #ff4d4f;
+}
+
+.metric-option-dot-power {
+  color: #52c41a;
+}
+
+/* 响应式 */
+@media (max-width: 1200px) {
+  .chart-controls {
+    padding: 12px;
+  }
+  
+  .chart-container {
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-value {
+    font-size: 24px;
+  }
+  
+  .stat-unit {
+    font-size: 14px;
+  }
+}

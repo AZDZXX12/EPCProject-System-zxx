@@ -20,6 +20,7 @@ import {
   ProjectOutlined,
 } from '@ant-design/icons';
 import { useProject } from '../contexts/ProjectContext';
+import { logger } from '../utils/logger';
 import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 
@@ -109,7 +110,7 @@ const ReportGenerator: React.FC = () => {
       } catch (error) {
         message.destroy();
         message.error('PDF生成失败');
-        console.error(error);
+        logger.error('[报表生成] PDF生成失败:', error);
       } finally {
         setIsGenerating(false);
       }
@@ -176,7 +177,7 @@ const ReportGenerator: React.FC = () => {
       } catch (error) {
         message.destroy();
         message.error('Excel生成失败');
-        console.error(error);
+        logger.error('[报表生成] Excel生成失败:', error);
       } finally {
         setIsGenerating(false);
       }

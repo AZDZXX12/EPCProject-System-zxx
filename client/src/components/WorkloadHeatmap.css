@@ -1,0 +1,112 @@
+.workload-heatmap-container {
+  margin-top: 16px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.workload-heatmap-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #262626;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.workload-heatmap {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.workload-cell {
+  min-width: 30px;
+  height: 24px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  position: relative;
+}
+
+.workload-cell:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.workload-cell.intensity-low {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.workload-cell.intensity-medium {
+  background-color: #ef5350;
+  color: white;
+}
+
+.workload-cell.intensity-high {
+  background-color: #c62828;
+  color: white;
+  font-weight: 600;
+}
+
+.workload-cell.intensity-none {
+  background-color: #f5f5f5;
+  color: #bdbdbd;
+}
+
+.workload-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #595959;
+}
+
+.workload-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.workload-legend-color {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+.workload-legend-color.none {
+  background: #f5f5f5;
+}
+
+.workload-legend-color.low {
+  background: #ffcdd2;
+}
+
+.workload-legend-color.medium {
+  background: #ef5350;
+}
+
+.workload-legend-color.high {
+  background: #c62828;
+}
+
+.workload-tooltip-date {
+  font-weight: bold;
+}
+
+.workload-tooltip-tasks {
+  margin-top: 4px;
+  font-size: 11px;
+}

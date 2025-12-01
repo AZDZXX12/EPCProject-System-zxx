@@ -1,0 +1,254 @@
+/* ========================================
+   公式展示移动端专用样式
+   ======================================== */
+
+@media (max-width: 767px) {
+  /* ========== 公式容器 ========== */
+  .formula-display {
+    padding: 12px !important;
+  }
+
+  /* ========== 公式卡片 ========== */
+  .formula-card {
+    margin-bottom: 12px !important;
+  }
+
+  .formula-card .ant-card-head {
+    padding: 8px 12px !important;
+  }
+
+  .formula-card .ant-card-body {
+    padding: 12px !important;
+  }
+
+  /* ========== 公式项 ========== */
+  .formula-item {
+    margin-bottom: 16px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .formula-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* ========== 公式名称 ========== */
+  .formula-name {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    color: #1890ff;
+  }
+
+  /* ========== 公式文本 ========== */
+  .formula-text {
+    font-size: 14px !important;
+    line-height: 1.8 !important;
+    padding: 8px 12px !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff !important;
+    border-radius: 6px !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 8px !important;
+    font-family: 'Courier New', Consolas, monospace;
+  }
+
+  /* 公式文本滚动条 */
+  .formula-text::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .formula-text::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+
+  /* ========== 公式描述 ========== */
+  .formula-description {
+    font-size: 13px !important;
+    color: #666 !important;
+    margin-bottom: 8px !important;
+    line-height: 1.6 !important;
+  }
+
+  /* ========== 变量网格 - 单列 ========== */
+  .variables-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin: 8px 0 !important;
+  }
+
+  /* ========== 变量项 ========== */
+  .variable-item {
+    display: flex;
+    align-items: center;
+    padding: 8px !important;
+    background: #f5f5f5;
+    border-radius: 4px;
+    font-size: 13px !important;
+  }
+
+  .variable-symbol {
+    margin-right: 8px !important;
+    font-size: 13px !important;
+    font-weight: 600;
+  }
+
+  .variable-name {
+    flex: 1;
+    font-size: 13px !important;
+    margin-right: 8px;
+  }
+
+  .variable-unit {
+    font-size: 12px !important;
+    color: #999 !important;
+  }
+
+  /* ========== 示例框 ========== */
+  .example-box {
+    background: #f0f9ff !important;
+    border-left: 3px solid #1890ff !important;
+    padding: 8px 12px !important;
+    margin: 8px 0 !important;
+    border-radius: 4px !important;
+    font-size: 13px !important;
+    line-height: 1.8 !important;
+    overflow-x: auto;
+    font-family: 'Courier New', Consolas, monospace;
+  }
+
+  .example-box pre {
+    margin: 0 !important;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* 示例框滚动条 */
+  .example-box::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .example-box::-webkit-scrollbar-thumb {
+    background: #1890ff;
+    border-radius: 2px;
+  }
+
+  /* ========== 常数网格 - 单列 ========== */
+  .constants-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+
+  /* ========== 常数卡片 ========== */
+  .constant-card {
+    padding: 10px 12px !important;
+    background: #fff !important;
+    border: 1px solid #e8e8e8 !important;
+    border-radius: 6px !important;
+    transition: all 0.2s;
+  }
+
+  .constant-card:active {
+    background: #fafafa !important;
+    transform: scale(0.98);
+  }
+
+  .constant-name {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .constant-value {
+    font-size: 14px !important;
+    color: #1890ff !important;
+    font-weight: 600 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .constant-desc {
+    font-size: 12px !important;
+    color: #999 !important;
+    line-height: 1.5 !important;
+  }
+
+  /* ========== 分隔线 ========== */
+  .formula-divider {
+    margin: 12px 0 !important;
+  }
+
+  /* ========== 标题 ========== */
+  .formula-section-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    color: #333 !important;
+  }
+}
+
+/* ========== 小屏幕特殊优化 ========== */
+@media (max-width: 375px) {
+  /* iPhone SE等小屏 */
+  .formula-display {
+    padding: 8px !important;
+  }
+
+  .formula-card .ant-card-body {
+    padding: 8px !important;
+  }
+
+  .formula-item {
+    margin-bottom: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .formula-text {
+    font-size: 13px !important;
+    padding: 6px 10px !important;
+  }
+
+  .variable-item,
+  .constant-card {
+    padding: 6px 8px !important;
+  }
+
+  .example-box {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* ========== 横屏优化 ========== */
+@media (max-width: 767px) and (orientation: landscape) {
+  .formula-item {
+    margin-bottom: 12px !important;
+    padding-bottom: 12px !important;
+  }
+
+  .variables-grid,
+  .constants-grid {
+    gap: 6px !important;
+  }
+}
+
+/* ========== 平板优化 ========== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* 平板端 - 2列布局 */
+  .variables-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .constants-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}

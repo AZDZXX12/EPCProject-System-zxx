@@ -37,3 +37,27 @@ server/data/*.db
 .cache/
 Luckysheet-master-2.0.2/release/
 Luckysheet-master-2.0.2/win-unpacked/
+.aider*
+
+# Large files and installers
+*.exe
+*.exr
+*.zip
+*.rar
+*.7z
+*.tar.gz
+
+# Python virtual environments
+aider_env/
+venv/
+env/
+
+# Upload archives
+*-upload.zip
+EPCProject-System-zxx-upload.zip
+
+# Test and demo files
+demo_*.bat
+test_*.js
+test-*.js
+test-*.html

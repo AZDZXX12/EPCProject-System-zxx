@@ -30,6 +30,7 @@ import {
 import { useProject } from '../contexts/ProjectContext';
 import PageContainer from '../components/Layout/PageContainer';
 import * as XLSX from 'xlsx';
+import { eventBus, EVENTS, ProcurementEventData, useEventBus } from '../utils/EventBus';
 
 const { Title, Text } = Typography;
 const { TextArea } = Input;
@@ -103,6 +104,13 @@ const ProcurementManagement: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingEquipment, setEditingEquipment] = useState<Equipment | null>(null);
   const [form] = Form.useForm();
+  const [pendingPlans, setPendingPlans] = useState<ProcurementEventData[]>([]);
+
+  // 监听采购计划创建事件
+  useEventBus(EVENTS.PROCUREMENT_PLAN_CREATED, (plan: ProcurementEventData) => {
+    setPendingPlans(prev => [...prev, plan]);
+    message.info(`收到新的采购计划：${plan.materialName}`);
+  }, []);
 
   const handleAdd = () => {
     setEditingEquipment(null);

@@ -1,0 +1,80 @@
+/* 设备管理页面样式 */
+
+/* 页面标题区域 */
+.device-header {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.device-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+/* 统计卡片区域 */
+.device-stats-row {
+  margin-bottom: 24px;
+}
+
+.device-stat-title {
+  font-size: 14px;
+  color: #666;
+}
+
+.device-stat-icon-blue {
+  color: #1890ff;
+}
+
+.device-stat-icon-green {
+  color: #52c41a;
+}
+
+.device-stat-icon-red {
+  color: #ff4d4f;
+}
+
+/* 设备列表卡片 */
+.device-list-header {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.device-list-badge {
+  background-color: #52c41a;
+}
+
+/* 进度列 */
+.device-progress-container {
+  width: 100%;
+}
+
+.device-delayed-text {
+  font-size: 12px;
+  color: #ff4d4f;
+}
+
+/* Alert提示 */
+.device-alert {
+  margin-bottom: 24px;
+}
+
+/* 表单DatePicker */
+.device-form-datepicker {
+  width: 100%;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .device-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .device-title {
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,48 @@
+.app-breadcrumb-wrapper {
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.app-breadcrumb {
+  font-size: 14px;
+}
+
+.breadcrumb-link {
+  color: rgba(0, 0, 0, 0.65);
+  transition: color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb-link:hover {
+  color: #1890ff;
+}
+
+.breadcrumb-icon {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumb-current {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+}
+
+/* 移动端优化 */
+@media (max-width: 767px) {
+  .app-breadcrumb-wrapper {
+    padding: 8px 16px;
+  }
+  
+  .app-breadcrumb {
+    font-size: 12px;
+  }
+  
+  .breadcrumb-icon {
+    font-size: 12px;
+  }
+}

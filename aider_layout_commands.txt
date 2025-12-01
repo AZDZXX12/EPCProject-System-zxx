@@ -1,0 +1,52 @@
+# Aider布局优化命令序列
+# 使用Gemini 2.5 Pro执行
+
+# 阶段1: 分析当前布局问题
+/add client/src/pages/Workspace.tsx
+/add client/src/App.tsx
+/add client/src/components/AIAssistant/AIAssistantPanel.tsx
+
+分析当前EPC项目管理系统的布局架构，识别以下问题：
+1. AI助手窗口的定位和响应式问题
+2. Workspace组件的复杂度和性能问题
+3. 整体设计语言的一致性问题
+4. 移动端适配的不足
+请提供详细的问题分析和改进建议。
+
+# 阶段2: 创建统一布局系统
+创建一个新的MainLayout组件，包含以下特性：
+1. 响应式网格系统
+2. 统一的CSS变量和主题
+3. 模块化的布局配置
+4. 支持多种布局模式（侧边栏、全屏、移动端）
+请在client/src/components/Layout/目录下创建相关文件。
+
+# 阶段3: 优化AI助手窗口
+重构AIAssistantPanel组件，实现：
+1. 智能定位算法（避免遮挡重要内容）
+2. 多设备适配（桌面、平板、移动端）
+3. 流畅的动画和交互
+4. 可拖拽、可调整大小、可最小化
+5. 记住用户偏好设置
+
+# 阶段4: 重构Workspace组件
+将Workspace.tsx拆分为多个子组件：
+1. WorkspaceHeader - 顶部导航和操作
+2. WorkspaceSidebar - 左侧导航
+3. WorkspaceContent - 主要内容区域
+4. WorkspacePanel - 右侧面板
+优化性能，减少重渲染，提升用户体验。
+
+# 阶段5: 统一设计语言
+1. 创建设计系统文件（colors, typography, spacing）
+2. 统一所有组件的视觉风格
+3. 建立一致的交互规范
+4. 添加暗色主题支持
+
+# 阶段6: 移动端优化
+1. 实现完整的移动端适配
+2. 优化触摸交互
+3. 适配不同屏幕尺寸
+4. 提升移动端性能
+
+/commit 完成EPC项目管理系统布局优化

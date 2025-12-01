@@ -1,0 +1,90 @@
+/* 供应商评估系统样式 */
+
+.supplier-evaluation-modal .ant-modal-body {
+  padding: 24px;
+}
+
+.supplier-evaluation-modal .ant-tabs {
+  margin-top: -8px;
+}
+
+.supplier-evaluation-modal .ant-form-item-label > label {
+  font-weight: 500;
+}
+
+.supplier-evaluation-modal .ant-slider {
+  margin: 16px 0 24px;
+}
+
+.supplier-evaluation-modal .ant-alert {
+  margin-bottom: 24px;
+}
+
+.supplier-evaluation-modal .ant-alert ul {
+  margin: 8px 0 0 20px;
+  padding: 0;
+}
+
+.supplier-evaluation-modal .ant-alert li {
+  margin: 4px 0;
+}
+
+.supplier-evaluation-modal .ant-statistic {
+  text-align: center;
+}
+
+.supplier-evaluation-modal .ant-statistic-title {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.supplier-evaluation-modal .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 表格样式 */
+.supplier-evaluation-modal .ant-table {
+  font-size: 13px;
+}
+
+.supplier-evaluation-modal .ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+.supplier-evaluation-modal .ant-progress {
+  margin: 0;
+}
+
+/* 统计图表容器 */
+.evaluation-chart-container {
+  padding: 20px 0;
+}
+
+.evaluation-indicator-item {
+  margin-bottom: 16px;
+}
+
+/* 评分等级分布样式 */
+.score-distribution-item {
+  margin-bottom: 16px;
+}
+
+.score-distribution-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .supplier-evaluation-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .supplier-evaluation-modal .ant-modal-body {
+    padding: 16px;
+  }
+}

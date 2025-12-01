@@ -19,6 +19,7 @@ import {
   ProgressEventData,
 } from '../utils/EventBus';
 import { StorageManager } from '../utils/StorageManager';
+import { logger } from '../utils/logger';
 
 // ============ 类型定义 ============
 
@@ -96,7 +97,7 @@ class DataManager {
     });
 
     if (this.debug) {
-      console.log('[DataManager] 事件监听器已初始化');
+      logger.info('[DataManager] 事件监听器已初始化');
     }
   }
 
@@ -138,7 +139,7 @@ class DataManager {
       const finalProgress = Math.round(totalProgress);
 
       if (this.debug) {
-        console.log('[DataManager] 项目进度计算:', {
+        logger.debug('[DataManager] 项目进度计算:', {
           projectId,
           taskProgress: Math.round(taskProgress),
           phaseProgress: Math.round(phaseProgress),
@@ -149,7 +150,7 @@ class DataManager {
 
       return finalProgress;
     } catch (error) {
-      console.error('[DataManager] 计算项目进度失败:', error);
+      logger.error('[DataManager] 计算项目进度失败:', error);
       return 0;
     }
   }
@@ -223,7 +224,7 @@ class DataManager {
   private async onTaskUpdate(taskData: TaskEventData): Promise<void> {
     try {
       if (this.debug) {
-        console.log('[DataManager] 任务更新联动:', taskData);
+        logger.debug('[DataManager] 任务更新联动:', taskData);
       }
 
       // 1. 更新关联的施工日志
@@ -268,7 +269,7 @@ class DataManager {
       // 4. 更新相关阶段
       await this.updatePhaseProgress(taskData.projectId, taskData);
     } catch (error) {
-      console.error('[DataManager] 任务更新联动失败:', error);
+      logger.error('[DataManager] 任务更新联动失败:', error);
     }
   }
 
@@ -278,7 +279,7 @@ class DataManager {
   private async onLogCreate(logData: LogEventData): Promise<void> {
     try {
       if (this.debug) {
-        console.log('[DataManager] 施工日志创建联动:', logData);
+        logger.debug('[DataManager] 施工日志创建联动:', logData);
       }
 
       // 1. 如果关联了任务，更新任务进度
@@ -312,7 +313,7 @@ class DataManager {
         duration: 3,
       });
     } catch (error) {
-      console.error('[DataManager] 施工日志创建联动失败:', error);
+      logger.error('[DataManager] 施工日志创建联动失败:', error);
     }
   }
 
@@ -322,7 +323,7 @@ class DataManager {
   private async onPhaseUpdate(phaseData: PhaseEventData): Promise<void> {
     try {
       if (this.debug) {
-        console.log('[DataManager] 阶段更新联动:', phaseData);
+        logger.debug('[DataManager] 阶段更新联动:', phaseData);
       }
 
       // 1. 重新计算项目进度
@@ -348,7 +349,7 @@ class DataManager {
         });
       }
     } catch (error) {
-      console.error('[DataManager] 阶段更新联动失败:', error);
+      logger.error('[DataManager] 阶段更新联动失败:', error);
     }
   }
 
@@ -423,7 +424,7 @@ class DataManager {
 
       return [];
     } catch (error) {
-      console.error('[DataManager] 获取任务失败:', error);
+      logger.error('[DataManager] 获取任务失败:', error);
       return [];
     }
   }
@@ -437,7 +438,7 @@ class DataManager {
       const phases = StorageManager.load(cacheKey);
       return phases || [];
     } catch (error) {
-      console.error('[DataManager] 获取阶段失败:', error);
+      logger.error('[DataManager] 获取阶段失败:', error);
       return [];
     }
   }
@@ -450,7 +451,7 @@ class DataManager {
       const allLogs = StorageManager.load('construction_logs') || [];
       return allLogs.filter((log: ConstructionLog) => log.project_id === projectId);
     } catch (error) {
-      console.error('[DataManager] 获取日志失败:', error);
+      logger.error('[DataManager] 获取日志失败:', error);
       return [];
     }
   }
@@ -463,7 +464,7 @@ class DataManager {
       const allLogs = StorageManager.load('construction_logs') || [];
       return allLogs.filter((log: ConstructionLog) => log.task_id === taskId);
     } catch (error) {
-      console.error('[DataManager] 获取任务日志失败:', error);
+      logger.error('[DataManager] 获取任务日志失败:', error);
       return [];
     }
   }
@@ -476,7 +477,7 @@ class DataManager {
       const allTasks = StorageManager.load('gantt_tasks_all') || [];
       return allTasks.find((t: Task) => t.id === taskId) || null;
     } catch (error) {
-      console.error('[DataManager] 获取任务失败:', error);
+      logger.error('[DataManager] 获取任务失败:', error);
       return null;
     }
   }
@@ -506,7 +507,7 @@ class DataManager {
       const allDevices = StorageManager.load('devices_all') || [];
       return allDevices.filter((d: Device) => d.related_task_id === taskId);
     } catch (error) {
-      console.error('[DataManager] 获取设备失败:', error);
+      logger.error('[DataManager] 获取设备失败:', error);
       return [];
     }
   }

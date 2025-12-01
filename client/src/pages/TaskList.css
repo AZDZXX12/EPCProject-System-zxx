@@ -1,0 +1,246 @@
+/* TaskList 样式 */
+@import '../styles/variables.css';
+
+/* 页面容器 */
+.task-list-container {
+  padding: var(--spacing-xl);
+  background: var(--bg-secondary);
+  min-height: 100vh;
+}
+
+/* 页面头部 */
+.task-list-header {
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-list-title {
+  font-size: var(--font-3xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* 任务卡片 */
+.task-card {
+  margin-bottom: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-normal) var(--ease-in-out);
+  box-shadow: var(--shadow-sm);
+}
+
+.task-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+.task-card-title {
+  font-size: var(--font-lg);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.task-card-body {
+  padding: var(--spacing-lg);
+}
+
+/* 任务信息 */
+.task-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.task-info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-info-label {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.task-info-value {
+  font-size: var(--font-md);
+  color: var(--text-primary);
+  font-weight: var(--font-medium);
+}
+
+/* 进度条 */
+.task-progress {
+  margin-top: var(--spacing-lg);
+}
+
+.task-progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.task-progress-text {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.task-progress-value {
+  font-size: var(--font-sm);
+  font-weight: var(--font-semibold);
+  color: var(--primary-color);
+}
+
+/* 操作按钮 */
+.task-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.task-action-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-in-out);
+}
+
+/* 表格样式 */
+.task-table {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.task-table-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* 模态框样式 */
+.task-modal {
+  border-radius: var(--radius-lg);
+}
+
+.task-modal-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+.task-modal-body {
+  padding: var(--spacing-lg);
+}
+
+.task-form-item {
+  margin-bottom: var(--spacing-lg);
+}
+
+.task-form-label {
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 状态标签 */
+.task-status-tag {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  font-weight: var(--font-medium);
+}
+
+.task-status-pending {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.task-status-progress {
+  background: rgba(var(--primary-color), 0.1);
+  color: var(--primary-color);
+}
+
+.task-status-completed {
+  background: rgba(var(--success-color), 0.1);
+  color: var(--success-color);
+}
+
+/* 优先级标签 */
+.task-priority-tag {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  font-weight: var(--font-medium);
+}
+
+.task-priority-low {
+  background: rgba(var(--info-color), 0.1);
+  color: var(--info-color);
+}
+
+.task-priority-medium {
+  background: rgba(var(--warning-color), 0.1);
+  color: var(--warning-color);
+}
+
+.task-priority-high {
+  background: rgba(var(--danger-color), 0.1);
+  color: var(--danger-color);
+}
+
+/* 空状态 */
+.task-empty {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: var(--text-secondary);
+}
+
+.task-empty-icon {
+  font-size: 48px;
+  color: var(--border-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.task-empty-text {
+  font-size: var(--font-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.task-empty-hint {
+  font-size: var(--font-md);
+  color: var(--text-disabled);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .task-list-container {
+    padding: var(--spacing-lg);
+  }
+  
+  .task-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+  
+  .task-info-row {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .task-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .task-action-btn {
+    width: 100%;
+  }
+}

@@ -1,6 +1,13 @@
 import React from 'react';
-import { Layout, Select, Avatar, Dropdown, Button, message } from 'antd';
-import { UserOutlined, ReloadOutlined, SafetyOutlined } from '@ant-design/icons';
+import { Layout, Select, Avatar, Dropdown, Button, message, Badge, Space, Input } from 'antd';
+import { 
+  UserOutlined, 
+  ReloadOutlined, 
+  SafetyOutlined,
+  BellOutlined,
+  SearchOutlined,
+  RocketOutlined
+} from '@ant-design/icons';
 import { useProject } from '../../contexts/ProjectContext';
 import { useNavigate } from 'react-router-dom';
 import './Header.css';
@@ -21,18 +28,18 @@ const AppHeader: React.FC = () => {
 
   return (
     <Header className="app-header">
-      {/* 左侧：标题和项目选择器 */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      {/* 左侧：Logo和项目选择器 */}
+      <div className="header-left">
         <div className="header-logo-container">
-          <SafetyOutlined className="header-logo-icon" />
+          <RocketOutlined className="header-logo-icon" />
           <span className="header-logo-text">EPC项目管理系统</span>
         </div>
         {currentProject && (
-          <>
+          <div className="header-project-selector">
             <span className="header-project-label">当前项目:</span>
             <Select
               value={currentProject?.id}
-              style={{ width: 220 }}
+              style={{ width: 200 }}
               onChange={(value) => {
                 const project = projects.find((p) => p.id === value);
                 if (project) setCurrentProject(project);
@@ -40,35 +47,65 @@ const AppHeader: React.FC = () => {
               options={projects.map((p) => ({ label: p.name, value: p.id }))}
             />
             <Button
-              type="default"
+              type="text"
               icon={<ReloadOutlined />}
               onClick={loadProjects}
               className="header-refresh-button"
-            >
-              刷新
-            </Button>
-          </>
+              title="刷新项目列表"
+            />
+          </div>
         )}
       </div>
 
-      {/* 用户信息 */}
-      <Dropdown
-        menu={{
-          items: [
-            { key: 'profile', label: '个人设置' },
-            { key: 'logout', label: '退出登录' },
-          ],
-          onClick: handleMenuClick,
-        }}
-      >
-        <div
-          className="header-user-container"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-        >
-          <Avatar icon={<UserOutlined />} className="header-user-avatar" />
-          <span className="header-user-name">管理员</span>
-        </div>
-      </Dropdown>
+      {/* 中间：全局搜索 */}
+      <div className="header-center">
+        <Input
+          prefix={<SearchOutlined />}
+          placeholder="搜索项目、任务、文档..."
+          className="header-search"
+          style={{ width: 320 }}
+          onPressEnter={(e) => {
+            const value = (e.target as HTMLInputElement).value;
+            if (value) {
+              message.info(`搜索: ${value}`);
+              // TODO: 实现全局搜索功能
+            }
+          }}
+        />
+      </div>
+
+      {/* 右侧：通知和用户信息 */}
+      <div className="header-right">
+        <Space size="large">
+          {/* 通知中心 */}
+          <Badge count={0} showZero={false}>
+            <Button
+              type="text"
+              icon={<BellOutlined />}
+              className="header-icon-btn"
+              title="通知中心"
+              onClick={() => message.info('暂无新通知')}
+            />
+          </Badge>
+
+          {/* 用户菜单 */}
+          <Dropdown
+            menu={{
+              items: [
+                { key: 'profile', label: '个人设置' },
+                { type: 'divider' },
+                { key: 'logout', label: '退出登录', danger: true },
+              ],
+              onClick: handleMenuClick,
+            }}
+          >
+            <div className="header-user-container">
+              <Avatar icon={<UserOutlined />} className="header-user-avatar" />
+              <span className="header-user-name">管理员</span>
+            </div>
+          </Dropdown>
+        </Space>
+      </div>
     </Header>
   );
 };

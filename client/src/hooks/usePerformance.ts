@@ -2,6 +2,7 @@
  * 性能监控Hook
  */
 import { useEffect, useCallback } from 'react';
+import { logger } from '../utils/logger';
 
 interface PerformanceMetrics {
   componentName: string;
@@ -25,13 +26,13 @@ export const usePerformance = (componentName: string) => {
 
     // 开发环境下输出性能信息
     if (process.env.NODE_ENV === 'development' && renderTime > 100) {
-      console.warn(`🐌 Slow render detected: ${componentName} took ${renderTime.toFixed(2)}ms`);
+      logger.warn(`[性能监控] 🐌 慢渲染: ${componentName} 耗时 ${renderTime.toFixed(2)}ms`);
     }
 
     // 可以发送到监控服务
     if (renderTime > 1000) {
       // 发送到监控系统
-      console.error('Performance issue detected:', metrics);
+      logger.error('[性能监控] 严重性能问题:', metrics);
     }
   }, [componentName, startTime]);
 
@@ -45,13 +46,13 @@ export const usePerformance = (componentName: string) => {
       const duration = performance.now() - start;
       
       if (process.env.NODE_ENV === 'development') {
-        console.log(`⚡ ${operationName} completed in ${duration.toFixed(2)}ms`);
+        logger.info(`[性能监控] ⚡ ${operationName} 完成，耗时 ${duration.toFixed(2)}ms`);
       }
       
       return result;
     } catch (error) {
       const duration = performance.now() - start;
-      console.error(`❌ ${operationName} failed after ${duration.toFixed(2)}ms:`, error);
+      logger.error(`[性能监控] ❌ ${operationName} 失败，耗时 ${duration.toFixed(2)}ms:`, error);
       throw error;
     }
   }, []);

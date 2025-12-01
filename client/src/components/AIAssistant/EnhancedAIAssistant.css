@@ -1,0 +1,443 @@
+/* 增强版AI助手样式 */
+
+.enhanced-ai-assistant {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 480px;
+  height: 680px;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  transform: translateY(calc(100% + 48px));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+}
+
+.enhanced-ai-assistant.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.ai-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+}
+
+.ai-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0;
+  margin-bottom: 16px;
+}
+
+.ai-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ai-messages::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.ai-messages::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.ai-messages::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.ai-message {
+  margin-bottom: 20px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ai-message.user {
+  text-align: right;
+}
+
+.ai-message .message-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.ai-message.user .message-header {
+  justify-content: flex-end;
+}
+
+.ai-message .message-content {
+  display: inline-block;
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.ai-message.user .message-content {
+  background: linear-gradient(135deg, #1890ff 0%, #13c2c2 100%);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.ai-message.assistant .message-content {
+  background: #f5f5f5;
+  color: #262626;
+  border-bottom-left-radius: 4px;
+}
+
+.quick-commands {
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.quick-commands::-webkit-scrollbar {
+  height: 4px;
+}
+
+.quick-commands::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.quick-commands::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+
+.ai-input-container {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 12px;
+}
+
+.ai-insights-container,
+.ai-risks-container,
+.ai-optimization-container {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.risk-card {
+  border-left: 3px solid #ff4d4f;
+  transition: all 0.2s;
+}
+
+.risk-card:hover {
+  border-left-color: #cf1322;
+  box-shadow: 0 2px 8px rgba(255, 77, 79, 0.15);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .enhanced-ai-assistant {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+    height: calc(100vh - 24px);
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+/* 动画效果 */
+.ant-collapse-content {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ant-badge-count {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Tab样式优化 */
+.ant-tabs-tab {
+  transition: all 0.2s;
+}
+
+.ant-tabs-tab:hover {
+  color: #1890ff;
+}
+
+.ant-tabs-tab-active {
+  font-weight: 600;
+}
+
+/* 卡片悬停效果 */
+.ant-card {
+  transition: all 0.3s;
+}
+
+.ant-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* 按钮优化 */
+.ant-btn-primary {
+  background: linear-gradient(135deg, #1890ff 0%, #13c2c2 100%);
+  border: none;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #40a9ff 0%, #36cfc9 100%);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+}
+
+/* 加载状态 */
+.ant-spin-container {
+  transition: all 0.3s;
+}
+
+/* 统计数字优化 */
+.ant-statistic-content {
+  font-weight: 600;
+}
+
+.ant-statistic-title {
+  color: #8c8c8c;
+  font-size: 13px;
+}
+
+/* Alert样式 */
+.ant-alert {
+  border-radius: 8px;
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* 时间轴优化 */
+.ant-timeline-item {
+  padding-bottom: 16px;
+}
+
+.ant-timeline-item-content {
+  margin-left: 24px;
+}
+
+/* Tag优化 */
+.ant-tag {
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+/* Progress优化 */
+.ant-progress-line {
+  margin-bottom: 4px;
+}
+
+/* Modal优化 */
+.ant-modal-content {
+  border-radius: 12px;
+}
+
+.ant-modal-header {
+  border-radius: 12px 12px 0 0;
+}
+
+/* Form优化 */
+.ant-form-item {
+  margin-bottom: 20px;
+}
+
+.ant-form-item-label > label {
+  font-weight: 500;
+}
+
+/* List优化 */
+.ant-list-item {
+  padding: 12px 0;
+  transition: background 0.2s;
+}
+
+.ant-list-item:hover {
+  background: #fafafa;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 4px;
+}
+
+/* 空状态优化 */
+.ant-empty {
+  margin: 40px 0;
+}
+
+.ant-empty-description {
+  color: #8c8c8c;
+}
+
+/* 折叠面板优化 */
+.ant-collapse {
+  border: none;
+  background: transparent;
+}
+
+.ant-collapse-item {
+  margin-bottom: 12px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-collapse-header {
+  padding: 12px 16px !important;
+  font-weight: 500;
+}
+
+.ant-collapse-content-box {
+  padding: 16px;
+}
+
+/* 徽章优化 */
+.ant-badge-status-dot {
+  width: 8px;
+  height: 8px;
+}
+
+.ant-badge-status-processing::after {
+  border: 1px solid #52c41a;
+}
+
+/* 工具提示优化 */
+.ant-tooltip-inner {
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+/* 选择器优化 */
+.ant-select {
+  width: 100%;
+}
+
+.ant-select-selector {
+  border-radius: 6px !important;
+}
+
+/* 输入框优化 */
+.ant-input,
+.ant-input-number,
+.ant-picker {
+  border-radius: 6px;
+}
+
+.ant-input:focus,
+.ant-input-number:focus,
+.ant-picker:focus {
+  border-color: #40a9ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+}
+
+/* TextArea优化 */
+.ant-input-textarea-show-count::after {
+  float: right;
+  color: #8c8c8c;
+}
+
+/* 行优化 */
+.ant-row {
+  margin-left: -8px !important;
+  margin-right: -8px !important;
+}
+
+.ant-col {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+/* 分割线优化 */
+.ant-divider {
+  margin: 16px 0;
+}
+
+/* 文字优化 */
+.ant-typography {
+  margin-bottom: 0.5em;
+}
+
+.ant-typography strong {
+  font-weight: 600;
+  color: #262626;
+}
+
+/* 间距优化 */
+.ant-space {
+  width: 100%;
+}
+
+.ant-space-item {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 卡片标题优化 */
+.ant-card-head-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* 卡片操作区优化 */
+.ant-card-extra {
+  padding: 0;
+}
+
+/* 滚动条美化 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #bfbfbf #f5f5f5;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #bfbfbf;
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #8c8c8c;
+}

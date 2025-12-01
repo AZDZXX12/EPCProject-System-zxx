@@ -1,0 +1,55 @@
+.error-boundary {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.error-details {
+  max-width: 800px;
+  margin: 24px auto 0;
+}
+
+.error-stack {
+  background-color: #f5f5f5;
+  padding: 12px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* 深色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .error-boundary {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+  
+  .error-stack {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .error-boundary {
+    padding: 16px;
+  }
+  
+  .error-details {
+    margin: 16px auto 0;
+  }
+  
+  .error-stack {
+    font-size: 11px;
+    max-height: 200px;
+  }
+}

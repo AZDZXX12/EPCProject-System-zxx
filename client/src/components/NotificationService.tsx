@@ -10,7 +10,7 @@ const NotificationService: React.FC = () => {
     const websocket = new WebSocket('ws://localhost:8000/ws');
 
     websocket.onopen = () => {
-      console.log('WebSocket connected');
+      // WebSocket connected
       setConnected(true);
       message.success('实时通知已连接');
     };
@@ -34,7 +34,7 @@ const NotificationService: React.FC = () => {
     };
 
     websocket.onclose = () => {
-      console.log('WebSocket disconnected');
+      // WebSocket disconnected
       setConnected(false);
       message.warning('实时通知已断开');
     };

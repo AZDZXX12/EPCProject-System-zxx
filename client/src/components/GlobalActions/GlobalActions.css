@@ -1,0 +1,46 @@
+/* 全局操作样式 */
+
+.global-actions-container {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 999;
+}
+
+/* 浮动按钮组动画 */
+.ant-float-btn-group .ant-float-btn {
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.ant-float-btn-group .ant-float-btn:hover {
+  transform: scale(1.1);
+}
+
+/* 浮动按钮徽章 */
+.ant-float-btn .ant-badge-dot {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .global-actions-container {
+    right: 16px;
+    bottom: 16px;
+  }
+  
+  .ant-float-btn-group {
+    right: 16px !important;
+    bottom: 16px !important;
+  }
+}

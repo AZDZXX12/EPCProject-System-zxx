@@ -9,12 +9,12 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 let mainWindow;
 let httpServer;
-const HTTP_PORT = 8765; // 内置HTTP服务器端口
+const HTTP_PORT = 8765;
 const childWindows = {}; // 存储子窗口引用
 
 // 创建简单的HTTP服务器
 function startHttpServer() {
-    const distPath = path.join(__dirname, 'client/public/selection-tools');
+    const distPath = path.join(__dirname, 'Luckysheet-master-2.0.2', 'dist-refactored');
     
     httpServer = http.createServer((req, res) => {
         let pathname = url.parse(req.url).pathname;
@@ -453,4 +453,3 @@ process.on('uncaughtException', (error) => {
     console.error('未捕获的异常:', error);
     dialog.showErrorBox('错误', '应用程序发生错误: ' + error.message);
 });
-

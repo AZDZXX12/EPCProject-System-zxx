@@ -1,0 +1,199 @@
+.construction-kpi-dashboard {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+  padding: 20px 24px 16px;
+  box-shadow: 0 4px 20px rgba(30, 58, 138, 0.25);
+  position: relative;
+  min-height: 140px;
+}
+
+.kpi-row {
+  margin-bottom: 0 !important;
+}
+
+.kpi-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+  height: 140px;
+  padding: 16px !important;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1890ff, #52c41a);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.kpi-card:hover::before {
+  opacity: 1;
+}
+
+.kpi-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 32px;
+  opacity: 0.15;
+  transition: all 0.3s;
+}
+
+.kpi-card:hover .kpi-icon {
+  opacity: 0.25;
+  transform: scale(1.1);
+}
+
+.kpi-progress .kpi-icon { color: #1890ff; }
+.kpi-value .kpi-icon { color: #fa8c16; }
+.kpi-workers .kpi-icon { color: #1890ff; }
+.kpi-quality .kpi-icon { color: #52c41a; }
+.kpi-safety .kpi-icon { color: #faad14; }
+
+.weather-icon {
+  font-size: 40px !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.kpi-card .ant-statistic-title {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.kpi-card .ant-statistic-content {
+  margin-bottom: 8px;
+}
+
+.kpi-trend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.kpi-trend .ant-tag {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.kpi-label {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* 天气卡片特殊样式 */
+.kpi-weather {
+  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+}
+
+.weather-info {
+  margin-top: 8px;
+}
+
+.weather-temp {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1890ff;
+  line-height: 1;
+}
+
+.weather-condition {
+  font-size: 14px;
+  color: #595959;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* 时间显示 */
+.kpi-time {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.kpi-time span {
+  font-family: 'Consolas', 'Monaco', monospace;
+  letter-spacing: 0.5px;
+}
+
+/* 响应式设计 */
+@media (max-width: 1600px) {
+  .kpi-card {
+    height: 130px;
+  }
+  
+  .kpi-card .ant-statistic-content {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .construction-kpi-dashboard {
+    padding: 16px 20px 12px;
+    min-height: 0;
+  }
+  
+  .kpi-card {
+    height: 120px;
+    padding: 12px !important;
+  }
+  
+  .kpi-icon {
+    font-size: 28px;
+    top: 12px;
+    right: 12px;
+  }
+  
+  .kpi-time {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin-top: 12px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .construction-kpi-dashboard {
+    padding: 12px 16px;
+  }
+  
+  .kpi-card {
+    height: 110px;
+    margin-bottom: 12px;
+  }
+  
+  .kpi-trend {
+    flex-wrap: wrap;
+  }
+}

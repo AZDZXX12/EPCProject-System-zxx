@@ -10,3 +10,20 @@
 .ant-form-vertical .ant-form-item-label {
   font-weight: 500;
 }
+
+/* 页面标题 */
+.settings-title { margin-bottom: 8px; font-size: 28px; font-weight: 600; }
+.settings-subtitle { color: #666; margin-bottom: 24px; }
+
+/* 通用工具类 */
+.text-center { text-align: center; }
+.mb-32 { margin-bottom: 32px; }
+.mb-24 { margin-bottom: 24px; }
+.mt-16 { margin-top: 16px; }
+.py-16 { padding: 16px 0; }
+.w-100 { width: 100%; }
+.max-600 { max-width: 600px; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.text-muted-12 { font-size: 12px; color: #999; }
+.box { padding: 16px; background: #f5f5f5; border-radius: 4px; }
+.avatar-primary { background-color: #1890ff !important; }

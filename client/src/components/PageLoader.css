@@ -1,0 +1,76 @@
+/* 页面加载器样式 */
+
+.page-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.page-loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.page-loader-progress {
+  width: 200px;
+  margin-top: 8px;
+}
+
+.page-loader-message {
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+/* 加载动画 */
+.page-loader .ant-spin-dot-item {
+  background-color: #1890ff;
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .page-loader {
+    background: rgba(20, 20, 20, 0.9);
+  }
+  
+  .page-loader-content {
+    background: #1f1f1f;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .page-loader-content {
+    padding: 24px;
+  }
+  
+  .page-loader-progress {
+    width: 150px;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-loader-content {
+  animation: fadeIn 0.3s ease-out;
+}

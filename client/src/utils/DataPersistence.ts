@@ -22,13 +22,13 @@ interface SyncQueueItem {
   operation: 'create' | 'update' | 'delete';
   entityType: string;
   entityId: string;
-  data?: any;
+  data?: unknown;
   retry: number;
   timestamp: number;
 }
 
 export class DataPersistenceManager {
-  private memoryCache: Map<string, CacheEntry<any>> = new Map();
+  private memoryCache: Map<string, CacheEntry<unknown>> = new Map();
   private syncQueue: SyncQueueItem[] = [];
   private isSyncing = false;
   private syncCallbacks: Map<string, Array<(success: boolean) => void>> = new Map();
@@ -149,7 +149,7 @@ export class DataPersistenceManager {
   private addToSyncQueue(
     operation: 'create' | 'update' | 'delete',
     key: string,
-    data?: any
+    data?: unknown
   ): void {
     const parts = key.split(':');
     const entityType = parts[0] || 'unknown';
@@ -174,7 +174,7 @@ export class DataPersistenceManager {
   /**
    * 延迟同步（防抖）
    */
-  private syncTimer: NodeJS.Timeout | null = null;
+  private syncTimer: ReturnType<typeof setTimeout> | null = null;
   
   private scheduleSyncWithDelay(delay: number): void {
     if (this.syncTimer) clearTimeout(this.syncTimer);
@@ -255,8 +255,16 @@ export class DataPersistenceManager {
   /**
    * 计算校验和
    */
-  private computeChecksum(data: any): string {
-    const str = JSON.stringify(data);
+  private computeChecksum(data: unknown): string {
+    let str: string;
+    try {
+      str = JSON.stringify(data);
+      if (typeof str !== 'string') {
+        str = String(data);
+      }
+    } catch {
+      str = String(data);
+    }
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);

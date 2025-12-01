@@ -32,6 +32,7 @@ import { useProject } from '../contexts/ProjectContext';
 import { logger } from '../utils/logger';
 import { deviceApi } from '../services/api';
 import { USE_MOCK_DATA } from '../config';
+import './DeviceManagement.css';
 
 const { Option } = Select;
 
@@ -54,22 +55,24 @@ const DeviceManagement: React.FC = () => {
   const { currentProject } = useProject();
   const [devices, setDevices] = useState<Device[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingLock, setLoadingLock] = useState(false); // 防止重复加载
+  const [lastProjectId, setLastProjectId] = useState<string | null>(null); // 记录上次项目ID
   const [modalVisible, setModalVisible] = useState(false);
   const [form] = Form.useForm();
 
+  // 统一的项目切换监听
   useEffect(() => {
-    loadDevices();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // 监听项目切换
-  useEffect(() => {
-    if (currentProject) {
-      logger.info(`🔄 项目切换至: ${currentProject.name}，重新加载设备...`);
+    // 检查项目是否真正变化
+    if (currentProject?.id && currentProject.id !== lastProjectId) {
+      logger.info(`🔄 项目切换至: ${currentProject.name}`);
+      setLastProjectId(currentProject.id);
       loadDevices();
+    } else if (!currentProject) {
+      setDevices([]);
+      setLastProjectId(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentProject]);
+  }, [currentProject?.id]);
 
   const loadDevices = async () => {
     if (!currentProject) {
@@ -77,9 +80,17 @@ const DeviceManagement: React.FC = () => {
       return;
     }
 
+    // 防止重复加载
+    if (loadingLock) {
+      logger.debug('设备加载已锁定，跳过重复请求');
+      return;
+    }
+
+    setLoadingLock(true);
+
     try {
       setLoading(true);
-      logger.debug(`🔄 加载设备中... 项目: ${currentProject.name} (ID: ${currentProject.id})`);
+      logger.debug(`🔄 开始加载设备... 项目: ${currentProject.name} (ID: ${currentProject.id})`);
 
       // 开发模式且后端不可用：直接使用演示数据，避免连接错误
       if (USE_MOCK_DATA) {
@@ -197,16 +208,16 @@ const DeviceManagement: React.FC = () => {
             project_id: currentProject.id,
           },
         ]);
-        console.log('✅ 演示数据已加载: 8 个设备');
+        logger.info('✅ 演示数据已加载: 8 个设备');
       } else {
         // 真实后端
         const data = await deviceApi.getAll();
         const list = Array.isArray(data) ? data : [];
         setDevices(list.filter((d: any) => !d.project_id || d.project_id === currentProject.id));
-        console.log(`✅ 设备已加载: ${list.length} 个`);
+        logger.info(`✅ 设备已加载: ${list.length} 个`);
       }
     } catch (err) {
-      console.error('⚠️ 连接失败:', err);
+      logger.error('⚠️ 连接失败:', err);
       // 使用演示数据
       setDevices([
         {
@@ -275,9 +286,11 @@ const DeviceManagement: React.FC = () => {
           responsible_person: '刘工',
         },
       ]);
-      console.log('✅ 演示数据已加载: 5 个设备');
+      logger.info('✅ 演示数据已加载: 5 个设备');
     } finally {
       setLoading(false);
+      // 500ms后解锁，防止短时间内重复请求
+      setTimeout(() => setLoadingLock(false), 500);
     }
   };
 
@@ -333,14 +346,14 @@ const DeviceManagement: React.FC = () => {
         const isDelayed = progress < 100 && expected < today;
 
         return (
-          <Space direction="vertical" size={0} style={{ width: '100%' }}>
+          <Space direction="vertical" size={0} className="device-progress-container">
             <Progress
               percent={progress}
               size="small"
               status={isDelayed ? 'exception' : progress === 100 ? 'success' : 'active'}
             />
             {isDelayed && (
-              <span style={{ fontSize: 12, color: '#ff4d4f' }}>
+              <span className="device-delayed-text">
                 <WarningOutlined /> 已延期
               </span>
             )}
@@ -409,15 +422,8 @@ const DeviceManagement: React.FC = () => {
 
   return (
     <div>
-      <div
-        style={{
-          marginBottom: 24,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600 }}>设备安装管理 (C)</h1>
+      <div className="device-header">
+        <h1 className="device-title">设备安装管理 (C)</h1>
         <Space>
           <Button icon={<SyncOutlined />} onClick={loadDevices}>
             刷新
@@ -446,17 +452,17 @@ const DeviceManagement: React.FC = () => {
           type="info"
           showIcon
           closable
-          style={{ marginBottom: 24 }}
+          className="device-alert"
         />
       )}
 
-      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+      <Row gutter={[16, 16]} className="device-stats-row">
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable>
             <Statistic
-              title={<span style={{ fontSize: 14, color: '#666' }}>设备总数</span>}
+              title={<span className="device-stat-title">设备总数</span>}
               value={devices.length}
-              prefix={<ToolOutlined style={{ color: '#1890ff' }} />}
+              prefix={<ToolOutlined className="device-stat-icon-blue" />}
               valueStyle={{ color: '#1890ff', fontSize: 32, fontWeight: 'bold' }}
               suffix="台"
             />
@@ -465,9 +471,9 @@ const DeviceManagement: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable>
             <Statistic
-              title={<span style={{ fontSize: 14, color: '#666' }}>已安装</span>}
+              title={<span className="device-stat-title">已安装</span>}
               value={installedDevices}
-              prefix={<CheckCircleOutlined style={{ color: '#52c41a' }} />}
+              prefix={<CheckCircleOutlined className="device-stat-icon-green" />}
               valueStyle={{ color: '#52c41a', fontSize: 32, fontWeight: 'bold' }}
               suffix="台"
             />
@@ -476,9 +482,9 @@ const DeviceManagement: React.FC = () => {
         <Col xs={24} sm={12} lg={6}>
           <Card hoverable>
             <Statistic
-              title={<span style={{ fontSize: 14, color: '#666' }}>安装中</span>}
+              title={<span className="device-stat-title">安装中</span>}
               value={inProgressDevices}
-              prefix={<SyncOutlined spin style={{ color: '#1890ff' }} />}
+              prefix={<SyncOutlined spin className="device-stat-icon-blue" />}
               valueStyle={{ color: '#1890ff', fontSize: 32, fontWeight: 'bold' }}
               suffix="台"
             />
@@ -488,9 +494,9 @@ const DeviceManagement: React.FC = () => {
           <Card hoverable>
             <Badge count={delayedDevices} offset={[-10, 10]}>
               <Statistic
-                title={<span style={{ fontSize: 14, color: '#666' }}>延期预警</span>}
+                title={<span className="device-stat-title">延期预警</span>}
                 value={delayedDevices}
-                prefix={<WarningOutlined style={{ color: '#ff4d4f' }} />}
+                prefix={<WarningOutlined className="device-stat-icon-red" />}
                 valueStyle={{ color: '#ff4d4f', fontSize: 32, fontWeight: 'bold' }}
                 suffix="台"
               />
@@ -502,8 +508,8 @@ const DeviceManagement: React.FC = () => {
       <Card
         title={
           <Space>
-            <span style={{ fontSize: 16, fontWeight: 600 }}>设备清单</span>
-            <Badge count={devices.length} showZero style={{ backgroundColor: '#52c41a' }} />
+            <span className="device-list-header">设备清单</span>
+            <Badge count={devices.length} showZero className="device-list-badge" />
           </Space>
         }
       >
@@ -526,7 +532,7 @@ const DeviceManagement: React.FC = () => {
         open={modalVisible}
         onOk={() => {
           form.validateFields().then((values) => {
-            console.log('添加设备:', values);
+            logger.info('添加设备:', values);
             setModalVisible(false);
             form.resetFields();
           });
@@ -571,7 +577,7 @@ const DeviceManagement: React.FC = () => {
             <Input placeholder="请输入负责人" />
           </Form.Item>
           <Form.Item label="预计完成日期" name="expected_completion" rules={[{ required: true }]}>
-            <DatePicker style={{ width: '100%' }} />
+            <DatePicker className="device-form-datepicker" />
           </Form.Item>
         </Form>
       </Modal>

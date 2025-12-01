@@ -1,0 +1,256 @@
+.analytics-dashboard {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: 100vh;
+}
+
+.dashboard-toolbar {
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-toolbar h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.dashboard-icon {
+  font-size: 24px;
+  color: #1890ff;
+}
+
+.dashboard-title {
+  margin: 0;
+}
+
+.chart-section {
+  margin-top: 16px;
+}
+
+.detail-section {
+  margin-top: 16px;
+}
+
+.connection-status-card {
+  margin-top: 16px;
+}
+
+.metric-card {
+  height: 100%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.metric-card .ant-statistic-title {
+  color: #8c8c8c;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.metric-card .ant-statistic-content {
+  margin-bottom: 12px;
+}
+
+.metric-trend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 13px;
+  color: #8c8c8c;
+}
+
+.trend-value {
+  font-weight: 500;
+}
+
+.trend-value.positive {
+  color: #52c41a;
+}
+
+.trend-value.negative {
+  color: #ff4d4f;
+}
+
+.health-details {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.health-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #595959;
+}
+
+.connection-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.connection-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.connection-name {
+  font-weight: 500;
+  font-size: 13px;
+  color: #262626;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.connection-route {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-bottom: 4px;
+}
+
+.connection-stats {
+  font-size: 11px;
+  color: #bfbfbf;
+}
+
+/* 图表容器样式 */
+.ant-card-body canvas {
+  max-height: 300px;
+}
+
+/* Timeline样式优化 */
+.ant-timeline-item-label {
+  width: 120px !important;
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.ant-timeline-item-content {
+  font-size: 13px;
+}
+
+/* 洞察列表样式 */
+.ant-list-item-meta-title {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.ant-list-item-meta-description {
+  font-size: 13px;
+  color: #595959;
+}
+
+.ant-list-item-meta-description p {
+  margin-bottom: 8px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .analytics-dashboard {
+    padding: 16px;
+  }
+
+  .dashboard-toolbar .ant-space {
+    flex-wrap: wrap;
+  }
+
+  .metric-card {
+    margin-bottom: 16px;
+  }
+
+  .ant-timeline-item-label {
+    display: none !important;
+  }
+}
+
+/* 加载动画 */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* 自定义滚动条 */
+.analytics-dashboard ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.analytics-dashboard ::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
+.analytics-dashboard ::-webkit-scrollbar-thumb {
+  background: #bfbfbf;
+  border-radius: 4px;
+}
+
+.analytics-dashboard ::-webkit-scrollbar-thumb:hover {
+  background: #8c8c8c;
+}
+
+/* 卡片阴影效果 */
+.ant-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.ant-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 标签样式 */
+.ant-tag {
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+/* 统计数值样式 */
+.ant-statistic-content-value {
+  font-weight: 600;
+}
+
+/* 进度条样式 */
+.ant-progress-line {
+  margin-top: 8px;
+}
+
+/* 按钮样式优化 */
+.ant-btn {
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.ant-btn-primary {
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.2);
+}
+
+.ant-btn-primary:hover {
+  box-shadow: 0 4px 8px rgba(24, 144, 255, 0.3);
+}

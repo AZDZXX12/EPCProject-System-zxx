@@ -1,0 +1,300 @@
+/* MaterialPriceMonitor 模块样式 */
+
+/* 页面容器 */
+.container {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: 100vh;
+}
+
+/* 页面头部 */
+.pageHeader {
+  margin-bottom: 24px;
+  background: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.pageDescription {
+  margin-top: 8px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* 刷新状态 */
+.refreshStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lastUpdateTime {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.countdown {
+  padding: 2px 8px;
+  background: #f0f9ff;
+  border-radius: 4px;
+  color: #1890ff;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 过滤器区域 */
+.filterSection {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.filterRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* 材料卡片 */
+.materialCard {
+  height: 100%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.materialCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.materialHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.materialName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.materialSpec {
+  color: #6b7280;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.priceInfo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.currentPrice {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1890ff;
+}
+
+.priceUnit {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.priceChange {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.priceUp {
+  background: #ffebe6;
+  color: #ff4d4f;
+}
+
+.priceDown {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.priceStable {
+  background: #f0f0f0;
+  color: #8c8c8c;
+}
+
+/* 图表容器 */
+.chartContainer {
+  margin-top: 24px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1f2937;
+}
+
+/* 市场分析 */
+.marketAnalysis {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.analysisItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.analysisItem:last-child {
+  border-bottom: none;
+}
+
+.analysisLabel {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.analysisValue {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* 价格预警 */
+.alertCard {
+  padding: 12px;
+  background: #fff7e6;
+  border-left: 4px solid #faad14;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.alertTitle {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.alertMessage {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* 详情弹窗 */
+.detailModal {
+  max-width: 800px;
+}
+
+.detailSection {
+  margin-bottom: 24px;
+}
+
+.detailTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1f2937;
+}
+
+/* 加载状态 */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.loadingText {
+  margin-top: 16px;
+  color: #6b7280;
+}
+
+/* 空状态 */
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: #6b7280;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+.emptyText {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.emptyHint {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .pageHeader {
+    padding: 12px 16px;
+  }
+
+  .pageTitle {
+    font-size: 20px;
+  }
+
+  .filterRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .currentPrice {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 12px;
+  }
+
+  .materialCard {
+    margin-bottom: 12px;
+  }
+
+  .chartContainer {
+    padding: 12px;
+  }
+}

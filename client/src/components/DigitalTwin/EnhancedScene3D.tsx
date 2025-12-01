@@ -1,15 +1,21 @@
-import React, { Suspense, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import {
-  OrbitControls,
-  Html,
-  ContactShadows,
-  Sky,
-  Stars,
-  Cloud,
-} from '@react-three/drei';
-import { Progress } from 'antd';
+import React, { useRef, useState, useEffect, Suspense, useMemo } from 'react';
+import { logger } from '../../utils/EnhancedLogger';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls, Stars, Text, Box, Sphere, Line, Html, PerspectiveCamera, Environment, ContactShadows, Sky } from '@react-three/drei';
 import * as THREE from 'three';
+import { Button, Card, Progress, Statistic, Row, Col, Space, Tag, message } from 'antd';
+import {
+  SettingOutlined,
+  ExpandOutlined,
+  SyncOutlined,
+  InfoCircleOutlined,
+  ThunderboltOutlined,
+  ApiOutlined,
+  CloudOutlined,
+  DashboardOutlined,
+  BarChartOutlined,
+} from '@ant-design/icons';
+import './EnhancedScene3D.css';
 
 interface ModelProps {
   position?: [number, number, number];
@@ -477,6 +483,77 @@ const EnhancedScene3D: React.FC<Scene3DProps> = ({ equipment = [], onEquipmentCl
         shadows
         camera={{ position: [15, 12, 15], fov: 50 }}
         style={{ background: 'linear-gradient(180deg, #0a0a20 0%, #1a1a40 50%, #2a1a3a 100%)' }}
+        gl={{
+          antialias: false,
+          alpha: false,
+          stencil: false,
+          depth: true,
+          powerPreference: 'high-performance',
+          preserveDrawingBuffer: false,
+          failIfMajorPerformanceCaveat: false,
+        }}
+        dpr={[1, 1.5]}
+        performance={{ min: 0.5 }}
+        onCreated={({ gl }) => {
+          // WebGL上下文管理 - 增强版
+          const canvas = gl.getContext().canvas;
+          let contextLossCount = 0;
+          let lastLossTime = 0;
+          
+          const handleContextLost = (e: Event) => {
+            e.preventDefault();
+            const now = Date.now();
+            
+            // 重置计数器（如果距离上次丢失超过1分钟）
+            if (now - lastLossTime > 60000) {
+              contextLossCount = 0;
+            }
+            
+            contextLossCount++;
+            lastLossTime = now;
+            
+            logger.warn(`WebGL context lost (${contextLossCount} times)`);
+            
+            // 如果短时间内频繁丢失，停止恢复尝试
+            if (contextLossCount > 3) {
+              logger.error('WebGL context lost too many times, stopping recovery attempts');
+              message.error('3D渲染器频繁崩溃，请刷新页面或降低画质', 5);
+              return;
+            }
+            
+            // 尝试恢复
+            message.warning('3D场景正在恢复...', 2);
+            setTimeout(() => {
+              try {
+                gl.forceContextRestore?.();
+              } catch (err) {
+                logger.error('Failed to restore WebGL context:', err);
+              }
+            }, 100);
+          };
+          
+          const handleContextRestored = () => {
+            logger.info('WebGL context restored successfully');
+            message.success('3D场景已恢复', 2);
+            
+            // 1分钟后重置计数器
+            setTimeout(() => {
+              if (contextLossCount > 0) {
+                contextLossCount = 0;
+                logger.info('WebGL context loss counter reset');
+              }
+            }, 60000);
+          };
+          
+          canvas.addEventListener('webglcontextlost', handleContextLost);
+          canvas.addEventListener('webglcontextrestored', handleContextRestored);
+          
+          // 清理函数
+          return () => {
+            canvas.removeEventListener('webglcontextlost', handleContextLost);
+            canvas.removeEventListener('webglcontextrestored', handleContextRestored);
+          };
+        }}
       >
         <Suspense fallback={null}>
           {/* 星空背景 */}
@@ -511,8 +588,6 @@ const EnhancedScene3D: React.FC<Scene3DProps> = ({ equipment = [], onEquipmentCl
           <Sky distance={450000} sunPosition={[0, 1, 0]} turbidity={8} rayleigh={2} mieCoefficient={0.005} mieDirectionalG={0.8} />
           <ambientLight intensity={0.4} />
           <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
-          <Cloud position={[-10, 15, -20]} opacity={0.2} speed={0.2} />
-          <Cloud position={[20, 12, 10]} opacity={0.2} speed={0.15} />
 
           {/* 粒子场 */}
           <ParticleField />
@@ -545,57 +620,42 @@ const EnhancedScene3D: React.FC<Scene3DProps> = ({ equipment = [], onEquipmentCl
       </Canvas>
 
       {/* 控制面板 */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 20,
-          left: 20,
-          background: 'rgba(0,0,0,0.85)',
-          padding: '16px 20px',
-          borderRadius: '12px',
-          border: '2px solid #00ff88',
-          color: '#00ff88',
-          fontFamily: 'system-ui',
-          fontSize: '13px',
-          backdropFilter: 'blur(10px)',
-          boxShadow: '0 8px 32px rgba(0,255,136,0.2)',
-        }}
-      >
-        <div style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: 12 }}>
-          🎮 数字孪生控制台
-        </div>
-        <div style={{ fontSize: '12px', color: '#aaa', lineHeight: '20px' }}>
-          • 左键拖拽：旋转视角
-          <br />
-          • 右键拖拽：平移视角
-          <br />
-          • 滚轮：缩放视角
-          <br />• 悬停/点击设备：查看详情
-        </div>
+      <div className="control-panel">
+        <Card
+          size="small"
+          className="control-card"
+          title={
+            <Space>
+              <SettingOutlined className="control-panel-icon" />
+              <span className="control-panel-title">控制面板</span>
+            </Space>
+          }
+        >
+          <div style={{ fontSize: '12px', color: '#aaa', lineHeight: '20px' }}>
+            • 左键拖拽：旋转视角
+            <br />
+            • 右键拖拽：平移视角
+            <br />
+            • 滚轮：缩放视角
+            <br />• 悬停/点击设备：查看详情
+          </div>
+        </Card>
       </div>
 
       {/* 状态统计 */}
       {showStats && (
-        <div
-          style={{
-            position: 'absolute',
-            top: 20,
-            right: 20,
-            background: 'rgba(0,0,0,0.85)',
-            padding: '16px 20px',
-            borderRadius: '12px',
-            border: '2px solid #0088ff',
-            color: '#fff',
-            fontFamily: 'system-ui',
-            fontSize: '13px',
-            backdropFilter: 'blur(10px)',
-            minWidth: '200px',
-          }}
-        >
-          <div style={{ fontSize: '15px', fontWeight: 'bold', marginBottom: 12, color: '#0088ff' }}>
-            📊 设备统计
-          </div>
-          <div style={{ fontSize: '12px', lineHeight: '24px' }}>
+        <div className="stats-panel">
+          <Card
+            size="small"
+            className="stats-card"
+            title={
+              <Space>
+                <BarChartOutlined className="stats-icon" />
+                <span className="stats-title">设备统计</span>
+              </Space>
+            }
+          >
+            <div style={{ fontSize: '12px', lineHeight: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <span style={{ color: '#aaa' }}>总设备数:</span>
               <span style={{ color: '#00ff88', fontWeight: 'bold' }}>{equipment.length}</span>
@@ -629,6 +689,7 @@ const EnhancedScene3D: React.FC<Scene3DProps> = ({ equipment = [], onEquipmentCl
               </div>
             )}
           </div>
+          </Card>
         </div>
       )}
 

@@ -16,6 +16,8 @@ body {
 
 #root {
   min-height: 100vh;
+  background: #f0f2f5;
+  width: 100%;
 }
 
 /* 全局平滑滚动 */

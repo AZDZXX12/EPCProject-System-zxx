@@ -30,6 +30,7 @@ import {
 } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
 import dayjs from 'dayjs';
+import { logger } from '../utils/logger';
 
 const { Search } = Input;
 
@@ -248,7 +249,7 @@ const Personnel: React.FC = () => {
 
       message.success(`✅ 考勤表已导出：${fileName}`);
     } catch (error) {
-      console.error('导出失败:', error);
+      logger.error('[人员管理] 考勤表导出失败:', error);
       message.error('导出失败，请重试');
     }
   };
@@ -308,7 +309,7 @@ const Personnel: React.FC = () => {
 
       message.success(`✅ 考勤汇总已导出：${fileName}`);
     } catch (error) {
-      console.error('导出失败:', error);
+      logger.error('[人员管理] 考勤汇总导出失败:', error);
       message.error('导出失败，请重试');
     }
   };
@@ -425,7 +426,7 @@ const Personnel: React.FC = () => {
   ];
 
   return (
-    <div>
+    <div style={{ width: '100%', maxWidth: '100%', overflowX: 'auto', padding: '24px', background: '#f0f2f5', minHeight: '100vh' }}>
       <div style={{ marginBottom: 24 }}>
         <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600, marginBottom: 8 }}>
           <TeamOutlined /> 施工人员管理

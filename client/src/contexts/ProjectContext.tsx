@@ -80,3 +80,8 @@ export const useProject = () => {
   }
   return context;
 };
+
+// 可选版本：在未包裹 Provider 时返回 undefined，而不是抛错
+export const useProjectOptional = () => {
+  return useContext(ProjectContext);
+};

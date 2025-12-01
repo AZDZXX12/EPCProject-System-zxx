@@ -1,0 +1,39 @@
+.issue-tracking {
+  padding: 0;
+}
+
+.issue-tracking .stats-row {
+  margin-bottom: 24px;
+}
+
+.issue-tracking .action-card {
+  margin-bottom: 24px;
+}
+
+/* 表格行颜色 */
+.issue-tracking .ant-table-row-level-0:hover {
+  background-color: #fafafa;
+}
+
+/* 逾期标记 */
+.issue-tracking .overdue {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+/* 步骤条样式 */
+.issue-tracking .ant-steps {
+  margin-bottom: 24px;
+}
+
+/* 描述列表样式 */
+.issue-tracking .ant-descriptions {
+  margin-top: 24px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .issue-tracking .ant-table {
+    font-size: 12px;
+  }
+}

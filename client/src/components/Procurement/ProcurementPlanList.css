@@ -1,0 +1,21 @@
+.procurement-plan-list {
+  padding: 24px;
+}
+
+.procurement-plan-list .ant-card {
+  margin-bottom: 16px;
+}
+
+.procurement-plan-list .ant-table-cell {
+  padding: 12px 16px;
+}
+
+.procurement-plan-list .ant-statistic-title {
+  font-size: 14px;
+  color: #666;
+}
+
+.procurement-plan-list .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 500;
+}

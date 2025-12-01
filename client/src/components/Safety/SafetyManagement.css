@@ -1,0 +1,22 @@
+.safety-management {
+  padding: 0;
+}
+
+.safety-management .stats-row {
+  margin-bottom: 24px;
+}
+
+.safety-management .hazard-count-warning {
+  color: #ff4d4f;
+}
+
+.safety-management .hazard-count-safe {
+  color: #52c41a;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .safety-management .ant-table {
+    font-size: 12px;
+  }
+}

@@ -110,40 +110,130 @@ export const eventBus = new EventBus(false); // 关闭debug模式
  * 例如: project:created, task:updated
  */
 export const EVENTS = {
-  // ============ 项目事件 ============
-  PROJECT_CREATED: 'project:created', // 项目创建
-  PROJECT_UPDATED: 'project:updated', // 项目更新
-  PROJECT_SELECTED: 'project:selected', // 项目选中
-  PROJECT_DELETED: 'project:deleted', // 项目删除
+  // 项目相关事件
+  PROJECT_CREATED: 'project:created',
+  PROJECT_UPDATED: 'project:updated',
+  PROJECT_SELECTED: 'project:selected',
+  PROJECT_DELETED: 'project:deleted',
+  PROJECT_PROGRESS_UPDATED: 'project:progress:updated',
+  
+  // 任务相关事件
+  TASK_CREATED: 'task:created',
+  TASK_UPDATED: 'task:updated',
+  TASK_DELETED: 'task:deleted',
+  TASK_ASSIGNED: 'task:assigned',
+  TASK_COMPLETED: 'task:completed',
+  
+  // 设备相关事件
+  DEVICE_CREATED: 'device:created',
+  DEVICE_UPDATED: 'device:updated',
+  DEVICE_DELETED: 'device:deleted',
+  DEVICE_STATUS_CHANGED: 'device:status:changed',
+  
+  // 采购相关事件
+  PROCUREMENT_CREATED: 'procurement:created',
+  PROCUREMENT_ITEM_ADDED: 'procurement:item:added',
+  PROCUREMENT_STATUS_CHANGED: 'procurement:status:changed',
+  PROCUREMENT_REQUEST: 'procurement:request',
+  
+  // 安全相关事件
+  SAFETY_CHECK_CREATED: 'safety:check:created',
+  SAFETY_ISSUE_FOUND: 'safety:issue:found',
+  SAFETY_ISSUE_RESOLVED: 'safety:issue:resolved',
+  SAFETY_ALERT: 'safety:alert',
+  
+  // 文档相关事件
+  DOCUMENT_UPLOADED: 'document:uploaded',
+  DOCUMENT_UPDATED: 'document:updated',
+  DOCUMENT_DELETED: 'document:deleted',
+  
+  // 系统事件
+  DATA_SYNCED: 'data:synced',
+  ERROR_OCCURRED: 'error:occurred',
+  
+  // 通知事件
+  NOTIFICATION_SENT: 'notification:sent',
+  NOTIFICATION_READ: 'notification:read',
+  NOTIFICATION_SEND: 'notification:send',
+  NOTIFICATION_SHOW: 'notification:show',
+  BROADCAST_NOTIFICATION: 'notification:broadcast',
+  EMERGENCY_NOTIFICATION: 'notification:emergency',
+  
+  // 施工相关事件
+  CONSTRUCTION_LOG_SUBMITTED: 'construction:log:submitted',
+  CONSTRUCTION_PAUSE: 'construction:pause',
+  CONSTRUCTION_STOP: 'construction:stop',
+  LOG_CREATED: 'log:created',
+  LOG_UPDATED: 'log:updated',
+  
+  // 质量相关事件
+  QUALITY_ISSUE_FOUND: 'quality:issue:found',
+  QUALITY_CHECK_COMPLETED: 'quality:check:completed',
+  
+  // 阶段管理事件
+  PHASE_TRANSITION: 'phase:transition',
+  PHASE_STARTED: 'phase:started',
+  PHASE_READY_FOR_TRANSITION: 'phase:ready:transition',
+  PHASE_COMPLETED: 'phase:completed',
+  PHASE_UPDATED: 'phase:updated',
+  PROGRESS_CHANGED: 'progress:changed',
+  
+  // 模块管理事件
+  MODULE_ACTIVATED: 'module:activated',
+  MODULE_DEACTIVATED: 'module:deactivated',
+  
+  // 优化相关事件
+  SCHEDULE_OPTIMIZED: 'schedule:optimized',
+  
+  // 价格相关事件
+  PRICE_INQUIRY: 'price:inquiry',
+  
+  // 供应商相关事件
+  SUPPLIER_EVALUATION: 'supplier:evaluation',
+  
+  // 费用事件
+  COST_UPDATED: 'cost:updated',
+  COST_WARNING: 'cost:warning',
+  
+  // 采购事件（避免重复）
+  PROCUREMENT_PLAN_CREATED: 'procurement:plan:created',
 
-  // ============ 任务事件 ============
-  TASK_CREATED: 'task:created', // 任务创建
-  TASK_UPDATED: 'task:updated', // 任务更新
-  TASK_DELETED: 'task:deleted', // 任务删除
-  TASK_PROGRESS_CHANGED: 'task:progress', // 任务进度变化
+  // 价格预警事件
+  PRICE_ALERT_TRIGGERED: 'price:alert:triggered',
 
-  // ============ 施工日志事件 ============
-  LOG_CREATED: 'log:created', // 日志创建
-  LOG_UPDATED: 'log:updated', // 日志更新
-  LOG_DELETED: 'log:deleted', // 日志删除
+  // 风险事件
+  RISK_IDENTIFIED: 'risk:identified',
+  RISK_UPDATED: 'risk:updated',
 
-  // ============ 阶段事件 ============
-  PHASE_STARTED: 'phase:started', // 阶段开始
-  PHASE_UPDATED: 'phase:updated', // 阶段更新
-  PHASE_COMPLETED: 'phase:completed', // 阶段完成
+  // 供应商事件
+  SUPPLIER_EVALUATED: 'supplier:evaluated',
 
-  // ============ 进度事件 ============
-  PROGRESS_CHANGED: 'progress:changed', // 项目进度变化
-  PROGRESS_SYNCED: 'progress:synced', // 进度同步完成
+  // 项目阶段事件
+  PHASE_CHANGED: 'phase:changed',
 
-  // ============ 设备事件 ============
-  DEVICE_CREATED: 'device:created', // 设备创建
-  DEVICE_UPDATED: 'device:updated', // 设备更新
-  DEVICE_STATUS_CHANGED: 'device:status', // 设备状态变化
+  // 里程碑事件
+  MILESTONE_CREATED: 'milestone:created',
+  MILESTONE_UPDATED: 'milestone:updated',
 
-  // ============ 通知事件 ============
-  NOTIFICATION_SHOW: 'notification:show', // 显示通知
-  NOTIFICATION_CLEAR: 'notification:clear', // 清除通知
+  // 交付物事件
+  DELIVERABLE_ADDED: 'deliverable:added',
+  DELIVERABLE_COMPLETED: 'deliverable:completed',
+  DELIVERABLE_APPROVED: 'deliverable:approved',
+  DELIVERABLE_REJECTED: 'deliverable:rejected',
+  DELIVERABLE_UPDATED: 'deliverable:updated',
+
+  // 模块集成事件
+  CONSTRUCTION_MILESTONE_REACHED: 'construction:milestone:reached',
+  HIGH_RISK_WORK_STARTED: 'construction:highrisk:started',
+  SAFETY_INCIDENT: 'safety:incident',
+  BUDGET_EXCEEDED: 'budget:exceeded',
+  RESOURCE_CONFLICT: 'resource:conflict',
+  CONSTRUCTION_UPDATE: 'construction:update',
+  TASK_PROGRESS_UPDATE: 'task:progress:update',
+  RESOURCE_REALLOCATED: 'resource:reallocated',
+
+  // AI助手事件
+  AI_ASSISTANT_OPEN: 'ai:open',
 } as const;
 
 /**
@@ -195,6 +285,32 @@ export interface ProgressEventData {
   progress: number;
   source?: 'task' | 'phase' | 'log' | 'manual';
   metadata?: any;
+}
+
+// 采购计划事件数据
+export interface ProcurementEventData {
+  materialId: string;
+  materialName: string;
+  specification: string;
+  quantity: number;
+  estimatedPrice: number;
+  urgency?: 'low' | 'medium' | 'high' | 'normal' | 'urgent' | 'emergency';
+  type?: string;
+  reason?: string;
+  data?: any;
+}
+
+// 价格预警事件数据
+export interface PriceAlertEventData {
+  materialId: string;
+  materialName: string;
+  currentPrice: number;
+  previousPrice: number;
+  change: number;
+  changePercent: number;
+  threshold: number;
+  severity: 'low' | 'medium' | 'high';
+  region?: string;
 }
 
 /**

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Layout, Menu, Button } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Layout, Menu, Button, Input, Tooltip } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   RocketOutlined,
@@ -21,7 +21,14 @@ import {
   BarChartOutlined,
   BuildOutlined,
   SettingOutlined,
+  DollarOutlined,
+  MenuOutlined,
+  CloseOutlined,
+  SearchOutlined,
+  BellOutlined,
+  StarOutlined,
 } from '@ant-design/icons';
+import './Sider.css';
 
 const { Sider } = Layout;
 
@@ -33,16 +40,27 @@ interface AppSiderProps {
 const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isMobile, setIsMobile] = useState(false);
+  const [mobileVisible, setMobileVisible] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredMenuItems, setFilteredMenuItems] = useState<any[]>([]);
+
+  // 检测移动端
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const menuItems = [
     {
       key: '/workspace',
       icon: <RocketOutlined />,
       label: '工作台',
-      style: {
-        borderLeft: '3px solid transparent',
-        fontWeight: 600,
-      },
+      className: 'menu-item-bold',
     },
     {
       key: '/digital-twin',
@@ -50,50 +68,32 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       label: '数字孪生驾驶舱',
     },
     {
-      key: '/gantt',
-      icon: <BarChartOutlined />,
-      label: '甘特图',
-    },
-    {
       key: '/tasks',
       icon: <UnorderedListOutlined />,
       label: '任务管理',
     },
     {
-      key: '/construction-management',
+      key: '/construction',
       icon: <BuildOutlined />,
-      label: '总包施工管理',
-      style: {
-        background: 'linear-gradient(135deg, rgba(24,144,255,0.1) 0%, rgba(102,126,234,0.1) 100%)',
-        borderLeft: '3px solid #1890ff',
-        fontWeight: 500,
-      },
-    },
-    {
-      key: '/construction-log',
-      icon: <FileTextOutlined />,
-      label: '施工日志',
-    },
-    {
-      key: '/devices',
-      icon: <ToolOutlined />,
-      label: '设备安装管理',
+      label: '施工管理',
+      className: 'menu-highlight-blue',
     },
     {
       key: '/procurement',
       icon: <ShoppingCartOutlined />,
-      label: '设备采购管理',
+      label: '采购管理',
+    },
+    {
+      key: '/material-price',
+      icon: <DollarOutlined />,
+      label: '材料价格监控',
+      className: 'menu-highlight-warning',
     },
     {
       key: '/selection',
       icon: <AppstoreOutlined />,
       label: '设备选型系统',
-      style: {
-        background:
-          'linear-gradient(135deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%)',
-        borderLeft: '3px solid #667eea',
-        fontWeight: 500,
-      },
+      className: 'menu-highlight-indigo',
     },
     {
       key: '/utilities',
@@ -131,124 +131,167 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       key: '/reports',
       icon: <FilePdfOutlined />,
       label: '数据分析',
-      style: {
-        background: 'linear-gradient(135deg, rgba(82,196,26,0.1) 0%, rgba(135,208,104,0.1) 100%)',
-        borderLeft: '3px solid #52c41a',
-        fontWeight: 500,
-      },
+      className: 'menu-highlight-green',
     },
     {
       key: '/system-management',
       icon: <ApiOutlined />,
       label: '后台管理',
-      style: {
-        marginTop: 16,
-        background: 'linear-gradient(135deg, rgba(255,85,0,0.1) 0%, rgba(255,140,0,0.1) 100%)',
-        borderLeft: '3px solid #ff5500',
-        fontWeight: 500,
-      },
+      className: 'menu-highlight-system',
     },
     {
       key: '/system-settings',
       icon: <SettingOutlined />,
       label: '系统设置',
-      style: {
-        background: 'linear-gradient(135deg, rgba(24,144,255,0.1) 0%, rgba(102,126,234,0.1) 100%)',
-        borderLeft: '3px solid #1890ff',
-        fontWeight: 500,
-        marginBottom: 16,
-      },
+      className: 'menu-highlight-blue menu-btm-mb',
     },
   ];
 
+  // 搜索过滤菜单
+  useEffect(() => {
+    if (!searchValue) {
+      setFilteredMenuItems(menuItems);
+      return;
+    }
+
+    const filterItems = (items: any[]): any[] => {
+      return items.filter(item => {
+        if (item.label && typeof item.label === 'string') {
+          if (item.label.toLowerCase().includes(searchValue.toLowerCase())) {
+            return true;
+          }
+        }
+        if (item.children) {
+          const filteredChildren = filterItems(item.children);
+          if (filteredChildren.length > 0) {
+            return true;
+          }
+        }
+        return false;
+      }).map(item => {
+        if (item.children) {
+          return {
+            ...item,
+            children: filterItems(item.children)
+          };
+        }
+        return item;
+      });
+    };
+
+    setFilteredMenuItems(filterItems(menuItems));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchValue]);
+
   const handleMenuClick = (e: { key: string }) => {
     navigate(e.key);
+    // 移动端点击菜单后关闭侧边栏
+    if (isMobile) {
+      setMobileVisible(false);
+    }
   };
 
   return (
-    <Sider
+    <>
+      {/* 移动端菜单按钮 */}
+      {isMobile && (
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMobileVisible(!mobileVisible)}
+          aria-label="Toggle menu"
+        >
+          {mobileVisible ? <CloseOutlined /> : <MenuOutlined />}
+        </button>
+      )}
+
+      {/* 移动端遮罩 */}
+      {isMobile && mobileVisible && (
+        <div
+          className="mobile-sider-mask"
+          onClick={() => setMobileVisible(false)}
+        />
+      )}
+
+      <Sider
       collapsible
       collapsed={collapsed}
       onCollapse={onCollapse}
       width={200}
       collapsedWidth={60}
       trigger={null}
-      style={{
-        background: '#fff',
-        boxShadow: '2px 0 8px rgba(0,0,0,0.06)',
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        bottom: 0,
-        height: '100vh',
-        overflow: 'auto',
-        zIndex: 100,
-      }}
+      className={`app-sider${isMobile && mobileVisible ? ' mobile-visible' : ''}`}
     >
       {/* Logo区域 - 精简版 */}
-      <div
-        style={{
-          height: 48,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderBottom: '1px solid #f0f0f0',
-          background:
-            'linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%)',
-          fontSize: collapsed ? 18 : 16,
-          fontWeight: 600,
-          color: '#667eea',
-        }}
-      >
+      <div className={`sider-logo ${collapsed ? 'sider-logo-collapsed' : ''}`}>
         {collapsed ? <RocketOutlined /> : '项目管理'}
       </div>
 
+      {/* 搜索框 - 非折叠时显示 */}
+      {!collapsed && (
+        <div style={{ padding: '8px 16px' }}>
+          <Input
+            placeholder="搜索菜单..."
+            prefix={<SearchOutlined />}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            allowClear
+            size="small"
+          />
+        </div>
+      )}
+
+      {/* 快捷操作按钮 - 折叠时显示 */}
+      {collapsed && (
+        <div style={{ padding: '8px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+          <Tooltip title="搜索" placement="right">
+            <Button
+              type="text"
+              icon={<SearchOutlined />}
+              onClick={() => onCollapse(false)}
+              style={{ width: '40px', height: '40px' }}
+            />
+          </Tooltip>
+          <Tooltip title="通知" placement="right">
+            <Button
+              type="text"
+              icon={<BellOutlined />}
+              onClick={() => navigate('/notifications')}
+              style={{ width: '40px', height: '40px' }}
+            />
+          </Tooltip>
+          <Tooltip title="收藏" placement="right">
+            <Button
+              type="text"
+              icon={<StarOutlined />}
+              onClick={() => navigate('/favorites')}
+              style={{ width: '40px', height: '40px' }}
+            />
+          </Tooltip>
+        </div>
+      )}
+
       {/* 菜单区域 */}
-      <div style={{ overflowY: 'auto', height: 'calc(100% - 96px)', paddingTop: 8 }}>
+      <div className="sider-menu-wrapper">
         <Menu
           mode="inline"
           selectedKeys={[location.pathname]}
-          style={{
-            height: '100%',
-            borderRight: 0,
-            fontSize: 15,
-          }}
-          items={menuItems}
+          className="sider-menu"
+          items={searchValue ? filteredMenuItems : menuItems}
           onClick={handleMenuClick}
         />
       </div>
 
       {/* 折叠按钮 */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          height: 48,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderTop: '2px solid #e0e0e0',
-          background: 'linear-gradient(to bottom, #fafafa, #f0f0f0)',
-          boxShadow: '0 -2px 8px rgba(0,0,0,0.05)',
-          zIndex: 10,
-        }}
-      >
+      <div className="sider-footer">
         <Button
           type="text"
           icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
           onClick={() => onCollapse(!collapsed)}
-          style={{
-            fontSize: 18,
-            width: 48,
-            height: 48,
-            color: '#1890ff',
-            fontWeight: 'bold',
-          }}
+          className="sider-collapse-btn"
         />
       </div>
     </Sider>
+    </>
   );
 };
 

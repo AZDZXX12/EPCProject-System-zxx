@@ -3,6 +3,8 @@
  * 用于管理任务、项目、用户偏好设置等本地数据
  */
 
+import { logger } from './EnhancedLogger';
+
 const STORAGE_VERSION = '1.0.0';
 
 // 存储键名
@@ -23,7 +25,7 @@ export const saveTasks = (tasks: any[]) => {
     localStorage.setItem(STORAGE_KEYS.VERSION, STORAGE_VERSION);
     return true;
   } catch (error) {
-    console.error('Failed to save tasks to localStorage:', error);
+    logger.error('Failed to save tasks to localStorage:', error);
     return false;
   }
 };
@@ -36,7 +38,7 @@ export const loadTasks = (): any[] => {
     const tasksStr = localStorage.getItem(STORAGE_KEYS.TASKS);
     return tasksStr ? JSON.parse(tasksStr) : [];
   } catch (error) {
-    console.error('Failed to load tasks from localStorage:', error);
+    logger.error('Failed to load tasks from localStorage:', error);
     return [];
   }
 };
@@ -49,7 +51,7 @@ export const saveCurrentProject = (project: any) => {
     localStorage.setItem(STORAGE_KEYS.CURRENT_PROJECT, JSON.stringify(project));
     return true;
   } catch (error) {
-    console.error('Failed to save current project:', error);
+    logger.error('Failed to save current project:', error);
     return false;
   }
 };
@@ -62,7 +64,7 @@ export const loadCurrentProject = (): any | null => {
     const projectStr = localStorage.getItem(STORAGE_KEYS.CURRENT_PROJECT);
     return projectStr ? JSON.parse(projectStr) : null;
   } catch (error) {
-    console.error('Failed to load current project:', error);
+    logger.error('Failed to load current project:', error);
     return null;
   }
 };
@@ -75,7 +77,7 @@ export const saveUserPreferences = (preferences: any) => {
     localStorage.setItem(STORAGE_KEYS.USER_PREFERENCES, JSON.stringify(preferences));
     return true;
   } catch (error) {
-    console.error('Failed to save user preferences:', error);
+    logger.error('Failed to save user preferences:', error);
     return false;
   }
 };
@@ -94,10 +96,9 @@ export const loadUserPreferences = (): any => {
           notifications: true,
         };
   } catch (error) {
-    console.error('Failed to load user preferences:', error);
+    logger.error('Failed to load user preferences:', error);
     return {
       theme: 'light',
-      language: 'zh-CN',
       notifications: true,
     };
   }
@@ -113,7 +114,7 @@ export const clearAllStorage = () => {
     });
     return true;
   } catch (error) {
-    console.error('Failed to clear localStorage:', error);
+    logger.error('Failed to clear localStorage:', error);
     return false;
   }
 };

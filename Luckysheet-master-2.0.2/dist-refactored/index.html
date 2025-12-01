@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 	<meta charset='utf-8'>
@@ -16,249 +16,9 @@
 	<!-- 应用样式 -->
 	<link rel='stylesheet' href='./css/app.css' />
 	
-	<!-- 动画样式 -->
-	<style>
-		@keyframes slideIn {
-			from { transform: translateX(400px); opacity: 0; }
-			to { transform: translateX(0); opacity: 1; }
-		}
-		@keyframes fadeOut {
-			from { opacity: 1; }
-			to { opacity: 0; }
-		}
-		
-		/* Luckysheet工具栏样式增强 - 增大图标和字体 */
-		.luckysheet-wa-editor .luckysheet-toolbar-button {
-			font-size: 15px !important;
-			padding: 6px 8px !important;
-		}
-		
-		.luckysheet-wa-editor .luckysheet-toolbar-button-split-left {
-			font-size: 15px !important;
-			padding: 6px 8px !important;
-		}
-		
-		.luckysheet-wa-editor .luckysheet-toolbar-select,
-		.luckysheet-wa-editor .luckysheet-toolbar-combo-button {
-			font-size: 14px !important;
-			height: 28px !important;
-			line-height: 28px !important;
-		}
-		
-		.luckysheet-wa-editor .luckysheet-icon {
-			font-size: 16px !important;
-		}
-		
-		/* 工具栏整体高度调整 */
-		#luckysheet-wa-editor {
-			min-height: 40px !important;
-		}
-		
-		.luckysheet-wa-editor {
-			padding: 5px 8px !important;
-		}
-		
-	/* 单元格编辑器默认字体 - 不设置固定大小，由动态脚本控制 */
-	#luckysheet-input-box,
-	#luckysheet-rich-text-editor,
-	.luckysheet-cell-flow-text {
-		font-family: 'SimSun', serif !important;
-	}
-	</style>
+	<!-- 动画样式已迁移至 css/app.css -->
 	
-	<!-- 登录模态框样式 -->
-	<style>
-		/* 登录模态框覆盖层 */
-		#loginModal {
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 9999;
-			background: linear-gradient(135deg, #1a2a44 0%, #2d4263 50%, #1a2a44 100%);
-		}
-
-		#loginModal.show {
-			display: block;
-		}
-
-		/* Canvas粒子背景 */
-		#particles-canvas {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 0;
-		}
-
-		/* 登录容器 */
-		.login-wrapper {
-			position: relative;
-			z-index: 1;
-			width: 100%;
-			height: 100vh;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-		}
-
-	.login-container {
-		position: relative;
-		background: transparent;
-		padding: 50px 45px 40px;
-		width: 420px;
-		max-width: 90%;
-		animation: fadeInUp 0.8s ease-out;
-	}
-
-		@keyframes fadeInUp {
-			from { opacity: 0; transform: translateY(30px); }
-			to { opacity: 1; transform: translateY(0); }
-		}
-
-		.login-header {
-			text-align: center;
-			margin-bottom: 40px;
-		}
-
-	.login-title {
-		color: #ffffff;
-		font-size: 32px;
-		font-weight: 700;
-		margin-bottom: 10px;
-		text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-	}
-
-	.login-subtitle {
-		color: rgba(255, 255, 255, 0.8);
-		font-size: 14px;
-	}
-
-		.input-group {
-			margin-bottom: 25px;
-		}
-
-	.input-label {
-		display: block;
-		margin-bottom: 10px;
-		color: rgba(255, 255, 255, 0.9);
-		font-size: 14px;
-		font-weight: 600;
-	}
-
-	.input-wrapper {
-		position: relative;
-		display: flex;
-		align-items: center;
-	}
-
-	.input-icon {
-		position: absolute;
-		left: 15px;
-		font-size: 18px;
-		z-index: 1;
-		filter: drop-shadow(0 0 3px rgba(100, 200, 255, 0.5));
-	}
-
-	.login-input {
-		width: 100%;
-		padding: 14px 15px 14px 45px;
-		border: 2px solid rgba(100, 200, 255, 0.3);
-		border-radius: 12px;
-		font-size: 15px;
-		font-weight: 500;
-		color: #ffffff;
-		background: rgba(255, 255, 255, 0.1);
-		-webkit-backdrop-filter: blur(10px);
-		backdrop-filter: blur(10px);
-		transition: all 0.3s ease;
-	}
-
-	.login-input:focus {
-		outline: none;
-		border-color: rgba(100, 200, 255, 0.8);
-		background: rgba(255, 255, 255, 0.15);
-		box-shadow: 0 0 20px rgba(100, 200, 255, 0.3);
-	}
-
-	.login-input::placeholder {
-		color: rgba(255, 255, 255, 0.5);
-	}
-
-	.login-btn {
-		width: 100%;
-		padding: 15px;
-		background: linear-gradient(135deg, rgba(100, 200, 255, 0.9) 0%, rgba(0, 153, 255, 0.9) 100%);
-		border: 2px solid rgba(100, 200, 255, 0.5);
-		border-radius: 12px;
-		color: white;
-		font-size: 16px;
-		font-weight: 700;
-		cursor: pointer;
-		transition: all 0.3s ease;
-		box-shadow: 0 4px 20px rgba(100, 200, 255, 0.4);
-		-webkit-backdrop-filter: blur(10px);
-		backdrop-filter: blur(10px);
-	}
-
-	.login-btn:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 6px 30px rgba(100, 200, 255, 0.6);
-		background: linear-gradient(135deg, rgba(100, 200, 255, 1) 0%, rgba(0, 153, 255, 1) 100%);
-	}
-
-		.footer-info {
-			margin-top: 30px;
-			text-align: center;
-		}
-
-		.copyright {
-			font-size: 13px;
-			color: #9ca3af;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			gap: 10px;
-			flex-wrap: wrap;
-		}
-
-	.company-name {
-		color: rgba(255, 255, 255, 0.7);
-		font-weight: 500;
-	}
-
-	.separator {
-		color: rgba(255, 255, 255, 0.4);
-	}
-
-	.author {
-		font-weight: 600;
-		color: rgba(100, 200, 255, 0.9);
-	}
-
-	.year {
-		color: rgba(255, 255, 255, 0.6);
-	}
-	
-	.toggle-link {
-		color: rgba(100, 200, 255, 0.9);
-		text-decoration: none;
-		font-size: 13px;
-		font-weight: 500;
-		transition: all 0.3s ease;
-		display: inline-block;
-	}
-	
-	.toggle-link:hover {
-		color: rgba(100, 200, 255, 1);
-		text-shadow: 0 0 10px rgba(100, 200, 255, 0.5);
-		transform: translateY(-1px);
-	}
-	</style>
+	<!-- 登录模态框样式已迁移至 css/app.css -->
 
 	<!-- jQuery 和依赖库 -->
 	<script>
@@ -775,22 +535,12 @@
 <div class="container">
 	<!-- 工具栏 -->
 	<div class="custom-toolbar">
-		<div style="display: flex; gap: 8px; align-items: center;">
+		<div class="toolbar-group left">
 			<!-- 个人中心按钮（仅普通用户可见）-->
-			<button id="userProfileBtn" class="custom-btn" title="个人中心" style="
-				display: none;
-				background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
-				color: white;
-				border: none;
-			">👤 个人中心</button>
+			<button id="userProfileBtn" class="custom-btn" title="个人中心" style="display: none;">👤 个人中心</button>
 			
 			<!-- 管理员按钮（仅管理员可见，是管理员的个人中心）-->
-			<button id="adminPageBtn" class="custom-btn" title="管理员中心" style="
-				display: none;
-				background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-				color: white;
-				border: none;
-			">👑 管理员</button>
+			<button id="adminPageBtn" class="custom-btn" title="管理员中心" style="display: none;">👑 管理员</button>
 			
 			<button id="openFileBtn" class="custom-btn" title="打开本地表格文件">打开</button>
 			<input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.json" style="display: none;" />
@@ -798,10 +548,10 @@
 			<button id="newFileBtn" class="custom-btn" title="新建空白表格">新建</button>
 			<button id="exportPdfBtn" class="custom-btn" title="导出为PDF文件">导出PDF</button>
 		</div>
-		<div style="flex: 1; display: flex; justify-content: center; align-items: center;">
-			<span style="font-size: 26px; font-weight: bold; color: #333; letter-spacing: 2px;">设备参数选型系统</span>
+		<div class="toolbar-group center">
+			<span class="app-title">设备参数选型系统</span>
 		</div>
-		<div style="display: flex; gap: 8px; align-items: center;">
+		<div class="toolbar-group right">
 			<!-- 实用工具按钮 -->
 			<button id="utilityToolsBtn" class="title-btn" title="实用工具集" onclick="window.location.href='tools/all-tools.html'">🛠️ 实用工具</button>
 			
@@ -811,7 +561,7 @@
 			<!-- <button id="openCableSelectorBtn" class="title-btn" title="打开电缆选型工具（新窗口）">⚡ 电缆选型</button> -->
 			
 			<button id="refreshDbBtn" class="refresh-btn" title="刷新表格">🔄 刷新</button>
-			<span style="color: #888; font-size: 12px;">💡 打开加载文件后刷新一下</span>
+			<span class="toolbar-hint">💡 打开加载文件后刷新一下</span>
 		</div>
 	</div>
 	
@@ -828,8 +578,8 @@
 			
 			<!-- 数据库文件加载区域 -->
 			<div class="database-load-section">
-				<span style="color: #666; font-weight: 500;">数据库:</span>
-				<span id="dbFileStatus" style="color: #666; flex: 1;">未加载</span>
+				<span>数据库:</span>
+				<span id="dbFileStatus">未加载</span>
 				<button id="loadDatabaseBtn" class="db-btn" title="加载数据库文件">加载数据库</button>
 				<input type="file" id="databaseFileInput" accept=".xlsx,.xls,.json" style="display: none;" />
 			</div>
@@ -843,9 +593,9 @@
 			
 			<div class="detail-body">
 				<div class="device-sidebar">
-					<div style="font-weight:600; margin-bottom:8px;">设备列表</div>
-					<div id="deviceListEmpty" style="font-size:12px; color:#666;">暂无数据</div>
-					<ul id="deviceList" style="list-style:none; padding-left:0; margin:0;"></ul>
+					<div>设备列表</div>
+					<div id="deviceListEmpty">暂无数据</div>
+					<ul id="deviceList"></ul>
 				</div>
 				
 				<div class="device-detail-panel">
@@ -922,14 +672,14 @@
 							</div>
 							<div class="detail-field">
 								<label for="singleDevicePower">单台设备功率</label>
-								<input type="number" id="singleDevicePower" class="detail-input" placeholder="单台功率(kW)" readonly style="background-color: #f5f5f5;">
+								<input type="number" id="singleDevicePower" class="detail-input" placeholder="单台功率(kW)" readonly>
 							</div>
 						</div>
 						
 						<div class="detail-row-pair">
 							<div class="detail-field">
 								<label for="totalPower">设备总功率</label>
-								<input type="number" id="totalPower" class="detail-input" placeholder="总功率(kW)" readonly style="background-color: #f5f5f5;">
+								<input type="number" id="totalPower" class="detail-input" placeholder="总功率(kW)" readonly>
 							</div>
 							<div class="detail-field">
 								<label for="unitPrice">设备单价</label>
@@ -940,7 +690,7 @@
 						<div class="detail-row-pair">
 							<div class="detail-field">
 								<label for="totalPrice">设备总价</label>
-								<input type="number" id="totalPrice" class="detail-input" placeholder="总价(元)" readonly style="background-color: #f5f5f5;">
+								<input type="number" id="totalPrice" class="detail-input" placeholder="总价(元)" readonly>
 							</div>
 							<div class="detail-field">
 								<label for="priceIncrease">价格增幅</label>
@@ -951,11 +701,11 @@
 						<div class="detail-row-pair">
 							<div class="detail-field">
 								<label for="installedPower">装机功率</label>
-								<input type="number" id="installedPower" class="detail-input" placeholder="装机功率(kW)" readonly style="background-color: #f5f5f5;">
+								<input type="number" id="installedPower" class="detail-input" placeholder="装机功率(kW)" readonly>
 							</div>
 							<div class="detail-field">
 								<label for="totalQuotePrice">总报价</label>
-								<input type="number" id="totalQuotePrice" class="detail-input" placeholder="总报价(元)" readonly style="background-color: #f5f5f5;">
+								<input type="number" id="totalQuotePrice" class="detail-input" placeholder="总报价(元)" readonly>
 							</div>
 						</div>
 						
@@ -983,40 +733,615 @@
 					<div class="detail-row-pair">
 						<div class="detail-field">
 							<label for="installedCapacity">装机容量</label>
-							<input type="number" id="installedCapacity" class="detail-input" placeholder="装机容量(kW)" readonly style="background-color: #f5f5f5;">
+							<input type="number" id="installedCapacity" class="detail-input" placeholder="装机容量(kW)" readonly>
 						</div>
 						<div class="detail-field">
 							<label for="totalQuote">总报价</label>
-							<input type="number" id="totalQuote" class="detail-input" placeholder="总报价(元)" readonly style="background-color: #f5f5f5;">
+							<input type="number" id="totalQuote" class="detail-input" placeholder="总报价(元)" readonly>
 						</div>
 						</div>
 						
 					<div class="detail-row-pair">
 						<div class="detail-field">
 							<label for="projectPriceIncrease">价格增幅</label>
-							<input type="number" id="projectPriceIncrease" class="detail-input" placeholder="价格增幅(元)" readonly style="background-color: #f5f5f5;">
+							<input type="number" id="projectPriceIncrease" class="detail-input" placeholder="价格增幅(元)" readonly>
 						</div>
 						<div class="detail-field">
 							<label for="conveyorCount">输送机数量</label>
-							<input type="number" id="conveyorCount" class="detail-input" placeholder="输送机数量" readonly style="background-color: #f5f5f5;">
+							<input type="number" id="conveyorCount" class="detail-input" placeholder="输送机数量" readonly>
 						</div>
 						</div>
 						
 					<div class="detail-row-pair">
 						<div class="detail-field">
 							<label for="elevatorCount">提升机数量</label>
-							<input type="number" id="elevatorCount" class="detail-input" placeholder="提升机数量" readonly style="background-color: #f5f5f5;">
+							<input type="number" id="elevatorCount" class="detail-input" placeholder="提升机数量" readonly>
 						</div>
 						<div class="detail-field">
 							<label for="scraperCount">刮板机数量</label>
-							<input type="number" id="scraperCount" class="detail-input" placeholder="刮板机数量" readonly style="background-color: #f5f5f5;">
+							<input type="number" id="scraperCount" class="detail-input" placeholder="刮板机数量" readonly>
 						</div>
 						</div>
 						
 					<div class="detail-row-pair">
 						<div class="detail-field">
 							<label for="steelTonnage">钢材吨数</label>
-							<input type="number" id="steelTonnage" class="detail-input" placeholder="钢材吨数(吨)" readonly style="background-color: #f5f5f5;">
+							<input type="number" id="steelTonnage" class="detail-input" placeholder="钢材吨数(吨)" readonly>
+						</div>
+						<div class="detail-field" style="visibility: hidden;">
+							<!-- 占位，保持布局 -->
+						</div>
+						</div>
+					</div>
+				
+				<!-- 设备资料内容 (隐藏) -->
+				<div id="equipmentDataContent" style="display: none;">
+					<div style="padding: 20px;">
+						<h3 style="margin-bottom: 20px; color: #333;">设备资料库</h3>
+						
+						<div class="detail-row">
+							<label for="equipmentCategory">设备类别</label>
+							<select id="equipmentCategory" class="detail-input">
+								<option value="">请选择设备类别</option>
+							</select>
+				</div>
+						
+						<div class="detail-row">
+							<label for="equipmentModel">设备型号</label>
+							<input type="text" id="equipmentModel" class="detail-input" placeholder="设备型号" readonly>
+				</div>
+						
+						<div class="detail-row">
+							<label for="equipmentManufacturer">制造商</label>
+							<input type="text" id="equipmentManufacturer" class="detail-input" placeholder="制造商">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentPower">额定功率</label>
+							<input type="text" id="equipmentPower" class="detail-input" placeholder="额定功率">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentVoltage">额定电压</label>
+							<input type="text" id="equipmentVoltage" class="detail-input" placeholder="额定电压">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentWeight">设备重量</label>
+							<input type="text" id="equipmentWeight" class="detail-input" placeholder="设备重量(kg)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentDimensions">外形尺寸</label>
+							<input type="text" id="equipmentDimensions" class="detail-input" placeholder="长×宽×高(mm)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentStandard">执行标准</label>
+							<input type="text" id="equipmentStandard" class="detail-input" placeholder="执行标准">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentCertificate">认证证书</label>
+							<input type="text" id="equipmentCertificate" class="detail-input" placeholder="认证证书编号">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentWarranty">质保期</label>
+							<input type="text" id="equipmentWarranty" class="detail-input" placeholder="质保期(月)">
+						</div>
+						
+						<div class="detail-row">
+							<label for="equipmentNotes">备注说明</label>
+							<textarea id="equipmentNotes" class="detail-input" placeholder="备注说明" rows="4"></textarea>
+						</div>
+						
+						<div class="detail-separator"></div>
+						
+					<div class="detail-actions">
+						<button id="saveEquipmentDataBtn" class="action-btn">保存资料</button>
+						<button id="clearEquipmentDataBtn" class="action-btn secondary">清空</button>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 配套厂家内容 (隐藏) -->
+			<div id="supplierContent" style="display: none;">
+				<div style="padding: 20px;">
+					<h3 style="margin-bottom: 20px; color: #333;">配套厂家信息</h3>
+					
+					<div class="detail-row">
+						<label for="supplierName">厂家名称</label>
+						<input type="text" id="supplierName" class="detail-input" placeholder="厂家名称">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierContact">联系人</label>
+						<input type="text" id="supplierContact" class="detail-input" placeholder="联系人">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierPhone">联系电话</label>
+						<input type="text" id="supplierPhone" class="detail-input" placeholder="联系电话">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierEmail">电子邮箱</label>
+						<input type="email" id="supplierEmail" class="detail-input" placeholder="电子邮箱">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierAddress">厂家地址</label>
+						<input type="text" id="supplierAddress" class="detail-input" placeholder="厂家地址">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierWebsite">公司网址</label>
+						<input type="text" id="supplierWebsite" class="detail-input" placeholder="公司网址">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierType">厂家类型</label>
+						<select id="supplierType" class="detail-input">
+							<option value="">请选择</option>
+							<option value="制造商">制造商</option>
+							<option value="代理商">代理商</option>
+							<option value="经销商">经销商</option>
+							<option value="贸易商">贸易商</option>
+						</select>
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierLevel">合作等级</label>
+						<select id="supplierLevel" class="detail-input">
+							<option value="">请选择</option>
+							<option value="优选">优选</option>
+							<option value="良好">良好</option>
+							<option value="一般">一般</option>
+						</select>
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierPayment">付款方式</label>
+						<input type="text" id="supplierPayment" class="detail-input" placeholder="付款方式">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierDelivery">交货周期</label>
+						<input type="text" id="supplierDelivery" class="detail-input" placeholder="交货周期(天)">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierWarranty">质保期限</label>
+						<input type="text" id="supplierWarranty" class="detail-input" placeholder="质保期限">
+					</div>
+					
+					<div class="detail-row">
+						<label for="supplierNotes">备注说明</label>
+						<textarea id="supplierNotes" class="detail-input" placeholder="备注说明" rows="4"></textarea>
+					</div>
+					
+					<div class="detail-separator"></div>
+					
+					<div class="detail-actions">
+						<button id="saveSupplierBtn" class="action-btn">保存厂家</button>
+						<button id="clearSupplierBtn" class="action-btn secondary">清空</button>
+					</div>
+				</div>
+			</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ========== 模块化JavaScript引用（按顺序加载） ========== -->
+<!-- 1. 配置模块 -->
+<script src="./js/config/tableConfig.js"></script>
+
+<!-- 2. 工具模块 -->
+	<script src="./js/utils/cellUtils.js"></script>
+	<script src="./js/utils/versionUtils.js"></script>
+	<script src="./js/utils/alignmentUtils.js"></script>
+	<script src="./js/utils/rowHeightUtils.js"></script>
+	<script src="./js/utils/fileNamePrompt.js"></script>
+
+<!-- 3. 数据模块 -->
+<script src="./js/data/deviceDatabase.js"></script>
+
+<!-- 4. 业务模块 -->
+<script src="./js/modules/formula.js"></script>
+<script src="./js/modules/sheet.js"></script>
+<script src="./js/modules/excel.js"></script>
+<script src="./js/modules/form.js"></script>
+<script src="./js/modules/sync.js"></script>
+<script src="./js/modules/database.js"></script>
+<script src="./js/modules/pdf.js"></script>
+<script src="./js/modules/wordEditor.js"></script>
+
+<!-- 5. 初始化模块 -->
+<script src="./js/init.js"></script>
+
+<!-- 6. 遗留代码模块（临时） -->
+<script src="./js/modules/legacy.js?v=4.6"></script>
+
+<!-- 7. 选型历史记录模块 -->
+<script src="./js/modules/selectionHistory.js?v=3.0"></script>
+
+<script>
+console.log('🎉 所有模块已加载！');
+console.log('📋 已模块化: 配置、工具、公式、初始化、历史记录');
+console.log('⏳ 待提取: 遗留代码（见 js/modules/legacy.js）');
+</script>
+
+<!-- PDF预览模态框 -->
+<div id="pdfPreviewModal">
+	<div class="pdf-modal-content">
+		<!-- 模态框头部 -->
+		<div class="pdf-modal-header">
+			<h2>📄 PDF导出预览</h2>
+			<button id="closePdfModal">&times;</button>
+		</div>
+		
+		<!-- 选项区域 -->
+		<div class="pdf-options-bar">
+			<div class="pdf-options-container">
+				<div class="pdf-option-group">
+					<label class="pdf-option-label">导出范围：</label>
+					<select id="pdfRangeType" class="pdf-select">
+						<option value="all">全部内容</option>
+						<option value="current">当前选区</option>
+						<option value="custom">自定义范围</option>
+					</select>
+				</div>
+				
+				<div id="customRangeInput">
+					<label class="pdf-option-label">范围：</label>
+					<input type="text" id="pdfCustomRange" placeholder="例如：A1:O20">
+				</div>
+				
+				<div class="pdf-option-group">
+					<label class="pdf-option-label">方向：</label>
+					<select id="pdfOrientation" class="pdf-select">
+						<option value="landscape">横向</option>
+						<option value="portrait">纵向</option>
+					</select>
+				</div>
+				
+				<div class="pdf-option-group">
+					<label class="pdf-option-label">纸张：</label>
+					<select id="pdfPageSize" class="pdf-select">
+						<option value="a4">A4</option>
+						<option value="a3">A3</option>
+						<option value="letter">Letter</option>
+					</select>
+				</div>
+			
+				<div class="pdf-action-group">
+					<label class="pdf-option-label" style="cursor: pointer;">
+						<input type="checkbox" id="enableWatermark">
+						添加水印
+					</label>
+					
+					<button id="refreshPdfPreview">
+						🔄 刷新预览
+					</button>
+				</div>
+				
+				<!-- 水印设置 -->
+				<div id="watermarkSettings">
+					<div class="watermark-controls">
+						<div class="watermark-input-group">
+							<label>文字:</label>
+							<input type="text" id="watermarkText" class="watermark-input-text" placeholder="水印内容" autocomplete="off">
+						</div>
+						<div class="watermark-input-group">
+							<label>大小:</label>
+							<input type="number" id="watermarkFontSize" value="40" min="20" max="200" class="watermark-input-number">
+							<span class="watermark-unit">px</span>
+						</div>
+						<div class="watermark-input-group">
+							<label>角度:</label>
+							<input type="number" id="watermarkRotation" value="-45" min="-180" max="180" class="watermark-input-number">
+							<span class="watermark-unit">°</span>
+						</div>
+						<div class="watermark-input-group">
+							<label>透明:</label>
+							<input type="number" id="watermarkOpacity" value="0.2" min="0" max="1" step="0.01" class="watermark-input-number">
+						</div>
+						<div class="watermark-input-group">
+							<label>密度:</label>
+							<select id="watermarkDensity" class="pdf-select" style="width: 90px;">
+								<option value="1">单个</option>
+								<option value="4">稀疏(4)</option>
+								<option value="9" selected>适中(9)</option>
+								<option value="16">密集(16)</option>
+								<option value="25">很密(25)</option>
+							</select>
+						</div>
+						<div class="watermark-input-group">
+							<label>颜色:</label>
+							<select id="watermarkColor" class="pdf-select" style="width: 70px;">
+								<option value="gray">灰色</option>
+								<option value="red">红色</option>
+								<option value="blue">蓝色</option>
+								<option value="green">绿色</option>
+								<option value="black">黑色</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 预览区域 -->
+		<div class="pdf-preview-area">
+			<div id="pdfPreviewContent">
+				<p>正在加载预览...</p>
+			</div>
+		</div>
+		
+		<!-- 底部操作按钮 -->
+		<div class="pdf-modal-footer">
+			<button id="cancelPdfExport">
+				取消
+			</button>
+			<button id="confirmPdfExport">
+				📥 确认导出
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- 版权信息 -->
+			<div class="footer-info">
+				<div class="copyright">
+					<span class="company-name">温岭市泽国化工机械有限公司</span>
+					<span class="separator">|</span>
+					<span class="author">ZXX</span>
+					<span class="separator">|</span>
+					<span class="year">© 2025</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<!-- 工具栏 -->
+	<div class="custom-toolbar">
+		<div class="toolbar-group left">
+			<!-- 个人中心按钮（仅普通用户可见）-->
+			<button id="userProfileBtn" class="custom-btn" title="个人中心" style="display: none;">👤 个人中心</button>
+			
+			<!-- 管理员按钮（仅管理员可见，是管理员的个人中心）-->
+			<button id="adminPageBtn" class="custom-btn" title="管理员中心" style="display: none;">👑 管理员</button>
+			
+			<button id="openFileBtn" class="custom-btn" title="打开本地表格文件">打开</button>
+			<input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.json" style="display: none;" />
+			<button id="saveFileBtn" class="custom-btn" title="保存表格到本地">保存</button>
+			<button id="newFileBtn" class="custom-btn" title="新建空白表格">新建</button>
+			<button id="exportPdfBtn" class="custom-btn" title="导出为PDF文件">导出PDF</button>
+		</div>
+		<div class="toolbar-group center">
+			<span class="app-title">设备参数选型系统</span>
+		</div>
+		<div class="toolbar-group right">
+			<!-- 实用工具按钮 -->
+			<button id="utilityToolsBtn" class="title-btn" title="实用工具集" onclick="window.location.href='tools/all-tools.html'">🛠️ 实用工具</button>
+			
+			<!-- Word编辑器、风机选型、电缆选型按钮 - 已注释但保留代码 -->
+			<!-- <button id="openWordEditorBtn" class="title-btn" title="打开Word文档编辑器（新窗口）">📝 Word编辑器</button> -->
+			<!-- <button id="openFanSelectorBtn" class="title-btn" title="打开离心风机选型工具（新窗口）">🌀 离心风机选型</button> -->
+			<!-- <button id="openCableSelectorBtn" class="title-btn" title="打开电缆选型工具（新窗口）">⚡ 电缆选型</button> -->
+			
+			<button id="refreshDbBtn" class="refresh-btn" title="刷新表格">🔄 刷新</button>
+			<span class="toolbar-hint">💡 打开加载文件后刷新一下</span>
+		</div>
+	</div>
+	
+	<!-- 主内容区域 -->
+	<div class="main-content">
+		<!-- Luckysheet容器 -->
+		<div class="table-container">
+			<div id="luckysheet"></div>
+		</div>
+		
+		<!-- 设备详情面板 -->
+		<div class="detail-panel-container" id="detailPanel">
+			<button class="collapse-toggle" id="collapseToggle" title="折叠/展开面板">折叠面板</button>
+			
+			<!-- 数据库文件加载区域 -->
+			<div class="database-load-section">
+				<span>数据库:</span>
+				<span id="dbFileStatus">未加载</span>
+				<button id="loadDatabaseBtn" class="db-btn" title="加载数据库文件">加载数据库</button>
+				<input type="file" id="databaseFileInput" accept=".xlsx,.xls,.json" style="display: none;" />
+			</div>
+			
+			<div class="detail-panel-header">
+				<button id="deviceTabBtn" class="action-btn">设备详情</button>
+				<button id="projectTabBtn" class="action-btn secondary">项目明细</button>
+				<button id="equipmentDataTabBtn" class="action-btn secondary">设备资料</button>
+				<button id="supplierTabBtn" class="action-btn secondary">配套厂家</button>
+			</div>
+			
+			<div class="detail-body">
+				<div class="device-sidebar">
+					<div>设备列表</div>
+					<div id="deviceListEmpty">暂无数据</div>
+					<ul id="deviceList"></ul>
+				</div>
+				
+				<div class="device-detail-panel">
+					<!-- 设备详情内容 -->
+					<div id="deviceDetailContent">
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="deviceNumber">设备位号</label>
+								<input type="text" id="deviceNumber" class="detail-input" value="/" placeholder="设备编号">
+							</div>
+							<div class="detail-field">
+								<label for="deviceType">设备类型</label>
+								<select id="deviceType" class="detail-select">
+									<option value="">请选择设备类型</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="deviceName">设备名称</label>
+								<select id="deviceName" class="detail-select">
+									<option value="">请选择设备名称</option>
+								</select>
+							</div>
+							<div class="detail-field">
+								<label for="specification">规格型号</label>
+								<select id="specification" class="detail-select">
+									<option value="">请选择规格型号</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="material">材料</label>
+								<select id="material" class="detail-select">
+									<option value="">请选择材料</option>
+									<option value="钢组件">钢组件</option>
+									<option value="304">304</option>
+									<option value="316L">316L</option>
+									<option value="FRP">FRP</option>
+								</select>
+							</div>
+							<div class="detail-field">
+								<label for="unit">单位</label>
+								<select id="unit" class="detail-select">
+									<option value="">请选择单位</option>
+									<option value="台">台</option>
+									<option value="套">套</option>
+									<option value="个">个</option>
+									<option value="件">件</option>
+									<option value="宗">宗</option>
+									<option value="项">项</option>
+								</select>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="quantity">设备数量</label>
+								<input type="number" id="quantity" class="detail-input" placeholder="数量">
+							</div>
+							<div class="detail-field">
+								<label for="motorQuantity">单台电机数量</label>
+								<input type="number" id="motorQuantity" class="detail-input" placeholder="电机数量">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="motorPower">电机功率</label>
+								<input type="text" id="motorPower" class="detail-input" placeholder="电机功率，可填 11+44">
+							</div>
+							<div class="detail-field">
+								<label for="singleDevicePower">单台设备功率</label>
+								<input type="number" id="singleDevicePower" class="detail-input" placeholder="单台功率(kW)" readonly>
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="totalPower">设备总功率</label>
+								<input type="number" id="totalPower" class="detail-input" placeholder="总功率(kW)" readonly>
+							</div>
+							<div class="detail-field">
+								<label for="unitPrice">设备单价</label>
+								<input type="number" id="unitPrice" class="detail-input" placeholder="单价(元)">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="totalPrice">设备总价</label>
+								<input type="number" id="totalPrice" class="detail-input" placeholder="总价(元)" readonly>
+							</div>
+							<div class="detail-field">
+								<label for="priceIncrease">价格增幅</label>
+								<input type="number" id="priceIncrease" class="detail-input" placeholder="价格增幅(%)" min="0" max="100" step="1">
+							</div>
+						</div>
+						
+						<div class="detail-row-pair">
+							<div class="detail-field">
+								<label for="installedPower">装机功率</label>
+								<input type="number" id="installedPower" class="detail-input" placeholder="装机功率(kW)" readonly>
+							</div>
+							<div class="detail-field">
+								<label for="totalQuotePrice">总报价</label>
+								<input type="number" id="totalQuotePrice" class="detail-input" placeholder="总报价(元)" readonly>
+							</div>
+						</div>
+						
+						<div class="detail-row">
+							<label for="technicalParams">技术参数</label>
+							<textarea id="technicalParams" class="detail-textarea" placeholder="技术参数描述"></textarea>
+						</div>
+						
+						<div class="detail-row">
+							<label for="remarks">备注</label>
+							<textarea id="remarks" class="detail-textarea" placeholder="备注信息"></textarea>
+						</div>
+						
+						<div class="detail-separator"></div>
+						
+						<div class="detail-actions">
+							<button id="addDeviceBtn" class="action-btn">添加设备</button>
+							<button id="updateDeviceBtn" class="action-btn">更新设备</button>
+							<button id="clearFormBtn" class="action-btn secondary">清空表单</button>
+						</div>
+					</div>
+					
+					<!-- 项目详情内容 (隐藏) -->
+					<div id="projectDetailContent" style="display: none;">
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="installedCapacity">装机容量</label>
+							<input type="number" id="installedCapacity" class="detail-input" placeholder="装机容量(kW)" readonly>
+						</div>
+						<div class="detail-field">
+							<label for="totalQuote">总报价</label>
+							<input type="number" id="totalQuote" class="detail-input" placeholder="总报价(元)" readonly>
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="projectPriceIncrease">价格增幅</label>
+							<input type="number" id="projectPriceIncrease" class="detail-input" placeholder="价格增幅(元)" readonly>
+						</div>
+						<div class="detail-field">
+							<label for="conveyorCount">输送机数量</label>
+							<input type="number" id="conveyorCount" class="detail-input" placeholder="输送机数量" readonly>
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="elevatorCount">提升机数量</label>
+							<input type="number" id="elevatorCount" class="detail-input" placeholder="提升机数量" readonly>
+						</div>
+						<div class="detail-field">
+							<label for="scraperCount">刮板机数量</label>
+							<input type="number" id="scraperCount" class="detail-input" placeholder="刮板机数量" readonly>
+						</div>
+						</div>
+						
+					<div class="detail-row-pair">
+						<div class="detail-field">
+							<label for="steelTonnage">钢材吨数</label>
+							<input type="number" id="steelTonnage" class="detail-input" placeholder="钢材吨数(吨)" readonly>
 						</div>
 						<div class="detail-field" style="visibility: hidden;">
 							<!-- 占位，保持布局 -->
@@ -1343,45 +1668,20 @@ console.log('⏳ 待提取: 遗留代码（见 js/modules/legacy.js）');
 </div>
 
 <!-- 版权信息 - 最左侧底部 -->
-<div style="position: fixed; bottom: 3px; left: 10px; font-size: 11px; color: #666; z-index: 100; font-family: 'Microsoft YaHei', SimSun, sans-serif; white-space: nowrap;">
+<div class="copyright-footer">
 	设备参数选型系统 v1.0.2 | © 2025 ZXX
 </div>
 
 <!-- 用户信息和退出登录 - 右下角 -->
-<div id="userInfoPanel" style="position: fixed; bottom: 3px; right: 10px; font-size: 11px; color: #666; z-index: 100; font-family: 'Microsoft YaHei', SimSun, sans-serif; display: flex; align-items: center; gap: 10px;">
+<div id="userInfoPanel">
 	<span id="userPhoneDisplay" style="color: #555;">
 		<span style="color: #999;">👤</span> <span id="phoneNumber">--</span>
 	</span>
 	<!-- 用户管理按钮（仅管理员可见）-->
-	<button id="userManagementBtn" style="
-		padding: 4px 12px;
-		background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-		color: white;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-		font-size: 11px;
-		font-family: inherit;
-		transition: all 0.3s ease;
-		box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
-		display: none;
-	" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(76, 175, 80, 0.4)'" 
-	   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(76, 175, 80, 0.3)'">
+	<button id="userManagementBtn" class="user-action-btn">
 		👥 用户管理
 	</button>
-	<button id="logoutBtn" style="
-		padding: 4px 12px;
-		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-		color: white;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-		font-size: 11px;
-		font-family: inherit;
-		transition: all 0.3s ease;
-		box-shadow: 0 2px 5px rgba(102, 126, 234, 0.3);
-	" onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(102, 126, 234, 0.4)'" 
-	   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 5px rgba(102, 126, 234, 0.3)'">
+	<button id="logoutBtn" class="user-action-btn">
 		🚪 退出登录
 	</button>
 </div>

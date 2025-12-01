@@ -1,0 +1,37 @@
+/* QualityPDCA Component Styles */
+
+.quality-pdca {
+  padding: 24px;
+}
+
+.quality-pdca h2 {
+  color: #1890ff;
+  margin-bottom: 8px;
+}
+
+.quality-pdca .ant-tabs-tab {
+  font-weight: 500;
+}
+
+.quality-pdca .ant-timeline-item-content {
+  font-size: 14px;
+}
+
+.quality-pdca .ant-statistic-title {
+  font-size: 14px;
+  color: #666;
+}
+
+.quality-pdca .ant-statistic-content {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.quality-pdca .ant-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.quality-pdca .ant-progress-text {
+  font-weight: 500;
+}

@@ -1,0 +1,174 @@
+/* SCADA仪表板样式 */
+
+.scada-dashboard {
+  width: 100%;
+  min-height: 100vh;
+  background: #f0f2f5;
+  padding: 16px;
+}
+
+/* 系统概览 */
+.system-overview {
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.stat-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+}
+
+.stat-card .ant-statistic-title {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.stat-card .ant-statistic-content {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* 报警提示 */
+.alarm-alert {
+  margin: 16px 0;
+  border-radius: 8px;
+}
+
+/* 标签页 */
+.scada-tabs {
+  margin-top: 16px;
+}
+
+.scada-tabs .ant-tabs-nav {
+  margin-bottom: 16px;
+}
+
+.scada-tabs .ant-tabs-tab {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 报警项 */
+.alarm-item {
+  padding: 8px 0;
+}
+
+.alarm-header {
+  margin-bottom: 8px;
+}
+
+.alarm-header strong {
+  font-size: 14px;
+  color: #333;
+}
+
+.alarm-header a {
+  color: #1890ff;
+  font-size: 12px;
+}
+
+.alarm-details {
+  font-size: 12px;
+  color: #666;
+  margin: 4px 0;
+}
+
+.alarm-ack {
+  font-size: 11px;
+  color: #52c41a;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* 设备分布 */
+.device-distribution {
+  padding: 16px 0;
+}
+
+.distribution-item {
+  margin-bottom: 16px;
+}
+
+.distribution-item:last-child {
+  margin-bottom: 0;
+}
+
+.distribution-item .label {
+  display: inline-block;
+  width: 80px;
+  font-size: 13px;
+  color: #666;
+  margin-right: 12px;
+}
+
+.distribution-item .ant-progress {
+  flex: 1;
+}
+
+/* 统计间距 */
+.stat-margin {
+  margin-top: 16px;
+}
+
+/* 响应式设计 */
+@media (max-width: 767px) {
+  .scada-dashboard {
+    padding: 8px;
+  }
+
+  .stat-card .ant-statistic-content {
+    font-size: 22px;
+  }
+
+  .distribution-item .label {
+    width: 60px;
+    font-size: 12px;
+  }
+
+  .alarm-header strong {
+    font-size: 13px;
+  }
+
+  .alarm-details {
+    font-size: 11px;
+  }
+}
+
+/* 平板适配 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .stat-card .ant-statistic-content {
+    font-size: 24px;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card {
+  animation: fadeIn 0.3s ease;
+}
+
+/* 时间线样式优化 */
+.ant-timeline-item-content {
+  margin-left: 24px;
+}
+
+.ant-timeline-item-tail {
+  border-left: 2px dashed #e8e8e8;
+}

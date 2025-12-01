@@ -8,6 +8,7 @@
  * 4. 支持数据过期
  */
 
+import { logger } from './logger';
 export interface StorageOptions {
   /** 过期时间（毫秒） */
   ttl?: number;
@@ -37,24 +38,24 @@ export class StorageManager {
       const storageData: StorageData<T> = {
         value,
         timestamp: Date.now(),
-        ttl: options.ttl,
+        ...(options.ttl !== undefined ? { ttl: options.ttl } : {}),
       };
 
       const serialized = JSON.stringify(storageData);
       localStorage.setItem(fullKey, serialized);
 
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Storage] 保存成功: ${key}`, { size: serialized.length });
+        logger.debug(`[Storage] 保存成功: ${key}`, { size: serialized.length });
       }
 
       return true;
     } catch (error) {
-      console.error(`[Storage] 保存失败: ${key}`, error);
+      logger.error(`[Storage] 保存失败: ${key}`, error);
 
       // 如果是配额超限，尝试清理
       if (error instanceof DOMException && error.name === 'QuotaExceededError') {
         this.cleanup();
-        console.warn('[Storage] 存储空间不足，已清理过期数据');
+        logger.warn('[Storage] 存储空间不足，已清理过期数据');
       }
 
       return false;
@@ -83,7 +84,7 @@ export class StorageManager {
         if (isExpired) {
           this.remove(key);
           if (process.env.NODE_ENV === 'development') {
-            console.log(`[Storage] 数据已过期: ${key}`);
+            logger.debug(`[Storage] 数据已过期: ${key}`);
           }
           return defaultValue;
         }
@@ -91,7 +92,7 @@ export class StorageManager {
 
       return storageData.value;
     } catch (error) {
-      console.error(`[Storage] 读取失败: ${key}`, error);
+      logger.error(`[Storage] 读取失败: ${key}`, error);
       return defaultValue;
     }
   }
@@ -106,12 +107,12 @@ export class StorageManager {
       localStorage.removeItem(fullKey);
 
       if (process.env.NODE_ENV === 'development') {
-        console.log(`[Storage] 删除成功: ${key}`);
+        logger.debug(`[Storage] 删除成功: ${key}`);
       }
 
       return true;
     } catch (error) {
-      console.error(`[Storage] 删除失败: ${key}`, error);
+      logger.error(`[Storage] 删除失败: ${key}`, error);
       return false;
     }
   }
@@ -126,10 +127,10 @@ export class StorageManager {
         localStorage.removeItem(key);
       });
 
-      console.log(`[Storage] 清理完成，共删除 ${keys.length} 项`);
+      logger.info(`[Storage] 清理完成，共删除 ${keys.length} 项`);
       return true;
     } catch (error) {
-      console.error('[Storage] 清理失败:', error);
+      logger.error('[Storage] 清理失败:', error);
       return false;
     }
   }
@@ -164,12 +165,12 @@ export class StorageManager {
       });
 
       if (cleanedCount > 0) {
-        console.log(`[Storage] 清理过期数据完成，共删除 ${cleanedCount} 项`);
+        logger.info(`[Storage] 清理过期数据完成，共删除 ${cleanedCount} 项`);
       }
 
       return cleanedCount;
     } catch (error) {
-      console.error('[Storage] 清理过期数据失败:', error);
+      logger.error('[Storage] 清理过期数据失败:', error);
       return 0;
     }
   }
@@ -314,6 +315,19 @@ export class StorageManager {
    */
   static importAll(data: Record<string, any>): { success: number; failed: number } {
     return this.saveMultiple(data);
+  }
+
+  /**
+   * 📦 获取当前存储总字节数（估算值）
+   */
+  static getSize(): number {
+    const keys = this.getAllKeys();
+    let total = 0;
+    keys.forEach((fullKey) => {
+      const item = localStorage.getItem(fullKey);
+      if (item) total += item.length;
+    });
+    return total;
   }
 }
 

@@ -1,0 +1,195 @@
+.equipment-comparison {
+  margin-bottom: 16px;
+}
+
+.comparison-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.comparison-card .ant-card-head {
+  background: linear-gradient(135deg, #e6f7ff, #bae7ff);
+  border-bottom: 2px solid #91d5ff;
+  font-weight: 600;
+}
+
+.equipment-selector {
+  min-width: 280px;
+}
+
+.metrics-row {
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  transition: all 0.3s;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.metric-card-running {
+  border-color: #52c41a;
+  background: linear-gradient(135deg, #f6ffed, #d9f7be);
+}
+
+.metric-card-idle {
+  border-color: #d9d9d9;
+}
+
+.metric-card-warning {
+  border-color: #faad14;
+  background: linear-gradient(135deg, #fffbe6, #fff1b8);
+}
+
+.metric-card-fault {
+  border-color: #ff4d4f;
+  background: linear-gradient(135deg, #fff1f0, #ffccc7);
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px dashed rgba(0, 0, 0, 0.1);
+}
+
+.metric-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.metric-card .ant-statistic-title {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.metric-card .ant-statistic-content {
+  font-weight: 700;
+}
+
+/* Statistic样式 */
+.statistic-efficiency .ant-statistic-content {
+  font-size: 20px;
+  color: #1890ff;
+}
+
+.statistic-reliability .ant-statistic-content {
+  font-size: 20px;
+  color: #52c41a;
+}
+
+.statistic-hours .ant-statistic-content {
+  font-size: 16px;
+}
+
+.statistic-failure-high .ant-statistic-content {
+  font-size: 16px;
+  color: #ff4d4f;
+}
+
+.statistic-failure-low .ant-statistic-content {
+  font-size: 16px;
+  color: #52c41a;
+}
+
+.chart-section {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-section {
+  margin-top: 32px;
+}
+
+.comparison-table .equipment-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.comparison-table .rate-high {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+.comparison-table .rate-normal {
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.comparison-table .efficiency-good {
+  color: #52c41a;
+  font-weight: 600;
+}
+
+.comparison-table .efficiency-normal {
+  color: #1890ff;
+  font-weight: 600;
+}
+
+/* Recharts自定义 */
+.recharts-legend-wrapper {
+  padding-top: 16px !important;
+}
+
+.recharts-legend-item-text {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.recharts-polar-angle-axis-tick-value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 响应式 */
+@media (max-width: 1400px) {
+  .equipment-selector {
+    min-width: 220px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .metrics-row .ant-col {
+    margin-bottom: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .metric-card {
+    padding: 12px;
+  }
+
+  .metric-name {
+    font-size: 14px;
+  }
+
+  .chart-section {
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-size: 14px;
+  }
+}

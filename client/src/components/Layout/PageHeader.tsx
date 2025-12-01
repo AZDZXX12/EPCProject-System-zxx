@@ -20,14 +20,15 @@ const PageHeader: React.FC = () => {
   return (
     <div
       style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)',
         padding: '12px 24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        boxShadow: '0 2px 8px rgba(102, 126, 234, 0.15)',
-        borderRadius: '8px',
-        margin: '16px 24px 0 24px',
+        boxShadow: '0 2px 8px rgba(24, 144, 255, 0.15)',
+        borderRadius: '0',
+        margin: '0',
+        width: '100%',
       }}
     >
       {/* 左侧：标题和项目选择器 */}
@@ -97,7 +98,7 @@ const PageHeader: React.FC = () => {
             icon={<UserOutlined />}
             size="small"
             style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)',
               border: '2px solid #fff',
             }}
           />

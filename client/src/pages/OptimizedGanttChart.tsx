@@ -7,16 +7,23 @@
  * 3. 实时保存指示器
  * 4. 性能监控
  * 5. 错误边界保护
+ * 6. Ganttable特色功能
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Card, Button, Space, Tooltip, Empty, App, Badge } from 'antd';
+import { Card, Button, Space, Tooltip, Empty, App, Badge, Modal, Divider } from 'antd';
 import { 
   ReloadOutlined, 
   DownloadOutlined, 
   FullscreenOutlined,
   CloudOutlined,
-  CloudSyncOutlined
+  CloudSyncOutlined,
+  BulbOutlined,
+  SettingOutlined,
+  ClockCircleOutlined,
+  ThunderboltOutlined,
+  ApartmentOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useProject } from '../contexts/ProjectContext';
@@ -27,7 +34,10 @@ import * as XLSX from 'xlsx';
 import { StorageManager } from '../utils/StorageManager';
 import { taskApi } from '../services/api';
 import { logger } from '../utils/logger';
-import './DhtmlxGanttChart.css';
+import AIGanttGenerator from '../components/AIGanttGenerator';
+import TaskBarCustomizer, { generateTaskBarText } from '../components/TaskBarCustomizer';
+import { applyFloatTimeToGantt, generateFloatTimeReport } from '../utils/floatTimeAnalyzer';
+import './OptimizedGanttChart.css';
 
 // 扩展 Window 类型
 declare global {
@@ -71,23 +81,40 @@ function useAutoSaveIndicator() {
   return { saveStatus, lastSaveTime, markSaving, markSaved, markError };
 }
 
-const OptimizedGanttChart: React.FC = () => {
+interface OptimizedGanttChartProps {
+  autoFullscreen?: boolean;
+  initialScale?: 'day' | 'week' | 'month';
+  hideTitle?: boolean;
+}
+
+const OptimizedGanttChart: React.FC<OptimizedGanttChartProps> = ({ 
+  autoFullscreen = false, 
+  initialScale = 'day', 
+  hideTitle = false 
+}) => {
   const ganttContainer = useRef<HTMLDivElement>(null);
   const { currentProject } = useProject();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
   const ganttInitializedRef = useRef(false);
-  const { notification } = App.useApp();
+  const { notification, message } = App.useApp();
 
-  // 🚀 性能监控
+  // 性能监控
   usePerformanceMonitor('OptimizedGanttChart');
 
-  // 🚀 自动保存状态
+  // 自动保存状态
   const { saveStatus, lastSaveTime, markSaving, markSaved, markError } = useAutoSaveIndicator();
 
   // 颜色管理
   const taskColorMapRef = useRef(new Map<string, number>());
   const colorIndexRef = useRef(0);
+
+  // 🎯 Ganttable特色功能状态
+  const [aiGenVisible, setAiGenVisible] = useState(false);
+  const [customizerVisible, setCustomizerVisible] = useState(false);
+  const [displayFields, setDisplayFields] = useState(['text', 'progress', 'status']);
+  const [taskGroupBy, setTaskGroupBy] = useState<string>('');
+  const [viewScale, setViewScale] = useState<'day' | 'week' | 'month'>(initialScale);
 
   const _colorPalette = [
     { bar: '#1890ff', progress: '#0050b3' },
@@ -102,10 +129,10 @@ const OptimizedGanttChart: React.FC = () => {
 
   // 🚀 优化1：本地优先的资源加载
   const loadDhtmlxGantt = useCallback(async () => {
-    console.log('[甘特图] 开始加载DHTMLX Gantt库...');
+    logger.info('[甘特图] 开始加载DHTMLX Gantt库...');
     
     if (window.gantt && window.__ganttScriptLoaded) {
-      console.log('[甘特图] 库已加载，直接初始化');
+      logger.info('[甘特图] 库已加载，直接初始化');
       initGantt();
       return;
     }
@@ -166,7 +193,7 @@ const OptimizedGanttChart: React.FC = () => {
         const timeout = setTimeout(() => {
           script.onerror = null;
           script.onload = null;
-          console.warn(`加载超时，尝试下一个源: ${src}`);
+          logger.warn(`[甘特图] 加载超时，尝试下一个源: ${src}`);
           loadJS(sources, index + 1).then(resolve).catch(reject);
         }, 10000);
 
@@ -186,9 +213,9 @@ const OptimizedGanttChart: React.FC = () => {
     };
 
     try {
-      console.log('[甘特图] 开始加载CSS和JS资源...');
+      logger.info('[甘特图] 开始加载CSS和JS资源...');
       await Promise.all([loadCSS(CSS_SOURCES), loadJS(JS_SOURCES)]);
-      console.log('[甘特图] 资源加载成功，开始初始化');
+      logger.info('[甘特图] 资源加载成功，开始初始化');
       
       // 等待gantt对象可用
       let retries = 0;
@@ -198,13 +225,13 @@ const OptimizedGanttChart: React.FC = () => {
       }
       
       if (window.gantt) {
-        console.log('[甘特图] gantt对象已就绪，执行初始化');
+        logger.info('[甘特图] gantt对象已就绪，执行初始化');
         initGantt();
       } else {
         throw new Error('gantt对象未能加载');
       }
     } catch (err) {
-      console.error('[甘特图] 加载失败:', err);
+      logger.error('[甘特图] 资源加载失败:', err);
       notification.error({
         message: '甘特图加载失败',
         description: '无法加载DHTMLX Gantt库，请检查网络连接或本地文件。错误: ' + (err as Error).message,
@@ -215,15 +242,15 @@ const OptimizedGanttChart: React.FC = () => {
 
   // 初始化甘特图
   const initGantt = useCallback(() => {
-    console.log('[甘特图] initGantt被调用');
-    console.log('[甘特图] 检查条件:', {
+    logger.info('[甘特图] initGantt被调用');
+    logger.debug('[甘特图] 检查条件:', {
       hasContainer: !!ganttContainer.current,
       hasGantt: !!window.gantt,
       isInitialized: ganttInitializedRef.current
     });
     
     if (!ganttContainer.current || !window.gantt || ganttInitializedRef.current) {
-      console.warn('[甘特图] 初始化条件不满足，跳过');
+      logger.warn('[甘特图] 初始化条件不满足，跳过');
       return;
     }
 
@@ -237,6 +264,32 @@ const OptimizedGanttChart: React.FC = () => {
     gantt.config.duration_unit = 'day';
     gantt.config.row_height = 40;
     gantt.config.bar_height = 28;
+    
+    // 🎯 Tooltip配置（悬浮显示详细信息）
+    gantt.config.tooltip_timeout = 30;
+    gantt.config.touch_drag = 500;
+    gantt.plugins({
+      tooltip: true
+    });
+    
+    // 自定义Tooltip模板
+    gantt.templates.tooltip_text = function(start, end, task) {
+      const startDate = gantt.date.date_to_str('%Y-%m-%d')(start);
+      const endDate = gantt.date.date_to_str('%Y-%m-%d')(end);
+      const progress = Math.round((task.progress || 0) * 100);
+      
+      return `<div class="gantt-tooltip">
+        <div class="tooltip-title">${task.text}</div>
+        <div class="tooltip-info">
+          <div><strong>开始：</strong>${startDate}</div>
+          <div><strong>结束：</strong>${endDate}</div>
+          <div><strong>工期：</strong>${task.duration || 0}天</div>
+          <div><strong>进度：</strong>${progress}%</div>
+          ${task.owner ? `<div><strong>负责人：</strong>${task.owner}</div>` : ''}
+          ${task.priority ? `<div><strong>优先级：</strong>${task.priority === 'high' ? '高' : task.priority === 'medium' ? '中' : '低'}</div>` : ''}
+        </div>
+      </div>`;
+    };
 
     // 中文本地化
     gantt.locale = {
@@ -247,16 +300,69 @@ const OptimizedGanttChart: React.FC = () => {
         day_short: ['日', '一', '二', '三', '四', '五', '六'],
       },
       labels: {
-        new_task: '新任务',
+        new_task: '新建任务',
         icon_save: '保存',
         icon_cancel: '取消',
         icon_delete: '删除',
+        confirm_closing: '确认关闭吗？未保存的修改将丢失！',
+        confirm_deleting: '确认删除任务吗？',
+        section_description: '任务描述',
         section_text: '任务名称',
         section_start_date: '开始时间',
+        section_end_date: '结束时间',
         section_duration: '持续时间',
-        section_progress: '进度 %',
+        section_type: '任务类型',
+        section_parent: '父任务',
+        section_progress: '进度',
         section_owner: '负责人',
         section_priority: '优先级',
+        section_time: '时间',
+        
+        // 🎯 按钮和操作
+        button_save: '保存',
+        button_cancel: '取消',
+        button_delete: '删除',
+        
+        // 🎯 列标题
+        column_text: '任务名称',
+        column_start_date: '开始日期',
+        column_duration: '工期',
+        column_add: '添加',
+        
+        // 🎯 消息提示
+        message_ok: '确定',
+        message_cancel: '取消',
+        
+        // 🎯 链接类型
+        link: '关联',
+        link_start: '开始',
+        link_end: '结束',
+        
+        // 🎯 Lightbox弹窗标题
+        'Details': '任务详情',
+        'Type': '类型',
+        'Task': '任务',
+        'Project': '项目',
+        'Milestone': '里程碑',
+        
+        // 🎯 时间选择器
+        'Hours': '小时',
+        'Minutes': '分钟',
+        'Days': '天',
+        'Weeks': '周',
+        'Months': '月',
+        'Years': '年',
+        type_task: '任务',
+        type_project: '项目',
+        type_milestone: '里程碑',
+        
+        // 🎯 时间单位
+        minutes: '分钟',
+        hours: '小时',
+        days: '天',
+        weeks: '周',
+        months: '月',
+        years: '年',
       },
     };
 
@@ -283,10 +389,40 @@ const OptimizedGanttChart: React.FC = () => {
     ];
 
     // 启用编辑
-    gantt.config.details_on_dblclick = true;
-    gantt.config.drag_resize = true;
-    gantt.config.drag_move = true;
-    gantt.config.drag_progress = true;
+    gantt.config.details_on_dblclick = true;  // 双击编辑
+    gantt.config.drag_resize = true;          // 拖拽调整时长
+    gantt.config.drag_move = true;            // 拖拽移动任务
+    gantt.config.drag_progress = true;        // 拖拽调整进度
+    gantt.config.drag_links = true;           // 🎯 拖拽创建依赖关系
+    
+    // 🎯 编辑弹窗配置
+    gantt.config.lightbox.sections = [
+      {name: 'description', height: 38, map_to: 'text', type: 'textarea', focus: true},
+      {name: 'owner', height: 22, map_to: 'owner', type: 'textarea'},
+      {name: 'priority', height: 22, map_to: 'priority', type: 'select', options: [
+        {key: 'high', label: '高'},
+        {key: 'medium', label: '中'},
+        {key: 'low', label: '低'}
+      ]},
+      {name: 'time', type: 'duration', map_to: 'auto'}
+    ];
+    
+    // 🎯 任务条配色（按状态和优先级）
+    gantt.templates.task_class = function(start: any, end: any, task: any) {
+      const classes: any = [];
+      
+      // 按优先级着色
+      if (task.priority === 'high') classes.push('task-priority-high');
+      else if (task.priority === 'medium') classes.push('task-priority-medium');
+      else if (task.priority === 'low') classes.push('task-priority-low');
+      
+      // 按进度着色
+      if (task.progress === 1) classes.push('task-completed');
+      else if (task.progress > 0) classes.push('task-in-progress');
+      else classes.push('task-not-started');
+      
+      return classes.join(' ');
+    };
 
     // 🚀 优化：统一的任务事件处理（带自动保存提示）
     let saveTimer: NodeJS.Timeout | null = null;
@@ -336,11 +472,11 @@ const OptimizedGanttChart: React.FC = () => {
     });
 
     // 初始化
-    console.log('[甘特图] 执行gantt.init...');
+    logger.info('[甘特图] 执行gantt.init...');
     gantt.init(ganttContainer.current);
     ganttInitializedRef.current = true;
     window.__ganttInitialized = true;
-    console.log('[甘特图] 初始化完成！');
+    logger.info('[甘特图] 初始化完成！');
 
     // 加载数据
     loadTasks();
@@ -509,6 +645,102 @@ const OptimizedGanttChart: React.FC = () => {
     ganttContainer.current?.requestFullscreen();
   };
 
+  // 🎯 AI生成甘特图处理
+  const handleAIGenerate = useCallback((tasks: any[]) => {
+    if (!window.gantt) return;
+    
+    // 添加AI生成的任务
+    tasks.forEach(task => {
+      window.gantt.addTask(task);
+    });
+    
+    window.gantt.render();
+    notification.success({ message: `成功生成 ${tasks.length} 个任务！` });
+    setAiGenVisible(false);
+  }, [notification]);
+
+  // 🎯 浮动时间分析处理
+  const handleFloatTimeAnalysis = useCallback(() => {
+    if (!window.gantt) return;
+    
+    const results = applyFloatTimeToGantt(window.gantt);
+    const report = generateFloatTimeReport(results);
+    
+    Modal.info({
+      title: '⏱️ 浮动时间分析报告',
+      content: <pre style={{ maxHeight: '400px', overflow: 'auto' }}>{report}</pre>,
+      width: 700,
+      okText: '关闭'
+    });
+  }, []);
+
+  // 🎯 任务分组处理（groupBy为付费版功能，使用筛选替代）
+  const handleTaskGrouping = useCallback(() => {
+    if (!window.gantt) return;
+    
+    Modal.info({
+      title: '📊 任务分组',
+      content: (
+        <div>
+          <p>可使用列头筛选功能按以下维度分组：</p>
+          <ul>
+            <li>按负责人筛选</li>
+            <li>按优先级筛选</li>
+            <li>按进度筛选</li>
+          </ul>
+          <p>点击列头可进行排序和筛选</p>
+        </div>
+      ),
+      okText: '知道了'
+    });
+  }, []);
+
+  // 🎯 任务条显示定制处理
+  const handleDisplayFieldsChange = useCallback((fields: string[]) => {
+    setDisplayFields(fields);
+    if (window.gantt) {
+      // 更新任务条显示
+      window.gantt.templates.task_text = function(_start: any, _end: any, task: any) {
+        return generateTaskBarText(task, fields);
+      };
+      window.gantt.render();
+    }
+  }, []);
+
+  // 🎯 时间轴缩放切换
+  const handleScaleChange = useCallback((scale: 'day' | 'week' | 'month') => {
+    if (!window.gantt) return;
+    
+    setViewScale(scale);
+    
+    // 配置不同的时间刻度
+    if (scale === 'day') {
+      window.gantt.config.scale_unit = 'day';
+      window.gantt.config.date_scale = '%m月%d日';
+      window.gantt.config.subscales = [
+        {unit: 'month', step: 1, date: '%Y年%m月'}
+      ];
+      window.gantt.config.scale_height = 50;
+    } else if (scale === 'week') {
+      window.gantt.config.scale_unit = 'week';
+      window.gantt.config.date_scale = '第%W周';
+      window.gantt.config.subscales = [
+        {unit: 'month', step: 1, date: '%Y年%m月'}
+      ];
+      window.gantt.config.scale_height = 50;
+    } else if (scale === 'month') {
+      window.gantt.config.scale_unit = 'month';
+      window.gantt.config.date_scale = '%Y年%m月';
+      window.gantt.config.subscales = [
+        {unit: 'year', step: 1, date: '%Y年'}
+      ];
+      window.gantt.config.scale_height = 50;
+    }
+    
+    window.gantt.render();
+    notification.success({ message: `已切换到${scale === 'day' ? '日' : scale === 'week' ? '周' : '月'}视图` });
+  }, [notification]);
+
   useEffect(() => {
     loadDhtmlxGantt();
     return () => {
@@ -554,9 +786,68 @@ const OptimizedGanttChart: React.FC = () => {
           }
           extra={
             <Space size="small">
-              <Tooltip title="刷新数据">
+              <Tooltip title="新增任务">
                 <Button
                   type="primary"
+                  size="small"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    logger.info('[甘特图] 点击新建任务按钮', { currentProject });
+                    
+                    if (!currentProject) {
+                      logger.warn('[甘特图] 新建任务失败：未选择项目');
+                      Modal.confirm({
+                        title: '请先选择项目',
+                        content: (
+                          <div>
+                            <p>创建任务前需要选择一个项目。</p>
+                            <p>您可以：</p>
+                            <ul>
+                              <li>在左侧菜单选择项目</li>
+                              <li>或访问工作台创建新项目</li>
+                            </ul>
+                          </div>
+                        ),
+                        okText: '前往工作台',
+                        cancelText: '取消',
+                        onOk: () => {
+                          window.location.href = '/workspace';
+                        }
+                      });
+                      return;
+                    }
+                    
+                    if (!window.gantt) {
+                      logger.error('[甘特图] 新建任务失败：gantt对象不存在');
+                      message.error('甘特图未初始化，请刷新页面重试');
+                      return;
+                    }
+                    
+                    try {
+                      logger.info('[甘特图] 开始创建新任务...');
+                      const newTaskId = window.gantt.createTask({
+                        text: '新任务',
+                        start_date: new Date(),
+                        duration: 3,
+                        progress: 0,
+                        owner: '',
+                        priority: 'medium',
+                        project_id: currentProject.id
+                      });
+                      logger.info('[甘特图] 新任务创建成功，ID:', newTaskId);
+                      
+                      // 打开编辑弹窗
+                      window.gantt.showLightbox(newTaskId);
+                      logger.info('[甘特图] 任务编辑弹窗已打开');
+                    } catch (error: any) {
+                      logger.error('[甘特图] 创建任务失败:', error);
+                      message.error('创建任务失败: ' + (error?.message || '未知错误'));
+                    }
+                  }}
+                />
+              </Tooltip>
+              <Tooltip title="刷新数据">
+                <Button
                   size="small"
                   icon={<ReloadOutlined />}
                   onClick={loadTasks}
@@ -573,6 +864,29 @@ const OptimizedGanttChart: React.FC = () => {
               <Tooltip title="全屏显示">
                 <Button size="small" icon={<FullscreenOutlined />} onClick={handleFullscreen} />
               </Tooltip>
+              <Divider type="vertical" />
+              <Tooltip title="切换时间视图">
+                <Space.Compact size="small">
+                  <Button
+                    type={viewScale === 'day' ? 'primary' : 'default'}
+                    onClick={() => handleScaleChange('day')}
+                  >
+                    日
+                  </Button>
+                  <Button
+                    type={viewScale === 'week' ? 'primary' : 'default'}
+                    onClick={() => handleScaleChange('week')}
+                  >
+                    周
+                  </Button>
+                  <Button
+                    type={viewScale === 'month' ? 'primary' : 'default'}
+                    onClick={() => handleScaleChange('month')}
+                  >
+                    月
+                  </Button>
+                </Space.Compact>
+              </Tooltip>
               <Tooltip title="导出 PDF">
                 <Button
                   size="small"
@@ -587,6 +901,39 @@ const OptimizedGanttChart: React.FC = () => {
                   icon={<DownloadOutlined />}
                   onClick={handleExportExcel}
                   disabled={isLoading}
+                />
+              </Tooltip>
+              <Divider type="vertical" />
+              <Tooltip title="AI智能生成甘特图">
+                <Button
+                  type="primary"
+                  size="small"
+                  icon={<BulbOutlined />}
+                  onClick={() => setAiGenVisible(true)}
+                  style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}
+                >
+                  AI生成
+                </Button>
+              </Tooltip>
+              <Tooltip title="定制任务条显示信息">
+                <Button
+                  size="small"
+                  icon={<SettingOutlined />}
+                  onClick={() => setCustomizerVisible(true)}
+                />
+              </Tooltip>
+              <Tooltip title="浮动时间分析">
+                <Button
+                  size="small"
+                  icon={<ClockCircleOutlined />}
+                  onClick={handleFloatTimeAnalysis}
+                />
+              </Tooltip>
+              <Tooltip title="任务智能分组">
+                <Button
+                  size="small"
+                  icon={<ApartmentOutlined />}
+                  onClick={handleTaskGrouping}
                 />
               </Tooltip>
             </Space>
@@ -626,6 +973,20 @@ const OptimizedGanttChart: React.FC = () => {
             </>
           )}
         </Card>
+
+        {/* 🎯 Ganttable特色功能组件 */}
+        <AIGanttGenerator
+          visible={aiGenVisible}
+          onClose={() => setAiGenVisible(false)}
+          onGenerate={handleAIGenerate}
+        />
+
+        <TaskBarCustomizer
+          visible={customizerVisible}
+          onClose={() => setCustomizerVisible(false)}
+          onSave={handleDisplayFieldsChange}
+          currentFields={displayFields}
+        />
       </div>
     </PageContainer>
   );

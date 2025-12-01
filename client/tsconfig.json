@@ -20,14 +20,15 @@
     "noEmit": true,
     "jsx": "react-jsx",
     
-    // 增强的类型检查 (暂时降低严格程度以便编译通过)
+    // 增强的类型检查 (逐步提升严格度)
     "noImplicitAny": false,
-    "noImplicitReturns": false,
-    "noImplicitThis": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "exactOptionalPropertyTypes": false,
     "noUncheckedIndexedAccess": false,
+    "strictNullChecks": true,
     
     // 路径映射
     "baseUrl": "src",

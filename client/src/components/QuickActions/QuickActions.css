@@ -1,0 +1,55 @@
+/* 快速操作面板样式 */
+
+.quick-actions {
+  margin-bottom: 24px;
+}
+
+.quick-action-card {
+  height: 100%;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.quick-action-card.hovered {
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.02);
+  }
+  100% {
+    transform: translateY(-4px) scale(1);
+  }
+}
+
+.action-icon {
+  transition: all 0.3s ease;
+}
+
+.action-title {
+  transition: all 0.3s ease;
+}
+
+.action-desc {
+  transition: all 0.3s ease;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .quick-action-card {
+    min-height: 80px;
+    padding: 12px !important;
+  }
+  
+  .action-icon svg {
+    font-size: 20px !important;
+  }
+}

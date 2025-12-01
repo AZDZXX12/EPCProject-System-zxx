@@ -1,0 +1,541 @@
+/* 甘特图表格竖向分割线样式 */
+
+/* 表格单元格边框 */
+.gantt_grid_scale,
+.gantt_grid_head_cell {
+  border-right: 1px solid #e0e0e0 !important;
+}
+
+.gantt_cell {
+  border-right: 1px solid #ebebeb !important;
+}
+
+/* 表头单元格边框加粗 */
+.gantt_grid_head_cell {
+  border-right: 1px solid #d0d0d0 !important;
+  font-weight: 600;
+}
+
+/* 列调整手柄样式 */
+.gantt_grid_head_cell {
+  position: relative;
+}
+
+.gantt_grid_head_cell:hover {
+  background-color: #f5f5f5;
+}
+
+/* 调整列宽时的视觉反馈 */
+.gantt_grid_resize_area {
+  cursor: col-resize;
+  width: 8px;
+  position: absolute;
+  right: -4px;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.gantt_grid_resize_area:hover {
+  background-color: rgba(24, 144, 255, 0.1);
+}
+
+/* 正在调整列宽时的样式 */
+.gantt_grid_resize_wrap {
+  border-right: 2px solid #1890ff !important;
+}
+
+/* 网格整体调整手柄 */
+.gantt_grid_resize {
+  cursor: col-resize;
+  width: 8px;
+  background-color: #f0f0f0;
+  border-left: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+}
+
+.gantt_grid_resize:hover {
+  background-color: #e6f7ff;
+  border-left: 1px solid #1890ff;
+  border-right: 1px solid #1890ff;
+}
+
+/* 行边框 */
+.gantt_row {
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.gantt_row:hover {
+  background-color: #fafafa !important;
+}
+
+/* 选中行样式 */
+.gantt_row.gantt_selected {
+  background-color: #e6f7ff !important;
+}
+
+/* 表格容器 */
+.gantt_grid {
+  border-right: 2px solid #d9d9d9 !important;
+}
+
+/* ---------- Utility ---------- */
+.w-100 {
+  width: 100%;
+}
+
+.mt-12 {
+  margin-top: 12px;
+}
+
+/* 优化列头文字样式 */
+.gantt_grid_head_cell {
+  color: #262626;
+  font-size: 14px;
+  padding: 8px 4px;
+  text-align: center;
+}
+
+/* 单元格内边距 */
+.gantt_cell {
+  padding: 8px 4px;
+  line-height: 24px;
+}
+
+/* 全屏提示按钮 */
+.gantt-fs-hint {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.gantt-fs-hint:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+/* 周末底色（时间轴与任务区域） */
+.gantt-weekend {
+  background-color: #fafafa !important;
+}
+
+/* 今天标记样式 */
+.gantt_marker_today {
+  background-color: rgba(255, 77, 79, 0.12);
+}
+.gantt_marker_today .gantt_marker_content {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+/* 树形结构缩进 */
+.gantt_tree_indent {
+  width: 20px;
+}
+
+/* 展开/折叠图标 */
+.gantt_tree_icon {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.gantt_tree_icon:hover {
+  background-color: #f0f0f0;
+  border-radius: 2px;
+}
+
+/* ========== Ganttable 风格优化 ========== */
+
+/* 任务条现代化样式 */
+.gantt_task_line {
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.gantt_task_line:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  cursor: move;
+  border-color: #1890ff;
+}
+
+/* 选中任务 */
+.gantt_task_line.gantt_selected {
+  border: 2px solid #1890ff !important;
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 延期任务 - 红色渐变 + 脉冲动画 */
+.gantt_task_line.task-delayed {
+  background: linear-gradient(135deg, #ff5722, #f44336) !important;
+  border: 2px solid #d32f2f !important;
+  animation: pulse-delayed 2s infinite;
+}
+
+@keyframes pulse-delayed {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+/* 关键路径任务 */
+.gantt_task_line.task-critical {
+  border: 2px solid #d32f2f !important;
+  box-shadow: 0 0 8px rgba(211, 47, 47, 0.4) !important;
+}
+
+/* 里程碑样式优化 */
+.gantt_task_line.gantt_milestone {
+  background-color: #FFD700 !important;
+  border: 2px solid #FFA500 !important;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+/* 任务进度条 */
+.gantt_task_progress {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px 0 0 4px;
+}
+
+/* 依赖连接线优化 */
+.gantt_line_wrapper div {
+  background-color: #90a4ae;
+  transition: all 0.2s;
+}
+
+.gantt_link_arrow {
+  border-color: #90a4ae;
+}
+
+.gantt_line_wrapper:hover div {
+  background-color: #1890ff !important;
+  box-shadow: 0 0 4px rgba(24, 144, 255, 0.5);
+}
+
+.gantt_line_wrapper:hover .gantt_link_arrow {
+  border-color: #1890ff !important;
+}
+
+/* 关键路径连接线 */
+.gantt_line_wrapper.link-critical div {
+  background-color: #d32f2f !important;
+  height: 3px !important;
+}
+
+.gantt_line_wrapper.link-critical .gantt_link_arrow {
+  border-color: #d32f2f !important;
+}
+
+/* 工作负载热力图容器 */
+.workload-heatmap-container {
+  margin-top: 16px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.workload-heatmap-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #262626;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.workload-heatmap {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+.workload-cell {
+  min-width: 30px;
+  height: 24px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 500;
+  position: relative;
+}
+
+.workload-cell:hover {
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.workload-cell.intensity-low {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.workload-cell.intensity-medium {
+  background-color: #ef5350;
+  color: white;
+}
+
+.workload-cell.intensity-high {
+  background-color: #c62828;
+  color: white;
+  font-weight: 600;
+}
+
+.workload-cell.intensity-none {
+  background-color: #f5f5f5;
+  color: #bdbdbd;
+}
+
+/* 热力图图例 */
+.workload-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #595959;
+}
+
+.workload-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.workload-legend-color {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+}
+
+/* 基线任务条 */
+.gantt_task_line .baseline-bar {
+  position: absolute;
+  bottom: -12px;
+  height: 8px;
+  background: #bdbdbd;
+  border-radius: 2px;
+  opacity: 0.6;
+  left: 0;
+}
+
+/* Tooltip 现代化 */
+.gantt-tooltip-modern {
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  max-width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.gantt-tooltip-modern .tooltip-header {
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 13px;
+}
+
+.gantt-tooltip-modern .tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gantt-tooltip-modern .info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.gantt-tooltip-modern .label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+}
+
+.gantt-tooltip-modern .value {
+  color: white;
+  font-weight: 500;
+}
+
+.gantt-tooltip-modern .delay-warning {
+  background: #ff4d4f;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+  font-size: 11px;
+  text-align: center;
+}
+
+.gantt-tooltip-modern .critical-badge {
+  background: #d32f2f;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  margin-left: 6px;
+}
+
+/* 甘特图容器高度 */
+.gantt-container {
+  min-height: 600px;
+  height: 600px;
+}
+
+/* 空状态提示 */
+.gantt-empty-hint {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}
+
+/* 空状态样式 */
+.gantt-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8c8c8c;
+}
+
+/* 🎯 Ganttable风格 - Tooltip悬浮显示 */
+.gantt-tooltip {
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  max-width: 300px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.gantt-tooltip .tooltip-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  border-radius: 6px 6px 0 0;
+}
+
+.gantt-tooltip .tooltip-info {
+  padding: 12px 16px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.gantt-tooltip .tooltip-info > div {
+  margin: 4px 0;
+  color: #595959;
+}
+
+.gantt-tooltip .tooltip-info strong {
+  color: #262626;
+  margin-right: 8px;
+  min-width: 60px;
+  display: inline-block;
+}
+
+/* 🎯 Ganttable风格 - 任务条配色方案 */
+
+/* 按优先级着色 */
+.gantt_task_line.task-priority-high {
+  background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%) !important;
+  border-color: #ee5a6f !important;
+}
+
+.gantt_task_line.task-priority-medium {
+  background: linear-gradient(135deg, #ffa502 0%, #ffc048 100%) !important;
+  border-color: #ff9f43 !important;
+}
+
+.gantt_task_line.task-priority-low {
+  background: linear-gradient(135deg, #5f27cd 0%, #7e5bef 100%) !important;
+  border-color: #6c5ce7 !important;
+}
+
+/* 按进度状态着色 */
+.gantt_task_line.task-completed {
+  background: linear-gradient(135deg, #26de81 0%, #2bcbba 100%) !important;
+  border-color: #20bf6b !important;
+  opacity: 0.9;
+}
+
+.gantt_task_line.task-in-progress {
+  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%) !important;
+  border-color: #0050b3 !important;
+}
+
+.gantt_task_line.task-not-started {
+  background: linear-gradient(135deg, #d3d3d3 0%, #e8e8e8 100%) !important;
+  border-color: #bfbfbf !important;
+}
+
+/* 任务条悬浮效果 */
+.gantt_task_line {
+  transition: all 0.2s ease;
+}
+
+.gantt_task_line:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 10 !important;
+}
+
+/* 进度条样式优化 */
+.gantt_task_progress {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-radius: 2px;
+}
+
+/* 任务文本优化 */
+.gantt_task_content {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 响应式调整 */
+@media (max-width: 1200px) {
+  .gantt_grid_head_cell {
+    font-size: 13px;
+    padding: 6px 2px;
+  }
+  
+  .gantt_cell {
+    padding: 6px 2px;
+    font-size: 13px;
+  }
+  
+  .workload-heatmap {
+    gap: 1px;
+  }
+  
+  .workload-cell {
+    min-width: 24px;
+    height: 20px;
+    font-size: 10px;
+  }
+}

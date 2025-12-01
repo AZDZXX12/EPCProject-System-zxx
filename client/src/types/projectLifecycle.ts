@@ -210,7 +210,7 @@ export function canTransitionToPhase(
 // 获取下一个阶段
 export function getNextPhase(currentPhase: ProjectPhase): ProjectPhase | null {
   const nextPhases = PhaseTransitionRules[currentPhase];
-  return nextPhases.length > 0 ? nextPhases[0] : null;
+  return nextPhases.length > 0 ? (nextPhases[0] ?? null) : null;
 }
 
 // 计算阶段进度

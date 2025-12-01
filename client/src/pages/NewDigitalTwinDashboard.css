@@ -1,0 +1,247 @@
+.new-digital-twin-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 50%, #f0f9ff 100%);
+  overflow: hidden;
+}
+
+/* 主内容区域 */
+.main-content {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  overflow: hidden;
+  min-height: 0; /* Fix flex overflow */
+}
+
+/* 左侧3D场景区域 */
+.scene-area {
+  flex: 1;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+  min-width: 0; /* Fix flex overflow */
+}
+
+/* 右侧数据面板 */
+.data-panel {
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+/* 自定义滚动条 */
+.data-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.data-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.data-panel::-webkit-scrollbar-thumb {
+  background: rgba(30, 58, 138, 0.5);
+  border-radius: 3px;
+}
+
+.data-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 58, 138, 0.7);
+}
+
+/* 卡片样式优化 */
+.overview-card,
+.detail-card,
+.list-card,
+.alarm-card {
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+}
+
+.overview-card:hover,
+.detail-card:hover,
+.list-card:hover,
+.alarm-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.overview-card .ant-card-head,
+.detail-card .ant-card-head,
+.list-card .ant-card-head,
+.alarm-card .ant-card-head {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border-bottom: 2px solid #e2e8f0;
+  font-weight: 600;
+}
+
+/* 系统概览卡片 */
+.overview-card .ant-statistic {
+  text-align: center;
+}
+
+.overview-card .ant-statistic-title {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.overview-card .ant-statistic-content {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* 设备列表 */
+.list-card .ant-list-item {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.list-card .ant-list-item:hover {
+  background: #f0f9ff;
+  border-color: #bfdbfe;
+}
+
+.list-card .ant-list-item.selected {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  border-color: #1e40af;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
+}
+
+.list-card .ant-list-item-meta-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.list-card .ant-list-item-meta-description {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Equipment avatar colors */
+.equipment-avatar {
+  transition: all 0.3s;
+}
+
+.equipment-avatar-running {
+  background-color: #52c41a !important;
+}
+
+.equipment-avatar-idle {
+  background-color: #1890ff !important;
+}
+
+.equipment-avatar-fault {
+  background-color: #ff4d4f !important;
+}
+
+.equipment-avatar-offline {
+  background-color: #ff4d4f !important;
+}
+
+.equipment-avatar-warning {
+  background-color: #faad14 !important;
+}
+
+/* 告警卡片 */
+.alarm-card .ant-list-item {
+  padding: 8px 0;
+}
+
+.alarm-card .ant-alert {
+  font-size: 13px;
+}
+
+.alarm-empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #8c8c8c;
+}
+
+.alarm-alert {
+  width: 100%;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #8c8c8c;
+}
+
+/* 详情卡片 */
+.detail-card .ant-descriptions-item-label {
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.detail-card .ant-descriptions-item-content {
+  color: #1f2937;
+}
+
+.detail-progress {
+  margin-top: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .data-panel {
+    width: 340px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .main-content {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .scene-area {
+    height: 500px;
+    flex: none;
+  }
+
+  .data-panel {
+    width: 100%;
+    max-height: none;
+    overflow-y: visible;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .data-panel > .ant-card {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .scene-area {
+    height: 400px;
+  }
+
+  .data-panel {
+    gap: 12px;
+  }
+
+  .data-panel > .ant-card {
+    flex: 1 1 100%;
+  }
+}

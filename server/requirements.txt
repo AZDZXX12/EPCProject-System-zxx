@@ -53,6 +53,9 @@ pytest-cov==4.1.0
 # 日志
 loguru==0.7.2
 
+# 健康检查
+requests==2.31.0
+
 
 
 

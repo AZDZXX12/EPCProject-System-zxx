@@ -1,0 +1,472 @@
+/* 专业级数字孪生系统样式 */
+
+.professional-digital-twin {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.professional-digital-twin.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  padding: 10px;
+}
+
+/* 工具栏 */
+.toolbar-card {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.system-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  font-size: 32px;
+  color: #1890ff;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.brand-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #262626;
+  letter-spacing: 0.5px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* KPI卡片 */
+.kpi-cards {
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #1890ff, #36cfc9);
+}
+
+.kpi-card.kpi-blue::before {
+  background: linear-gradient(90deg, #1890ff, #36cfc9);
+}
+
+.kpi-card.kpi-green::before {
+  background: linear-gradient(90deg, #52c41a, #95de64);
+}
+
+.kpi-card.kpi-orange::before {
+  background: linear-gradient(90deg, #faad14, #ffc53d);
+}
+
+.kpi-card.kpi-purple::before {
+  background: linear-gradient(90deg, #1890ff, #40a9ff);
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.kpi-card .ant-statistic-title {
+  font-size: 14px;
+  color: #8c8c8c;
+  margin-bottom: 8px;
+}
+
+.kpi-card .ant-statistic-content {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.kpi-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+/* 主内容卡片 */
+.main-content-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.main-content-card .ant-tabs-nav {
+  margin-bottom: 16px;
+  padding: 0 16px;
+}
+
+.main-content-card .ant-tabs-tab {
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+}
+
+.main-content-card .ant-tabs-tab:hover {
+  background: rgba(24, 144, 255, 0.06);
+  border-radius: 8px 8px 0 0;
+}
+
+.main-content-card .ant-tabs-tab-active {
+  background: linear-gradient(135deg, #1890ff, #36cfc9);
+  color: white !important;
+  border-radius: 8px 8px 0 0;
+}
+
+.main-content-card .ant-tabs-tab-active .anticon {
+  color: white !important;
+}
+
+/* 图表容器 */
+.chart-wrapper {
+  min-height: 300px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.empty-chart {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #bfbfbf;
+  font-size: 14px;
+}
+
+.empty-chart .anticon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+/* 设备状态网格 */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.status-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.status-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: white;
+}
+
+.status-running .status-icon {
+  background: linear-gradient(135deg, #52c41a, #95de64);
+}
+
+.status-idle .status-icon {
+  background: linear-gradient(135deg, #1890ff, #36cfc9);
+}
+
+.status-fault .status-icon {
+  background: linear-gradient(135deg, #f5222d, #ff4d4f);
+}
+
+.status-maintenance .status-icon {
+  background: linear-gradient(135deg, #faad14, #ffc53d);
+}
+
+.status-info {
+  flex: 1;
+}
+
+.status-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #262626;
+  line-height: 1;
+}
+
+.status-label {
+  font-size: 13px;
+  color: #8c8c8c;
+  margin-top: 4px;
+}
+
+/* 指标标签 */
+.metric-label {
+  font-size: 13px;
+  color: #8c8c8c;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #bfbfbf;
+}
+
+.empty-state .anticon {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.empty-state div {
+  font-size: 14px;
+}
+
+/* 表格样式 */
+.professional-digital-twin .ant-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.professional-digital-twin .ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+  color: #262626;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.professional-digital-twin .ant-table-tbody > tr:hover > td {
+  background: #e6f7ff;
+}
+
+/* 抽屉样式 */
+.professional-digital-twin .ant-drawer-body {
+  padding: 24px;
+}
+
+.professional-digital-twin .ant-descriptions-item-label {
+  font-weight: 600;
+  background: #fafafa;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+  .professional-digital-twin {
+    padding: 16px;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-card .ant-statistic-content {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .professional-digital-twin {
+    padding: 12px;
+  }
+
+  .toolbar-card {
+    margin-bottom: 12px;
+  }
+
+  .system-brand {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .brand-text {
+    font-size: 16px;
+  }
+
+  .kpi-cards {
+    margin-bottom: 12px;
+  }
+
+  .kpi-card .ant-statistic-content {
+    font-size: 20px;
+  }
+
+  .kpi-footer {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .main-content-card .ant-tabs-tab {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .chart-wrapper {
+    min-height: 200px;
+  }
+
+  .empty-chart {
+    height: 200px;
+  }
+
+  .status-value {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .professional-digital-twin {
+    padding: 8px;
+  }
+
+  .toolbar-card .ant-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .kpi-card {
+    margin-bottom: 8px;
+  }
+
+  .status-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .status-value {
+    font-size: 20px;
+  }
+}
+
+/* 动画效果 */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kpi-card {
+  animation: slideInUp 0.6s ease-out;
+}
+
+.kpi-card:nth-child(1) { animation-delay: 0.1s; }
+.kpi-card:nth-child(2) { animation-delay: 0.2s; }
+.kpi-card:nth-child(3) { animation-delay: 0.3s; }
+.kpi-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* 数据流动效果 */
+@keyframes dataFlow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: dataFlow 3s ease-in-out infinite;
+}
+
+/* 进度条样式优化 */
+.professional-digital-twin .ant-progress-bg {
+  border-radius: 10px;
+}
+
+.professional-digital-twin .ant-progress-inner {
+  border-radius: 10px;
+  background: #f0f0f0;
+}
+
+/* 标签样式 */
+.professional-digital-twin .ant-tag {
+  border-radius: 4px;
+  font-weight: 500;
+  padding: 2px 8px;
+}
+
+/* 统计卡片 */
+.professional-digital-twin .ant-statistic {
+  text-align: center;
+}
+
+/* 按钮组样式 */
+.professional-digital-twin .ant-space-item {
+  display: flex;
+  align-items: center;
+}
+
+/* 时间选择器样式 */
+.professional-digital-twin .ant-picker {
+  border-radius: 6px;
+}
+
+/* 选择框样式 */
+.professional-digital-twin .ant-select-selector {
+  border-radius: 6px !important;
+}
+
+/* 卡片标题 */
+.professional-digital-twin .ant-card-head-title {
+  font-weight: 600;
+  font-size: 15px;
+}

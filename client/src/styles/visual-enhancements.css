@@ -1,0 +1,299 @@
+/* 视觉增强样式 - 统一卡片、滚动条、动画等 */
+
+/* ==================== 卡片样式 ==================== */
+
+/* 统一卡片样式 */
+.ant-card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  transition: all var(--transition) var(--ease);
+  border: 1px solid var(--border-color-light);
+}
+
+.ant-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.ant-card-head {
+  border-bottom: 1px solid var(--border-color-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.ant-card-body {
+  padding: var(--spacing-lg);
+}
+
+/* 小卡片 */
+.ant-card-small .ant-card-head {
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.ant-card-small .ant-card-body {
+  padding: var(--spacing-md);
+}
+
+/* ==================== 滚动条样式 ==================== */
+
+/* Webkit浏览器（Chrome, Safari, Edge） */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: var(--radius);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius);
+  transition: background var(--transition);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 深色模式滚动条 */
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+[data-theme='dark'] * {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* ==================== 按钮样式 ==================== */
+
+.ant-btn {
+  border-radius: var(--radius-md);
+  transition: all var(--transition) var(--ease);
+  box-shadow: var(--shadow-sm);
+}
+
+.ant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.ant-btn:active {
+  transform: translateY(0);
+}
+
+.ant-btn-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-active) 100%);
+  border: none;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
+}
+
+/* ==================== 输入框样式 ==================== */
+
+.ant-input,
+.ant-input-password,
+.ant-select-selector,
+.ant-picker {
+  border-radius: var(--radius-md);
+  transition: all var(--transition) var(--ease);
+}
+
+.ant-input:focus,
+.ant-input-password:focus,
+.ant-select-focused .ant-select-selector,
+.ant-picker-focused {
+  box-shadow: 0 0 0 2px var(--color-primary-light);
+}
+
+/* ==================== 模态框样式 ==================== */
+
+.ant-modal-content {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.ant-modal-header {
+  border-bottom: 1px solid var(--border-color-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.ant-modal-body {
+  padding: var(--spacing-lg);
+}
+
+.ant-modal-footer {
+  border-top: 1px solid var(--border-color-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* ==================== 抽屉样式 ==================== */
+
+.ant-drawer-content {
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.ant-drawer-header {
+  border-bottom: 1px solid var(--border-color-light);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.ant-drawer-body {
+  padding: var(--spacing-lg);
+}
+
+/* ==================== 表格样式 ==================== */
+
+.ant-table {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+  background: var(--bg-tertiary);
+  font-weight: 600;
+  padding: var(--spacing-md) var(--spacing);
+}
+
+.ant-table-tbody > tr > td {
+  padding: var(--spacing-md) var(--spacing);
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: var(--bg-hover);
+}
+
+/* ==================== 标签样式 ==================== */
+
+.ant-tag {
+  border-radius: var(--radius);
+  padding: 2px var(--spacing-sm);
+  border: none;
+  font-size: 12px;
+}
+
+/* ==================== 徽章样式 ==================== */
+
+.ant-badge-count {
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==================== 工具提示样式 ==================== */
+
+.ant-tooltip-inner {
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing);
+  box-shadow: var(--shadow-md);
+}
+
+/* ==================== 分割线样式 ==================== */
+
+.ant-divider {
+  border-color: var(--border-color-light);
+}
+
+/* ==================== 加载动画 ==================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn var(--transition) var(--ease);
+}
+
+/* ==================== 悬停效果 ==================== */
+
+.hover-lift {
+  transition: all var(--transition) var(--ease);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ==================== 渐变背景 ==================== */
+
+.gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-active) 100%);
+}
+
+.gradient-success {
+  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+}
+
+.gradient-warning {
+  background: linear-gradient(135deg, #faad14 0%, #d48806 100%);
+}
+
+.gradient-error {
+  background: linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%);
+}
+
+/* ==================== 玻璃态效果 ==================== */
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme='dark'] .glass-effect {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ==================== 响应式间距 ==================== */
+
+@media (max-width: 768px) {
+  .ant-card-body {
+    padding: var(--spacing-md);
+  }
+  
+  .ant-modal-body,
+  .ant-drawer-body {
+    padding: var(--spacing-md);
+  }
+  
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    padding: var(--spacing-sm) var(--spacing-xs);
+  }
+}
+
+/* ==================== 打印样式 ==================== */
+
+@media print {
+  .ant-card {
+    box-shadow: none;
+    border: 1px solid #d9d9d9;
+  }
+  
+  .hover-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

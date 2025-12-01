@@ -1,0 +1,47 @@
+.procurement-progress-tracker {
+  padding: 0;
+}
+
+.procurement-progress-tracker .ant-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.procurement-progress-tracker .ant-statistic-title {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.procurement-progress-tracker .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.procurement-progress-tracker .ant-steps-item-icon {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.procurement-progress-tracker .ant-progress-line {
+  margin-bottom: 0;
+}
+
+.procurement-progress-tracker .ant-timeline-item-content {
+  margin-left: 24px;
+}
+
+.procurement-progress-tracker .ant-table-wrapper {
+  margin-top: 16px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .procurement-progress-tracker .ant-statistic-content {
+    font-size: 20px;
+  }
+  
+  .procurement-progress-tracker .ant-steps {
+    flex-direction: column;
+  }
+}

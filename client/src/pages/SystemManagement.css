@@ -3,11 +3,53 @@
   margin: 0 auto;
 }
 
-.ant-card {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+/* 通用间距与排版 */
+.sm-title {
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 600;
 }
 
-.ant-list-item-meta-avatar {
-  display: flex;
-  align-items: center;
+.sm-subtitle {
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.sm-mb-24 { margin-bottom: 24px; }
+.sm-mb-16 { margin-bottom: 16px; }
+.sm-mb-8 { margin-bottom: 8px; }
+.sm-mt-16 { margin-top: 16px; }
+
+/* 统计卡片与图标色 */
+.sm-stats-row { margin-bottom: 24px; }
+.sm-icon-blue { color: #1890ff; }
+.sm-icon-green { color: #52c41a; }
+.sm-icon-purple { color: #1890ff; }
+.sm-icon-orange { color: #faad14; }
+.sm-icon-24 { font-size: 24px; }
+
+.sm-stat { font-weight: bold; }
+.sm-stat-blue .ant-statistic-content-value { color: #1890ff; }
+.sm-stat-green .ant-statistic-content-value { color: #52c41a; }
+.sm-stat-purple .ant-statistic-content-value { color: #1890ff; }
+.sm-stat-orange .ant-statistic-content-value { color: #faad14; }
+.sm-stat .ant-statistic-content-value { font-size: 32px; }
+
+/* 列表标题/链接展示 */
+.sm-list-title { font-size: 16px; font-weight: 500; }
+.sm-url { font-size: 12px; color: #1890ff; font-family: monospace; }
+
+/* 区块标题 */
+.sm-section-title { margin-top: 24px; }
+
+/* 干净的UL */
+.sm-ul-clean { padding-left: 20px; margin: 0; }
+
+/* 系统配置卡片样式 */
+.sm-config-card { margin-top: 16px; }
+.sm-config-box {
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-family: monospace;
 }

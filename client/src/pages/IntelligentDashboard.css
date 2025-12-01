@@ -1,0 +1,65 @@
+/* 智能仪表盘样式 */
+
+.intelligent-dashboard {
+  padding: 24px;
+  background: #f0f2f5;
+  min-height: calc(100vh - 64px);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.dashboard-content {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.prediction-content {
+  padding: 16px;
+}
+
+.risk-matrix {
+  padding: 16px;
+}
+
+/* 卡片悬浮效果 */
+.ant-card {
+  transition: all 0.3s;
+  border-radius: 8px;
+}
+
+.ant-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* 统计数字动画 */
+.ant-statistic-content-value {
+  animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* 进度条动画 */
+.ant-progress-bg {
+  animation: progressGrow 1.5s ease-out;
+}
+
+@keyframes progressGrow {
+  from { width: 0; }
+}

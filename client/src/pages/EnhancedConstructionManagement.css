@@ -1,0 +1,269 @@
+/* 施工管理页面 - 主容器样式 */
+.enhanced-construction-management {
+  min-height: 100vh;
+  width: 100%;
+  background: #f0f2f5;
+  padding: 24px;
+}
+
+/* 确保卡片容器正常显示 */
+.enhanced-construction-management > .ant-card {
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Tab面板内容区域 */
+.enhanced-construction-management .ant-tabs-content {
+  background: transparent;
+  padding: 16px 0;
+}
+
+/* 项目总览卡片 */
+.enhanced-construction-management .ant-card {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+}
+
+/* 统计指标卡片 */
+.enhanced-construction-management .ant-statistic {
+  padding: 16px;
+}
+
+/* 描述列表样式 */
+.enhanced-construction-management .ant-descriptions {
+  background: #fff;
+}
+
+/* 时间线样式 */
+.enhanced-construction-management .ant-timeline {
+  padding: 16px;
+}
+
+/* 进度条容器 */
+.enhanced-construction-management .ant-progress {
+  margin: 8px 0;
+}
+
+/* 表格样式 */
+.enhanced-construction-management .ant-table-wrapper {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+/* Tab标签样式优化 */
+.enhanced-construction-management .ant-tabs-tab {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 20px;
+}
+
+.enhanced-construction-management .ant-tabs-tab-active {
+  font-weight: 600;
+  color: #1890ff;
+}
+
+/* 按钮组样式 */
+.enhanced-construction-management .ant-space {
+  gap: 8px;
+}
+
+/* 表单布局优化 */
+.enhanced-construction-management .ant-form {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.enhanced-construction-management .ant-form-item {
+  margin-bottom: 16px;
+}
+
+/* Modal样式 */
+.enhanced-construction-management .ant-modal-content {
+  border-radius: 8px;
+}
+
+/* 上传组件样式 */
+.enhanced-construction-management .ant-upload-list-picture-card-container {
+  margin: 8px;
+}
+
+/* 提示信息样式 */
+.enhanced-construction-management .ant-alert {
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+/* Badge徽章样式 */
+.enhanced-construction-management .ant-badge {
+  margin-left: 8px;
+}
+
+/* Tag标签样式 */
+.enhanced-construction-management .ant-tag {
+  margin: 4px;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+/* 分隔线样式 */
+.enhanced-construction-management .ant-divider {
+  margin: 16px 0;
+}
+
+/* 图片预览样式 */
+.enhanced-construction-management .ant-image-preview-mask {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* 响应式布局 */
+@media (max-width: 1200px) {
+  .enhanced-construction-management {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .enhanced-construction-management {
+    padding: 12px;
+  }
+  
+  .enhanced-construction-management .ant-tabs-tab {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .enhanced-construction-management .ant-card {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-construction-management {
+    padding: 8px;
+  }
+  
+  .enhanced-construction-management > .ant-card {
+    margin-bottom: 8px;
+  }
+}
+
+/* 确保内容不会溢出 */
+.enhanced-construction-management * {
+  box-sizing: border-box;
+}
+
+/* 修复可能的浮动问题 */
+.enhanced-construction-management::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* 信息卡片 */
+.enhanced-construction-management .info-card {
+  margin-bottom: 16px;
+}
+
+/* 指标卡片 */
+.enhanced-construction-management .metrics-card {
+  margin-bottom: 16px;
+}
+
+/* 阶段卡片 */
+.enhanced-construction-management .stage-card {
+  margin-bottom: 16px;
+}
+
+/* 统计行 */
+.enhanced-construction-management .stats-row {
+  margin-bottom: 16px;
+}
+
+/* Statistic颜色类 */
+.enhanced-construction-management .statistic-success .ant-statistic-content {
+  color: #3f8600;
+}
+
+.enhanced-construction-management .statistic-warning .ant-statistic-content {
+  color: #faad14;
+}
+
+.enhanced-construction-management .statistic-danger .ant-statistic-content {
+  color: #cf1322;
+}
+
+.enhanced-construction-management .statistic-primary .ant-statistic-content {
+  color: #1890ff;
+}
+
+/* 进度容器样式 */
+.enhanced-construction-management .progress-container {
+  width: 100px;
+}
+
+.enhanced-construction-management .progress-bar-bg {
+  width: 100%;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.enhanced-construction-management .progress-bar-fill {
+  height: 100%;
+  background-color: #1890ff;
+  transition: width 0.3s;
+}
+
+.enhanced-construction-management .progress-text {
+  text-align: center;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* 上传占位符 */
+.enhanced-construction-management .upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.enhanced-construction-management .upload-text {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* 安全提示 */
+.enhanced-construction-management .safety-alert {
+  margin-top: 16px;
+}
+
+/* 统计详情文本 */
+.enhanced-construction-management .stat-detail {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #999;
+}
+
+/* 边距工具类 */
+.enhanced-construction-management .mb-16 {
+  margin-bottom: 16px !important;
+}
+
+/* 宽度工具类 */
+.enhanced-construction-management .w-full {
+  width: 100%;
+}
+
+/* Badge颜色类 */
+.enhanced-construction-management .badge-success {
+  background-color: #52c41a;
+}

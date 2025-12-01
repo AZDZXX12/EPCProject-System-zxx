@@ -13,9 +13,12 @@ import {
   Tag,
   Alert,
   Switch,
+  Divider,
+  Spin,
   Form,
   Select,
 } from 'antd';
+import { logger } from '../utils/logger';
 import {
   SettingOutlined,
   DatabaseOutlined,
@@ -65,7 +68,7 @@ const SystemSettings: React.FC = () => {
         setDbInfo(data);
       }
     } catch (error) {
-      console.error('获取数据库信息失败:', error);
+      logger.error('[系统设置] 获取数据库信息失败:', error);
       message.error('无法连接到后端服务');
     } finally {
       setLoading(false);
@@ -73,10 +76,8 @@ const SystemSettings: React.FC = () => {
   };
 
   const openDatabaseFolder = async () => {
-    // @ts-ignore - Electron API通过preload.js注入
-    if ((window as any).electronAPI) {
-      // @ts-ignore
-      await (window as any).electronAPI.openDatabaseFolder();
+    if (window.electronAPI) {
+      await window.electronAPI.openDatabaseFolder();
       message.success('数据库文件夹已打开');
     } else {
       message.info('此功能仅在桌面版中可用');
@@ -99,7 +100,7 @@ const SystemSettings: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('备份失败:', error);
+      logger.error('[系统设置] 数据库备份失败:', error);
       message.error('备份失败，请检查后端服务');
     } finally {
       setLoading(false);

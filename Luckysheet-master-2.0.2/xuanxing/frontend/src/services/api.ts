@@ -8,7 +8,20 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 15000,
 });
+
+async function withRetry<T>(fn: () => Promise<T>, retries = 2, delay = 500): Promise<T> {
+  try {
+    return await fn();
+  } catch (err: any) {
+    if (retries > 0) {
+      await new Promise((r) => setTimeout(r, delay));
+      return withRetry(fn, retries - 1, delay * 2);
+    }
+    throw err;
+  }
+}
 
 export const cableApi = {
   /**
@@ -16,7 +29,7 @@ export const cableApi = {
    */
   async calculateCable(params: CableParams): Promise<CableResult[]> {
     try {
-      const response = await apiClient.post<CableResult[]>('/calculate/', params);
+      const response = await withRetry(() => apiClient.post<CableResult[]>('/calculate/', params));
       return response.data;
     } catch (error) {
       console.error('API Error:', error);
@@ -29,8 +42,12 @@ export const cableApi = {
    */
   async getCableSpecs(): Promise<any[]> {
     try {
-      const response = await apiClient.get('/cables/');
-      return response.data;
+      const response = await withRetry(() => apiClient.get('/cables/'));
+      const data = response.data as any;
+      if (data && Array.isArray(data.results)) {
+        return data.results;
+      }
+      return data;
     } catch (error) {
       console.error('API Error:', error);
       throw error;

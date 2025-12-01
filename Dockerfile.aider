@@ -1,0 +1,51 @@
+# Aider + Gemini Docker环境
+FROM python:3.11-slim
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装Aider
+RUN pip install --no-cache-dir aider-chat
+
+# 设置工作目录
+WORKDIR /workspace
+
+# 配置Git（避免警告）
+RUN git config --global user.email "aider@example.com" && \
+    git config --global user.name "Aider User" && \
+    git config --global init.defaultBranch main
+
+# 创建启动脚本
+RUN echo '#!/bin/bash\n\
+if [ -z "$GEMINI_API_KEY" ]; then\n\
+    echo "❌ 错误: 请设置GEMINI_API_KEY环境变量"\n\
+    echo "使用方法: docker run -e GEMINI_API_KEY=你的key ..."\n\
+    exit 1\n\
+fi\n\
+\n\
+echo "🤖 Aider + Gemini 已就绪！"\n\
+echo "📁 工作目录: /workspace"\n\
+echo "🔑 API Key: ${GEMINI_API_KEY:0:10}..."\n\
+echo ""\n\
+echo "💡 使用提示:"\n\
+echo "  /add <文件>     - 添加文件到对话"\n\
+echo "  /help          - 查看帮助"\n\
+echo "  /exit          - 退出"\n\
+echo ""\n\
+\n\
+# 初始化Git仓库（如果不存在）\n\
+if [ ! -d ".git" ]; then\n\
+    git init\n\
+    echo "✅ Git仓库已初始化"\n\
+fi\n\
+\n\
+# 启动Aider\n\
+exec aider --model gemini/gemini-pro "$@"' > /usr/local/bin/start-aider.sh
+
+RUN chmod +x /usr/local/bin/start-aider.sh
+
+# 设置入口点
+ENTRYPOINT ["/usr/local/bin/start-aider.sh"]

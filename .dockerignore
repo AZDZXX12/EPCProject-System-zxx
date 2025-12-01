@@ -1,0 +1,69 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+.npm
+.yarn
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test
+coverage/
+.nyc_output
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Docs
+docs/
+*.md
+!README.md
+
+# CI/CD
+.github/
+
+# Temp
+tmp/
+temp/
+*.tmp
+
+# Backup
+*.bak
+*.backup
+backup/
+
+# Data (exclude from image)
+data/
+*.db
+*.sqlite
+*.sqlite3

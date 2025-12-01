@@ -1,0 +1,1089 @@
+/**
+ * 任务管理中心
+ * 
+ * 整合任务列表、看板、甘特图、日历视图
+ * 支持拖拽、批量操作、实时同步
+ */
+
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import dayjs from 'dayjs';
+import {
+  Tabs,
+  Card,
+  Button,
+  Space,
+  Dropdown,
+  Menu,
+  Badge,
+  Input,
+  Select,
+  DatePicker,
+  Tag,
+  Tooltip,
+  Modal,
+  Form,
+  message,
+  Spin,
+  Empty,
+  Row,
+  Col,
+  Statistic,
+  Progress,
+  Checkbox,
+  Radio,
+  Table,
+  Calendar as AntCalendar,
+} from 'antd';
+import {
+  UnorderedListOutlined,
+  AppstoreOutlined,
+  BarChartOutlined,
+  CalendarOutlined,
+  PlusOutlined,
+  FilterOutlined,
+  DownloadOutlined,
+  SyncOutlined,
+  TeamOutlined,
+  ClockCircleOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  CopyOutlined,
+  ShareAltOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
+import { DndProvider, useDrag, useDrop } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useGlobalStore } from '../store/globalStore';
+import { useEventBus } from '../utils/EnhancedEventBus';
+import { logger } from '../utils/EnhancedLogger';
+import { Task, TaskStatus, TaskPriority } from '../types/common';
+import { taskApi } from '../services/api';
+import { useLocation, useNavigate } from 'react-router-dom';
+import './TaskManagementCenter.css';
+
+// const { TabPane } = Tabs; // 已弃用，使用items属性
+const { Search } = Input;
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+
+// 视图类型
+type ViewType = 'list' | 'kanban' | 'gantt' | 'calendar';
+
+// 看板列配置
+const KANBAN_COLUMNS: { key: TaskStatus; title: string; color: string }[] = [
+  { key: TaskStatus.TODO, title: '待办', color: '#d9d9d9' },
+  { key: TaskStatus.IN_PROGRESS, title: '进行中', color: '#1890ff' },
+  { key: TaskStatus.IN_REVIEW, title: '审核中', color: '#faad14' },
+  { key: TaskStatus.DONE, title: '完成', color: '#52c41a' },
+];
+
+// 优先级配置
+const PRIORITY_CONFIG = {
+  [TaskPriority.LOW]: { color: '#87d068', text: '低' },
+  [TaskPriority.MEDIUM]: { color: '#108ee9', text: '中' },
+  [TaskPriority.HIGH]: { color: '#f50', text: '高' },
+  [TaskPriority.URGENT]: { color: '#cf1322', text: '紧急' },
+};
+
+// 状态配置
+const STATUS_CONFIG = {
+  [TaskStatus.TODO]: { color: '#d9d9d9', text: '待办' },
+  [TaskStatus.IN_PROGRESS]: { color: '#1890ff', text: '进行中' },
+  [TaskStatus.IN_REVIEW]: { color: '#faad14', text: '审核中' },
+  [TaskStatus.DONE]: { color: '#52c41a', text: '完成' },
+  [TaskStatus.CANCELLED]: { color: '#8c8c8c', text: '取消' },
+};
+
+const kanbanColorClass = (hex: string) => {
+  switch (hex) {
+    case '#1890ff':
+      return 'kanban-color-blue';
+    case '#faad14':
+      return 'kanban-color-orange';
+    case '#52c41a':
+      return 'kanban-color-green';
+    case '#d9d9d9':
+    default:
+      return 'kanban-color-gray';
+  }
+};
+
+// 任务卡片组件
+const TaskCard: React.FC<{
+  task: Task;
+  view: ViewType;
+  onEdit: (task: Task) => void;
+  onDelete: (taskId: string) => void;
+  selected: boolean;
+  onSelect: (taskId: string, selected: boolean) => void;
+}> = ({ task, view, onEdit, onDelete, selected, onSelect }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'TASK',
+    item: { id: task.id, status: task.status },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (e.ctrlKey || e.metaKey) {
+      onSelect(task.id, !selected);
+    } else {
+      onEdit(task);
+    }
+  };
+
+  if (view === 'list') {
+    return (
+      <div
+        className={`task-list-item ${selected ? 'selected' : ''} ${isDragging ? 'dragging' : ''}`}
+        onClick={handleClick}
+      >
+        <Checkbox
+          checked={selected}
+          onChange={(e) => onSelect(task.id, e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
+        />
+        <div className="task-content">
+          <div className="task-title">{task.title}</div>
+          <div className="task-meta">
+            <Tag color={PRIORITY_CONFIG[task.priority].color}>
+              {PRIORITY_CONFIG[task.priority].text}
+            </Tag>
+            <span className="task-assignee">
+              <TeamOutlined /> {task.assigneeName || '未分配'}
+            </span>
+            <span className="task-date">
+              <ClockCircleOutlined /> {task.endDate}
+            </span>
+            <Progress percent={task.progress} size="small" className="w-100px" />
+          </div>
+        </div>
+        <div className="task-actions">
+          <Button size="small" icon={<EditOutlined />} onClick={() => onEdit(task)} />
+          <Button size="small" danger icon={<DeleteOutlined />} onClick={() => onDelete(task.id)} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      ref={drag}
+      className={`task-card ${isDragging ? 'dragging' : ''} ${selected ? 'selected' : ''}`}
+      onClick={handleClick}
+    >
+      <div className="task-card-header">
+        <Checkbox
+          checked={selected}
+          onChange={(e) => onSelect(task.id, e.target.checked)}
+          onClick={(e) => e.stopPropagation()}
+        />
+        <Tag color={PRIORITY_CONFIG[task.priority].color}>
+          {PRIORITY_CONFIG[task.priority].text}
+        </Tag>
+      </div>
+      <div className="task-card-title">{task.title}</div>
+      <div className="task-card-meta">
+        <div className="task-assignee">
+          <TeamOutlined /> {task.assigneeName || '未分配'}
+        </div>
+        <div className="task-date">
+          <ClockCircleOutlined /> {task.endDate}
+        </div>
+      </div>
+      <Progress percent={task.progress} size="small" showInfo={false} />
+      {task.tags && task.tags.length > 0 && (
+        <div className="task-tags">
+          {task.tags.map(tag => (
+            <Tag key={tag}>{tag}</Tag>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// 看板列组件
+const KanbanColumn: React.FC<{
+  status: TaskStatus;
+  title: string;
+  color: string;
+  tasks: Task[];
+  onTaskEdit: (task: Task) => void;
+  onTaskDelete: (taskId: string) => void;
+  onTaskMove: (taskId: string, newStatus: TaskStatus) => void;
+  selectedTasks: Set<string>;
+  onTaskSelect: (taskId: string, selected: boolean) => void;
+}> = ({ status, title, color, tasks, onTaskEdit, onTaskDelete, onTaskMove, selectedTasks, onTaskSelect }) => {
+  const [{ isOver }, drop] = useDrop({
+    accept: 'TASK',
+    drop: (item: { id: string; status: TaskStatus }) => {
+      if (item.status !== status) {
+        onTaskMove(item.id, status);
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+
+  return (
+    <div ref={drop} className={`kanban-column ${isOver ? 'drag-over' : ''}`}>
+      <div className={`kanban-column-header ${kanbanColorClass(color)}`}>
+        <h3>{title}</h3>
+        <Badge count={tasks.length} className={`kanban-badge ${kanbanColorClass(color)}`} />
+      </div>
+      <div className="kanban-column-content">
+        {tasks.length === 0 ? (
+          <Empty description="暂无任务" />
+        ) : (
+          tasks.map(task => (
+            <TaskCard
+              key={task.id}
+              task={task}
+              view="kanban"
+              onEdit={onTaskEdit}
+              onDelete={onTaskDelete}
+              selected={selectedTasks.has(task.id)}
+              onSelect={onTaskSelect}
+            />
+          ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+// 主组件
+const TaskManagementCenter: React.FC = () => {
+  const {
+    tasks,
+    taskFilters,
+    loading,
+    setTasks,
+    updateTask,
+    setTaskFilters,
+    setLoading,
+    currentProject,
+  } = useGlobalStore();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [activeView, setActiveView] = useState<ViewType>('list');
+  const [searchText, setSearchText] = useState('');
+  const [selectedTasks, setSelectedTasks] = useState<Set<string>>(new Set());
+  const [taskModalVisible, setTaskModalVisible] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [form] = Form.useForm();
+  const [listMode, setListMode] = useState<'table' | 'card'>('table');
+
+  // 根据URL查询参数设置默认视图
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const v = params.get('view') as ViewType | null;
+    if (v && ['list', 'kanban', 'gantt', 'calendar'].includes(v) && v !== activeView) {
+      setActiveView(v);
+    }
+  }, [location.search]);
+
+  const autoFullscreen = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get('fullscreen') === '1';
+  }, [location.search]);
+
+  // 后端 <-> 通用任务类型映射
+  const mapApiStatusToCommon = (status: string): TaskStatus => {
+    switch (status) {
+      case 'pending':
+        return TaskStatus.TODO;
+      case 'in_progress':
+        return TaskStatus.IN_PROGRESS;
+      case 'completed':
+        return TaskStatus.DONE;
+      case 'blocked':
+        return TaskStatus.IN_REVIEW;
+      default:
+        return TaskStatus.TODO;
+    }
+  };
+
+  const mapCommonStatusToApi = (status: TaskStatus): string => {
+    switch (status) {
+      case TaskStatus.TODO:
+        return 'pending';
+      case TaskStatus.IN_PROGRESS:
+        return 'in_progress';
+      case TaskStatus.DONE:
+        return 'completed';
+      case TaskStatus.IN_REVIEW:
+      case TaskStatus.CANCELLED:
+        return 'blocked';
+      default:
+        return 'pending';
+    }
+  };
+
+  const mapApiPriorityToCommon = (p: string): TaskPriority => {
+    switch (p) {
+      case 'low':
+        return TaskPriority.LOW;
+      case 'medium':
+        return TaskPriority.MEDIUM;
+      case 'high':
+        return TaskPriority.HIGH;
+      case 'urgent':
+        return TaskPriority.URGENT;
+      default:
+        return TaskPriority.MEDIUM;
+    }
+  };
+
+  const mapCommonPriorityToApi = (p: TaskPriority): string => {
+    switch (p) {
+      case TaskPriority.LOW:
+        return 'low';
+      case TaskPriority.MEDIUM:
+        return 'medium';
+      case TaskPriority.HIGH:
+        return 'high';
+      case TaskPriority.URGENT:
+        return 'urgent';
+      default:
+        return 'medium';
+    }
+  };
+
+  const mapApiTaskToCommon = (t: any): Task => ({
+    id: String(t.id),
+    title: t.name || t.title || '',
+    description: t.description || '',
+    status: mapApiStatusToCommon(t.status || 'pending'),
+    priority: mapApiPriorityToCommon(t.priority || 'medium'),
+    assignee: t.assignee || '',
+    assigneeName: t.assignee || '',
+    startDate: t.start_date,
+    endDate: t.end_date,
+    progress: typeof t.progress === 'number' ? t.progress : 0,
+    dependencies: t.dependencies || [],
+    subtasks: [],
+    tags: t.tags || [],
+    attachments: [],
+    comments: [],
+    createdBy: t.created_by || 'system',
+    createdAt: t.created_at || new Date().toISOString(),
+    updatedAt: t.updated_at,
+  });
+
+  const loadTasksFromApi = useCallback(async () => {
+    if (!currentProject?.id) return;
+    setLoading('tasks', true);
+    try {
+      const data = await taskApi.getAll(currentProject.id);
+      const mapped = Array.isArray(data) ? (data as any[]).map(mapApiTaskToCommon) : [];
+      setTasks(mapped);
+    } catch (err) {
+      // 保持现有任务不变，提示可由上层处理
+    } finally {
+      setLoading('tasks', false);
+    }
+  }, [currentProject?.id, setLoading, setTasks]);
+
+  // 订阅事件
+  useEventBus('task:refresh', () => {
+    loadTasksFromApi();
+  });
+
+  useEventBus('task:select', ({ data }: { data: { taskId: string } }) => {
+    const task = tasks.find(t => t.id === data.taskId);
+    if (task) {
+      setEditingTask(task);
+      setTaskModalVisible(true);
+    }
+  });
+
+  // 初次加载/项目切换时拉取后端任务
+  useEffect(() => {
+    loadTasksFromApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentProject?.id]);
+
+  // 过滤后的任务
+  const filteredTasks = useMemo(() => {
+    return tasks.filter(task => {
+      // 搜索过滤
+      if (searchText && !task.title.toLowerCase().includes(searchText.toLowerCase())) {
+        return false;
+      }
+      
+      // 状态过滤
+      if (taskFilters.status && task.status !== taskFilters.status) {
+        return false;
+      }
+      
+      // 分配人过滤
+      if (taskFilters.assignee && task.assignee !== taskFilters.assignee) {
+        return false;
+      }
+      
+      // 优先级过滤
+      if (taskFilters.priority && task.priority !== taskFilters.priority) {
+        return false;
+      }
+      
+      return true;
+    });
+  }, [tasks, searchText, taskFilters]);
+
+  // 按状态分组的任务
+  const tasksByStatus = useMemo(() => {
+    const grouped: Record<TaskStatus, Task[]> = {
+      [TaskStatus.TODO]: [],
+      [TaskStatus.IN_PROGRESS]: [],
+      [TaskStatus.IN_REVIEW]: [],
+      [TaskStatus.DONE]: [],
+      [TaskStatus.CANCELLED]: [],
+    };
+    
+    filteredTasks.forEach(task => {
+      grouped[task.status].push(task);
+    });
+    
+    return grouped;
+  }, [filteredTasks]);
+
+  // 统计数据
+  const statistics = useMemo(() => {
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.status === TaskStatus.DONE).length;
+    const inProgress = tasks.filter(t => t.status === TaskStatus.IN_PROGRESS).length;
+    const overdue = tasks.filter(t => new Date(t.endDate) < new Date()).length;
+    
+    return {
+      total,
+      completed,
+      inProgress,
+      overdue,
+      completionRate: total > 0 ? Math.round((completed / total) * 100) : 0,
+    };
+  }, [tasks]);
+
+  // 处理任务创建/编辑（后端）
+  const handleTaskSubmit = async (values: any) => {
+    try {
+      if (!currentProject?.id) {
+        message.warning('请先选择项目');
+        return;
+      }
+
+      const payload = {
+        name: values.title,
+        description: values.description || '',
+        start_date: values.dateRange?.[0]?.format('YYYY-MM-DD'),
+        end_date: values.dateRange?.[1]?.format('YYYY-MM-DD'),
+        status: mapCommonStatusToApi(values.status || TaskStatus.TODO),
+        priority: mapCommonPriorityToApi(values.priority || TaskPriority.MEDIUM),
+        assignee: values.assignee || '',
+        progress: typeof editingTask?.progress === 'number' ? editingTask.progress : 0,
+        project_id: currentProject.id,
+      };
+
+      if (editingTask) {
+        await taskApi.update(editingTask.id, payload);
+        message.success('任务更新成功');
+      } else {
+        await taskApi.create(payload);
+        message.success('任务创建成功');
+      }
+      await loadTasksFromApi();
+      
+      setTaskModalVisible(false);
+      form.resetFields();
+      setEditingTask(null);
+    } catch (error) {
+      logger.error('Failed to save task', error);
+      message.error('保存失败');
+    }
+  };
+
+  // 处理任务移动
+  const handleTaskMove = async (taskId: string, newStatus: TaskStatus) => {
+    // 先本地更新提升交互响应
+    updateTask(taskId, { status: newStatus });
+    try {
+      await taskApi.update(taskId, { status: mapCommonStatusToApi(newStatus) });
+      message.success('任务状态已更新');
+    } catch {
+      // 回滚或刷新
+      loadTasksFromApi();
+    }
+  };
+
+  // 处理任务删除
+  const handleTaskDelete = (taskId: string) => {
+    Modal.confirm({
+      title: '确认删除',
+      content: '确定要删除这个任务吗？',
+      onOk: () => {
+        (async () => {
+          try {
+            await taskApi.delete(taskId);
+            message.success('任务已删除');
+            await loadTasksFromApi();
+          } catch {
+            message.error('删除失败');
+          }
+        })();
+      },
+    });
+  };
+
+  // 批量操作
+  const handleBatchOperation = (operation: string) => {
+    if (selectedTasks.size === 0) {
+      message.warning('请先选择任务');
+      return;
+    }
+    
+    switch (operation) {
+      case 'delete':
+        Modal.confirm({
+          title: '批量删除',
+          content: `确定要删除选中的 ${selectedTasks.size} 个任务吗？`,
+          onOk: () => {
+            (async () => {
+              try {
+                await Promise.all(Array.from(selectedTasks).map(id => taskApi.delete(id)));
+                setSelectedTasks(new Set());
+                message.success('批量删除成功');
+                await loadTasksFromApi();
+              } catch {
+                message.error('批量删除失败');
+              }
+            })();
+          },
+        });
+        break;
+      
+      case 'assign':
+        Modal.confirm({
+          title: '批量分配任务',
+          content: (
+            <Form layout="vertical">
+              <Form.Item label="负责人">
+                <Input placeholder="请输入负责人" id="tmc-batch-assign-input" />
+              </Form.Item>
+            </Form>
+          ),
+          onOk: async () => {
+            const assignee = (document.getElementById('tmc-batch-assign-input') as HTMLInputElement)?.value?.trim();
+            if (!assignee) {
+              message.warning('请输入负责人');
+              throw new Error('no-assignee');
+            }
+            try {
+              await Promise.all(Array.from(selectedTasks).map(id => taskApi.update(id, { assignee })));
+              message.success('批量分配成功');
+              setSelectedTasks(new Set());
+              await loadTasksFromApi();
+            } catch {
+              message.error('批量分配失败');
+            }
+          },
+        });
+        break;
+      
+      case 'status':
+        Modal.confirm({
+          title: '批量更新状态',
+          content: (
+            <div>
+              <div className="mb-8">状态</div>
+              <select id="tmc-batch-status-select" aria-label="状态" defaultValue={TaskStatus.TODO} className="w-100">
+                <option value={TaskStatus.TODO}>待办</option>
+                <option value={TaskStatus.IN_PROGRESS}>进行中</option>
+                <option value={TaskStatus.IN_REVIEW}>审核中</option>
+                <option value={TaskStatus.DONE}>完成</option>
+                <option value={TaskStatus.CANCELLED}>取消</option>
+              </select>
+            </div>
+          ),
+          onOk: async () => {
+            const select = document.getElementById('tmc-batch-status-select') as HTMLSelectElement | null;
+            const value = select?.value as TaskStatus | undefined;
+            if (!value) {
+              message.warning('请选择状态');
+              throw new Error('no-status');
+            }
+            try {
+              await Promise.all(Array.from(selectedTasks).map(id => taskApi.update(id, { status: mapCommonStatusToApi(value) })));
+              message.success('批量状态更新成功');
+              setSelectedTasks(new Set());
+              await loadTasksFromApi();
+            } catch {
+              message.error('批量状态更新失败');
+            }
+          },
+        });
+        break;
+      
+      case 'export':
+        const exportData = filteredTasks.map(task => ({
+          标题: task.title,
+          状态: STATUS_CONFIG[task.status]?.text || task.status,
+          优先级: PRIORITY_CONFIG[task.priority]?.text || task.priority,
+          负责人: task.assigneeName || '未分配',
+          开始日期: task.startDate,
+          结束日期: task.endDate,
+          进度: `${task.progress}%`,
+          描述: task.description || '',
+        }));
+        
+        const csvContent = [
+          Object.keys(exportData[0] || {}).join(','),
+          ...exportData.map(row => Object.values(row).map(v => `"${v}"`).join(',')),
+        ].join('\\n');
+        
+        const blob = new Blob([`\\ufeff${csvContent}`], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `tasks-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        message.success(`成功导出 ${exportData.length} 条任务记录`);
+        break;
+      
+      default:
+        break;
+    }
+  };
+
+  // 导出任务
+  const handleExport = () => {
+    const data = filteredTasks.map(task => ({
+      标题: task.title,
+      状态: task.status,
+      优先级: task.priority,
+      负责人: task.assigneeName || '未分配',
+      开始日期: task.startDate,
+      结束日期: task.endDate,
+      进度: `${task.progress}%`,
+    }));
+    
+    // 这里应该调用实际的导出服务
+    logger.info('Exporting tasks', { count: data.length });
+    message.success('导出成功');
+  };
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div className="task-management-center">
+        {/* 头部工具栏 */}
+        <Card className="task-header">
+          <Row gutter={16} align="middle">
+            <Col span={12}>
+              <Space>
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    setEditingTask(null);
+                    setTaskModalVisible(true);
+                  }}
+                >
+                  新建任务
+                </Button>
+                
+                <Dropdown
+                  menu={{
+                    items: [
+                      { key: 'assign', label: '批量分配' },
+                      { key: 'status', label: '批量更新状态' },
+                      { key: 'delete', label: '批量删除', danger: true },
+                    ],
+                    onClick: ({ key }) => handleBatchOperation(key),
+                  }}
+                  disabled={selectedTasks.size === 0}
+                >
+                  <Button>
+                    批量操作 ({selectedTasks.size})
+                  </Button>
+                </Dropdown>
+                
+                <Button icon={<DownloadOutlined />} onClick={handleExport}>
+                  导出
+                </Button>
+                
+                <Button
+                  icon={<SyncOutlined />}
+                  loading={loading.tasks}
+                  onClick={loadTasksFromApi}
+                >
+                  刷新
+                </Button>
+              </Space>
+            </Col>
+            
+            <Col span={12} className="text-right">
+              <Space>
+                <Search
+                  placeholder="搜索任务"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  className="w-200px"
+                />
+                
+                <Select
+                  placeholder="状态筛选"
+                  allowClear
+                  className="w-120px"
+                  value={taskFilters.status}
+                  onChange={(value) => setTaskFilters({ ...taskFilters, status: value })}
+                >
+                  {Object.values(TaskStatus).map(status => (
+                    <Option key={status} value={status}>{status}</Option>
+                  ))}
+                </Select>
+                
+                <Select
+                  placeholder="优先级筛选"
+                  allowClear
+                  className="w-120px"
+                  value={taskFilters.priority}
+                  onChange={(value) => setTaskFilters({ ...taskFilters, priority: value })}
+                >
+                  {Object.entries(PRIORITY_CONFIG).map(([key, config]) => (
+                    <Option key={key} value={key}>{config.text}</Option>
+                  ))}
+                </Select>
+              </Space>
+            </Col>
+          </Row>
+          
+          {/* 统计信息 */}
+          <Row gutter={16} className="mt-16">
+            <Col span={6}>
+              <Statistic title="总任务" value={statistics.total} />
+            </Col>
+            <Col span={6}>
+              <Statistic
+                title="进行中"
+                value={statistics.inProgress}
+                valueStyle={{ color: '#1890ff' }}
+              />
+            </Col>
+            <Col span={6}>
+              <Statistic
+                title="已完成"
+                value={statistics.completed}
+                valueStyle={{ color: '#52c41a' }}
+              />
+            </Col>
+            <Col span={6}>
+              <Statistic
+                title="完成率"
+                value={statistics.completionRate}
+                suffix="%"
+                valueStyle={{ color: statistics.completionRate >= 80 ? '#52c41a' : '#faad14' }}
+              />
+            </Col>
+          </Row>
+        </Card>
+        
+        {/* 视图切换 */}
+        <Card className="task-content">
+          <Tabs
+            activeKey={activeView}
+            onChange={(key) => {
+              const v = key as ViewType;
+              setActiveView(v);
+              const params = new URLSearchParams(location.search);
+              params.set('view', v);
+              navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
+            }}
+            tabBarExtraContent={
+              <Radio.Group value={activeView} onChange={(e) => {
+                const v = e.target.value as ViewType;
+                setActiveView(v);
+                const params = new URLSearchParams(location.search);
+                params.set('view', v);
+                navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
+              }}>
+                <Radio.Button value="list">
+                  <UnorderedListOutlined /> 列表
+                </Radio.Button>
+                <Radio.Button value="kanban">
+                  <AppstoreOutlined /> 看板
+                </Radio.Button>
+                <Radio.Button value="gantt">
+                  <BarChartOutlined /> 甘特图
+                </Radio.Button>
+                <Radio.Button value="calendar">
+                  <CalendarOutlined /> 日历
+                </Radio.Button>
+              </Radio.Group>
+            }
+            items={[
+              {
+                key: 'list',
+                label: '列表视图',
+                children: (
+                  <div className="task-list-view">
+                    <div className="list-toolbar mb-12 between">
+                      <div>
+                        <Radio.Group value={listMode} onChange={(e) => setListMode(e.target.value)} size="small">
+                          <Radio.Button value="table">表格</Radio.Button>
+                          <Radio.Button value="card">卡片</Radio.Button>
+                        </Radio.Group>
+                      </div>
+                      <Space>
+                        <Button
+                          disabled={selectedTasks.size === 0}
+                          onClick={() => handleBatchOperation('assign')}
+                          size="small"
+                        >
+                          批量分配 ({selectedTasks.size})
+                        </Button>
+                        <Button
+                          disabled={selectedTasks.size === 0}
+                          onClick={() => handleBatchOperation('status')}
+                          size="small"
+                        >
+                          批量状态
+                        </Button>
+                        <Button
+                          disabled={selectedTasks.size === 0}
+                          danger
+                          onClick={() => handleBatchOperation('delete')}
+                          size="small"
+                        >
+                          批量删除
+                        </Button>
+                        <Button
+                          icon={<DownloadOutlined />}
+                          onClick={() => handleBatchOperation('export')}
+                          size="small"
+                        >
+                          导出任务
+                        </Button>
+                      </Space>
+                    </div>
+                  </div>
+
+                {loading.tasks ? (
+                  <Spin size="large" />
+                ) : filteredTasks.length === 0 ? (
+                  <Empty description="暂无任务" />
+                ) : listMode === 'table' ? (
+                  <Table
+                    rowKey={(r) => r.id}
+                    dataSource={filteredTasks}
+                    pagination={{ pageSize: 10, showSizeChanger: true }}
+                    rowSelection={{
+                      selectedRowKeys: Array.from(selectedTasks),
+                      onChange: (keys) => setSelectedTasks(new Set(keys as string[])),
+                    }}
+                    columns={[
+                      { title: '标题', dataIndex: 'title', key: 'title' },
+                      { title: '状态', dataIndex: 'status', key: 'status', render: (v: TaskStatus) => (
+                        <Tag color={STATUS_CONFIG[v].color}>{STATUS_CONFIG[v].text}</Tag>
+                      ) },
+                      { title: '优先级', dataIndex: 'priority', key: 'priority', render: (v: TaskPriority) => (
+                        <Tag color={PRIORITY_CONFIG[v].color}>{PRIORITY_CONFIG[v].text}</Tag>
+                      ) },
+                      { title: '负责人', dataIndex: 'assigneeName', key: 'assigneeName', render: (_: any, r: Task) => r.assigneeName || '未分配' },
+                      { title: '结束日期', dataIndex: 'endDate', key: 'endDate' },
+                      { title: '进度', dataIndex: 'progress', key: 'progress', render: (v: number) => <span>{v}%</span> },
+                      { title: '操作', key: 'action', render: (_: any, record: Task) => (
+                        <Space size="small">
+                          <Button size="small" type="link" onClick={() => { setEditingTask(record); setTaskModalVisible(true); }}>编辑</Button>
+                          <Button size="small" type="link" danger onClick={() => handleTaskDelete(record.id)}>删除</Button>
+                        </Space>
+                      ) },
+                    ]}
+                  />
+                ) : (
+                  filteredTasks.map(task => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      view="list"
+                      onEdit={(task) => {
+                        setEditingTask(task);
+                        setTaskModalVisible(true);
+                      }}
+                      onDelete={handleTaskDelete}
+                      selected={selectedTasks.has(task.id)}
+                      onSelect={(taskId, selected) => {
+                        const newSelected = new Set(selectedTasks);
+                        if (selected) {
+                          newSelected.add(taskId);
+                        } else {
+                          newSelected.delete(taskId);
+                        }
+                        setSelectedTasks(newSelected);
+                      }}
+                    />
+                  ))
+                )}
+              </div>
+                )
+              },
+              {
+                key: 'kanban',
+                label: '看板视图',
+                children: (
+              <div className="kanban-view">
+                {KANBAN_COLUMNS.map(column => (
+                  <KanbanColumn
+                    key={column.key}
+                    status={column.key}
+                    title={column.title}
+                    color={column.color}
+                    tasks={tasksByStatus[column.key] || []}
+                    onTaskEdit={(task) => {
+                      setEditingTask(task);
+                      setTaskModalVisible(true);
+                    }}
+                    onTaskDelete={handleTaskDelete}
+                    onTaskMove={handleTaskMove}
+                    selectedTasks={selectedTasks}
+                    onTaskSelect={(taskId, selected) => {
+                      const newSelected = new Set(selectedTasks);
+                      if (selected) {
+                        newSelected.add(taskId);
+                      } else {
+                        newSelected.delete(taskId);
+                      }
+                      setSelectedTasks(newSelected);
+                    }}
+                  />
+                ))}
+              </div>
+                )
+              },
+              {
+                key: 'calendar',
+                label: '日历视图',
+                children: (
+              <div className="calendar-view">
+                <AntCalendar
+                  dateCellRender={(date) => {
+                    const dateStr = date.format('YYYY-MM-DD');
+                    const dayTasks = tasks.filter(t => t.startDate <= dateStr && t.endDate >= dateStr);
+                    if (dayTasks.length === 0) return null;
+                    return (
+                      <div>
+                        {dayTasks.slice(0, 3).map(t => (
+                          <div key={t.id} className="calendar-task">
+                            <span className="calendar-dot" />
+                            {t.title}
+                          </div>
+                        ))}
+                        {dayTasks.length > 3 && (
+                          <div className="calendar-more">+{dayTasks.length - 3} 更多</div>
+                        )}
+                      </div>
+                    );
+                  }}
+                  onSelect={(date) => {
+                    setEditingTask(null);
+                    form.setFieldsValue({
+                      title: '',
+                      status: TaskStatus.TODO,
+                      priority: TaskPriority.MEDIUM,
+                      dateRange: [dayjs(date), dayjs(date)],
+                    });
+                    setTaskModalVisible(true);
+                  }}
+                />
+              </div>
+                )
+              }
+            ]}
+          />
+        </Card>
+        
+        {/* 任务编辑弹窗 */}
+        <Modal
+          title={editingTask ? '编辑任务' : '新建任务'}
+          open={taskModalVisible}
+          onOk={() => form.submit()}
+          onCancel={() => {
+            setTaskModalVisible(false);
+            form.resetFields();
+            setEditingTask(null);
+          }}
+          width={800}
+        >
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleTaskSubmit}
+            initialValues={editingTask || {
+              status: TaskStatus.TODO,
+              priority: TaskPriority.MEDIUM,
+            }}
+          >
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name="title"
+                  label="任务标题"
+                  rules={[{ required: true, message: '请输入任务标题' }]}
+                >
+                  <Input placeholder="输入任务标题" />
+                </Form.Item>
+              </Col>
+              
+              <Col span={12}>
+                <Form.Item name="status" label="状态">
+                  <Select>
+                    {Object.values(TaskStatus).map(status => (
+                      <Option key={status} value={status}>{status}</Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              
+              <Col span={12}>
+                <Form.Item name="priority" label="优先级">
+                  <Select>
+                    {Object.entries(PRIORITY_CONFIG).map(([key, config]) => (
+                      <Option key={key} value={key}>{config.text}</Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              
+              <Col span={12}>
+                <Form.Item name="assignee" label="负责人">
+                  <Input placeholder="选择负责人" />
+                </Form.Item>
+              </Col>
+              
+              <Col span={12}>
+                <Form.Item name="dateRange" label="起止日期">
+                  <RangePicker className="w-100" />
+                </Form.Item>
+              </Col>
+              
+              <Col span={24}>
+                <Form.Item name="description" label="任务描述">
+                  <Input.TextArea rows={4} placeholder="输入任务描述" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Modal>
+      </div>
+    </DndProvider>
+  );
+};
+
+export default TaskManagementCenter;

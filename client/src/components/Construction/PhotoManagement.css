@@ -1,0 +1,124 @@
+.photo-management {
+  padding: 0;
+}
+
+.photo-management .stats-row {
+  margin-bottom: 24px;
+}
+
+.photo-management .stat-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.photo-management .stat-icon {
+  font-size: 32px;
+  color: #1890ff;
+}
+
+.photo-management .stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.photo-management .stat-label {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.photo-management .action-card {
+  margin-bottom: 24px;
+}
+
+.photo-management .photo-card {
+  height: 100%;
+}
+
+.photo-management .photo-cover {
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-management .photo-cover:hover .photo-overlay {
+  opacity: 1;
+}
+
+.photo-management .photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.photo-management .photo-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.photo-management .photo-info {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.photo-management .timeline-card {
+  margin-bottom: 8px;
+}
+
+.photo-management .photo-desc {
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #595959;
+}
+
+.photo-management .comparison-card {
+  margin-bottom: 16px;
+}
+
+.photo-management .comparison-item {
+  text-align: center;
+}
+
+.photo-management .comparison-label {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #262626;
+}
+
+.photo-management .comparison-date {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.photo-management .comparison-desc {
+  margin-top: 16px;
+  padding: 12px;
+  background: #f0f2f5;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #595959;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .photo-management .stat-value {
+    font-size: 20px;
+  }
+  
+  .photo-management .stat-icon {
+    font-size: 24px;
+  }
+}

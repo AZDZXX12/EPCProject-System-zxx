@@ -45,6 +45,12 @@ body {
   background: #555;
 }
 
+/* 内容包装器 */
+.content-wrapper {
+  padding: 16px 24px;
+  min-height: calc(100vh - 64px - 40px); /* 减去Header和Breadcrumb高度 */
+}
+
 /* 卡片悬停效果 */
 .ant-card-hoverable:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -79,18 +85,339 @@ body {
   padding: 24px;
 }
 
-/* 主内容区域样式 */
+/* 全屏加载样式（用于懒加载fallback） */
+.loading-fullscreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* 主内容区域样式 - 为固定侧边栏留出空间 */
 .main-content {
-  padding: 0;
+  padding: 24px;
   background: #f0f2f5;
   min-height: 100vh;
   transition: all 0.2s ease;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 1;
 }
 
-.main-content.collapsed {
+.main-content.sider-expanded {
+  margin-left: 200px;
+}
+
+.main-content.sider-collapsed {
   margin-left: 60px;
 }
 
-.main-content.expanded {
-  margin-left: 200px;
+/* 确保所有页面容器背景正确 */
+.ant-layout-content {
+  background: #f0f2f5 !important;
+  min-height: 100vh;
+}
+
+/* 页面通用容器样式 */
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  background: transparent;
+}
+
+/* 卡片容器通用样式 */
+.content-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ========================================
+   AI智能助手浮动窗口样式
+   ======================================== */
+
+/* AI浮动按钮 */
+.ai-assistant-float-btn {
+  position: fixed !important;
+  right: 24px;
+  bottom: 80px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+  z-index: 9999 !important;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.ai-assistant-float-btn:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 6px 24px rgba(102, 126, 234, 0.5) !important;
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%) !important;
+}
+
+.ai-assistant-float-btn:active {
+  transform: translateY(-2px) !important;
+}
+
+/* 覆盖Ant Design Button默认样式 */
+.ai-assistant-float-btn.ant-btn {
+  padding: 0 !important;
+  height: 56px !important;
+  line-height: 56px !important;
+}
+
+.ai-assistant-float-btn .anticon {
+  font-size: 28px;
+  color: #fff;
+}
+
+/* AI浮动窗口 */
+.ai-floating-window {
+  position: fixed !important;
+  background: #fff !important;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden;
+  will-change: left, top;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: box-shadow 0.2s ease;
+}
+
+.ai-floating-window:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+.ai-window-header {
+  cursor: move;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px 12px 0 0;
+  transition: background 0.2s ease;
+}
+
+.ai-window-header:active {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  cursor: grabbing;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.header-actions .ant-btn {
+  color: rgba(255, 255, 255, 0.8);
+  border: none;
+  background: transparent;
+}
+
+.header-actions .ant-btn:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ai-floating-window.minimized {
+  height: 48px !important;
+}
+
+/* AI窗口头部 */
+.ai-window-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.ai-window-header .header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-window-header .header-title .anticon {
+  font-size: 18px;
+}
+
+.ai-window-header .header-title span {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.ai-window-header .header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-window-header .ant-btn-text {
+  color: white;
+  border: none;
+}
+
+.ai-window-header .ant-btn-text:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* AI窗口内容 */
+.ai-window-content {
+  flex: 1;
+  overflow: auto;
+  background: #fff;
+}
+
+/* 调整大小句柄 */
+.ai-resize-handle,
+.ai-resize-handle-right,
+.ai-resize-handle-bottom {
+  position: absolute;
+  background: rgba(102, 126, 234, 0.3);
+  transition: background 0.2s;
+}
+
+.ai-resize-handle {
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  height: 16px;
+  cursor: nwse-resize;
+  border-radius: 0 0 12px 0;
+}
+
+.ai-resize-handle-right {
+  right: 0;
+  top: 48px;
+  bottom: 16px;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+.ai-resize-handle-bottom {
+  left: 0;
+  right: 16px;
+  bottom: 0;
+  height: 4px;
+  cursor: ns-resize;
+}
+
+.ai-resize-handle:hover,
+.ai-resize-handle-right:hover,
+.ai-resize-handle-bottom:hover {
+  background: rgba(102, 126, 234, 0.6);
+}
+
+/* 移动端底部弹窗样式 */
+.ai-floating-window.bottom-sheet {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  top: auto !important;
+  width: 100% !important;
+  height: 70vh !important;
+  border-radius: 16px 16px 0 0;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+.ai-floating-window.bottom-sheet .ai-window-header {
+  cursor: default;
+}
+
+/* ========================================
+   响应式布局优化
+   ======================================== */
+
+/* 平板断点 (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+  
+  .main-content.sider-expanded {
+    margin-left: 180px; /* 平板端侧边栏宽度调整 */
+  }
+  
+  .page-container {
+    padding: 16px;
+  }
+  
+  .ai-assistant-float-btn {
+    right: 16px;
+    bottom: 60px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .ai-assistant-float-btn .anticon {
+    font-size: 24px;
+  }
+}
+
+/* 移动端断点 (小于768px) */
+@media (max-width: 767px) {
+  .main-content {
+    padding: 12px;
+    margin-left: 0 !important; /* 移动端移除侧边栏margin */
+  }
+  
+  .page-container {
+    padding: 12px;
+  }
+  
+  .content-card {
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .ai-assistant-float-btn {
+    right: 12px;
+    bottom: 20px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .ai-assistant-float-btn .anticon {
+    font-size: 24px;
+  }
+  
+  /* 隐藏调整大小句柄 */
+  .ai-resize-handle,
+  .ai-resize-handle-right,
+  .ai-resize-handle-bottom {
+    display: none;
+  }
 }

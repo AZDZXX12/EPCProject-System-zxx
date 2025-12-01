@@ -274,6 +274,109 @@ class ApiService {
       }
     }
 
+    // 资源相关API Mock
+    if (endpoint.includes('/resources')) {
+      const projectId = new URLSearchParams(endpoint.split('?')[1])?.get('project_id');
+      if (method === 'GET') {
+        return [
+          {
+            id: 1,
+            name: '工程师A',
+            type: 'human',
+            availability: 0.8,
+            cost: 800,
+            skills: ['安装', '调试'],
+            currentTasks: ['TASK-001']
+          },
+          {
+            id: 2,
+            name: '工程师B',
+            type: 'human',
+            availability: 0.6,
+            cost: 750,
+            skills: ['焊接', '检测'],
+            currentTasks: ['TASK-002', 'TASK-003']
+          },
+          {
+            id: 3,
+            name: '起重机A',
+            type: 'equipment',
+            availability: 0.9,
+            cost: 500,
+            capacity: '50吨',
+            currentTasks: ['TASK-001']
+          }
+        ] as T;
+      }
+    }
+
+    // AI助手相关API Mock
+    if (endpoint.includes('/ai/risks') || endpoint.includes('/risks')) {
+      if (method === 'GET') {
+        return {
+          risks: [
+            {
+              id: 1,
+              type: 'schedule',
+              severity: 'medium',
+              description: '项目进度延迟风险',
+              probability: 0.3,
+              impact: 'medium',
+              mitigation: '增加资源投入，优化任务并行度'
+            },
+            {
+              id: 2,
+              type: 'resource',
+              severity: 'low',
+              description: '资源利用率不均衡',
+              probability: 0.2,
+              impact: 'low',
+              mitigation: '重新分配任务，平衡工作负载'
+            }
+          ]
+        } as T;
+      }
+    }
+
+    if (endpoint.includes('/ai/resources') || endpoint.includes('/resources/optimization')) {
+      if (method === 'GET') {
+        return {
+          optimization: {
+            currentUtilization: 0.75,
+            recommendedUtilization: 0.85,
+            suggestions: [
+              {
+                id: 1,
+                type: 'reallocation',
+                description: '将任务A的资源重新分配到任务B',
+                expectedImprovement: 0.1
+              },
+              {
+                id: 2,
+                type: 'scheduling',
+                description: '调整任务执行顺序以优化资源使用',
+                expectedImprovement: 0.05
+              }
+            ]
+          }
+        } as T;
+      }
+    }
+
+    // 数据库信息API Mock
+    if (endpoint.includes('/database/info')) {
+      if (method === 'GET') {
+        return {
+          status: 'connected',
+          type: 'sqlite',
+          version: '3.36.0',
+          size: '2.5 MB',
+          tables: 5,
+          lastBackup: new Date().toISOString()
+        } as T;
+      }
+    }
+
     throw new ApiError('Mock API not implemented for this endpoint', 501);
   }
 
@@ -341,6 +444,17 @@ export const taskApi = {
   create: (data: any) => apiService.post('/api/v1/tasks/', data),
   update: (id: string, data: any) => apiService.put(`/api/v1/tasks/${id}`, data),
   delete: (id: string) => apiService.delete(`/api/v1/tasks/${id}`),
+};
+
+// 任务依赖连线 API
+export const taskLinkApi = {
+  getAll: (projectId?: string) => {
+    const query = projectId ? `?project_id=${projectId}` : '';
+    return apiService.get(`/api/v1/task-links${query}`, { useCache: true, cacheTTL: 120000 });
+  },
+  create: (data: any) => apiService.post('/api/v1/task-links/', data),
+  update: (id: string, data: any) => apiService.put(`/api/v1/task-links/${id}`, data),
+  delete: (id: string) => apiService.delete(`/api/v1/task-links/${id}`),
 };
 
 export const authApi = {

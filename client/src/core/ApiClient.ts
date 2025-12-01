@@ -207,8 +207,16 @@ export class ApiClient {
         lastError = new Error(`HTTP ${response.status}`);
       } catch (error) {
         lastError = error;
-        
-        if (attempt < retryConfig.count) {
+
+        // 自定义网络错误重试判定
+        let allowRetry = true;
+        if (typeof retryConfig.shouldRetry === 'function') {
+          try {
+            allowRetry = retryConfig.shouldRetry(new NetworkError('Network request failed', error));
+          } catch {/* ignore predicate errors */}
+        }
+
+        if (attempt < retryConfig.count && allowRetry) {
           const delay = typeof retryConfig.delay === 'function'
             ? retryConfig.delay(attempt)
             : retryConfig.delay;
@@ -216,6 +224,8 @@ export class ApiClient {
           await this.sleep(delay);
           continue;
         }
+        // 不允许重试或已达上限
+        break;
       }
     }
 
@@ -254,8 +264,9 @@ export class ApiClient {
    */
   private getFromCache<T>(config: RequestConfig): T | null {
     if (!config.cache) return null;
-
-    const key = this.getRequestKey(config);
+    const key = typeof config.cache === 'boolean'
+      ? this.getRequestKey(config)
+      : config.cache.key;
     const cached = this.cache.get(key);
 
     if (!cached) return null;
@@ -347,13 +358,17 @@ export class ApiClient {
   /**
    * 判断是否应该重试
    */
-  private shouldRetry(status: number, _config: RetryConfig): boolean {
-    // 5xx错误可以重试
+  private shouldRetry(status: number, config: RetryConfig): boolean {
+    // 尊重自定义策略
+    if (typeof config.shouldRetry === 'function') {
+      try {
+        const decision = config.shouldRetry(new ServerError(`HTTP ${status}`));
+        if (typeof decision === 'boolean') return decision;
+      } catch {/* ignore predicate errors */}
+    }
+    // 默认策略：5xx与429重试
     if (status >= 500) return true;
-    
-    // 429 Too Many Requests可以重试
     if (status === 429) return true;
-    
     return false;
   }
 
