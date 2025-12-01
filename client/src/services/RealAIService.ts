@@ -4,7 +4,49 @@
  * 完全免费，支持真实对话
  */
 
-import { logger } from '../utils/logger';
+import { logger } from '../utils/EnhancedLogger';
+import { getActiveAIConfig, PROMPTS, AI_ERROR_MESSAGES } from '../config/ai.config';
+
+interface ChatMessage {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+}
+
+interface AITaskResult {
+  title: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+  estimatedDuration: number;
+  suggestedAssignee?: string;
+  dependencies?: string[];
+  tags?: string[];
+  confidence: number;
+}
+
+interface AIProgressPrediction {
+  predictedCompletionDate: string;
+  confidenceLevel: number;
+  bottlenecks: string[];
+  recommendations: string[];
+  riskFactors: string[];
+}
+
+interface AIRiskAssessment {
+  riskLevel: 'critical' | 'high' | 'medium' | 'low';
+  riskType: string;
+  description: string;
+  mitigation: string;
+  probability: number;
+  impact: number;
+}
+
+interface AIResourceOptimization {
+  currentUtilization: number;
+  issues: string[];
+  optimizationSuggestions: string[];
+  expectedImprovement: string;
+  costSavings: number;
+}
 
 // AI提供商类型
 export type AIProvider = 'siliconflow' | 'deepseek' | 'qwen' | 'yi' | 'groq' | 'local';
