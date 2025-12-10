@@ -377,7 +377,38 @@ class ApiService {
       }
     }
 
-    throw new ApiError('Mock API not implemented for this endpoint', 501);
+    // 施工日志相关API Mock
+    if (endpoint.includes('/construction-logs')) {
+      if (method === 'GET') {
+        return [] as T;
+      }
+      if (method === 'POST') {
+        return { success: true, id: Date.now().toString() } as T;
+      }
+    }
+
+    // 质量检查相关API Mock
+    if (endpoint.includes('/quality-checks')) {
+      if (method === 'GET') {
+        return [] as T;
+      }
+      if (method === 'POST') {
+        return { success: true, id: Date.now().toString() } as T;
+      }
+    }
+
+    // 安全巡检相关API Mock
+    if (endpoint.includes('/safety-inspections')) {
+      if (method === 'GET') {
+        return [] as T;
+      }
+      if (method === 'POST') {
+        return { success: true, id: Date.now().toString() } as T;
+      }
+    }
+
+    console.warn(`[MockAPI] Missing mock for endpoint: ${endpoint}`);
+    throw new ApiError(`Mock API not implemented for endpoint: ${endpoint}`, 501);
   }
 
   // GET请求

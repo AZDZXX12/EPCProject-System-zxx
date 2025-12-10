@@ -27,6 +27,7 @@ import {
   Space,
   Tag,
   Modal,
+  App,
   message,
   Row,
   Col,
@@ -213,6 +214,7 @@ interface EnhancedConstructionLog {
 // ==================== 主组件 ====================
 
 const EnhancedConstructionManagement: React.FC = () => {
+  const { message, modal } = App.useApp();
   const [form] = Form.useForm();
   const [qualityForm] = Form.useForm();
   const [safetyForm] = Form.useForm();
@@ -597,7 +599,7 @@ const EnhancedConstructionManagement: React.FC = () => {
 
   // 批量审批质量检查
   const handleBatchApprove = () => {
-    Modal.confirm({
+    modal.confirm({
       title: '批量审批',
       content: '确认批准所有待审批的质量检查项？',
       onOk: () => {
@@ -623,7 +625,7 @@ const EnhancedConstructionManagement: React.FC = () => {
 
   // 催办
   const handleUrge = (record: SafetyInspection) => {
-    Modal.confirm({
+    modal.confirm({
       title: '催办确认',
       content: `确认催办「${record.location}」的整改工作？将通知责任人：${record.responsible}`,
       onOk: () => {
