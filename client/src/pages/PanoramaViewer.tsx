@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Spin } from 'antd';
+import { API_BASE_URL } from '../config';
 import './PanoramaViewer.css';
 
 const PanoramaViewer: React.FC = () => {
@@ -49,7 +50,7 @@ const PanoramaViewer: React.FC = () => {
       <iframe
         key="pano-frame"
         id="pano-frame"
-        src={`/pano-viewer/index.html?v=${timestamp}`}
+        src={`/pano-viewer/index.html?v=${timestamp}&api=${encodeURIComponent(API_BASE_URL)}`}
         title="Panoramic Viewer"
         style={{
           width: '100%',

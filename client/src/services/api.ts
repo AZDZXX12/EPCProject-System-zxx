@@ -128,7 +128,7 @@ class ApiService {
     try {
       const response = await fetchWithRetry(url, {
         ...config,
-        timeout: (config.timeout ?? (isCrossOrigin ? 1200 : 10000)),
+        timeout: (config.timeout ?? (isCrossOrigin ? 30000 : 10000)),
         headers: {
           'Content-Type': 'application/json',
           ...config.headers,

@@ -16,7 +16,7 @@ const appState = {
   gyroEnabled: false
 };
 
-const API_BASE_URL = 'http://localhost:8000';
+// API_BASE_URL moved to dynamic initialization below
 
 /**
  * 显示通知
@@ -82,9 +82,14 @@ function getUrlParam(name) {
 // 全局项目ID
 const PROJECT_ID = getUrlParam('projectId');
 
-/**
- * 初始化应用
- */
+// API Base URL from query param or default
+const API_PARAM = getUrlParam('api');
+// 如果是本地开发环境，且没有传入 api 参数，默认使用 localhost:8000
+// 否则默认为空字符串（使用相对路径）
+const DEFAULT_API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+  ? 'http://localhost:8000' 
+  : '';
+const API_BASE_URL = API_PARAM ? decodeURIComponent(API_PARAM) : DEFAULT_API_URL;
 function initApp() {
   console.log('🚀 初始化全景编辑器...');
   console.log('Project ID:', PROJECT_ID);
@@ -124,13 +129,83 @@ function initApp() {
 }
 
 /**
- * 从后端加载项目
+ * 加载单个场景 (Promise wrapper)
+ */
+function loadOnePano(pano) {
+  return new Promise((resolve) => {
+    // Use URL from server
+    const imageUrl = pano.url.startsWith('http') ? pano.url : `${API_BASE_URL}${pano.url}`;
+    
+    let thumbnailUrl = pano.thumbnail || imageUrl;
+    if (pano.thumbnail && !pano.thumbnail.startsWith('http')) {
+        thumbnailUrl = `${API_BASE_URL}${pano.thumbnail}`;
+    }
+    
+    const img = new Image();
+    img.onload = () => {
+      try {
+         const aspectRatio = img.width / img.height;
+         let geometry;
+         if (aspectRatio > 1.8 && aspectRatio < 2.2) {
+           geometry = new Marzipano.EquirectGeometry([{ width: 4096 }]);
+         } else {
+           geometry = new Marzipano.CubeGeometry([{ tileSize: 1024, size: 1024 }]);
+         }
+         const limiter = Marzipano.RectilinearView.limit.traditional(4096, 120 * Math.PI / 180);
+         
+         let initialView = { yaw: 0, pitch: 0, fov: 90 * Math.PI / 180 };
+         if (pano.scene_data && pano.scene_data.view) {
+           initialView = pano.scene_data.view;
+         }
+         
+         const view = new Marzipano.RectilinearView(initialView, limiter);
+         
+         const source = Marzipano.ImageUrlSource.fromString(imageUrl);
+         const scene = appState.viewer.createScene({
+           source: source,
+           geometry: geometry,
+           view: view,
+           pinFirstLevel: true
+         });
+         
+         const sceneData = {
+           id: pano.id,
+           name: pano.name,
+           imageData: imageUrl,
+           scene: scene,
+           view: view,
+           hotspots: [],
+           thumbnail: thumbnailUrl,
+           isDefault: false
+         };
+         
+         if (pano.hotspots && Array.isArray(pano.hotspots)) {
+           sceneData.hotspots = pano.hotspots;
+         }
+         
+         appState.scenes.push(sceneData);
+         resolve(sceneData);
+      } catch (err) {
+         console.error('Error creating scene:', err);
+         resolve(null);
+      }
+    };
+    img.onerror = () => {
+       console.error('Failed to load image:', imageUrl);
+       resolve(null);
+    };
+    img.src = imageUrl;
+  });
+}
+
+/**
+ * 从后端加载项目 (优化版：优先加载首图，后台加载其余)
  */
 async function loadProjectFromBackend() {
   if (!PROJECT_ID) return;
   
   showLoading();
-  setProgress(10, '加载项目数据...');
+  setProgress(10, '获取项目列表...');
   
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/panoramas/?project_id=${PROJECT_ID}`);
@@ -145,83 +220,33 @@ async function loadProjectFromBackend() {
       return;
     }
     
-    // Process each panorama
-    for (let i = 0; i < panos.length; i++) {
-      const pano = panos[i];
-      // Use URL from server
-      const imageUrl = pano.url.startsWith('http') ? pano.url : `${API_BASE_URL}${pano.url}`;
-      
-      let thumbnailUrl = pano.thumbnail || imageUrl;
-      if (pano.thumbnail && !pano.thumbnail.startsWith('http')) {
-          thumbnailUrl = `${API_BASE_URL}${pano.thumbnail}`;
-      }
-      
-      // Load image
-      await new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-          // Create scene
-          // Similar logic to createScene but using existing data
-           const aspectRatio = img.width / img.height;
-           let geometry;
-           if (aspectRatio > 1.8 && aspectRatio < 2.2) {
-             geometry = new Marzipano.EquirectGeometry([{ width: 4096 }]);
-           } else {
-             geometry = new Marzipano.CubeGeometry([{ tileSize: 1024, size: 1024 }]);
-           }
-           const limiter = Marzipano.RectilinearView.limit.traditional(4096, 120 * Math.PI / 180);
-           
-           // Restore view parameters if available
-           let initialView = { yaw: 0, pitch: 0, fov: 90 * Math.PI / 180 };
-           if (pano.scene_data && pano.scene_data.view) {
-             initialView = pano.scene_data.view;
-           }
-           
-           const view = new Marzipano.RectilinearView(initialView, limiter);
-           
-           const source = Marzipano.ImageUrlSource.fromString(imageUrl);
-           const scene = appState.viewer.createScene({
-             source: source,
-             geometry: geometry,
-             view: view,
-             pinFirstLevel: true
-           });
-           
-           const sceneData = {
-             id: pano.id, // Use DB ID
-             name: pano.name,
-             imageData: imageUrl,
-             scene: scene,
-             view: view,
-             hotspots: [],
-             thumbnail: thumbnailUrl,
-             isDefault: false
-           };
-           
-           // Restore hotspots
-           if (pano.hotspots && Array.isArray(pano.hotspots)) {
-             sceneData.hotspots = pano.hotspots;
-           }
-           
-           appState.scenes.push(sceneData);
-           resolve();
-        };
-        img.src = imageUrl;
-      });
-      
-      setProgress(10 + Math.round(((i + 1) / panos.length) * 90), `加载场景 ${i + 1}/${panos.length}`);
-    }
+    // 1. Load the first panorama immediately
+    setProgress(30, '加载首个场景...');
+    await loadOnePano(panos[0]);
     
     updateSceneList();
     if (appState.scenes.length > 0) {
       switchScene(appState.scenes[0].id);
     }
     
+    // 2. Hide loading screen immediately so user can interact
+    hideLoading();
+    
+    // 3. Load remaining panoramas in background
+    if (panos.length > 1) {
+      console.log('Background loading remaining scenes...');
+      // Load sequentially in background to avoid freezing UI
+      for (let i = 1; i < panos.length; i++) {
+        await loadOnePano(panos[i]);
+        updateSceneList(); // Update list as they come in
+      }
+      console.log('All scenes loaded.');
+    }
+    
   } catch (e) {
     console.error('加载项目失败:', e);
     alert('加载项目失败，请检查网络');
     showDefaultSky();
-  } finally {
     hideLoading();
   }
 }
