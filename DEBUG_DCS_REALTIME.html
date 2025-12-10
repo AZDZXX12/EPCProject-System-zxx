@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DCS实时数据诊断工具</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .panel {
+            background: #000;
+            border: 2px solid #00ff00;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0ff;
+        }
+        .error { color: #ff0000; }
+        .success { color: #00ff00; }
+        .warning { color: #ffaa00; }
+    </style>
+</head>
+<body>
+    <h1>🔍 DCS数字孪生系统实时诊断</h1>
+    
+    <div class="panel">
+        <h2>1. 页面加载状态</h2>
+        <div id="loadStatus">检查中...</div>
+    </div>
+    
+    <div class="panel">
+        <h2>2. DCS数据更新监控</h2>
+        <div>TIC-101温度: <span id="temp" class="value">--</span> °C</div>
+        <div>PIC-203压力: <span id="pressure" class="value">--</span> MPa</div>
+        <div>更新计数: <span id="updateCount" class="value">0</span></div>
+        <div>最后更新: <span id="lastUpdate">--</span></div>
+    </div>
+    
+    <div class="panel">
+        <h2>3. React组件状态</h2>
+        <div id="reactStatus">检查中...</div>
+    </div>
+    
+    <div class="panel">
+        <h2>4. 控制台错误</h2>
+        <div id="errors" class="error">无错误</div>
+    </div>
+    
+    <div class="panel">
+        <h2>5. 修复建议</h2>
+        <div id="suggestions"></div>
+    </div>
+
+    <script>
+        let updateCount = 0;
+        let lastTemp = null;
+        let errors = [];
+        
+        // 拦截控制台错误
+        window.addEventListener('error', (e) => {
+            errors.push(e.message);
+            document.getElementById('errors').innerHTML = errors.join('<br>');
+        });
+        
+        // 检查页面加载
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('loadStatus').innerHTML = 
+                '<span class="success">✓ 页面已加载</span>';
+        });
+        
+        // 监控数据更新
+        setInterval(() => {
+            try {
+                // 尝试获取温度值
+                const tempElement = window.parent.document.querySelector('.pid-value-num');
+                if (tempElement) {
+                    const currentTemp = tempElement.innerText;
+                    document.getElementById('temp').innerText = currentTemp;
+                    
+                    if (lastTemp && lastTemp !== currentTemp) {
+                        updateCount++;
+                        document.getElementById('updateCount').innerText = updateCount;
+                        document.getElementById('lastUpdate').innerText = new Date().toLocaleTimeString();
+                    }
+                    lastTemp = currentTemp;
+                }
+                
+                // 检查React
+                if (window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+                    document.getElementById('reactStatus').innerHTML = 
+                        '<span class="success">✓ React已加载</span>';
+                } else {
+                    document.getElementById('reactStatus').innerHTML = 
+                        '<span class="warning">⚠ React DevTools未检测到</span>';
+                }
+                
+                // 生成建议
+                const suggestions = [];
+                if (updateCount === 0) {
+                    suggestions.push('⚠ 数据未更新，建议：');
+                    suggestions.push('1. 按 Ctrl+Shift+R 强制刷新');
+                    suggestions.push('2. 检查浏览器控制台错误');
+                    suggestions.push('3. 确认开发服务器运行正常');
+                } else {
+                    suggestions.push('<span class="success">✓ DCS数据正在实时更新！</span>');
+                    suggestions.push(`更新频率: ${updateCount}次/${Math.floor(Date.now()/1000)}秒`);
+                }
+                document.getElementById('suggestions').innerHTML = suggestions.join('<br>');
+                
+            } catch (e) {
+                document.getElementById('errors').innerHTML += '<br>' + e.message;
+            }
+        }, 1000);
+        
+        // 初始化提示
+        setTimeout(() => {
+            alert('请在数字孪生页面打开此工具（F12开发者工具）以监控实时数据');
+        }, 1000);
+    </script>
+</body>
+</html>

@@ -175,6 +175,13 @@ export const routes: RouteConfig[] = [
     icon: <FolderOutlined />,
   },
   {
+    path: '/panorama',
+    name: '全景图查看器',
+    element: lazyLoad('PanoramaViewer'),
+    icon: <DashboardOutlined />,
+    cache: true,
+  },
+  {
     path: '/reports',
     name: '报表生成',
     element: lazyLoad('ReportGenerator'),

@@ -96,6 +96,12 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       className: 'menu-highlight-indigo',
     },
     {
+      key: '/panorama',
+      icon: <DashboardOutlined />,
+      label: '全景图查看器',
+      className: 'menu-highlight-green',
+    },
+    {
       key: '/utilities',
       icon: <ToolOutlined />,
       label: '实用工具',
@@ -220,10 +226,19 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
       collapsedWidth={60}
       trigger={null}
       className={`app-sider${isMobile && mobileVisible ? ' mobile-visible' : ''}`}
+      theme="light"
+      style={{
+        overflow: 'hidden',
+        height: '100vh',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        zIndex: 100,
+      }}
     >
-      {/* Logo区域 - 精简版 */}
       <div className={`sider-logo ${collapsed ? 'sider-logo-collapsed' : ''}`}>
-        {collapsed ? <RocketOutlined /> : '项目管理'}
+        {collapsed ? 'EPC' : 'EPC 项目管理'}
       </div>
 
       {/* 搜索框 - 非折叠时显示 */}
@@ -251,26 +266,9 @@ const AppSider: React.FC<AppSiderProps> = ({ collapsed, onCollapse }) => {
               style={{ width: '40px', height: '40px' }}
             />
           </Tooltip>
-          <Tooltip title="通知" placement="right">
-            <Button
-              type="text"
-              icon={<BellOutlined />}
-              onClick={() => navigate('/notifications')}
-              style={{ width: '40px', height: '40px' }}
-            />
-          </Tooltip>
-          <Tooltip title="收藏" placement="right">
-            <Button
-              type="text"
-              icon={<StarOutlined />}
-              onClick={() => navigate('/favorites')}
-              style={{ width: '40px', height: '40px' }}
-            />
-          </Tooltip>
         </div>
       )}
-
-      {/* 菜单区域 */}
+      
       <div className="sider-menu-wrapper">
         <Menu
           mode="inline"

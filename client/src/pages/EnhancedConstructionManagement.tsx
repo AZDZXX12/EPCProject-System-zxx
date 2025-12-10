@@ -42,6 +42,7 @@ import {
 import dayjs from 'dayjs';
 import { StorageManager } from '../utils/StorageManager';
 import { logger } from '../utils/logger';
+import { createTabItems } from '../utils/tabsMigration';
 import type { UploadFile } from 'antd/es/upload/interface';
 import './EnhancedConstructionManagement.css';
 import {
@@ -61,7 +62,6 @@ import {
   ClockCircleOutlined,
 } from '@ant-design/icons';
 
-const { TabPane } = Tabs;
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -653,8 +653,15 @@ const EnhancedConstructionManagement: React.FC = () => {
           </Space>
         }
       >
-        <Tabs activeKey={activeTab} onChange={setActiveTab}>
-          <Tabs.TabPane tab="📊 项目总览" key="overview">
+        <Tabs 
+          activeKey={activeTab} 
+          onChange={setActiveTab}
+          items={[
+            {
+              key: 'overview',
+              label: '📊 项目总览',
+              children: (
+                <>
             <Card title="项目基本信息" className="info-card">
               <Descriptions column={3}>
                 <Descriptions.Item label="项目名称">化工设备生产线EPC项目</Descriptions.Item>
@@ -744,9 +751,14 @@ const EnhancedConstructionManagement: React.FC = () => {
                 </Timeline.Item>
               </Timeline>
             </Card>
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab="📈 进度管理" key="progress">
+                </>
+              )
+            },
+            {
+              key: 'progress',
+              label: '📈 进度管理',
+              children: (
+                <>
             <Alert
               message="项目整体进度"
               description="当前项目总体进度为65%，按计划推进中。采购阶段85%，施工阶段60%。"
@@ -896,9 +908,14 @@ const EnhancedConstructionManagement: React.FC = () => {
                 </Timeline.Item>
               </Timeline>
             </Card>
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab="📝 施工日志" key="log">
+                </>
+              )
+            },
+            {
+              key: 'log',
+              label: '📝 施工日志',
+              children: (
+                <>
             <Table
               dataSource={logs}
               rowKey="id"
@@ -984,10 +1001,14 @@ const EnhancedConstructionManagement: React.FC = () => {
                 },
               ]}
             />
-          </Tabs.TabPane>
-
-          {/* 质量检查 */}
-          <Tabs.TabPane tab="🔍 质量检查" key="quality">
+                </>
+              )
+            },
+            {
+              key: 'quality',
+              label: '🔍 质量检查',
+              children: (
+                <>
             <Space className="mb-16">
               <Button type="primary" icon={<PlusOutlined />} onClick={() => setQualityModalVisible(true)}>
                 新建检查
@@ -1076,10 +1097,14 @@ const EnhancedConstructionManagement: React.FC = () => {
                 },
               ]}
             />
-          </Tabs.TabPane>
-
-          {/* 安全巡检 */}
-          <Tabs.TabPane tab="🛡️ 安全巡检" key="safety">
+                </>
+              )
+            },
+            {
+              key: 'safety',
+              label: '🛡️ 安全巡检',
+              children: (
+                <>
             <Space className="mb-16">
               <Button type="primary" icon={<PlusOutlined />} onClick={() => setSafetyModalVisible(true)}>
                 新建巡检
@@ -1179,10 +1204,14 @@ const EnhancedConstructionManagement: React.FC = () => {
                 },
               ]}
             />
-          </Tabs.TabPane>
-
-          {/* 统计分析 */}
-          <Tabs.TabPane tab="📊 统计分析" key="statistics">
+                </>
+              )
+            },
+            {
+              key: 'statistics',
+              label: '📊 统计分析',
+              children: (
+                <>
             <Row gutter={16} className="mb-16">
               <Col span={6}>
                 <Card>
@@ -1291,8 +1320,11 @@ const EnhancedConstructionManagement: React.FC = () => {
                 </Card>
               </Col>
             </Row>
-          </Tabs.TabPane>
-        </Tabs>
+                </>
+              )
+            }
+          ]}
+        />
       </Card>
 
       {/* 新建/编辑施工日志弹窗 */}
@@ -1504,7 +1536,6 @@ const EnhancedConstructionManagement: React.FC = () => {
         open={safetyModalVisible}
         onOk={handleSafetySubmit}
         onCancel={() => setSafetyModalVisible(false)}
-        width={800}
       >
         <Form form={safetyForm} layout="vertical">
           <Row gutter={16}>

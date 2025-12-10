@@ -1,0 +1,36 @@
+.advanced-filter-modal .ant-modal-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.advanced-filter-form {
+  padding: 8px 0;
+}
+
+.advanced-filter-form .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.advanced-filter-form .ant-form-item:last-child {
+  margin-bottom: 0;
+}
+
+.advanced-filter-form .ant-form-item-label {
+  padding-bottom: 4px;
+}
+
+.advanced-filter-form .ant-form-item-label > label {
+  font-weight: 500;
+  color: #333;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .advanced-filter-modal {
+    max-width: 95%;
+  }
+
+  .advanced-filter-modal .ant-modal-body {
+    max-height: 400px;
+  }
+}

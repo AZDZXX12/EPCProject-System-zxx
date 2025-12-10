@@ -1,0 +1,214 @@
+/* 注册页面样式 */
+
+.register-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(252, 70, 107, 0.3), transparent 50%);
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.register-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.register-card.success-card {
+  max-width: 700px;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.register-title {
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.register-subtitle {
+  font-size: 14px;
+  color: #8c8c8c;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.register-steps {
+  margin-bottom: 32px;
+}
+
+.register-form {
+  margin-top: 24px;
+}
+
+.form-step {
+  animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-actions {
+  margin-top: 32px;
+  margin-bottom: 0;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.button-group button {
+  min-width: 100px;
+}
+
+/* 成功页面样式 */
+.success-info {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.success-info p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #595959;
+}
+
+.success-info strong {
+  color: #262626;
+  margin-right: 8px;
+}
+
+/* 移动端适配 */
+@media (max-width: 767px) {
+  .register-container {
+    padding: 12px;
+  }
+
+  .register-card {
+    padding: 24px 20px;
+  }
+
+  .register-title {
+    font-size: 24px;
+  }
+
+  .register-subtitle {
+    font-size: 12px;
+  }
+
+  .register-steps {
+    margin-bottom: 24px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .button-group button {
+    width: 100%;
+  }
+}
+
+/* 小屏手机 */
+@media (max-width: 575px) {
+  .register-card {
+    padding: 20px 16px;
+  }
+
+  .register-title {
+    font-size: 20px;
+  }
+
+  .form-actions {
+    margin-top: 24px;
+  }
+}
+
+/* 表单项样式增强 */
+.register-form .ant-form-item-label > label {
+  font-weight: 500;
+  color: #262626;
+}
+
+.register-form .ant-input,
+.register-form .ant-input-password,
+.register-form .ant-select-selector,
+.register-form .ant-input-textarea {
+  border-radius: 8px;
+}
+
+.register-form .ant-input:focus,
+.register-form .ant-input-password:focus,
+.register-form .ant-select-selector:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.register-form .ant-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+  height: 44px;
+  font-weight: 500;
+}
+
+.register-form .ant-btn-primary:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+}
+
+.register-form .ant-btn-default {
+  border-radius: 8px;
+  height: 44px;
+}

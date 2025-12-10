@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "dayjs": "^1.9.6",
-    "escape-html": "^1.0.3"
+    "escape-html": "^1.0.3",
+    "http-server": "^14.1.1"
   },
   "build": {
     "appId": "com.chemical.project.management",

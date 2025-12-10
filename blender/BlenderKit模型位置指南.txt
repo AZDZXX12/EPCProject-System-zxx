@@ -1,0 +1,290 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║          BlenderKit下载的模型在哪？- 完整指南                ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+📍 BlenderKit模型的存储位置
+
+═══════════════════════════════════════════════════════════════
+
+🗂️ 默认存储路径（Windows）
+
+BlenderKit将下载的模型存储在：
+
+C:\Users\[您的用户名]\AppData\Roaming\Blender Foundation\Blender\[版本号]\datafiles\blenderkit_data\
+
+例如：
+- Blender 3.0: C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender\3.0\datafiles\blenderkit_data\
+- Blender 4.0: C:\Users\Administrator\AppData\Roaming\Blender Foundation\Blender\4.0\datafiles\blenderkit_data\
+
+⚠️ 注意：AppData 是隐藏文件夹！
+
+═══════════════════════════════════════════════════════════════
+
+🔍 如何快速打开模型文件夹
+
+【方法1】通过Windows运行（最快）
+
+1. 按 Win + R
+2. 输入: %APPDATA%\Blender Foundation\Blender
+3. 按回车
+4. 找到您的Blender版本文件夹（如 3.0）
+5. 进入: datafiles\blenderkit_data\
+
+【方法2】通过Blender查看路径
+
+1. 打开 Blender
+2. Edit → Preferences → Add-ons
+3. 搜索 "BlenderKit"
+4. 展开插件（点击左侧小箭头）
+5. 找到 "Global Directory" 或 "Temp Directory"
+6. 这就是模型下载位置
+7. 点击文件夹图标可以直接打开
+
+【方法3】通过文件资源管理器
+
+1. 打开文件资源管理器
+2. 在地址栏输入: %APPDATA%
+3. 进入: Blender Foundation\Blender\[版本]\datafiles\blenderkit_data\
+
+【方法4】显示隐藏文件夹后手动查找
+
+1. 打开文件资源管理器
+2. 点击"查看" → 勾选"隐藏的项目"
+3. 进入 C:\Users\[用户名]\AppData\
+4. Roaming\Blender Foundation\Blender\[版本]\datafiles\blenderkit_data\
+
+═══════════════════════════════════════════════════════════════
+
+📁 BlenderKit文件夹结构
+
+blenderkit_data\
+├── models\          ← 模型文件（.blend）
+│   ├── [资产ID]\
+│   │   ├── [模型名].blend
+│   │   ├── thumbnail.jpg
+│   │   └── metadata.json
+│
+├── scenes\          ← 场景文件
+│
+├── materials\       ← 材质文件
+│
+├── brushes\         ← 笔刷文件
+│
+└── hdrs\            ← HDRI环境贴图
+
+每个下载的资产都有自己的文件夹，包含：
+- .blend 文件（主文件）
+- 缩略图
+- 元数据
+- 相关纹理
+
+═══════════════════════════════════════════════════════════════
+
+🎯 如何使用下载的模型
+
+【方法1】通过BlenderKit面板（推荐）
+
+1. 在Blender中按 N 键打开侧边栏
+2. 找到 "BlenderKit" 标签
+3. 点击顶部的图标切换类别：
+   - 🔲 Models（模型）
+   - 🎨 Materials（材质）
+   - 🌄 HDRs（环境）
+   - 🖌️ Brushes（笔刷）
+
+4. 在 "My Assets" 或 "Downloaded" 中查看已下载的资产
+5. 点击模型缩略图直接导入到场景
+
+【方法2】直接从文件夹导入
+
+1. File → Append（追加）或 Link（链接）
+2. 浏览到 BlenderKit 文件夹
+3. 进入 models\[资产ID]\
+4. 选择 .blend 文件
+5. 进入 Object 或 Collection 文件夹
+6. 选择要导入的对象
+7. 点击 Append 或 Link
+
+Append vs Link 的区别：
+- Append: 将模型完全复制到当前文件（独立）
+- Link: 链接外部文件（节省空间，但依赖源文件）
+
+【方法3】拖放导入（某些版本支持）
+
+1. 打开文件资源管理器
+2. 找到模型的 .blend 文件
+3. 直接拖放到 Blender 3D 视图
+4. 自动导入
+
+═══════════════════════════════════════════════════════════════
+
+🔄 如何更改BlenderKit下载位置
+
+如果您想改变模型存储位置（例如移到D盘）：
+
+1. Edit → Preferences → Add-ons
+2. 搜索 "BlenderKit"
+3. 展开插件设置
+4. 找到 "Global Directory" 或 "Project Directory"
+
+5. 点击文件夹图标，选择新位置：
+   推荐：D:\BlenderAssets\BlenderKit
+   
+   ⚠️ 必须是纯英文路径！
+
+6. 如果已有下载的文件，可以选择：
+   - 将旧文件夹内容复制到新位置
+   - 或者保留旧文件（但需重新下载）
+
+7. Save Preferences
+8. 重启 Blender
+
+═══════════════════════════════════════════════════════════════
+
+📊 查看已下载模型的信息
+
+【查看下载历史】
+
+1. 在 BlenderKit 面板
+2. 点击 "Search" 标签
+3. 勾选 "Show only my assets" 或 "Downloaded"
+4. 查看所有已下载的资产
+
+【查看磁盘占用】
+
+1. 打开 blenderkit_data 文件夹
+2. 右键文件夹 → 属性
+3. 查看 "大小" 
+4. 可以看到总共下载了多少数据
+
+【整理下载的模型】
+
+BlenderKit 会自动管理文件，不建议手动修改！
+
+但您可以：
+- 导出收藏的模型到单独文件夹
+- 使用 File → External Data → Pack All into .blend
+  将所有资源打包到当前文件
+
+═══════════════════════════════════════════════════════════════
+
+🗑️ 清理下载的模型
+
+如果想释放空间：
+
+【方法1】在Blender内清理
+
+1. BlenderKit 面板
+2. 点击设置图标（齿轮）
+3. 找到 "Clear Cache" 或 "Delete Downloaded"
+4. 选择要删除的类型
+5. 确认删除
+
+【方法2】手动删除
+
+1. 完全关闭 Blender
+2. 打开 blenderkit_data 文件夹
+3. 手动删除不需要的文件夹
+4. 重启 Blender
+
+⚠️ 警告：删除后需要重新下载！
+
+═══════════════════════════════════════════════════════════════
+
+💡 常见问题解答
+
+Q: 下载的模型可以用在商业项目吗？
+A: 要看模型的许可证！
+   - 在BlenderKit中点击模型查看 License
+   - 有些是 CC0（完全免费）
+   - 有些是 Royalty Free（需订阅）
+   - 检查使用条款：https://www.blenderkit.com/docs/licensing/
+
+Q: 模型下载后消失了？
+A: 可能原因：
+   1. 检查 "Downloaded" 过滤器是否开启
+   2. 搜索关键词是否太严格
+   3. 切换到 "My Assets" 查看
+   4. 检查文件夹中是否真的存在
+
+Q: 可以分享下载的模型给别人吗？
+A: 不推荐！
+   - 违反 BlenderKit 使用条款
+   - 应该让对方自己注册下载
+   - 但您制作的场景（包含模型）可以分享
+
+Q: 下载的模型版本不对怎么办？
+A: 
+   1. 右键模型缩略图
+   2. 选择 "Re-download"
+   3. 选择不同的分辨率或版本
+
+Q: 模型文件夹太大了怎么办？
+A: 
+   1. 将下载位置改到大容量硬盘（如D盘）
+   2. 定期清理不用的模型
+   3. 使用 "Low Poly" 过滤器下载小文件
+   4. 只下载真正需要的资产
+
+Q: 换电脑后怎么带走下载的模型？
+A: 
+   1. 复制整个 blenderkit_data 文件夹
+   2. 在新电脑安装 Blender 和 BlenderKit
+   3. 将文件夹粘贴到新电脑的相同位置
+   4. 或在插件设置中指向这个文件夹
+
+═══════════════════════════════════════════════════════════════
+
+🎯 实用技巧
+
+【快速找到特定模型文件】
+
+1. 在BlenderKit面板中右键模型
+2. 选择 "Open in File Browser"
+3. 直接打开该模型的文件夹
+
+【备份重要模型】
+
+1. 找到常用模型的 .blend 文件
+2. 复制到您的项目资产库
+3. 例如: D:\MyProjects\Blender\Assets\Favorites\
+
+【离线使用】
+
+下载后的模型可以离线使用！
+- 不需要网络连接
+- 不需要登录 BlenderKit
+- 直接从本地文件加载
+
+【批量下载】
+
+1. 在网页版 BlenderKit 浏览
+   https://www.blenderkit.com/asset-gallery
+2. 标记喜欢的模型（❤️）
+3. 在Blender中打开 BlenderKit
+4. 切换到 "Liked" 
+5. 批量下载收藏的模型
+
+═══════════════════════════════════════════════════════════════
+
+📝 总结
+
+✓ 默认位置: %APPDATA%\Blender Foundation\Blender\[版本]\datafiles\blenderkit_data\
+
+✓ 查看位置: Edit → Preferences → Add-ons → BlenderKit → Global Directory
+
+✓ 使用模型: 按 N → BlenderKit 面板 → 点击缩略图导入
+
+✓ 更改位置: 在插件设置中修改路径（推荐D盘英文路径）
+
+✓ 管理文件: 通过 BlenderKit 面板，不要手动修改
+
+═══════════════════════════════════════════════════════════════
+
+需要更多帮助？查看官方文档：
+https://www.blenderkit.com/docs/
+
+祝您使用愉快！🎨✨
+

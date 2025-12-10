@@ -1,0 +1,219 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║         Blender 稳定性 + HDR 添加 - 快速参考卡              ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+🔧 提升稳定性 - 立即执行这5步
+
+1️⃣ 禁用自动保存（最重要！）
+   Edit → Preferences → Save & Load
+   ☐ Auto Save Temporary Files
+   改为手动 Ctrl+S 保存
+
+2️⃣ 添加到加密软件白名单
+   您的系统有 winrdlv3/sdhelper2
+   添加白名单：
+   - blender.exe / MyBlender.exe
+   - D:\BlenderProjects\
+   - %APPDATA%\Blender Foundation\
+
+3️⃣ 使用英文路径
+   ✗ D:\工作文件夹\备份文件\...
+   ✓ D:\BlenderProjects\
+
+4️⃣ 增加虚拟内存
+   Win+Pause → 高级系统设置 → 性能
+   虚拟内存：初始 16384MB，最大 32768MB
+
+5️⃣ 禁用不用的插件
+   Edit → Preferences → Add-ons
+   BlenderKit 用完就禁用（下载时最容易崩溃）
+
+═══════════════════════════════════════════════════════════════
+
+🌅 添加 HDR 环境 - 3种方法
+
+【方法1】使用脚本（最简单）⭐⭐⭐⭐⭐
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Scripting 工作区
+2. Open → 一键添加HDR.py
+3. 运行脚本 ▶
+4. 按提示选择 HDR 文件
+✓ 完成！
+
+【方法2】手动添加（最常用）⭐⭐⭐⭐⭐
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. 切换到 Shading 工作区
+2. Shader Editor 底部点击 [🔘World]
+3. Shift+A → Texture → Environment Texture
+4. 连接: Environment Texture → Background
+5. 在 Environment Texture 节点点击 "Open"
+6. 选择 .hdr 或 .exr 文件
+7. 按 Z → Rendered
+✓ 看到效果！
+
+【方法3】使用插件（最快）⭐⭐⭐⭐⭐
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+如果装了 Poly Haven 或 BlenderKit:
+1. 按 N 打开侧边栏
+2. 找到插件标签
+3. 点击 HDRs / HDRI 类别
+4. 点击一个 HDRI 缩略图
+✓ 自动应用！
+
+⚠️ 插件下载时可能卡顿，耐心等待
+
+═══════════════════════════════════════════════════════════════
+
+📥 获取免费 HDR
+
+Poly Haven（最推荐）
+https://polyhaven.com/hdris
+
+1. 选择一个 HDRI
+2. 点击 Download
+3. 分辨率: 4K（推荐）或 8K
+4. 格式: HDR
+5. 下载到英文路径（如 D:\HDRI\）
+
+推荐下载：
+- studio_small_03 (室内产品渲染)
+- abandoned_warehouse (工业风格)
+- forest_slope (户外自然光)
+- sunset_fairway (日落场景)
+
+═══════════════════════════════════════════════════════════════
+
+🎨 调整 HDR 效果
+
+旋转环境（改变光照方向）
+━━━━━━━━━━━━━━━━━━━━━━━━
+1. 添加 Mapping 节点:
+   Shift+A → Vector → Mapping
+2. 添加 Texture Coordinate:
+   Shift+A → Input → Texture Coordinate
+3. 连接:
+   Texture Coordinate (Generated)
+   → Mapping (Vector)
+   → Environment Texture (Vector)
+4. 调整 Mapping → Rotation → Z: 90°
+
+调整亮度
+━━━━━━━━━━━━━━━━━━━━━━━━
+Background 节点 → Strength:
+- 0.5 = 变暗
+- 1.0 = 正常
+- 2.0 = 变亮
+
+隐藏背景（只要照明）
+━━━━━━━━━━━━━━━━━━━━━━━━
+Render Properties → Film
+☑ Transparent
+
+═══════════════════════════════════════════════════════════════
+
+⚡ 工作时注意事项
+
+防止崩溃：
+☑ 每 5-10 分钟手动保存 (Ctrl+S)
+☑ 重要操作前先保存
+☑ 加载大模型用 Link 不用 Append
+☑ 一次只下载 1 个模型
+☑ 关闭其他占内存程序
+☑ 启用简化模式 (Render Properties → Simplify)
+
+加载模型前：
+☑ 新建空白文件
+☑ 保存当前工作
+☑ 设置为边界框显示
+
+═══════════════════════════════════════════════════════════════
+
+📁 我为您创建的文件
+
+1. 提升Blender稳定性.txt
+   → 详细的稳定性优化指南
+
+2. HDR环境贴图完整教程.txt
+   → 完整的 HDR 使用教程
+
+3. 一键添加HDR.py
+   → 自动化 HDR 设置脚本
+
+4. 安全加载大模型.py
+   → 解决大模型卡死问题
+
+5. 紧急救援_已加载模型优化.py
+   → 已经卡了用这个救急
+
+6. 优化大型模型指南.txt
+   → 大模型优化完整方案
+
+7. BlenderKit模型位置指南.txt
+   → 找到下载的模型在哪
+
+8. 查找BlenderKit模型.py
+   → 自动查找模型位置
+
+9. 插件下载崩溃解决方案.txt
+   → 下载模型时崩溃的解决方案
+
+═══════════════════════════════════════════════════════════════
+
+🎯 现在就开始
+
+Step 1: 提升稳定性
+   1. 禁用自动保存
+   2. 添加加密软件白名单
+   3. 创建英文路径文件夹: D:\BlenderProjects
+
+Step 2: 下载 HDR
+   1. 访问 https://polyhaven.com/hdris
+   2. 下载 studio_small_03_4k.hdr
+   3. 保存到 D:\HDRI\
+
+Step 3: 添加 HDR
+   方法A: 运行 "一键添加HDR.py" 脚本
+   方法B: Shading → World → Environment Texture
+
+Step 4: 测试
+   1. 添加一个球体 (Shift+A)
+   2. 按 Z → Rendered
+   3. 看到 HDR 照明效果
+
+═══════════════════════════════════════════════════════════════
+
+💡 最常见问题
+
+Q: 还是经常崩溃？
+A: 重点检查：
+   1. 加密软件白名单
+   2. 禁用自动保存
+   3. 使用英文路径
+
+Q: 添加 HDR 后没效果？
+A: 
+   1. 按 Z → Rendered
+   2. 检查渲染引擎是 Cycles 或 Eevee
+   3. 检查节点连接
+
+Q: BlenderKit 下载就崩溃？
+A: 
+   1. 一次只下载 1 个
+   2. 改为网页端下载
+   3. 下载完成后禁用插件
+
+Q: 奥迪汽车模型加载卡死？
+A: 
+   1. 用 Link 不用 Append
+   2. 启用简化模式
+   3. 设为边界框显示
+   4. 使用"安全加载大模型.py"
+
+═══════════════════════════════════════════════════════════════
+
+需要更多帮助？查看对应的详细文档！
+
+祝您使用愉快！🎨✨
+

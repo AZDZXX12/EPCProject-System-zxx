@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>项目导航</title>
+<style>
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:#0f172a;background:#0b1220}
+.wrap{max-width:880px;margin:40px auto;padding:0 20px}
+.title{font-size:22px;font-weight:700;color:#e2e8f0;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:#111827;border:1px solid #334155;border-radius:10px;padding:16px;text-decoration:none;color:#e2e8f0}
+.card:hover{border-color:#60a5fa;background:#0f172a}
+.name{font-size:16px;font-weight:600;margin-bottom:6px}
+.desc{font-size:13px;color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">项目入口</div>
+  <div class="grid">
+    <a class="card" href="http://localhost:3001" target="_blank">
+      <div class="name">EPC 项目管理系统</div>
+      <div class="desc">工程总承包全流程管理 (React + FastAPI)</div>
+    </a>
+    <a class="card" href="./Luckysheet-master-2.0.2/dist-refactored/index.html">
+      <div class="name">Luckysheet 重构版</div>
+      <div class="desc">主主页与应用入口</div>
+    </a>
+    <a class="card" href="./Luckysheet-master-2.0.2/dist-refactored/tools/all-tools.html">
+      <div class="name">Luckysheet 工具集合</div>
+      <div class="desc">常用计算器与工具页</div>
+    </a>
+    <a class="card" href="./Luckysheet-master-2.0.2/dist-refactored/login.html">
+      <div class="name">Luckysheet 登录页</div>
+      <div class="desc">用户登录与管理</div>
+    </a>
+    <a class="card" href="./marzipano-master/pano-viewer/index.html">
+      <div class="name">Marzipano 编辑器</div>
+      <div class="desc">全景图查看与编辑</div>
+    </a>
+    <a class="card" href="./marzipano-master/demos/sample-tour/index.html">
+      <div class="name">Marzipano 示例：Tour</div>
+      <div class="desc">场景与热点示例</div>
+    </a>
+    <a class="card" href="./marzipano-master/demos/equirect/index.html">
+      <div class="name">Marzipano 示例：Equirect</div>
+      <div class="desc">等距矩形图示例</div>
+    </a>
+  </div>
+</div>
+</body>
+</html>

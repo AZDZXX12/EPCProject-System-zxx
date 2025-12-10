@@ -1,0 +1,204 @@
+================================================================
+Blender Free Add-ons Collection (免费插件合集)
+================================================================
+
+✅ 100% FREE - No Payment Required
+
+================================================================
+1. NODE WRANGLER (内置插件 - 材质节点增强)
+================================================================
+
+Status: FREE - Built-in Blender
+Function: 快速材质预览、节点管理
+
+How to Enable:
+Edit > Preferences > Add-ons > Search "Node Wrangler" > ✓ Enable
+
+Usage:
+- Ctrl+Shift+Click on texture node = Preview
+- Ctrl+T = Add texture setup automatically
+- Super useful for material editing!
+
+================================================================
+2. EXTRA OBJECTS (内置插件 - 额外物体)
+================================================================
+
+Status: FREE - Built-in Blender
+Function: 添加更多基础物体（齿轮、管道等）
+
+How to Enable:
+Edit > Preferences > Add-ons > Search "Extra Objects" > ✓ Enable
+
+Includes:
+- Add Mesh: Extra Objects
+- Add Curve: Extra Objects
+- Gears, Pipes, Rocks, etc.
+
+================================================================
+3. IMAGES AS PLANES (内置插件 - 图片转平面)
+================================================================
+
+Status: FREE - Built-in Blender
+Function: 将图片导入为带材质的平面
+
+How to Enable:
+Edit > Preferences > Add-ons > Search "Images as Planes" > ✓ Enable
+
+Usage:
+Add > Image > Images as Planes
+Perfect for reference images!
+
+================================================================
+4. ARCHIMESH (免费建筑插件)
+================================================================
+
+Status: FREE
+Function: 快速创建建筑元素（门、窗、墙等）
+
+How to Install:
+Built-in! Just enable it:
+Edit > Preferences > Add-ons > Search "Archimesh" > ✓ Enable
+
+Usage:
+Add > Mesh > Archimesh
+
+================================================================
+5. BLENDERKIT (免费资产库)
+================================================================
+
+Status: FREE (with Premium option)
+Function: 10,000+ 免费3D模型、材质、HDRIs
+Website: https://www.blenderkit.com/
+
+How to Install:
+1. Edit > Preferences > Add-ons
+2. Click "Install" button
+3. Download from: https://www.blenderkit.com/
+4. Free account = 100 downloads/month
+
+Best Free Alternative!
+
+================================================================
+6. 3D VIEWPORT PIE MENUS (内置)
+================================================================
+
+Status: FREE - Built-in
+Function: 快捷饼状菜单
+
+How to Enable:
+Edit > Preferences > Add-ons > Search "3D Viewport Pie Menus" > ✓
+
+Usage:
+- Z = Shading pie menu
+- Tab = Mode pie menu
+- . = Pivot pie menu
+
+================================================================
+7. A.N.T. LANDSCAPE (内置 - 地形生成)
+================================================================
+
+Status: FREE - Built-in
+Function: 自动生成地形
+
+How to Enable:
+Edit > Preferences > Add-ons > Search "A.N.T. Landscape" > ✓
+
+Usage:
+Add > Mesh > Landscape
+
+================================================================
+8. RIGIFY (内置 - 骨骼绑定)
+================================================================
+
+Status: FREE - Built-in
+Function: 自动角色骨骼绑定
+
+How to Enable:
+Edit > Preferences > Add-ons > Search "Rigify" > ✓
+
+For character animation
+
+================================================================
+9. MATERIALS FROM TEXTURE (网站免费下载)
+================================================================
+
+Status: FREE
+Function: 从贴图自动生成PBR材质
+
+Download: Search "Blender materials from texture free"
+
+================================================================
+10. QUIXEL BRIDGE (Megascans免费资产)
+================================================================
+
+Status: FREE (Epic Games account needed)
+Function: 10,000+ 高质量扫描资产
+Website: https://quixel.com/mixer
+
+Free with Epic Games account!
+
+================================================================
+RECOMMENDED SETUP FOR BEGINNERS:
+================================================================
+
+Enable These Built-in Add-ons (All FREE):
+1. ✓ Node Wrangler
+2. ✓ Extra Objects  
+3. ✓ Images as Planes
+4. ✓ Archimesh
+5. ✓ 3D Viewport Pie Menus
+6. ✓ A.N.T. Landscape
+
+Then Install:
+- BlenderKit (best free alternative to Poly Haven plugin)
+
+================================================================
+FREE ASSET WEBSITES (No Plugin Needed):
+================================================================
+
+1. Poly Haven (polyhaven.com)
+   - HDRIs, Textures, Models
+   - CC0 License - 100% Free
+
+2. Texture Haven (texturehaven.com)
+   - Redirect to polyhaven.com now
+   
+3. CC0 Textures (cc0textures.com)
+   - Free PBR textures
+   - No account needed
+
+4. FreePBR (freepbr.com)
+   - Free PBR materials
+
+5. Texture Ninja (textures.ninja)
+   - Free seamless textures
+
+6. 3D Textures (3dtextures.me)
+   - Free PBR textures
+
+7. AmbientCG (ambientcg.com)
+   - CC0 materials
+
+Just download and drag into Blender!
+
+================================================================
+HOW TO MANUALLY ADD MATERIALS:
+================================================================
+
+1. Go to website (e.g., polyhaven.com)
+2. Download texture (choose 4K or 2K)
+3. In Blender: Select object
+4. Go to Shading workspace
+5. Add > Texture > Image Texture
+6. Open downloaded image
+7. Done!
+
+Or use Node Wrangler (Ctrl+Shift+T) for automatic setup!
+
+================================================================
+
+Best FREE recommendation: BlenderKit + Manual downloads from Poly Haven
+Total cost: $0 forever!
+
+================================================================
+

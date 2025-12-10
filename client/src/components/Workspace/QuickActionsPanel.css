@@ -1,0 +1,86 @@
+/* 快速操作面板样式 */
+
+.quick-actions-panel {
+  margin-bottom: 16px;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 8px;
+  border: 2px solid #f0f0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fff;
+  min-height: 100px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-card:active {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.action-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.action-title {
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.action-description {
+  font-size: 12px;
+  text-align: center;
+  display: block;
+}
+
+/* 移动端优化 */
+@media (max-width: 767px) {
+  .quick-actions-panel {
+    margin-bottom: 12px;
+  }
+
+  .action-card {
+    padding: 12px 6px;
+    min-height: 80px;
+  }
+
+  .action-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+
+  .action-title {
+    font-size: 13px;
+  }
+}
+
+/* 小屏手机 */
+@media (max-width: 575px) {
+  .action-card {
+    padding: 10px 4px;
+    min-height: 70px;
+  }
+
+  .action-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .action-title {
+    font-size: 12px;
+  }
+}

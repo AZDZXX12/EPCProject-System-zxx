@@ -18,12 +18,6 @@ body {
   z-index: 100;
 }
 
-.ant-layout-sider {
-  position: sticky;
-  top: 64px;
-  height: calc(100vh - 64px);
-  overflow-y: auto;
-}
 
 /* 自定义滚动条样式 */
 ::-webkit-scrollbar {
@@ -98,6 +92,7 @@ body {
   padding: 24px;
   background: #f0f2f5;
   min-height: 100vh;
+  position: relative; /* Ensure absolute children position relative to this */
   transition: all 0.2s ease;
   overflow-x: hidden;
   position: relative;
@@ -299,6 +294,42 @@ body {
   flex: 1;
   overflow: auto;
   background: #fff;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* 确保AI窗口内所有交互元素可用 */
+.ai-window-content input,
+.ai-window-content textarea,
+.ai-window-content button,
+.ai-window-content select,
+.ai-window-content .ant-input,
+.ai-window-content .ant-input-textarea,
+.ai-window-content .ant-btn,
+.ai-window-content .ant-select {
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  cursor: text !important;
+}
+
+.ai-window-content button,
+.ai-window-content .ant-btn {
+  cursor: pointer !important;
+}
+
+/* 确保输入区域可交互 */
+.input-area {
+  position: relative;
+  z-index: 10;
+  pointer-events: auto !important;
+}
+
+/* 确保AI助手面板完全可交互 */
+.ai-assistant-panel,
+.ai-assistant-panel * {
+  pointer-events: auto !important;
 }
 
 /* 调整大小句柄 */

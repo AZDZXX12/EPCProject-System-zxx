@@ -36,6 +36,9 @@ const { Title, Text } = Typography;
 
 const DigitalTwinContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState('industrial');
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showQuickStats, setShowQuickStats] = useState(true);
+  
   const { 
     isSimulatorRunning, 
     startSimulator, 
@@ -46,6 +49,14 @@ const DigitalTwinContent: React.FC = () => {
   } = useDigitalTwin();
 
   const unacknowledgedAlarms = alarms.filter(alarm => !alarm.acknowledged);
+
+  // 全屏切换
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+    if (!isFullscreen) {
+      setShowQuickStats(false);
+    }
+  };
 
   const summaryMetrics = [
     {
@@ -133,84 +144,94 @@ const DigitalTwinContent: React.FC = () => {
   ];
 
   return (
-    <div className="digital-twin-dashboard">
-      <section className="dt-hero-card">
-        <div className="dt-hero-content">
-          <p className="dt-eyebrow">项目模块 · 数字孪生</p>
-          <Title level={2} className="dt-hero-title">
-            数字孪生驾驶舱
-          </Title>
-          <Text className="dt-hero-desc">
-            统一监控 3D 场景、工艺数据与 PLC 控制，实现项目态势的一屏掌握。
-            支持快照对比、趋势分析和跨模块联动。
-          </Text>
-          <div className="dt-hero-meta">
-            <span>
-              <CheckCircleOutlined />
-              {systemStats.runningCount} 台正在运行
-            </span>
-            <span>
-              <MonitorOutlined />
-              {systemStats.totalPower.toFixed(1)} kW 载荷
-            </span>
+    <div className={`digital-twin-dashboard ${isFullscreen ? 'dt-fullscreen' : ''}`}>
+      {!isFullscreen && (
+        <section className="dt-hero-card">
+          <div className="dt-hero-content">
+            <p className="dt-eyebrow">项目模块 · 数字孪生</p>
+            <Title level={2} className="dt-hero-title">
+              数字孪生驾驶舱
+            </Title>
+            <Text className="dt-hero-desc">
+              统一监控 3D 场景、工艺数据与 PLC 控制，实现项目态势的一屏掌握。
+              支持快照对比、趋势分析和跨模块联动。
+            </Text>
+            <div className="dt-hero-meta">
+              <span>
+                <CheckCircleOutlined />
+                {systemStats.runningCount} 台正在运行
+              </span>
+              <span>
+                <MonitorOutlined />
+                {systemStats.totalPower.toFixed(1)} kW 载荷
+              </span>
+              <span>
+                <ThunderboltOutlined />
+                效率 {systemStats.totalEfficiency.toFixed(1)}%
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="dt-hero-actions">
-          <Tag color={isSimulatorRunning ? 'green' : 'default'}>
-            {isSimulatorRunning ? '实时模拟 · ON' : '实时模拟 · OFF'}
-          </Tag>
-          <Space size="middle">
-            <Button
-              type={isSimulatorRunning ? 'default' : 'primary'}
-              icon={isSimulatorRunning ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
-              onClick={isSimulatorRunning ? stopSimulator : startSimulator}
-              size="large"
-            >
-              {isSimulatorRunning ? '停止模拟' : '启动模拟'}
-            </Button>
-            <Tooltip title="切换到专业监控视图">
+          <div className="dt-hero-actions">
+            <Tag color={isSimulatorRunning ? 'green' : 'default'}>
+              {isSimulatorRunning ? '实时模拟 · ON' : '实时模拟 · OFF'}
+            </Tag>
+            <Space size="middle" wrap>
               <Button
-                icon={<RobotOutlined />}
-                onClick={() => setActiveTab('professional')}
+                type={isSimulatorRunning ? 'default' : 'primary'}
+                icon={isSimulatorRunning ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
+                onClick={isSimulatorRunning ? stopSimulator : startSimulator}
                 size="large"
               >
-                专业模式
+                {isSimulatorRunning ? '停止模拟' : '启动模拟'}
               </Button>
-            </Tooltip>
-            <Tooltip title="打开 PLC 控制台">
-              <Button
-                icon={<ApiOutlined />}
-                onClick={() => setActiveTab('enhanced')}
-                size="large"
-              >
-                PLC 控制
-              </Button>
-            </Tooltip>
-          </Space>
-        </div>
-      </section>
+              <Tooltip title="切换到专业监控视图">
+                <Button
+                  icon={<RobotOutlined />}
+                  onClick={() => setActiveTab('professional')}
+                  size="large"
+                >
+                  专业模式
+                </Button>
+              </Tooltip>
+              <Tooltip title="打开 PLC 控制台">
+                <Button
+                  icon={<ApiOutlined />}
+                  onClick={() => setActiveTab('enhanced')}
+                  size="large"
+                >
+                  PLC 控制
+                </Button>
+              </Tooltip>
+            </Space>
+          </div>
+        </section>
+      )}
 
-      <Row gutter={[16, 16]} className="dt-summary-row">
-        {summaryMetrics.map(metric => (
-          <Col xs={24} sm={12} md={6} key={metric.key}>
-            <Card className="dt-metric-card" hoverable>
-              <div className="dt-metric-icon">{metric.icon}</div>
-              <div className="dt-metric-body">
-                <div className="dt-metric-label">{metric.label}</div>
-                <div className="dt-metric-value">
-                  {metric.value}
-                  <span className="dt-metric-unit">{metric.unit}</span>
+      {showQuickStats && !isFullscreen && (
+        <Row gutter={[16, 16]} className="dt-summary-row">
+          {summaryMetrics.map(metric => (
+            <Col xs={24} sm={12} md={6} key={metric.key}>
+              <Card className="dt-metric-card" hoverable>
+                <div className="dt-metric-icon">{metric.icon}</div>
+                <div className="dt-metric-body">
+                  <div className="dt-metric-label">{metric.label}</div>
+                  <div className="dt-metric-value">
+                    {metric.value}
+                    <span className="dt-metric-unit">{metric.unit}</span>
+                  </div>
+                  <div className={`dt-metric-trend trend-${metric.color}`}>
+                    {metric.trend}
+                  </div>
                 </div>
-                <div className={`dt-metric-trend trend-${metric.color}`}>{metric.trend}</div>
-              </div>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
 
       <div className="dt-layout">
         <div className="dt-main-column">
-          <Card className="dt-tabs-card" bodyStyle={{ padding: 0 }}>
+          <Card className="dt-tabs-card" styles={{ body: { padding: 0 } }}>
             <Tabs
               activeKey={activeTab}
               onChange={setActiveTab}

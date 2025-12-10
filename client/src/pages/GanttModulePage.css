@@ -1,0 +1,129 @@
+/* 任务管理模块页面样式 - 优化版 */
+.gantt-module-page-compact {
+  /* 使用 Flex 布局，占满全屏 */
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 64px); /* 减去顶部导航栏高度，防止双重滚动条 */
+  width: 100%;
+  background: #f0f2f5;
+  padding: 0; /* 移除外边距，最大化利用空间 */
+  overflow: hidden; /* 防止页面级滚动条 */
+}
+
+/* 内容卡片 - 撑满剩余空间 */
+.gantt-module-page-compact .content-card-compact {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0; /* 移除圆角，因为是全屏 */
+  box-shadow: none; /* 移除阴影 */
+  border: none;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* 强制卡片内容区域也是 Flex 布局 */
+.gantt-module-page-compact .content-card-compact .ant-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0; /* 移除内边距 */
+  overflow: hidden;
+}
+
+/* 紧凑头部 - 稍微增加高度以提升美观 */
+.gantt-module-page-compact .compact-header {
+  flex: 0 0 auto; /* 固定高度 */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  z-index: 10;
+}
+
+.gantt-module-page-compact .compact-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+/* Tab样式 - 撑满空间 */
+.gantt-module-page-compact .compact-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Tab 头部背景 */
+.gantt-module-page-compact .compact-tabs > .ant-tabs-nav {
+  margin-bottom: 0;
+  background: #fff;
+  padding: 0 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Tab 内容区域撑满 */
+.gantt-module-page-compact .compact-tabs .ant-tabs-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.gantt-module-page-compact .compact-tabs .ant-tabs-tabpane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 通用 Tab 内容容器 */
+.gantt-module-page-compact .tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto; /* 允许非甘特图视图滚动 */
+  position: relative;
+}
+
+/* 针对包含甘特图的容器，禁用滚动以防双重滚动条 */
+.gantt-module-page-compact .tab-content:has(.gantt-page-wrapper) {
+  overflow: hidden;
+}
+
+/* 修复内部 Gantt 组件的容器 */
+.gantt-page-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 覆盖 Ant Design Card 在内部的样式，确保全屏 */
+.gantt-page-wrapper .ant-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.gantt-page-wrapper .ant-card .ant-card-head {
+  flex: 0 0 auto;
+  min-height: auto;
+  padding: 0 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.gantt-page-wrapper .ant-card .ant-card-body {
+  flex: 1;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}

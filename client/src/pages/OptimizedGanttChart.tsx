@@ -11,7 +11,7 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Card, Button, Space, Tooltip, Empty, App, Badge, Modal, Divider } from 'antd';
+import { Card, Button, Space, Tooltip, Empty, App, Badge, Modal } from 'antd';
 import { 
   ReloadOutlined, 
   DownloadOutlined, 
@@ -27,7 +27,6 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useProject } from '../contexts/ProjectContext';
-import PageContainer from '../components/Layout/PageContainer';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
@@ -761,29 +760,10 @@ const OptimizedGanttChart: React.FC<OptimizedGanttChartProps> = ({
   }, [currentProject?.id, loadTasks]);
 
   return (
-    <PageContainer>
-      <div className="dhtmlx-gantt-container" style={{ minHeight: '100%' }}>
-        <Card
-          title={
-            <Space size="large" align="center">
-              <span style={{ fontSize: '18px', fontWeight: 600, color: '#1890ff' }}>
-                📊 甘特图 {currentProject && `- ${currentProject.name}`}
-              </span>
-              {/* 🚀 新增：保存状态指示器 */}
-              {saveStatus === 'saving' && (
-                <Badge status="processing" text="正在保存..." />
-              )}
-              {saveStatus === 'saved' && lastSaveTime && (
-                <Badge
-                  status="success"
-                  text={`已保存 (${dayjs(lastSaveTime).format('HH:mm:ss')})`}
-                />
-              )}
-              {saveStatus === 'error' && (
-                <Badge status="error" text="保存失败" />
-              )}
-            </Space>
-          }
+    <div className="gantt-page-wrapper">
+      <Card
+        className="gantt-card-compact"
+        styles={{ body: { padding: 0 } }}
           extra={
             <Space size="small">
               <Tooltip title="新增任务">
@@ -864,28 +844,29 @@ const OptimizedGanttChart: React.FC<OptimizedGanttChartProps> = ({
               <Tooltip title="全屏显示">
                 <Button size="small" icon={<FullscreenOutlined />} onClick={handleFullscreen} />
               </Tooltip>
-              <Divider type="vertical" />
               <Tooltip title="切换时间视图">
-                <Space.Compact size="small">
-                  <Button
-                    type={viewScale === 'day' ? 'primary' : 'default'}
-                    onClick={() => handleScaleChange('day')}
-                  >
-                    日
-                  </Button>
-                  <Button
-                    type={viewScale === 'week' ? 'primary' : 'default'}
-                    onClick={() => handleScaleChange('week')}
-                  >
-                    周
-                  </Button>
-                  <Button
-                    type={viewScale === 'month' ? 'primary' : 'default'}
-                    onClick={() => handleScaleChange('month')}
-                  >
-                    月
-                  </Button>
-                </Space.Compact>
+                <span>
+                  <Space.Compact size="small">
+                    <Button
+                      type={viewScale === 'day' ? 'primary' : 'default'}
+                      onClick={() => handleScaleChange('day')}
+                    >
+                      日
+                    </Button>
+                    <Button
+                      type={viewScale === 'week' ? 'primary' : 'default'}
+                      onClick={() => handleScaleChange('week')}
+                    >
+                      周
+                    </Button>
+                    <Button
+                      type={viewScale === 'month' ? 'primary' : 'default'}
+                      onClick={() => handleScaleChange('month')}
+                    >
+                      月
+                    </Button>
+                  </Space.Compact>
+                </span>
               </Tooltip>
               <Tooltip title="导出 PDF">
                 <Button
@@ -903,7 +884,6 @@ const OptimizedGanttChart: React.FC<OptimizedGanttChartProps> = ({
                   disabled={isLoading}
                 />
               </Tooltip>
-              <Divider type="vertical" />
               <Tooltip title="AI智能生成甘特图">
                 <Button
                   type="primary"
@@ -964,10 +944,8 @@ const OptimizedGanttChart: React.FC<OptimizedGanttChartProps> = ({
                 className="gantt-container"
                 style={{
                   width: '100%',
-                  height: 'calc(100vh - 240px)',
-                  minHeight: '400px',
-                  border: '1px solid #f0f0f0',
-                  borderRadius: '4px',
+                  height: '100%',
+                  border: 'none',
                 }}
               />
             </>
@@ -988,7 +966,6 @@ const OptimizedGanttChart: React.FC<OptimizedGanttChartProps> = ({
           currentFields={displayFields}
         />
       </div>
-    </PageContainer>
   );
 };
 

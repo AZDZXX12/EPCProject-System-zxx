@@ -1,0 +1,358 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║          WSL2 编译方案 - Linux环境完全绕过Windows监控        ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+这是一个100%绕过Windows加密软件的方法！
+因为编译在Linux子系统中进行，Windows驱动无法监控。
+
+═══════════════════════════════════════════════════════════════
+
+📋 优势
+
+✓ 完全绕过Windows文件监控
+✓ 不需要RAM盘
+✓ 编译速度快
+✓ 原生Linux环境
+✓ 与Windows无缝集成
+
+═══════════════════════════════════════════════════════════════
+
+🔧 安装 WSL2
+
+步骤1：启用WSL（以管理员权限运行PowerShell）
+
+```powershell
+# 启用WSL
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+# 启用虚拟机平台
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# 重启电脑
+```
+
+步骤2：设置WSL2为默认版本
+
+```powershell
+wsl --set-default-version 2
+```
+
+步骤3：安装Ubuntu
+
+```powershell
+# 方法1：从Microsoft Store安装
+# 搜索"Ubuntu 22.04 LTS"并安装
+
+# 方法2：命令行安装
+wsl --install -d Ubuntu-22.04
+```
+
+步骤4：首次启动
+- 打开"Ubuntu"应用
+- 设置用户名和密码
+- 等待初始化完成
+
+═══════════════════════════════════════════════════════════════
+
+🛠️ 配置编译环境
+
+在WSL2 Ubuntu中执行：
+
+```bash
+# 更新包列表
+sudo apt update && sudo apt upgrade -y
+
+# 安装编译依赖
+sudo apt install -y \
+    git \
+    build-essential \
+    cmake \
+    python3 \
+    python3-pip \
+    subversion \
+    libx11-dev \
+    libxxf86vm-dev \
+    libxcursor-dev \
+    libxi-dev \
+    libxrandr-dev \
+    libxinerama-dev \
+    libegl-dev \
+    libwayland-dev \
+    wayland-protocols \
+    libxkbcommon-dev \
+    libdbus-1-dev \
+    linux-libc-dev
+
+# 安装额外工具
+sudo apt install -y \
+    libssl-dev \
+    libopenimageio-dev \
+    libtiff-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libavdevice-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libswscale-dev \
+    libavutil-dev
+```
+
+═══════════════════════════════════════════════════════════════
+
+📥 克隆和编译 Blender
+
+```bash
+# 进入主目录
+cd ~
+
+# 克隆源码
+git clone https://projects.blender.org/blender/blender.git
+cd blender
+
+# 下载预编译库
+make update
+
+# 创建构建目录
+mkdir build
+cd build
+
+# 配置CMake
+cmake .. \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DWITH_PYTHON_INSTALL=ON
+
+# 编译（使用所有CPU核心）
+make -j$(nproc)
+
+# 等待编译完成...
+```
+
+编译时间：约 20-40 分钟（取决于CPU）
+
+═══════════════════════════════════════════════════════════════
+
+📤 导出到Windows
+
+编译完成后，复制到Windows：
+
+```bash
+# 创建Windows输出目录
+mkdir -p /mnt/c/BlenderBuild
+
+# 复制整个构建结果
+cp -r ~/blender/build/bin/* /mnt/c/BlenderBuild/
+
+# 或者只复制可执行文件
+cp ~/blender/build/bin/blender /mnt/c/BlenderBuild/
+```
+
+说明：
+- `/mnt/c/` 对应 Windows 的 C:\ 盘
+- `/mnt/d/` 对应 Windows 的 D:\ 盘
+- 以此类推
+
+复制到Windows后的文件**不会被加密**，因为它们是从Linux系统复制的！
+
+═══════════════════════════════════════════════════════════════
+
+🚀 自动化脚本
+
+创建编译脚本 `build_blender.sh`：
+
+```bash
+#!/bin/bash
+
+echo "================================"
+echo "Blender WSL2 编译脚本"
+echo "================================"
+echo
+
+# 配置
+BUILD_DIR=~/blender/build
+OUTPUT_DIR=/mnt/c/BlenderBuild
+
+# 进入源码目录
+cd ~/blender
+
+# 更新源码（可选）
+echo "[1/4] 更新源码..."
+# git pull
+
+# 创建构建目录
+if [ ! -d "$BUILD_DIR" ]; then
+    mkdir -p "$BUILD_DIR"
+fi
+
+cd "$BUILD_DIR"
+
+# 配置
+echo "[2/4] 配置CMake..."
+cmake .. -DCMAKE_BUILD_TYPE=Release
+
+# 编译
+echo "[3/4] 编译中..."
+make -j$(nproc)
+
+if [ $? -ne 0 ]; then
+    echo "编译失败！"
+    exit 1
+fi
+
+# 导出到Windows
+echo "[4/4] 导出到Windows..."
+mkdir -p "$OUTPUT_DIR"
+cp -r bin/* "$OUTPUT_DIR/"
+
+echo
+echo "================================"
+echo "编译完成！"
+echo "================================"
+echo
+echo "输出位置: C:\\BlenderBuild"
+echo "可执行文件: blender.exe"
+echo
+```
+
+使用方法：
+```bash
+chmod +x build_blender.sh
+./build_blender.sh
+```
+
+═══════════════════════════════════════════════════════════════
+
+💡 高级技巧
+
+### 1. 性能优化
+
+增加WSL2内存限制（Windows用户目录下创建 `.wslconfig`）：
+
+```ini
+# C:\Users\你的用户名\.wslconfig
+[wsl2]
+memory=16GB
+processors=8
+swap=8GB
+```
+
+重启WSL2生效：
+```powershell
+wsl --shutdown
+```
+
+### 2. 访问WSL文件系统
+
+在Windows文件资源管理器中：
+```
+\\wsl$\Ubuntu-22.04\home\你的用户名\blender
+```
+
+可以直接在Windows中编辑Linux文件！
+
+### 3. VSCode集成
+
+安装VSCode的"WSL"扩展，可以：
+- 在Windows中用VSCode编辑WSL中的代码
+- 在WSL中调试和运行
+- 完美的开发体验
+
+═══════════════════════════════════════════════════════════════
+
+🔧 故障排除
+
+Q1: 编译错误"找不到库"
+A: 重新运行依赖安装命令，确保所有包都安装了
+
+Q2: 内存不足
+A: 增加WSL2内存限制（见上面的.wslconfig）
+
+Q3: 复制到Windows后无法运行
+A: WSL2编译的是Linux版本！
+   如果要Windows版本，需要交叉编译或使用MinGW
+
+Q4: 文件权限问题
+A: 使用 sudo chmod +x 给予执行权限
+
+═══════════════════════════════════════════════════════════════
+
+⚠️ 重要说明
+
+**跨平台编译**
+
+WSL2默认编译Linux版本的Blender。
+
+如果您需要Windows版本：
+
+选项1：使用MinGW交叉编译（复杂）
+选项2：在WSL2编译Linux版本，在Windows中运行（需要WSLg）
+选项3：结合使用 - WSL2只用于处理源码，实际编译用Windows工具
+
+**推荐混合方案：**
+```bash
+# 在WSL2中处理源码和修改
+cd ~/blender
+# 编辑代码...
+
+# 同步到Windows
+rsync -av ~/blender/ /mnt/c/BlenderSource/
+
+# 在Windows PowerShell中编译
+cd C:\BlenderSource\build
+cmake ..
+cmake --build . --config Release
+```
+
+这样源码修改在Linux（不被监控），编译在Windows（生成Windows可执行文件）。
+
+═══════════════════════════════════════════════════════════════
+
+📊 方案对比
+
+| 方案 | 绕过加密 | 速度 | 难度 | 推荐度 |
+|------|----------|------|------|--------|
+| WSL2（Linux版） | ✓✓✓ | ⚡⚡⚡ | ⭐⭐ | ⭐⭐⭐ |
+| WSL2+MinGW | ✓✓✓ | ⚡⚡ | ⭐⭐⭐⭐ | ⭐⭐ |
+| RAM盘 | ✓✓✓ | ⚡⚡⚡ | ⭐ | ⭐⭐⭐⭐⭐ |
+| 混合方案 | ✓✓ | ⚡⚡ | ⭐⭐ | ⭐⭐⭐⭐ |
+
+═══════════════════════════════════════════════════════════════
+
+✅ 验证成功
+
+编译完成后检查：
+
+```bash
+# 在WSL2中
+cd ~/blender/build/bin
+./blender --version
+
+# 在Windows中（复制后）
+C:\BlenderBuild\blender.exe --version
+```
+
+如果成功显示版本信息，恭喜！
+
+═══════════════════════════════════════════════════════════════
+
+🎯 总结
+
+WSL2方案适合：
+✓ 有管理员权限启用WSL2
+✓ 熟悉Linux命令行
+✓ 需要Linux版Blender，或愿意学习交叉编译
+✓ 追求最彻底的隔离
+
+不适合：
+✗ 没有管理员权限
+✗ 不熟悉Linux
+✗ 只想快速获得Windows版
+
+═══════════════════════════════════════════════════════════════
+
+如果WSL2方案对您来说太复杂，
+强烈推荐使用"RAM盘方案"（方案1）！
+
+返回 START_HERE.bat 选择其他方案 →
+

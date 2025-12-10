@@ -398,10 +398,142 @@
   margin-left: 6px;
 }
 
-/* 甘特图容器高度 */
+/* 甘特图页面包装器 */
+.gantt-page-wrapper {
+  padding: 16px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 紧凑卡片 */
+.gantt-card-compact {
+  border-radius: 4px;
+  height: calc(100vh - 32px);
+  overflow: hidden;
+}
+
+.gantt-card-compact .ant-card-head {
+  min-height: 48px;
+  padding: 0 12px;
+  border-bottom: 1px solid #f0f0f0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.gantt-card-compact .ant-card-head-wrapper {
+  display: flex;
+  align-items: center;
+  min-width: 100%;
+}
+
+.gantt-card-compact .ant-card-head-title {
+  padding: 12px 0;
+  font-size: 15px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.gantt-card-compact .ant-card-extra {
+  padding: 8px 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.gantt-card-compact .ant-card-body {
+  height: calc(100% - 48px);
+  overflow: hidden;
+}
+
+/* Card头部按钮样式 */
+.gantt-card-compact .ant-card-extra .ant-btn {
+  background: white;
+  border: 1px solid #d9d9d9;
+}
+
+.gantt-card-compact .ant-card-extra .ant-btn-primary {
+  background: #1890ff;
+  border-color: #1890ff;
+  color: white;
+}
+
+.gantt-card-compact .ant-card-extra .ant-btn:hover {
+  border-color: #40a9ff;
+  color: #40a9ff;
+}
+
+.gantt-card-compact .ant-card-extra .ant-btn-primary:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+  color: white;
+}
+
+/* Card头部滚动条样式 */
+.gantt-card-compact .ant-card-head::-webkit-scrollbar {
+  height: 6px;
+}
+
+.gantt-card-compact .ant-card-head::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.gantt-card-compact .ant-card-head::-webkit-scrollbar-thumb {
+  background: #d9d9d9;
+  border-radius: 3px;
+}
+
+.gantt-card-compact .ant-card-head::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+
+/* 甘特图容器高度 - 最大化布局 */
 .gantt-container {
-  min-height: 600px;
-  height: 600px;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 甘特图主体区域 */
+.gantt-container .gantt_container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 时间轴区域滚动优化 */
+.gantt_task {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+
+/* 表格区域滚动优化 */
+.gantt_grid {
+  overflow-y: auto !important;
+}
+
+/* 滚动条样式优化 */
+.gantt_task::-webkit-scrollbar,
+.gantt_grid::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.gantt_task::-webkit-scrollbar-track,
+.gantt_grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+.gantt_task::-webkit-scrollbar-thumb,
+.gantt_grid::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.gantt_task::-webkit-scrollbar-thumb:hover,
+.gantt_grid::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 /* 空状态提示 */
@@ -538,4 +670,50 @@
     height: 20px;
     font-size: 10px;
   }
+  
+  .gantt-container {
+    height: calc(100vh - 400px);
+    min-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .gantt-container {
+    height: calc(100vh - 450px);
+    min-height: 350px;
+  }
+  
+  .gantt_task::-webkit-scrollbar,
+  .gantt_grid::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .gantt_grid_head_cell {
+    font-size: 12px;
+    padding: 4px 2px;
+  }
+  
+  .gantt_cell {
+    padding: 4px 2px;
+    font-size: 12px;
+  }
+}
+
+/* 全屏模式优化 */
+.gantt-container.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-height: none !important;
+  z-index: 9999;
+  background: white;
+}
+
+.gantt-container.fullscreen .gantt_container {
+  height: 100% !important;
 }

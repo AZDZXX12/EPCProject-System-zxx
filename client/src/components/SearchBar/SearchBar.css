@@ -1,0 +1,146 @@
+.search-bar-container {
+  width: 100%;
+}
+
+.search-bar-input-group {
+  width: 100%;
+  display: flex;
+}
+
+.search-bar-input {
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-bar-button {
+  min-width: 80px;
+}
+
+.search-bar-filter-button {
+  min-width: 80px;
+}
+
+.search-clear-icon {
+  color: #999;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.search-clear-icon:hover {
+  color: #f5222d;
+}
+
+/* 搜索历史 */
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.history-icon {
+  margin-right: 8px;
+  color: #999;
+  font-size: 14px;
+}
+
+.history-icon.favorite {
+  color: #faad14;
+}
+
+.history-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-remove,
+.history-favorite {
+  margin-left: 8px;
+  color: #999;
+  font-size: 12px;
+  opacity: 0;
+  transition: all 0.3s;
+}
+
+.history-item:hover .history-remove,
+.history-item:hover .history-favorite {
+  opacity: 1;
+}
+
+.history-remove:hover {
+  color: #f5222d;
+}
+
+.history-favorite:hover,
+.history-favorite.active {
+  color: #faad14;
+}
+
+.history-empty {
+  padding: 12px 0;
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+}
+
+/* 活跃筛选 */
+.search-bar-active-filters {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.active-filters-label {
+  font-size: 12px;
+  color: #666;
+  margin-right: 4px;
+}
+
+.active-filter-tag {
+  margin: 0;
+}
+
+.clear-filters-button {
+  padding: 0;
+  height: auto;
+  font-size: 12px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .search-bar-input-group {
+    flex-wrap: wrap;
+  }
+
+  .search-bar-input {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .search-bar-button,
+  .search-bar-filter-button {
+    flex: 1;
+  }
+
+  .search-bar-active-filters {
+    font-size: 11px;
+  }
+
+  .active-filter-tag {
+    font-size: 11px;
+  }
+}

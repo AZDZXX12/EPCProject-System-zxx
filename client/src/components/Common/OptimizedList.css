@@ -1,0 +1,25 @@
+.optimized-list {
+  width: 100%;
+}
+
+.optimized-list-search {
+  margin-bottom: 16px;
+}
+
+.optimized-list-container {
+  position: relative;
+}
+
+.optimized-list-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+.optimized-list-load-more {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  min-height: 60px;
+}

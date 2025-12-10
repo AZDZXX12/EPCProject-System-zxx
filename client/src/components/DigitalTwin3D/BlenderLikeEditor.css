@@ -1,0 +1,851 @@
+/* ========================================
+   简化版Blender编辑器样式
+   ======================================== */
+
+.blender-editor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: #2b2b2b;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   顶部菜单栏 (Blender风格)
+   ======================================== */
+
+.blender-menubar {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  background: #232323;
+  border-bottom: 1px solid #1a1a1a;
+  padding: 0 8px;
+  font-size: 13px;
+  z-index: 100;
+}
+
+.menu-item {
+  position: relative;
+  padding: 0 12px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.menu-item:hover {
+  background: #2d2d2d;
+}
+
+.menu-item > span {
+  color: #c5c5c5;
+  font-weight: 500;
+}
+
+.menu-item:hover .submenu {
+  display: block;
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #2a2a2a;
+  border: 1px solid #1a1a1a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  min-width: 200px;
+  z-index: 1000;
+}
+
+.submenu button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: #c5c5c5;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submenu button:hover:not(:disabled) {
+  background: #3a3a3a;
+  color: white;
+}
+
+.submenu button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.menu-divider {
+  height: 1px;
+  background: #3a3a3a;
+  margin: 4px 0;
+}
+
+.mode-selector {
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+  background: #1a1a1a;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.mode-selector button {
+  padding: 4px 16px;
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s;
+}
+
+.mode-selector button.active {
+  background: #4a9eff;
+  color: white;
+}
+
+.mode-selector button:hover:not(.active) {
+  background: #2a2a2a;
+  color: #c5c5c5;
+}
+
+/* ========================================
+   顶部工具栏
+   ======================================== */
+
+.blender-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #3a3a3a;
+  min-height: 48px;
+  flex-shrink: 0;
+}
+
+.toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.toolbar-label {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-right: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #3a3a3a;
+  margin: 0 8px;
+}
+
+.blender-toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #333;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e5e5e5;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.blender-toolbar button:hover:not(:disabled) {
+  background: #3a3a3a;
+  border-color: #06b6d4;
+  color: #06b6d4;
+}
+
+.blender-toolbar button.active {
+  background: #06b6d4;
+  border-color: #06b6d4;
+  color: white;
+}
+
+.blender-toolbar button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* 文件操作区域增强样式 */
+.file-section {
+  gap: 4px !important;
+}
+
+.file-section button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px !important;
+}
+
+.file-section .btn-text {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.import-btn {
+  background: #10b981 !important;
+  border-color: #059669 !important;
+}
+
+.import-btn:hover {
+  background: #059669 !important;
+  border-color: #047857 !important;
+}
+
+.save-btn {
+  background: #3b82f6 !important;
+  border-color: #2563eb !important;
+}
+
+.save-btn:hover {
+  background: #2563eb !important;
+  border-color: #1d4ed8 !important;
+}
+
+.blender-toolbar input[type="color"] {
+  width: 40px;
+  height: 32px;
+  cursor: pointer;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: transparent;
+}
+
+.blender-toolbar input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.blender-toolbar input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 2px;
+}
+
+/* 导出下拉菜单 */
+.export-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.export-main-btn {
+  background: #333;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e5e5e5;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.export-main-btn:hover {
+  background: #06b6d4;
+  border-color: #06b6d4;
+  color: white;
+}
+
+.export-dropdown:hover .export-menu {
+  display: block;
+}
+
+.export-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  min-width: 120px;
+}
+
+.export-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: #e5e5e5;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: left;
+}
+
+.export-menu button:hover {
+  background: #3a3a3a;
+}
+
+.export-menu button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.export-menu button:disabled:hover {
+  background: transparent;
+}
+
+/* ========================================
+   主编辑区域
+   ======================================== */
+
+.blender-viewport {
+  flex: 1;
+  position: relative;
+  background: #1a1a1a;
+  overflow: hidden;
+}
+
+.blender-viewport canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 视图控制按钮 */
+.viewport-controls {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.view-angles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(42, 42, 42, 0.9);
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #3a3a3a;
+}
+
+.view-angles button {
+  width: 48px;
+  height: 32px;
+  background: #333;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e5e5e5;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-angles button:hover {
+  background: #3a3a3a;
+  border-color: #06b6d4;
+  color: #06b6d4;
+}
+
+/* ========================================
+   右侧对象列表（Outliner）
+   ======================================== */
+
+.blender-outliner {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  bottom: 32px;
+  width: min(280px, 25vw);
+  max-width: 300px;
+  min-width: 200px;
+  background: rgba(26, 26, 26, 0.95);
+  border-left: 1px solid #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+
+.outliner-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #3a3a3a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.outliner-header .object-count {
+  margin-left: auto;
+  font-size: 11px;
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.outliner-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+}
+
+.outliner-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.outliner-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.outliner-list::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.outliner-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6b7280;
+  text-align: center;
+  padding: 20px;
+}
+
+.outliner-empty p {
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.outliner-empty .hint {
+  font-size: 11px;
+  color: #4b5563;
+}
+
+.outliner-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 4px;
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.outliner-item:hover {
+  background: #333;
+  border-color: #444;
+}
+
+.outliner-item.selected {
+  background: rgba(6, 182, 212, 0.2);
+  border-color: #06b6d4;
+}
+
+.outliner-item.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #06b6d4;
+}
+
+.item-name {
+  flex: 1;
+  font-size: 12px;
+  color: #e5e5e5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.outliner-item:hover .item-actions {
+  opacity: 1;
+}
+
+.item-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.item-actions button:hover {
+  background: #3a3a3a;
+  border-color: #444;
+  color: #06b6d4;
+}
+
+/* ========================================
+   底部状态栏
+   ======================================== */
+
+.blender-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 16px;
+  background: #2a2a2a;
+  border-top: 1px solid #3a3a3a;
+  font-size: 11px;
+  color: #9ca3af;
+  min-height: 32px;
+  flex-shrink: 0;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-info span {
+  white-space: nowrap;
+}
+
+.status-tips {
+  color: #6b7280;
+}
+
+/* ========================================
+   响应式调整
+   ======================================== */
+
+@media (max-width: 1024px) {
+  .blender-outliner {
+    width: 240px;
+  }
+  
+  .toolbar-label {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .blender-outliner {
+    display: none;
+  }
+  
+  .status-tips {
+    display: none;
+  }
+}
+
+/* ========================================
+   动画效果
+   ======================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.outliner-item {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* ========================================
+   暗色主题优化
+   ======================================== */
+
+.blender-editor * {
+  box-sizing: border-box;
+}
+
+.blender-editor button:focus {
+  outline: 2px solid #06b6d4;
+  outline-offset: 2px;
+}
+
+.blender-editor button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ========================================
+   底部状态栏 (Blender风格)
+   ======================================== */
+
+.blender-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  padding: 0 16px;
+  background: #232323;
+  border-top: 1px solid #1a1a1a;
+  font-size: 11px;
+  color: #999;
+  z-index: 100;
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-info span {
+  color: #c5c5c5;
+}
+
+.status-tips {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  color: #777;
+}
+
+.status-tips span {
+  font-family: 'Courier New', monospace;
+}
+
+/* ========================================
+   左侧工具栏 (Blender风格)
+   ======================================== */
+
+.left-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  background: rgba(26, 26, 26, 0.95);
+  border-right: 1px solid #3a3a3a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+  gap: 4px;
+  z-index: 10;
+}
+
+.left-toolbar button {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #c5c5c5;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.left-toolbar button:hover {
+  background: #3a3a3a;
+  color: white;
+}
+
+.left-toolbar button.active {
+  background: #4a9eff;
+  color: white;
+}
+
+.toolbar-divider-vertical {
+  width: 30px;
+  height: 1px;
+  background: #3a3a3a;
+  margin: 4px 0;
+}
+
+/* ========================================
+   右侧Tab切换
+   ======================================== */
+
+.outliner-tabs {
+  display: flex;
+  background: #1a1a1a;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.outliner-tabs button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.outliner-tabs button:hover {
+  background: #2a2a2a;
+  color: #c5c5c5;
+}
+
+.outliner-tabs button.active {
+  color: white;
+  border-bottom-color: #4a9eff;
+  background: #232323;
+}
+
+/* ========================================
+   属性面板
+   ======================================== */
+
+.properties-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.properties-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.properties-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #666;
+  text-align: center;
+}
+
+.properties-empty p {
+  margin: 8px 0;
+}
+
+.properties-empty .hint {
+  font-size: 11px;
+  color: #555;
+}
+
+.property-section {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c5c5c5;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #3a3a3a;
+}
+
+.property-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+.property-row label {
+  color: #999;
+}
+
+.property-row span {
+  color: #c5c5c5;
+}
+
+.transform-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.transform-group label {
+  font-size: 11px;
+  color: #999;
+  min-width: 60px;
+}
+
+.transform-group input {
+  flex: 1;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #c5c5c5;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  text-align: right;
+  font-family: 'Courier New', monospace;
+}
+
+.transform-group input:focus {
+  outline: none;
+  border-color: #4a9eff;
+}
+
+.color-preview {
+  width: 40px;
+  height: 20px;
+  border: 1px solid #444;
+  border-radius: 3px;
+}

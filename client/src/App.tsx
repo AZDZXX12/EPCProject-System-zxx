@@ -8,10 +8,14 @@ import AppSider from './components/Layout/Sider';
 import CommandPalette from './components/CommandPalette';
 import GlobalActions from './components/GlobalActions/GlobalActions';
 import Login from './pages/Login';
+import Register from './pages/Register';
+import ChangePassword from './pages/ChangePassword';
 import Workspace from './pages/Workspace';
+import { initializeSystem } from './utils/initializeSystem';
 import { lazyWithRetry, preloadComponents } from './utils/lazyLoader';
 import { usePerformance } from './hooks/usePerformance';
 import { logger } from './utils/logger';
+import './styles/globals.css';
 import './App.css';
 import './styles/MobileOptimization.css';
 import './styles/visual-enhancements.css';
@@ -22,6 +26,7 @@ import eventBus, { EVENTS } from './utils/EventBus';
 // 使用优化的懒加载
 const DigitalTwinDashboard = lazyWithRetry(() => import('./pages/DigitalTwinDashboard'));
 const NewDigitalTwinDashboard = lazyWithRetry(() => import('./pages/NewDigitalTwinDashboard'));
+const BlenderEditorPage = lazyWithRetry(() => import('./pages/BlenderEditorPage'));
 const GanttModulePage = lazyWithRetry(() => import('./pages/GanttModulePage'));
 const DeviceManagement = lazyWithRetry(() => import('./pages/DeviceManagement'));
 const Safety = lazyWithRetry(() => import('./pages/Safety'));
@@ -42,6 +47,8 @@ const CostManagement = lazyWithRetry(() => import('./pages/CostManagement'));
 const KnowledgeBasePage = lazyWithRetry(() => import('./pages/KnowledgeBasePage'));
 const SystemSettings = lazyWithRetry(() => import('./pages/SystemSettings'));
 const MaterialPriceMonitor = lazyWithRetry(() => import('./pages/MaterialPriceMonitor'));
+const UserManagement = lazyWithRetry(() => import('./pages/UserManagement'));
+const PanoramaViewer = lazyWithRetry(() => import('./pages/PanoramaViewer'));
 
 // 扩展Window接口
 declare global {
@@ -117,6 +124,10 @@ const App: React.FC = React.memo(() => {
   const [aiSize, setAiSize] = React.useState<{ w: number; h: number }>({ w: 480, h: 600 });
   const [aiMinimized, setAiMinimized] = React.useState<boolean>(false);
   const [isMobile, setIsMobile] = React.useState<boolean>(false);
+  // Draggable AI floating button state
+  const [aiBtnPos, setAiBtnPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const aiBtnDragging = React.useRef(false);
+  const aiBtnStart = React.useRef<{ x: number; y: number; cx: number; cy: number }>({ x: 0, y: 0, cx: 0, cy: 0 });
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -140,6 +151,19 @@ const App: React.FC = React.memo(() => {
         if (typeof s.x === 'number' && typeof s.y === 'number') setAiPos({ x: s.x, y: s.y });
         if (typeof s.minimized === 'boolean') setAiMinimized(s.minimized);
       }
+      const btnSaved = localStorage.getItem('global_ai_button_pos');
+      if (btnSaved) {
+        const p = JSON.parse(btnSaved);
+        if (typeof p.x === 'number' && typeof p.y === 'number') {
+          setAiBtnPos({ x: p.x, y: p.y });
+        }
+      } else {
+        // default bottom-right: match previous visual roughly
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const btnSize = 56; // matches CSS
+        setAiBtnPos({ x: Math.max(12, vw - btnSize - 24), y: Math.max(12, vh - btnSize - 80) });
+      }
     } catch {}
   }, []);
 
@@ -150,6 +174,13 @@ const App: React.FC = React.memo(() => {
       localStorage.setItem('global_ai_window_state', JSON.stringify(saved));
     } catch {}
   }, [aiPos, aiSize, aiMinimized]);
+
+  // Persist AI floating button position
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('global_ai_button_pos', JSON.stringify(aiBtnPos));
+    } catch {}
+  }, [aiBtnPos]);
 
   // Mobile detection
   React.useEffect(() => {
@@ -242,6 +273,11 @@ const App: React.FC = React.memo(() => {
     logger.debug('[App] aiVisible状态变化', { aiVisible, aiPos, aiSize });
   }, [aiVisible, aiPos, aiSize]);
 
+  // 系统初始化
+  React.useEffect(() => {
+    initializeSystem();
+  }, []);
+
   // 预加载常用组件（按使用频率优化）
   React.useEffect(() => {
     const preloadCommonComponents = async () => {
@@ -266,8 +302,9 @@ const App: React.FC = React.memo(() => {
     <AntdApp>
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
-          {/* 登录页面路由 */}
+          {/* 登录和注册页面路由 */}
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* 受保护的主应用路由 */}
           <Route
@@ -289,6 +326,7 @@ const App: React.FC = React.memo(() => {
                             <Route path="/project-lifecycle" element={<ProjectLifecycleManager />} />
                             <Route path="/digital-twin" element={<NewDigitalTwinDashboard />} />
                             <Route path="/digital-twin-legacy" element={<DigitalTwinDashboard />} />
+                            <Route path="/blender-editor" element={<BlenderEditorPage />} />
                             <Route path="/procurement" element={<ProcurementManagement />} />
                             {/* 统一任务管理入口 */}
                             <Route path="/tasks" element={<GanttModulePage />} />
@@ -310,12 +348,15 @@ const App: React.FC = React.memo(() => {
                             <Route path="/settings" element={<EnhancedSettings />} />
                             <Route path="/settings-enhanced" element={<Navigate to="/settings" replace />} />
                             <Route path="/system-management" element={<EnhancedSystemManagement />} />
+                            <Route path="/user-management" element={<UserManagement />} />
+                            <Route path="/change-password" element={<ChangePassword />} />
                             <Route path="/construction-enhanced" element={<Navigate to="/construction" replace />} />
               <Route path="/cost-management" element={<CostManagement />} />
               <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
                             <Route path="/system-management-enhanced" element={<EnhancedSystemManagement />} />
                             <Route path="/system-settings" element={<SystemSettings />} />
                             <Route path="/material-price" element={<MaterialPriceMonitor />} />
+                            <Route path="/panorama" element={<PanoramaViewer />} />
                           </Routes>
                         </Suspense>
                       </Content>
@@ -328,11 +369,49 @@ const App: React.FC = React.memo(() => {
                         icon={<RobotOutlined />}
                         size="large"
                         className="ai-assistant-float-btn"
-                        onClick={() => {
-                          logger.debug('[App] AI按钮点击事件触发');
-                          openAI();
+                        style={{
+                          position: 'fixed',
+                          left: aiBtnPos.x,
+                          top: aiBtnPos.y,
+                          right: 'auto',
+                          bottom: 'auto',
+                          zIndex: 10001,
+                          cursor: aiBtnDragging.current ? 'grabbing' as any : 'grab'
                         }}
-                        title="打开AI助手"
+                        onMouseDown={(e) => {
+                          try {
+                            aiBtnDragging.current = false;
+                            aiBtnStart.current = { x: e.clientX, y: e.clientY, cx: aiBtnPos.x, cy: aiBtnPos.y };
+                            const move = (ev: MouseEvent) => {
+                              const dx = ev.clientX - aiBtnStart.current.x;
+                              const dy = ev.clientY - aiBtnStart.current.y;
+                              if (!aiBtnDragging.current && (Math.abs(dx) > 2 || Math.abs(dy) > 2)) {
+                                aiBtnDragging.current = true;
+                              }
+                              const vw = window.innerWidth;
+                              const vh = window.innerHeight;
+                              const size = 56; // approximate
+                              let nx = aiBtnStart.current.cx + dx;
+                              let ny = aiBtnStart.current.cy + dy;
+                              nx = Math.max(8, Math.min(vw - size - 8, nx));
+                              ny = Math.max(8, Math.min(vh - size - 8, ny));
+                              setAiBtnPos({ x: nx, y: ny });
+                            };
+                            const up = (ev: MouseEvent) => {
+                              document.removeEventListener('mousemove', move);
+                              document.removeEventListener('mouseup', up);
+                              const moved = aiBtnDragging.current;
+                              aiBtnDragging.current = false;
+                              if (!moved) {
+                                logger.debug('[App] AI按钮点击事件触发');
+                                openAI();
+                              }
+                            };
+                            document.addEventListener('mousemove', move);
+                            document.addEventListener('mouseup', up);
+                          } catch {}
+                        }}
+                        title="打开AI助手（可拖动）"
                       />,
                       document.body
                     )}

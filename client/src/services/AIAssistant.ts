@@ -1,10 +1,12 @@
 /**
  * AI智能助手服务
  * 提供自然语言处理、智能预测、风险识别等AI功能
+ * 集成真实AI大模型（Groq/DeepSeek等）
  */
 
 import { apiService } from './api';
 import { logger } from '../utils/EnhancedLogger';
+import { realAIService } from './RealAIService';
 
 export interface AITaskSuggestion {
   title: string;
@@ -44,34 +46,50 @@ class AIAssistantService {
   private learningData: any[] = [];
 
   /**
-   * 自然语言解析任务
+   * 自然语言解析任务 - 优先使用真实AI
    */
   async parseNaturalLanguageTask(input: string): Promise<AITaskSuggestion> {
-    // 本地NLP处理
-    const keywords = this.extractKeywords(input);
-    const priority = this.detectPriority(input);
-    const duration = this.estimateDuration(keywords);
-    
-    // 智能任务建议
-    const suggestion: AITaskSuggestion = {
-      title: this.generateTitle(keywords),
-      description: this.enhanceDescription(input),
-      priority,
-      estimatedDuration: duration,
-      suggestedAssignee: this.suggestAssignee(keywords),
-      dependencies: this.identifyDependencies(keywords),
-      confidence: this.calculateConfidence(keywords, input)
-    };
-
-    // 如果后端可用，获取更精确的建议
     try {
-      const enhancedSuggestion = await apiService.post<any>('/api/v1/ai/parse-task', {
-        input,
-        context: Object.fromEntries(this.context)
-      });
-      return { ...suggestion, ...(enhancedSuggestion || {}) };
-    } catch {
-      return suggestion;
+      // 优先使用真实AI大模型
+      const prompt = `解析以下任务描述，提取关键信息并以JSON格式返回：
+
+任务描述：${input}
+
+返回格式：
+{
+  "title": "简洁的任务标题",
+  "description": "详细描述",
+  "priority": "high/medium/low",
+  "estimatedDuration": 工时数（小时）,
+  "suggestedAssignee": "建议负责人",
+  "dependencies": ["依赖项"],
+  "confidence": 0.95
+}
+
+只返回JSON，不要其他文字。`;
+
+      const aiResponse = await realAIService.chat(prompt);
+      const parsed = JSON.parse(aiResponse.message);
+      
+      logger.info('[AI助手] 任务解析成功', { title: parsed.title });
+      return parsed;
+    } catch (error) {
+      logger.warn('[AI助手] AI解析失败，使用本地处理', error);
+      
+      // 降级到本地NLP处理
+      const keywords = this.extractKeywords(input);
+      const priority = this.detectPriority(input);
+      const duration = this.estimateDuration(keywords);
+      
+      return {
+        title: this.generateTitle(keywords),
+        description: this.enhanceDescription(input),
+        priority,
+        estimatedDuration: duration,
+        suggestedAssignee: this.suggestAssignee(keywords),
+        dependencies: this.identifyDependencies(keywords),
+        confidence: this.calculateConfidence(keywords, input)
+      };
     }
   }
 

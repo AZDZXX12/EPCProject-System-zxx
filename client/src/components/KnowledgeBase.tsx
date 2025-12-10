@@ -59,7 +59,7 @@ const KnowledgeBase: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', gap: 16, height: 'calc(100vh - 200px)' }}>
-      <Card style={{ width: 280, overflow: 'auto' }} bodyStyle={{ padding: 12 }}>
+      <Card style={{ width: 280, overflow: 'auto' }} styles={{ body: { padding: 12 } }}>
         <Space direction="vertical" style={{ width: '100%', marginBottom: 12 }}>
           <Search placeholder="搜索文档" />
           <Button type="primary" icon={<PlusOutlined />} block>

@@ -1,0 +1,111 @@
+================================================================
+Poly Haven Assets Download Guide (English Interface)
+================================================================
+
+IMPORTANT: You MUST configure Asset Library first!
+
+================================================================
+STEP 1: Configure Asset Library
+================================================================
+
+1. Top menu: Click "Edit"
+2. Scroll down, click "Preferences" (at the bottom)
+3. Left sidebar: Click "File Paths"
+4. Find "Asset Libraries" section
+5. Click the "+" button on the right
+6. Enter Name: Poly Haven
+7. Click folder icon to choose save location (need 4GB)
+   Recommended: D:\Blender_Assets\PolyHaven
+8. Click OK
+9. Close Preferences window
+
+================================================================
+STEP 2: Open Asset Browser
+================================================================
+
+Method 1 (Easy):
+- Click editor icon at top-left of window (looks like squares)
+- Select "Asset Browser" from menu
+
+Method 2 (Shortcut):
+- Press Shift+F1
+- Select "Asset Browser"
+
+================================================================
+STEP 3: Download Assets
+================================================================
+
+1. In Asset Browser, find dropdown menu at top
+2. Select "Poly Haven" from dropdown
+3. Top toolbar will show "Fetch Assets" button
+4. Click "Fetch Assets"
+5. Wait for download (~3.3GB, 30-60 minutes)
+
+First time will download all 1500+ asset previews!
+
+================================================================
+TROUBLESHOOTING
+================================================================
+
+Q: Don't see "Poly Haven" in dropdown?
+A: You didn't configure Asset Library! Go back to Step 1
+
+Q: "Fetch Assets" button is gray/disabled?
+A: Make sure you selected correct folder with write permission
+
+Q: Download is slow?
+A: First download takes time, be patient, can leave it running
+
+Q: Where are assets stored?
+A: In the folder you selected in Step 1
+
+================================================================
+HOW TO USE ASSETS
+================================================================
+
+After download completes:
+
+1. HDRI Environments:
+   - Find HDRIs category
+   - Drag HDRI to 3D viewport
+   - Automatically applies to world
+
+2. Textures:
+   - Find Textures category
+   - Drag texture onto object
+   - Creates full PBR material
+
+3. Models:
+   - Find Models category
+   - Drag model to scene
+   - Ready to use!
+
+================================================================
+QUICK TEST
+================================================================
+
+1. Delete default cube (press X)
+2. Add > Mesh > UV Sphere
+3. Open Asset Browser
+4. Select "Poly Haven" 
+5. Drag any texture to sphere
+6. Press Z > Material Preview
+7. See the result!
+
+================================================================
+KEYBOARD SHORTCUTS
+================================================================
+
+Shift+F1 = Switch editor type
+Z = Shading mode menu
+F3 = Search menu
+F4 = Open Preferences (alternative)
+
+================================================================
+
+NEED CHINESE INTERFACE?
+Run: setup_chinese.bat
+Then restart Blender
+
+================================================================
+

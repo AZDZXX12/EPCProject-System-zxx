@@ -266,16 +266,29 @@ const Workspace: React.FC = () => {
         const newProject: any = {
           id: newProjectId,
           name: values.name,
-          description: values.description,
+          description: values.description || '',
           status: values.status || 'planning',
           progress: 0,
           start_date: dayjs().format('YYYY-MM-DD'),
           end_date: dayjs().add(180, 'day').format('YYYY-MM-DD'),
           budget: values.budget || 0,
           spent: 0,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
 
-        const savedProject = await projectApi.create(newProject);
+        let savedProject;
+        try {
+          // 尝试调用后端API
+          savedProject = await projectApi.create(newProject);
+        } catch (apiError) {
+          // API失败，使用本地存储
+          console.warn('API创建项目失败，使用本地存储:', apiError);
+          const localProjects = JSON.parse(localStorage.getItem('projects') || '[]');
+          localProjects.push(newProject);
+          localStorage.setItem('projects', JSON.stringify(localProjects));
+          savedProject = newProject;
+        }
         const phases = [
           {
             key: 'initiation',
@@ -573,12 +586,23 @@ const Workspace: React.FC = () => {
             <Space direction="vertical" align="end">
               <Space>
                 <Tooltip title="新建项目">
-                  <Button type="primary" size="large" icon={<ProjectOutlined />} className="btn-white-primary">
+                  <Button 
+                    type="primary" 
+                    size="large" 
+                    icon={<ProjectOutlined />} 
+                    className="btn-white-primary"
+                    onClick={handleCreateProject}
+                  >
                     新建项目
                   </Button>
                 </Tooltip>
                 <Tooltip title="智能仪表盘">
-                  <Button size="large" icon={<DashboardOutlined />} className="btn-glass">
+                  <Button 
+                    size="large" 
+                    icon={<DashboardOutlined />} 
+                    className="btn-glass"
+                    onClick={() => navigate('/dashboard')}
+                  >
                     智能分析
                   </Button>
                 </Tooltip>

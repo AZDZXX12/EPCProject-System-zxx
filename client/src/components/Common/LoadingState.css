@@ -1,0 +1,47 @@
+.loading-state-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 24px;
+}
+
+.loading-state-fullscreen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.loading-progress {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.loading-tip {
+  margin-top: 16px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loading-state-container,
+.loading-state-fullscreen {
+  animation: fadeIn 0.3s ease-in;
+}

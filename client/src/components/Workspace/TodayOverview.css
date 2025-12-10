@@ -1,0 +1,162 @@
+/* 今日概览样式 */
+
+.today-overview {
+  margin-bottom: 16px;
+}
+
+.overview-card {
+  border-radius: 8px;
+}
+
+.overview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.overview-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.overview-date {
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.stats-row {
+  margin-bottom: 24px;
+}
+
+.progress-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+}
+
+.tasks-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.section-title {
+  margin-bottom: 12px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.task-item {
+  padding: 12px 0 !important;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-content {
+  width: 100%;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.task-title {
+  font-size: 14px;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.task-assignee,
+.task-deadline {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 移动端优化 */
+@media (max-width: 767px) {
+  .today-overview {
+    margin-bottom: 12px;
+  }
+
+  .overview-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .overview-date {
+    margin-left: 0;
+    font-size: 12px;
+  }
+
+  .stats-row {
+    margin-bottom: 16px;
+  }
+
+  .progress-stat {
+    gap: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .tasks-section {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .section-title {
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .task-item {
+    padding: 8px 0 !important;
+  }
+
+  .task-title {
+    font-size: 13px;
+  }
+
+  .task-meta {
+    gap: 8px;
+  }
+
+  .task-assignee,
+  .task-deadline {
+    font-size: 11px;
+  }
+}
+
+/* 小屏手机 */
+@media (max-width: 575px) {
+  .overview-title {
+    font-size: 14px;
+  }
+
+  .task-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

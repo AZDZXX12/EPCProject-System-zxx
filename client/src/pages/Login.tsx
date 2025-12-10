@@ -292,6 +292,19 @@ const Login: React.FC = () => {
                     {loading ? '验证中...' : '登录系统'}
                   </Button>
                 </Form.Item>
+
+                <Form.Item>
+                  <div style={{ textAlign: 'center', marginTop: '16px' }}>
+                    <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>还没有账号？</span>
+                    <Button
+                      type="link"
+                      onClick={() => navigate('/register')}
+                      style={{ color: '#00d9ff', padding: '0 8px' }}
+                    >
+                      立即注册
+                    </Button>
+                  </div>
+                </Form.Item>
               </Form>
             </ConfigProvider>
           </div>

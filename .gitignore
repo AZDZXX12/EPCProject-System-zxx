@@ -35,6 +35,8 @@ server/data/*.db
 *.tmp
 *.temp
 .cache/
+blender/blender_temp/
+*.pdb
 Luckysheet-master-2.0.2/release/
 Luckysheet-master-2.0.2/win-unpacked/
 .aider*

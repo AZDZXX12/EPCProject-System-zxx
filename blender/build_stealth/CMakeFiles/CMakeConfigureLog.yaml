@@ -1,0 +1,2142 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineSystem.cmake:212 (message)"
+      - "CMakeLists.txt:113 (project)"
+    message: |
+      The system is: Windows - 10.0.26100 - AMD64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCCompilerId.c.in"
+    candidate_directories:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/"
+      - "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/Modules/"
+      - "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/platform/"
+    found: "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeCCompilerId.c.in"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:122 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:113 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      閫傜敤浜?.NET Framework MSBuild 鐗堟湰 17.14.23+b0019275e
+      鐢熸垚鍚姩鏃堕棿涓?2025/10/15 11:55:25銆?
+      
+      鑺傜偣 1 涓婄殑椤圭洰鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\4.1.2\\CompilerIdC\\CompilerIdC.vcxproj鈥?榛樿鐩爣)銆?
+      PrepareForBuild:
+        姝ｅ湪鍒涘缓鐩綍鈥淒ebug\\鈥濄€?
+        宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
+        姝ｅ湪鍒涘缓鐩綍鈥淒ebug\\CompilerIdC.tlog\\鈥濄€?
+      InitializeBuildStatus:
+        姝ｅ湪鍒涘缓鈥淒ebug\\CompilerIdC.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+        姝ｅ湪瀵光€淒ebug\\CompilerIdC.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+      ClCompile:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TC /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\4.1.2\\CompilerIdC\\CompilerIdC.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        姝ｅ湪鍒犻櫎鏂囦欢鈥淒ebug\\CompilerIdC.tlog\\unsuccessfulbuild鈥濄€?
+        姝ｅ湪瀵光€淒ebug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate鈥濇墽琛?Touch 浠诲姟銆?
+      宸插畬鎴愮敓鎴愰」鐩€淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\4.1.2\\CompilerIdC\\CompilerIdC.vcxproj鈥?榛樿鐩爣)鐨勬搷浣溿€?
+      
+      宸叉垚鍔熺敓鎴愩€?
+          0 涓鍛?
+          0 涓敊璇?
+      
+      宸茬敤鏃堕棿 00:00:01.52
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/4.1.2/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:103 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "link"
+    candidate_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/"
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+    searched_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/link.com"
+    found: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/link.exe"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:104 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lld-link"
+    candidate_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/"
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+    searched_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link.com"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link.exe"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link"
+      - "D:/VMware/bin/lld-link.com"
+      - "D:/VMware/bin/lld-link.exe"
+      - "D:/VMware/bin/lld-link"
+      - "C:/Windows/System32/lld-link.com"
+      - "C:/Windows/System32/lld-link.exe"
+      - "C:/Windows/System32/lld-link"
+      - "C:/Windows/lld-link.com"
+      - "C:/Windows/lld-link.exe"
+      - "C:/Windows/lld-link"
+      - "C:/Windows/System32/wbem/lld-link.com"
+      - "C:/Windows/System32/wbem/lld-link.exe"
+      - "C:/Windows/System32/wbem/lld-link"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link"
+      - "C:/Windows/System32/OpenSSH/lld-link.com"
+      - "C:/Windows/System32/OpenSSH/lld-link.exe"
+      - "C:/Windows/System32/OpenSSH/lld-link"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/lld-link.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/lld-link.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/lld-link"
+      - "D:/python3.13.5/lld-link.com"
+      - "D:/python3.13.5/lld-link.exe"
+      - "D:/python3.13.5/lld-link"
+      - "D:/python3.13.5/Scripts/lld-link.com"
+      - "D:/python3.13.5/Scripts/lld-link.exe"
+      - "D:/python3.13.5/Scripts/lld-link"
+      - "C:/Program Files/Common Files/Autodesk Shared/lld-link.com"
+      - "C:/Program Files/Common Files/Autodesk Shared/lld-link.exe"
+      - "C:/Program Files/Common Files/Autodesk Shared/lld-link"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.com"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.exe"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link"
+      - "C:/Program Files/dotnet/lld-link.com"
+      - "C:/Program Files/dotnet/lld-link.exe"
+      - "C:/Program Files/dotnet/lld-link"
+      - "C:/Program Files/nodejs/lld-link.com"
+      - "C:/Program Files/nodejs/lld-link.exe"
+      - "C:/Program Files/nodejs/lld-link"
+      - "C:/Program Files/cursor/resources/app/bin/lld-link.com"
+      - "C:/Program Files/cursor/resources/app/bin/lld-link.exe"
+      - "C:/Program Files/cursor/resources/app/bin/lld-link"
+      - "C:/Program Files/Git/cmd/lld-link.com"
+      - "C:/Program Files/Git/cmd/lld-link.exe"
+      - "C:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/lld-link.com"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/lld-link.exe"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/lld-link"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link.com"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link.exe"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/lld-link.com"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/lld-link.exe"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/lld-link"
+      - "C:/Program Files/apache-maven-3.9.6/bin/lld-link.com"
+      - "C:/Program Files/apache-maven-3.9.6/bin/lld-link.exe"
+      - "C:/Program Files/apache-maven-3.9.6/bin/lld-link"
+      - "C:/Program Files/Memurai/lld-link.com"
+      - "C:/Program Files/Memurai/lld-link.exe"
+      - "C:/Program Files/Memurai/lld-link"
+      - "C:/Users/Administrator/.cargo/bin/lld-link.com"
+      - "C:/Users/Administrator/.cargo/bin/lld-link.exe"
+      - "C:/Users/Administrator/.cargo/bin/lld-link"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/lld-link.com"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/lld-link"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/lld-link.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/lld-link"
+      - "D:/Microsoft VS Code/bin/lld-link.com"
+      - "D:/Microsoft VS Code/bin/lld-link.exe"
+      - "D:/Microsoft VS Code/bin/lld-link"
+      - "C:/Users/Administrator/AppData/Roaming/npm/lld-link.com"
+      - "C:/Users/Administrator/AppData/Roaming/npm/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Roaming/npm/lld-link"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/lld-link.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/lld-link"
+      - "C:/Program Files/CMake/bin/lld-link.com"
+      - "C:/Program Files/CMake/bin/lld-link.exe"
+      - "C:/Program Files/CMake/bin/lld-link"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "link"
+    candidate_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/"
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+    searched_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/link.com"
+    found: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/link.exe"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "program"
+    variable: "CMAKE_MT"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "mt"
+    candidate_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/"
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+    searched_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/mt.com"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/mt.exe"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/mt"
+      - "D:/VMware/bin/mt.com"
+      - "D:/VMware/bin/mt.exe"
+      - "D:/VMware/bin/mt"
+      - "C:/Windows/System32/mt.com"
+      - "C:/Windows/System32/mt.exe"
+      - "C:/Windows/System32/mt"
+      - "C:/Windows/mt.com"
+      - "C:/Windows/mt.exe"
+      - "C:/Windows/mt"
+      - "C:/Windows/System32/wbem/mt.com"
+      - "C:/Windows/System32/wbem/mt.exe"
+      - "C:/Windows/System32/wbem/mt"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/mt"
+      - "C:/Windows/System32/OpenSSH/mt.com"
+      - "C:/Windows/System32/OpenSSH/mt.exe"
+      - "C:/Windows/System32/OpenSSH/mt"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/mt.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/mt.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/mt"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/mt.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/mt.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/mt"
+      - "D:/python3.13.5/mt.com"
+      - "D:/python3.13.5/mt.exe"
+      - "D:/python3.13.5/mt"
+      - "D:/python3.13.5/Scripts/mt.com"
+      - "D:/python3.13.5/Scripts/mt.exe"
+      - "D:/python3.13.5/Scripts/mt"
+      - "C:/Program Files/Common Files/Autodesk Shared/mt.com"
+      - "C:/Program Files/Common Files/Autodesk Shared/mt.exe"
+      - "C:/Program Files/Common Files/Autodesk Shared/mt"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/mt.com"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/mt.exe"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/mt"
+      - "C:/Program Files/dotnet/mt.com"
+      - "C:/Program Files/dotnet/mt.exe"
+      - "C:/Program Files/dotnet/mt"
+      - "C:/Program Files/nodejs/mt.com"
+      - "C:/Program Files/nodejs/mt.exe"
+      - "C:/Program Files/nodejs/mt"
+      - "C:/Program Files/cursor/resources/app/bin/mt.com"
+      - "C:/Program Files/cursor/resources/app/bin/mt.exe"
+      - "C:/Program Files/cursor/resources/app/bin/mt"
+      - "C:/Program Files/Git/cmd/mt.com"
+      - "C:/Program Files/Git/cmd/mt.exe"
+      - "C:/Program Files/Git/cmd/mt"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/mt.com"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/mt.exe"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/mt"
+      - "C:/Program Files/Docker/Docker/resources/bin/mt.com"
+      - "C:/Program Files/Docker/Docker/resources/bin/mt.exe"
+      - "C:/Program Files/Docker/Docker/resources/bin/mt"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/mt.com"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/mt.exe"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/mt"
+      - "C:/Program Files/apache-maven-3.9.6/bin/mt.com"
+      - "C:/Program Files/apache-maven-3.9.6/bin/mt.exe"
+      - "C:/Program Files/apache-maven-3.9.6/bin/mt"
+      - "C:/Program Files/Memurai/mt.com"
+      - "C:/Program Files/Memurai/mt.exe"
+      - "C:/Program Files/Memurai/mt"
+      - "C:/Users/Administrator/.cargo/bin/mt.com"
+      - "C:/Users/Administrator/.cargo/bin/mt.exe"
+      - "C:/Users/Administrator/.cargo/bin/mt"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/mt.com"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/mt.exe"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/mt"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/mt.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/mt.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/mt"
+      - "D:/Microsoft VS Code/bin/mt.com"
+      - "D:/Microsoft VS Code/bin/mt.exe"
+      - "D:/Microsoft VS Code/bin/mt"
+      - "C:/Users/Administrator/AppData/Roaming/npm/mt.com"
+      - "C:/Users/Administrator/AppData/Roaming/npm/mt.exe"
+      - "C:/Users/Administrator/AppData/Roaming/npm/mt"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/mt.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/mt.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/mt"
+      - "C:/Program Files/CMake/bin/mt.com"
+      - "C:/Program Files/CMake/bin/mt.exe"
+      - "C:/Program Files/CMake/bin/mt"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:238 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "program"
+    variable: "CMAKE_AR"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lib"
+    candidate_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/"
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+    searched_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lib.com"
+    found: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lib.exe"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:462 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:500 (CMAKE_DETERMINE_COMPILER_ID_WRITE)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:8 (CMAKE_DETERMINE_COMPILER_ID_BUILD)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "file"
+    variable: "src_in"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "CMakeCXXCompilerId.cpp.in"
+    candidate_directories:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/"
+      - "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/Modules/"
+      - "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/platform/"
+    found: "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeCXXCompilerId.cpp.in"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:125 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:113 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      閫傜敤浜?.NET Framework MSBuild 鐗堟湰 17.14.23+b0019275e
+      鐢熸垚鍚姩鏃堕棿涓?2025/10/15 11:55:27銆?
+      
+      鑺傜偣 1 涓婄殑椤圭洰鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\4.1.2\\CompilerIdCXX\\CompilerIdCXX.vcxproj鈥?榛樿鐩爣)銆?
+      PrepareForBuild:
+        姝ｅ湪鍒涘缓鐩綍鈥淒ebug\\鈥濄€?
+        宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
+        姝ｅ湪鍒涘缓鐩綍鈥淒ebug\\CompilerIdCXX.tlog\\鈥濄€?
+      InitializeBuildStatus:
+        姝ｅ湪鍒涘缓鈥淒ebug\\CompilerIdCXX.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+        姝ｅ湪瀵光€淒ebug\\CompilerIdCXX.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+      ClCompile:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TP /FC /errorReport:queue CMakeCXXCompilerId.cpp
+        CMakeCXXCompilerId.cpp
+      Link:
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
+        CompilerIdCXX.vcxproj -> C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\4.1.2\\CompilerIdCXX\\CompilerIdCXX.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_CXX_COMPILER=C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        姝ｅ湪鍒犻櫎鏂囦欢鈥淒ebug\\CompilerIdCXX.tlog\\unsuccessfulbuild鈥濄€?
+        姝ｅ湪瀵光€淒ebug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate鈥濇墽琛?Touch 浠诲姟銆?
+      宸插畬鎴愮敓鎴愰」鐩€淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\4.1.2\\CompilerIdCXX\\CompilerIdCXX.vcxproj鈥?榛樿鐩爣)鐨勬搷浣溿€?
+      
+      宸叉垚鍔熺敓鎴愩€?
+          0 涓鍛?
+          0 涓敊璇?
+      
+      宸茬敤鏃堕棿 00:00:01.29
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+      
+      The CXX compiler identification is MSVC, found in:
+        C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/4.1.2/CompilerIdCXX/CompilerIdCXX.exe
+      
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:37 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:65 (__resolve_tool_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeFindBinUtils.cmake:104 (__resolve_linker_path)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCXXCompiler.cmake:206 (include)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "program"
+    variable: "_CMAKE_TOOL_WITH_PATH"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "lld-link"
+    candidate_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/"
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+    searched_directories:
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link.com"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link.exe"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lld-link"
+      - "D:/VMware/bin/lld-link.com"
+      - "D:/VMware/bin/lld-link.exe"
+      - "D:/VMware/bin/lld-link"
+      - "C:/Windows/System32/lld-link.com"
+      - "C:/Windows/System32/lld-link.exe"
+      - "C:/Windows/System32/lld-link"
+      - "C:/Windows/lld-link.com"
+      - "C:/Windows/lld-link.exe"
+      - "C:/Windows/lld-link"
+      - "C:/Windows/System32/wbem/lld-link.com"
+      - "C:/Windows/System32/wbem/lld-link.exe"
+      - "C:/Windows/System32/wbem/lld-link"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/lld-link"
+      - "C:/Windows/System32/OpenSSH/lld-link.com"
+      - "C:/Windows/System32/OpenSSH/lld-link.exe"
+      - "C:/Windows/System32/OpenSSH/lld-link"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/lld-link"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/lld-link.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/lld-link.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/lld-link"
+      - "D:/python3.13.5/lld-link.com"
+      - "D:/python3.13.5/lld-link.exe"
+      - "D:/python3.13.5/lld-link"
+      - "D:/python3.13.5/Scripts/lld-link.com"
+      - "D:/python3.13.5/Scripts/lld-link.exe"
+      - "D:/python3.13.5/Scripts/lld-link"
+      - "C:/Program Files/Common Files/Autodesk Shared/lld-link.com"
+      - "C:/Program Files/Common Files/Autodesk Shared/lld-link.exe"
+      - "C:/Program Files/Common Files/Autodesk Shared/lld-link"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.com"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link.exe"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/lld-link"
+      - "C:/Program Files/dotnet/lld-link.com"
+      - "C:/Program Files/dotnet/lld-link.exe"
+      - "C:/Program Files/dotnet/lld-link"
+      - "C:/Program Files/nodejs/lld-link.com"
+      - "C:/Program Files/nodejs/lld-link.exe"
+      - "C:/Program Files/nodejs/lld-link"
+      - "C:/Program Files/cursor/resources/app/bin/lld-link.com"
+      - "C:/Program Files/cursor/resources/app/bin/lld-link.exe"
+      - "C:/Program Files/cursor/resources/app/bin/lld-link"
+      - "C:/Program Files/Git/cmd/lld-link.com"
+      - "C:/Program Files/Git/cmd/lld-link.exe"
+      - "C:/Program Files/Git/cmd/lld-link"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/lld-link.com"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/lld-link.exe"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/lld-link"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link.com"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link.exe"
+      - "C:/Program Files/Docker/Docker/resources/bin/lld-link"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/lld-link.com"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/lld-link.exe"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/lld-link"
+      - "C:/Program Files/apache-maven-3.9.6/bin/lld-link.com"
+      - "C:/Program Files/apache-maven-3.9.6/bin/lld-link.exe"
+      - "C:/Program Files/apache-maven-3.9.6/bin/lld-link"
+      - "C:/Program Files/Memurai/lld-link.com"
+      - "C:/Program Files/Memurai/lld-link.exe"
+      - "C:/Program Files/Memurai/lld-link"
+      - "C:/Users/Administrator/.cargo/bin/lld-link.com"
+      - "C:/Users/Administrator/.cargo/bin/lld-link.exe"
+      - "C:/Users/Administrator/.cargo/bin/lld-link"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/lld-link.com"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/lld-link"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/lld-link.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/lld-link"
+      - "D:/Microsoft VS Code/bin/lld-link.com"
+      - "D:/Microsoft VS Code/bin/lld-link.exe"
+      - "D:/Microsoft VS Code/bin/lld-link"
+      - "C:/Users/Administrator/AppData/Roaming/npm/lld-link.com"
+      - "C:/Users/Administrator/AppData/Roaming/npm/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Roaming/npm/lld-link"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/lld-link.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/lld-link.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/lld-link"
+      - "C:/Program Files/CMake/bin/lld-link.com"
+      - "C:/Program Files/CMake/bin/lld-link.exe"
+      - "C:/Program Files/CMake/bin/lld-link"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineRCCompiler.cmake:40 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Platform/Windows-MSVC.cmake:574 (enable_language)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Platform/Windows-MSVC.cmake:547 (__windows_compiler_msvc_enable_rc)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Platform/Windows-MSVC-C.cmake:5 (__windows_compiler_msvc)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeCInformation.cmake:48 (include)"
+      - "CMakeLists.txt:113 (project)"
+    mode: "program"
+    variable: "CMAKE_RC_COMPILER"
+    description: "RC compiler"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "rc"
+    candidate_directories:
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/bin/"
+      - "C:/Program Files/sbin/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/bin/"
+      - "C:/Program Files (x86)/sbin/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/CMake/sbin/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files/Blender/bin/"
+      - "C:/Program Files/Blender/sbin/"
+      - "C:/Program Files/Blender/"
+    searched_directories:
+      - "D:/VMware/bin/rc.com"
+      - "D:/VMware/bin/rc.exe"
+      - "D:/VMware/bin/rc"
+      - "C:/Windows/System32/rc.com"
+      - "C:/Windows/System32/rc.exe"
+      - "C:/Windows/System32/rc"
+      - "C:/Windows/rc.com"
+      - "C:/Windows/rc.exe"
+      - "C:/Windows/rc"
+      - "C:/Windows/System32/wbem/rc.com"
+      - "C:/Windows/System32/wbem/rc.exe"
+      - "C:/Windows/System32/wbem/rc"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/rc"
+      - "C:/Windows/System32/OpenSSH/rc.com"
+      - "C:/Windows/System32/OpenSSH/rc.exe"
+      - "C:/Windows/System32/OpenSSH/rc"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/rc.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/rc.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/rc"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/rc.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/rc.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/rc"
+      - "D:/python3.13.5/rc.com"
+      - "D:/python3.13.5/rc.exe"
+      - "D:/python3.13.5/rc"
+      - "D:/python3.13.5/Scripts/rc.com"
+      - "D:/python3.13.5/Scripts/rc.exe"
+      - "D:/python3.13.5/Scripts/rc"
+      - "C:/Program Files/Common Files/Autodesk Shared/rc.com"
+      - "C:/Program Files/Common Files/Autodesk Shared/rc.exe"
+      - "C:/Program Files/Common Files/Autodesk Shared/rc"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/rc.com"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/rc.exe"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/rc"
+      - "C:/Program Files/dotnet/rc.com"
+      - "C:/Program Files/dotnet/rc.exe"
+      - "C:/Program Files/dotnet/rc"
+      - "C:/Program Files/nodejs/rc.com"
+      - "C:/Program Files/nodejs/rc.exe"
+      - "C:/Program Files/nodejs/rc"
+      - "C:/Program Files/cursor/resources/app/bin/rc.com"
+      - "C:/Program Files/cursor/resources/app/bin/rc.exe"
+      - "C:/Program Files/cursor/resources/app/bin/rc"
+      - "C:/Program Files/Git/cmd/rc.com"
+      - "C:/Program Files/Git/cmd/rc.exe"
+      - "C:/Program Files/Git/cmd/rc"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/rc.com"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/rc.exe"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/rc"
+      - "C:/Program Files/Docker/Docker/resources/bin/rc.com"
+      - "C:/Program Files/Docker/Docker/resources/bin/rc.exe"
+      - "C:/Program Files/Docker/Docker/resources/bin/rc"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/rc.com"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/rc.exe"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/rc"
+      - "C:/Program Files/apache-maven-3.9.6/bin/rc.com"
+      - "C:/Program Files/apache-maven-3.9.6/bin/rc.exe"
+      - "C:/Program Files/apache-maven-3.9.6/bin/rc"
+      - "C:/Program Files/Memurai/rc.com"
+      - "C:/Program Files/Memurai/rc.exe"
+      - "C:/Program Files/Memurai/rc"
+      - "C:/Users/Administrator/.cargo/bin/rc.com"
+      - "C:/Users/Administrator/.cargo/bin/rc.exe"
+      - "C:/Users/Administrator/.cargo/bin/rc"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/rc.com"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/rc.exe"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/rc"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/rc.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/rc.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/rc"
+      - "D:/Microsoft VS Code/bin/rc.com"
+      - "D:/Microsoft VS Code/bin/rc.exe"
+      - "D:/Microsoft VS Code/bin/rc"
+      - "C:/Users/Administrator/AppData/Roaming/npm/rc.com"
+      - "C:/Users/Administrator/AppData/Roaming/npm/rc.exe"
+      - "C:/Users/Administrator/AppData/Roaming/npm/rc"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/rc.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/rc.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/rc"
+      - "C:/Program Files/CMake/bin/rc.com"
+      - "C:/Program Files/CMake/bin/rc.exe"
+      - "C:/Program Files/CMake/bin/rc"
+      - "C:/Program Files/bin/rc.com"
+      - "C:/Program Files/bin/rc.exe"
+      - "C:/Program Files/bin/rc"
+      - "C:/Program Files/sbin/rc.com"
+      - "C:/Program Files/sbin/rc.exe"
+      - "C:/Program Files/sbin/rc"
+      - "C:/Program Files/rc.com"
+      - "C:/Program Files/rc.exe"
+      - "C:/Program Files/rc"
+      - "C:/Program Files (x86)/bin/rc.com"
+      - "C:/Program Files (x86)/bin/rc.exe"
+      - "C:/Program Files (x86)/bin/rc"
+      - "C:/Program Files (x86)/sbin/rc.com"
+      - "C:/Program Files (x86)/sbin/rc.exe"
+      - "C:/Program Files (x86)/sbin/rc"
+      - "C:/Program Files (x86)/rc.com"
+      - "C:/Program Files (x86)/rc.exe"
+      - "C:/Program Files (x86)/rc"
+      - "C:/Program Files/CMake/bin/rc.com"
+      - "C:/Program Files/CMake/bin/rc.exe"
+      - "C:/Program Files/CMake/bin/rc"
+      - "C:/Program Files/CMake/sbin/rc.com"
+      - "C:/Program Files/CMake/sbin/rc.exe"
+      - "C:/Program Files/CMake/sbin/rc"
+      - "C:/Program Files/CMake/rc.com"
+      - "C:/Program Files/CMake/rc.exe"
+      - "C:/Program Files/CMake/rc"
+      - "C:/Program Files/Blender/bin/rc.com"
+      - "C:/Program Files/Blender/bin/rc.exe"
+      - "C:/Program Files/Blender/bin/rc"
+      - "C:/Program Files/Blender/sbin/rc.com"
+      - "C:/Program Files/Blender/sbin/rc.exe"
+      - "C:/Program Files/Blender/sbin/rc"
+      - "C:/Program Files/Blender/rc.com"
+      - "C:/Program Files/Blender/rc.exe"
+      - "C:/Program Files/Blender/rc"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files/Blender"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files/Blender"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:113 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-7sp4e2"
+      binary: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-7sp4e2"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/Modules;C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/platform"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-7sp4e2'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_fbd7d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        閫傜敤浜?.NET Framework MSBuild 鐗堟湰 17.14.23+b0019275e
+        鐢熸垚鍚姩鏃堕棿涓?2025/10/15 11:55:28銆?
+        
+        鑺傜偣 1 涓婄殑椤圭洰鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-7sp4e2\\cmTC_fbd7d.vcxproj鈥?榛樿鐩爣)銆?
+        PrepareForBuild:
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_fbd7d.dir\\Debug\\鈥濄€?
+          宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
+          姝ｅ湪鍒涘缓鐩綍鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-7sp4e2\\Debug\\鈥濄€?
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_fbd7d.dir\\Debug\\cmTC_fbd7d.tlog\\鈥濄€?
+        InitializeBuildStatus:
+          姝ｅ湪鍒涘缓鈥渃mTC_fbd7d.dir\\Debug\\cmTC_fbd7d.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+          姝ｅ湪瀵光€渃mTC_fbd7d.dir\\Debug\\cmTC_fbd7d.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+        ClCompile:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_fbd7d.dir\\Debug\\\\" /Fd"cmTC_fbd7d.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          鐢ㄤ簬 x64 鐨?Microsoft (R) C/C++ 浼樺寲缂栬瘧鍣?19.44.35217 鐗?
+          鐗堟潈鎵€鏈?C) Microsoft Corporation銆備繚鐣欐墍鏈夋潈鍒┿€?
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_fbd7d.dir\\Debug\\\\" /Fd"cmTC_fbd7d.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.1\\Modules\\CMakeCCompilerABI.c"
+          CMakeCCompilerABI.c
+        Link:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-7sp4e2\\Debug\\cmTC_fbd7d.exe" /INCREMENTAL /ILK:"cmTC_fbd7d.dir\\Debug\\cmTC_fbd7d.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-7sp4e2/Debug/cmTC_fbd7d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-7sp4e2/Debug/cmTC_fbd7d.lib" /MACHINE:X64  /machine:x64 cmTC_fbd7d.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_fbd7d.vcxproj -> C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-7sp4e2\\Debug\\cmTC_fbd7d.exe
+        FinalizeBuildStatus:
+          姝ｅ湪鍒犻櫎鏂囦欢鈥渃mTC_fbd7d.dir\\Debug\\cmTC_fbd7d.tlog\\unsuccessfulbuild鈥濄€?
+          姝ｅ湪瀵光€渃mTC_fbd7d.dir\\Debug\\cmTC_fbd7d.tlog\\cmTC_fbd7d.lastbuildstate鈥濇墽琛?Touch 浠诲姟銆?
+        宸插畬鎴愮敓鎴愰」鐩€淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-7sp4e2\\cmTC_fbd7d.vcxproj鈥?榛樿鐩爣)鐨勬搷浣溿€?
+        
+        宸叉垚鍔熺敓鎴愩€?
+            0 涓鍛?
+            0 涓敊璇?
+        
+        宸茬敤鏃堕棿 00:00:01.32
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:113 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        linker tool for 'C': C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:113 (project)"
+    message: |
+      Running the C compiler's linker: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.44.35217.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:83 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:113 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-j50ndr"
+      binary: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-j50ndr"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/Modules;C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/platform"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-j50ndr'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d751f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        閫傜敤浜?.NET Framework MSBuild 鐗堟湰 17.14.23+b0019275e
+        鐢熸垚鍚姩鏃堕棿涓?2025/10/15 11:55:30銆?
+        
+        鑺傜偣 1 涓婄殑椤圭洰鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-j50ndr\\cmTC_d751f.vcxproj鈥?榛樿鐩爣)銆?
+        PrepareForBuild:
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_d751f.dir\\Debug\\鈥濄€?
+          宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
+          姝ｅ湪鍒涘缓鐩綍鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-j50ndr\\Debug\\鈥濄€?
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_d751f.dir\\Debug\\cmTC_d751f.tlog\\鈥濄€?
+        InitializeBuildStatus:
+          姝ｅ湪鍒涘缓鈥渃mTC_d751f.dir\\Debug\\cmTC_d751f.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+          姝ｅ湪瀵光€渃mTC_d751f.dir\\Debug\\cmTC_d751f.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+        ClCompile:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_d751f.dir\\Debug\\\\" /Fd"cmTC_d751f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
+          鐢ㄤ簬 x64 鐨?Microsoft (R) C/C++ 浼樺寲缂栬瘧鍣?19.44.35217 鐗?
+          鐗堟潈鎵€鏈?C) Microsoft Corporation銆備繚鐣欐墍鏈夋潈鍒┿€?
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_d751f.dir\\Debug\\\\" /Fd"cmTC_d751f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-4.1\\Modules\\CMakeCXXCompilerABI.cpp"
+          CMakeCXXCompilerABI.cpp
+        Link:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-j50ndr\\Debug\\cmTC_d751f.exe" /INCREMENTAL /ILK:"cmTC_d751f.dir\\Debug\\cmTC_d751f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-j50ndr/Debug/cmTC_d751f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-j50ndr/Debug/cmTC_d751f.lib" /MACHINE:X64  /machine:x64 cmTC_d751f.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_d751f.vcxproj -> C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-j50ndr\\Debug\\cmTC_d751f.exe
+        FinalizeBuildStatus:
+          姝ｅ湪鍒犻櫎鏂囦欢鈥渃mTC_d751f.dir\\Debug\\cmTC_d751f.tlog\\unsuccessfulbuild鈥濄€?
+          姝ｅ湪瀵光€渃mTC_d751f.dir\\Debug\\cmTC_d751f.tlog\\cmTC_d751f.lastbuildstate鈥濇墽琛?Touch 浠诲姟銆?
+        宸插畬鎴愮敓鎴愰」鐩€淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-j50ndr\\cmTC_d751f.vcxproj鈥?榛樿鐩爣)鐨勬搷浣溿€?
+        
+        宸叉垚鍔熺敓鎴愩€?
+            0 涓鍛?
+            0 涓敊璇?
+        
+        宸茬敤鏃堕棿 00:00:01.31
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:253 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:113 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|link\\.exe|lld-link(\\.exe)?))("|,| |$)]
+        linker tool for 'CXX': C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: []
+        implicit fwks: []
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Internal/CMakeDetermineLinkerId.cmake:36 (message)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeDetermineCompilerABI.cmake:299 (cmake_determine_linker_id)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:113 (project)"
+    message: |
+      Running the CXX compiler's linker: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Tools/MSVC/14.44.35207/bin/HostX64/x64/link.exe" "-v"
+      Microsoft (R) Incremental Linker Version 14.44.35217.0
+      Copyright (C) Microsoft Corporation.  All rights reserved.
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CheckSymbolExists.cmake:193 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CheckSymbolExists.cmake:98 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "build_files/cmake/have_features.cmake:14 (check_symbol_exists)"
+      - "CMakeLists.txt:166 (include)"
+    checks:
+      - "Looking for malloc_stats"
+    directories:
+      source: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-u9e47s"
+      binary: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-u9e47s"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/Modules;C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/platform"
+    buildResult:
+      variable: "HAVE_MALLOC_STATS_H"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-u9e47s'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_dd3c4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        閫傜敤浜?.NET Framework MSBuild 鐗堟湰 17.14.23+b0019275e
+        鐢熸垚鍚姩鏃堕棿涓?2025/10/15 11:55:32銆?
+        
+        鑺傜偣 1 涓婄殑椤圭洰鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\cmTC_dd3c4.vcxproj鈥?榛樿鐩爣)銆?
+        PrepareForBuild:
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_dd3c4.dir\\Debug\\鈥濄€?
+          宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
+          姝ｅ湪鍒涘缓鐩綍鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\Debug\\鈥濄€?
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_dd3c4.dir\\Debug\\cmTC_dd3c4.tlog\\鈥濄€?
+        InitializeBuildStatus:
+          姝ｅ湪鍒涘缓鈥渃mTC_dd3c4.dir\\Debug\\cmTC_dd3c4.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+          姝ｅ湪瀵光€渃mTC_dd3c4.dir\\Debug\\cmTC_dd3c4.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+        ClCompile:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_dd3c4.dir\\Debug\\\\" /Fd"cmTC_dd3c4.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\CheckSymbolExists.c"
+          鐢ㄤ簬 x64 鐨?Microsoft (R) C/C++ 浼樺寲缂栬瘧鍣?19.44.35217 鐗?
+          鐗堟潈鎵€鏈?C) Microsoft Corporation銆備繚鐣欐墍鏈夋潈鍒┿€?
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_dd3c4.dir\\Debug\\\\" /Fd"cmTC_dd3c4.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\CheckSymbolExists.c"
+          CheckSymbolExists.c
+        C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\CheckSymbolExists.c(8,19): error C2065: 鈥渕alloc_stats鈥? 鏈０鏄庣殑鏍囪瘑绗?[C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\cmTC_dd3c4.vcxproj]
+        宸插畬鎴愮敓鎴愰」鐩€淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\cmTC_dd3c4.vcxproj鈥?榛樿鐩爣)鐨勬搷浣?- 澶辫触銆?
+        
+        鐢熸垚澶辫触銆?
+        
+        鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\cmTC_dd3c4.vcxproj鈥?榛樿鐩爣) (1) ->
+        (ClCompile 鐩爣) -> 
+          C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\CheckSymbolExists.c(8,19): error C2065: 鈥渕alloc_stats鈥? 鏈０鏄庣殑鏍囪瘑绗?[C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-u9e47s\\cmTC_dd3c4.vcxproj]
+        
+            0 涓鍛?
+            1 涓敊璇?
+        
+        宸茬敤鏃堕棿 00:00:01.25
+        
+      exitCode: 1
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/FindGit.cmake:86 (find_program)"
+      - "CMakeLists.txt:1398 (find_package)"
+    mode: "program"
+    variable: "GIT_EXECUTABLE"
+    description: "Git command line client"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "git.cmd"
+      - "git"
+    candidate_directories:
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/bin/"
+      - "C:/Program Files/sbin/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/bin/"
+      - "C:/Program Files (x86)/sbin/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/CMake/sbin/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files/Blender/bin/"
+      - "C:/Program Files/Blender/sbin/"
+      - "C:/Program Files/Blender/"
+      - "C:/Users/Administrator/AppData/Local/Atlassian/SourceTree/git_local/bin/"
+    searched_directories:
+      - "D:/VMware/bin/git.cmd.com"
+      - "D:/VMware/bin/git.cmd.exe"
+      - "D:/VMware/bin/git.cmd"
+      - "C:/Windows/System32/git.cmd.com"
+      - "C:/Windows/System32/git.cmd.exe"
+      - "C:/Windows/System32/git.cmd"
+      - "C:/Windows/git.cmd.com"
+      - "C:/Windows/git.cmd.exe"
+      - "C:/Windows/git.cmd"
+      - "C:/Windows/System32/wbem/git.cmd.com"
+      - "C:/Windows/System32/wbem/git.cmd.exe"
+      - "C:/Windows/System32/wbem/git.cmd"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.cmd.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.cmd.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.cmd"
+      - "C:/Windows/System32/OpenSSH/git.cmd.com"
+      - "C:/Windows/System32/OpenSSH/git.cmd.exe"
+      - "C:/Windows/System32/OpenSSH/git.cmd"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.cmd.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.cmd.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.cmd"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/git.cmd.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/git.cmd.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/git.cmd"
+      - "D:/python3.13.5/git.cmd.com"
+      - "D:/python3.13.5/git.cmd.exe"
+      - "D:/python3.13.5/git.cmd"
+      - "D:/python3.13.5/Scripts/git.cmd.com"
+      - "D:/python3.13.5/Scripts/git.cmd.exe"
+      - "D:/python3.13.5/Scripts/git.cmd"
+      - "C:/Program Files/Common Files/Autodesk Shared/git.cmd.com"
+      - "C:/Program Files/Common Files/Autodesk Shared/git.cmd.exe"
+      - "C:/Program Files/Common Files/Autodesk Shared/git.cmd"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd.com"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd.exe"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.cmd"
+      - "C:/Program Files/dotnet/git.cmd.com"
+      - "C:/Program Files/dotnet/git.cmd.exe"
+      - "C:/Program Files/dotnet/git.cmd"
+      - "C:/Program Files/nodejs/git.cmd.com"
+      - "C:/Program Files/nodejs/git.cmd.exe"
+      - "C:/Program Files/nodejs/git.cmd"
+      - "C:/Program Files/cursor/resources/app/bin/git.cmd.com"
+      - "C:/Program Files/cursor/resources/app/bin/git.cmd.exe"
+      - "C:/Program Files/cursor/resources/app/bin/git.cmd"
+      - "C:/Program Files/Git/cmd/git.cmd.com"
+      - "C:/Program Files/Git/cmd/git.cmd.exe"
+      - "C:/Program Files/Git/cmd/git.cmd"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/git.cmd.com"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/git.cmd.exe"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/git.cmd"
+      - "C:/Program Files/Docker/Docker/resources/bin/git.cmd.com"
+      - "C:/Program Files/Docker/Docker/resources/bin/git.cmd.exe"
+      - "C:/Program Files/Docker/Docker/resources/bin/git.cmd"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/git.cmd.com"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/git.cmd.exe"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/git.cmd"
+      - "C:/Program Files/apache-maven-3.9.6/bin/git.cmd.com"
+      - "C:/Program Files/apache-maven-3.9.6/bin/git.cmd.exe"
+      - "C:/Program Files/apache-maven-3.9.6/bin/git.cmd"
+      - "C:/Program Files/Memurai/git.cmd.com"
+      - "C:/Program Files/Memurai/git.cmd.exe"
+      - "C:/Program Files/Memurai/git.cmd"
+      - "C:/Users/Administrator/.cargo/bin/git.cmd.com"
+      - "C:/Users/Administrator/.cargo/bin/git.cmd.exe"
+      - "C:/Users/Administrator/.cargo/bin/git.cmd"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/git.cmd.com"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/git.cmd.exe"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/git.cmd"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/git.cmd.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/git.cmd.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/git.cmd"
+      - "D:/Microsoft VS Code/bin/git.cmd.com"
+      - "D:/Microsoft VS Code/bin/git.cmd.exe"
+      - "D:/Microsoft VS Code/bin/git.cmd"
+      - "C:/Users/Administrator/AppData/Roaming/npm/git.cmd.com"
+      - "C:/Users/Administrator/AppData/Roaming/npm/git.cmd.exe"
+      - "C:/Users/Administrator/AppData/Roaming/npm/git.cmd"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/git.cmd.com"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/git.cmd.exe"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/git.cmd"
+      - "C:/Program Files/CMake/bin/git.cmd.com"
+      - "C:/Program Files/CMake/bin/git.cmd.exe"
+      - "C:/Program Files/CMake/bin/git.cmd"
+      - "C:/Program Files/bin/git.cmd.com"
+      - "C:/Program Files/bin/git.cmd.exe"
+      - "C:/Program Files/bin/git.cmd"
+      - "C:/Program Files/sbin/git.cmd.com"
+      - "C:/Program Files/sbin/git.cmd.exe"
+      - "C:/Program Files/sbin/git.cmd"
+      - "C:/Program Files/git.cmd.com"
+      - "C:/Program Files/git.cmd.exe"
+      - "C:/Program Files/git.cmd"
+      - "C:/Program Files (x86)/bin/git.cmd.com"
+      - "C:/Program Files (x86)/bin/git.cmd.exe"
+      - "C:/Program Files (x86)/bin/git.cmd"
+      - "C:/Program Files (x86)/sbin/git.cmd.com"
+      - "C:/Program Files (x86)/sbin/git.cmd.exe"
+      - "C:/Program Files (x86)/sbin/git.cmd"
+      - "C:/Program Files (x86)/git.cmd.com"
+      - "C:/Program Files (x86)/git.cmd.exe"
+      - "C:/Program Files (x86)/git.cmd"
+      - "C:/Program Files/CMake/bin/git.cmd.com"
+      - "C:/Program Files/CMake/bin/git.cmd.exe"
+      - "C:/Program Files/CMake/bin/git.cmd"
+      - "C:/Program Files/CMake/sbin/git.cmd.com"
+      - "C:/Program Files/CMake/sbin/git.cmd.exe"
+      - "C:/Program Files/CMake/sbin/git.cmd"
+      - "C:/Program Files/CMake/git.cmd.com"
+      - "C:/Program Files/CMake/git.cmd.exe"
+      - "C:/Program Files/CMake/git.cmd"
+      - "C:/Program Files/Blender/bin/git.cmd.com"
+      - "C:/Program Files/Blender/bin/git.cmd.exe"
+      - "C:/Program Files/Blender/bin/git.cmd"
+      - "C:/Program Files/Blender/sbin/git.cmd.com"
+      - "C:/Program Files/Blender/sbin/git.cmd.exe"
+      - "C:/Program Files/Blender/sbin/git.cmd"
+      - "C:/Program Files/Blender/git.cmd.com"
+      - "C:/Program Files/Blender/git.cmd.exe"
+      - "C:/Program Files/Blender/git.cmd"
+      - "C:/Users/Administrator/AppData/Local/Atlassian/SourceTree/git_local/bin/git.cmd.com"
+      - "C:/Users/Administrator/AppData/Local/Atlassian/SourceTree/git_local/bin/git.cmd.exe"
+      - "C:/Users/Administrator/AppData/Local/Atlassian/SourceTree/git_local/bin/git.cmd"
+      - "D:/VMware/bin/git.com"
+      - "D:/VMware/bin/git.exe"
+      - "D:/VMware/bin/git"
+      - "C:/Windows/System32/git.com"
+      - "C:/Windows/System32/git.exe"
+      - "C:/Windows/System32/git"
+      - "C:/Windows/git.com"
+      - "C:/Windows/git.exe"
+      - "C:/Windows/git"
+      - "C:/Windows/System32/wbem/git.com"
+      - "C:/Windows/System32/wbem/git.exe"
+      - "C:/Windows/System32/wbem/git"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.com"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git.exe"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/git"
+      - "C:/Windows/System32/OpenSSH/git.com"
+      - "C:/Windows/System32/OpenSSH/git.exe"
+      - "C:/Windows/System32/OpenSSH/git"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.com"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git.exe"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/git"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/git.com"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/git.exe"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/git"
+      - "D:/python3.13.5/git.com"
+      - "D:/python3.13.5/git.exe"
+      - "D:/python3.13.5/git"
+      - "D:/python3.13.5/Scripts/git.com"
+      - "D:/python3.13.5/Scripts/git.exe"
+      - "D:/python3.13.5/Scripts/git"
+      - "C:/Program Files/Common Files/Autodesk Shared/git.com"
+      - "C:/Program Files/Common Files/Autodesk Shared/git.exe"
+      - "C:/Program Files/Common Files/Autodesk Shared/git"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.com"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git.exe"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/git"
+      - "C:/Program Files/dotnet/git.com"
+      - "C:/Program Files/dotnet/git.exe"
+      - "C:/Program Files/dotnet/git"
+      - "C:/Program Files/nodejs/git.com"
+      - "C:/Program Files/nodejs/git.exe"
+      - "C:/Program Files/nodejs/git"
+      - "C:/Program Files/cursor/resources/app/bin/git.com"
+      - "C:/Program Files/cursor/resources/app/bin/git.exe"
+      - "C:/Program Files/cursor/resources/app/bin/git"
+      - "C:/Program Files/Git/cmd/git.com"
+    found: "C:/Program Files/Git/cmd/git.exe"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/bin/${BUILD_TYPE}"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files/Blender"
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Internal/CheckSourceCompiles.cmake:104 (try_compile)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CheckCXXSourceCompiles.cmake:103 (cmake_check_source_compiles)"
+      - "build_files/cmake/macros.cmake:590 (check_cxx_source_compiles)"
+      - "CMakeLists.txt:1559 (test_neon_support)"
+    checks:
+      - "Performing Test SUPPORT_NEON_BUILD"
+    directories:
+      source: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-eyu6gu"
+      binary: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-eyu6gu"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/Modules;C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/platform"
+    buildResult:
+      variable: "SUPPORT_NEON_BUILD"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-eyu6gu'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_b91af.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        閫傜敤浜?.NET Framework MSBuild 鐗堟湰 17.14.23+b0019275e
+        鐢熸垚鍚姩鏃堕棿涓?2025/10/15 11:55:34銆?
+        
+        鑺傜偣 1 涓婄殑椤圭洰鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\cmTC_b91af.vcxproj鈥?榛樿鐩爣)銆?
+        PrepareForBuild:
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_b91af.dir\\Debug\\鈥濄€?
+          宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
+          姝ｅ湪鍒涘缓鐩綍鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\Debug\\鈥濄€?
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_b91af.dir\\Debug\\cmTC_b91af.tlog\\鈥濄€?
+        InitializeBuildStatus:
+          姝ｅ湪鍒涘缓鈥渃mTC_b91af.dir\\Debug\\cmTC_b91af.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+          姝ｅ湪瀵光€渃mTC_b91af.dir\\Debug\\cmTC_b91af.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+        ClCompile:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D SUPPORT_NEON_BUILD /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_b91af.dir\\Debug\\\\" /Fd"cmTC_b91af.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\src.cxx"
+          鐢ㄤ簬 x64 鐨?Microsoft (R) C/C++ 浼樺寲缂栬瘧鍣?19.44.35217 鐗?
+          鐗堟潈鎵€鏈?C) Microsoft Corporation銆備繚鐣欐墍鏈夋潈鍒┿€?
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D SUPPORT_NEON_BUILD /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /GR /Fo"cmTC_b91af.dir\\Debug\\\\" /Fd"cmTC_b91af.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\src.cxx"
+          src.cxx
+        C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\include\\arm_neon.h(21,1): error C1189: #error:  This header is specific to ARM targets [C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\cmTC_b91af.vcxproj]
+          (缂栬瘧婧愭枃浠垛€渟rc.cxx鈥?
+          
+        宸插畬鎴愮敓鎴愰」鐩€淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\cmTC_b91af.vcxproj鈥?榛樿鐩爣)鐨勬搷浣?- 澶辫触銆?
+        
+        鐢熸垚澶辫触銆?
+        
+        鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\cmTC_b91af.vcxproj鈥?榛樿鐩爣) (1) ->
+        (ClCompile 鐩爣) -> 
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\include\\arm_neon.h(21,1): error C1189: #error:  This header is specific to ARM targets [C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-eyu6gu\\cmTC_b91af.vcxproj]
+        
+            0 涓鍛?
+            1 涓敊璇?
+        
+        宸茬敤鏃堕棿 00:00:01.26
+        
+      exitCode: 1
+  -
+    kind: "try_run-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/Internal/CheckSourceRuns.cmake:95 (try_run)"
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/CheckCSourceRuns.cmake:88 (cmake_check_source_runs)"
+      - "build_files/cmake/macros.cmake:571 (check_c_source_runs)"
+      - "CMakeLists.txt:1561 (test_sse_support)"
+    checks:
+      - "Performing Test SUPPORT_SSE42_BUILD"
+    directories:
+      source: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-5b8ev1"
+      binary: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-5b8ev1"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+      CMAKE_MODULE_PATH: "C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/Modules;C:/Users/Administrator/Desktop/Z1D2/blender/build_files/cmake/platform"
+    buildResult:
+      variable: "SUPPORT_SSE42_BUILD_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-5b8ev1'
+        
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_98a3c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        閫傜敤浜?.NET Framework MSBuild 鐗堟湰 17.14.23+b0019275e
+        鐢熸垚鍚姩鏃堕棿涓?2025/10/15 11:55:36銆?
+        
+        鑺傜偣 1 涓婄殑椤圭洰鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-5b8ev1\\cmTC_98a3c.vcxproj鈥?榛樿鐩爣)銆?
+        PrepareForBuild:
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_98a3c.dir\\Debug\\鈥濄€?
+          宸插惎鐢ㄧ粨鏋勫寲杈撳嚭銆傜紪璇戝櫒璇婃柇鐨勬牸寮忚缃皢鍙嶆槧閿欒灞傛缁撴瀯銆傛湁鍏宠缁嗕俊鎭紝璇峰弬闃?https://aka.ms/cpp/structured-output銆?
+          姝ｅ湪鍒涘缓鐩綍鈥淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-5b8ev1\\Debug\\鈥濄€?
+          姝ｅ湪鍒涘缓鐩綍鈥渃mTC_98a3c.dir\\Debug\\cmTC_98a3c.tlog\\鈥濄€?
+        InitializeBuildStatus:
+          姝ｅ湪鍒涘缓鈥渃mTC_98a3c.dir\\Debug\\cmTC_98a3c.tlog\\unsuccessfulbuild鈥濓紝鍥犱负宸叉寚瀹氣€淎lwaysCreate鈥濄€?
+          姝ｅ湪瀵光€渃mTC_98a3c.dir\\Debug\\cmTC_98a3c.tlog\\unsuccessfulbuild鈥濇墽琛?Touch 浠诲姟銆?
+        ClCompile:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D SUPPORT_SSE42_BUILD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_98a3c.dir\\Debug\\\\" /Fd"cmTC_98a3c.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-5b8ev1\\src.c"
+          鐢ㄤ簬 x64 鐨?Microsoft (R) C/C++ 浼樺寲缂栬瘧鍣?19.44.35217 鐗?
+          鐗堟潈鎵€鏈?C) Microsoft Corporation銆備繚鐣欐墍鏈夋潈鍒┿€?
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D SUPPORT_SSE42_BUILD /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Fo"cmTC_98a3c.dir\\Debug\\\\" /Fd"cmTC_98a3c.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-5b8ev1\\src.c"
+          src.c
+        Link:
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.44.35207\\bin\\HostX64\\x64\\link.exe /OUT:"C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-5b8ev1\\Debug\\cmTC_98a3c.exe" /INCREMENTAL /ILK:"cmTC_98a3c.dir\\Debug\\cmTC_98a3c.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-5b8ev1/Debug/cmTC_98a3c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /IMPLIB:"C:/Users/Administrator/Desktop/Z1D2/build_stealth/CMakeFiles/CMakeScratch/TryCompile-5b8ev1/Debug/cmTC_98a3c.lib" /MACHINE:X64  /machine:x64 cmTC_98a3c.dir\\Debug\\src.obj
+          cmTC_98a3c.vcxproj -> C:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-5b8ev1\\Debug\\cmTC_98a3c.exe
+        FinalizeBuildStatus:
+          姝ｅ湪鍒犻櫎鏂囦欢鈥渃mTC_98a3c.dir\\Debug\\cmTC_98a3c.tlog\\unsuccessfulbuild鈥濄€?
+          姝ｅ湪瀵光€渃mTC_98a3c.dir\\Debug\\cmTC_98a3c.tlog\\cmTC_98a3c.lastbuildstate鈥濇墽琛?Touch 浠诲姟銆?
+        宸插畬鎴愮敓鎴愰」鐩€淐:\\Users\\Administrator\\Desktop\\Z1D2\\build_stealth\\CMakeFiles\\CMakeScratch\\TryCompile-5b8ev1\\cmTC_98a3c.vcxproj鈥?榛樿鐩爣)鐨勬搷浣溿€?
+        
+        宸叉垚鍔熺敓鎴愩€?
+            0 涓鍛?
+            0 涓敊璇?
+        
+        宸茬敤鏃堕棿 00:00:01.31
+        
+      exitCode: 0
+    runResult:
+      variable: "SUPPORT_SSE42_BUILD_EXITCODE"
+      cached: true
+      stdout: |
+      stderr: |
+      exitCode: 0
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/InstallRequiredSystemLibraries.cmake:314 (find_path)"
+      - "build_files/cmake/platform/platform_win32.cmake:154 (include)"
+      - "CMakeLists.txt:1576 (include)"
+    mode: "path"
+    variable: "MSVC_REDIST_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "x64/Microsoft.VC143.CRT"
+    candidate_directories:
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/include/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/include/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/include/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files/Blender/include/"
+      - "C:/Program Files/Blender/"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Redist/MSVC/v143/"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Redist/MSVC/14.44.35112/"
+    searched_directories:
+      - "D:/VMware/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Windows/System32/x64/Microsoft.VC143.CRT"
+      - "C:/Windows/x64/Microsoft.VC143.CRT"
+      - "C:/Windows/System32/wbem/x64/Microsoft.VC143.CRT"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/x64/Microsoft.VC143.CRT"
+      - "C:/Windows/System32/OpenSSH/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/x64/Microsoft.VC143.CRT"
+      - "D:/python3.13.5/x64/Microsoft.VC143.CRT"
+      - "D:/python3.13.5/Scripts/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Common Files/Autodesk Shared/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/dotnet/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/nodejs/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/cursor/resources/app/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Git/cmd/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Docker/Docker/resources/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/apache-maven-3.9.6/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Memurai/x64/Microsoft.VC143.CRT"
+      - "C:/Users/Administrator/.cargo/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/x64/Microsoft.VC143.CRT"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/x64/Microsoft.VC143.CRT"
+      - "D:/Microsoft VS Code/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Users/Administrator/AppData/Roaming/npm/x64/Microsoft.VC143.CRT"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/CMake/bin/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/include/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files (x86)/include/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files (x86)/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/CMake/include/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/CMake/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Blender/include/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files/Blender/x64/Microsoft.VC143.CRT"
+      - "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Redist/MSVC/v143/x64/Microsoft.VC143.CRT"
+    found: "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/VC/Redist/MSVC/14.44.35112/"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/bin/${BUILD_TYPE}"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files/Blender"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.1/Modules/InstallRequiredSystemLibraries.cmake:383 (find_path)"
+      - "build_files/cmake/platform/platform_win32.cmake:154 (include)"
+      - "CMakeLists.txt:1576 (include)"
+    mode: "path"
+    variable: "WINDOWS_KITS_DIR"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "Redist/ucrt/DLLs/x64/ucrtbase.dll"
+    candidate_directories:
+      - "D:/VMware/bin/"
+      - "C:/Windows/System32/"
+      - "C:/Windows/"
+      - "C:/Windows/System32/wbem/"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/"
+      - "C:/Windows/System32/OpenSSH/"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/"
+      - "D:/python3.13.5/"
+      - "D:/python3.13.5/Scripts/"
+      - "C:/Program Files/Common Files/Autodesk Shared/"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/"
+      - "C:/Program Files/dotnet/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Program Files/cursor/resources/app/bin/"
+      - "C:/Program Files/Git/cmd/"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/"
+      - "C:/Program Files/Docker/Docker/resources/bin/"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/"
+      - "C:/Program Files/apache-maven-3.9.6/bin/"
+      - "C:/Program Files/Memurai/"
+      - "C:/Users/Administrator/.cargo/bin/"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/"
+      - "D:/Microsoft VS Code/bin/"
+      - "C:/Users/Administrator/AppData/Roaming/npm/"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/"
+      - "C:/Program Files/CMake/bin/"
+      - "C:/Program Files/include/"
+      - "C:/Program Files/"
+      - "C:/Program Files (x86)/include/"
+      - "C:/Program Files (x86)/"
+      - "C:/Program Files/CMake/include/"
+      - "C:/Program Files/CMake/"
+      - "C:/Program Files/Blender/include/"
+      - "C:/Program Files/Blender/"
+      - "C:/Program Files (x86)/Windows Kits/10/"
+      - "C:/Program Files/Windows Kits/10/"
+    searched_directories:
+      - "D:/VMware/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Windows/System32/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Windows/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Windows/System32/wbem/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Windows/System32/WindowsPowerShell/v1.0/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Windows/System32/OpenSSH/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "D:/python3.13.5/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "D:/python3.13.5/Scripts/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Common Files/Autodesk Shared/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Microsoft SQL Server/150/Tools/Binn/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/dotnet/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/nodejs/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/cursor/resources/app/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Git/cmd/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files (x86)/Tencent/\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177/dll/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Docker/Docker/resources/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Java/jdk-17.0.9/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/apache-maven-3.9.6/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Memurai/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Users/Administrator/.cargo/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Users/Administrator/AppData/Local/Programs/Python/Launcher/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WindowsApps/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "D:/Microsoft VS Code/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Users/Administrator/AppData/Roaming/npm/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Users/Administrator/AppData/Local/Microsoft/WinGet/Links/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/CMake/bin/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/include/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files (x86)/include/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files (x86)/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/CMake/include/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/CMake/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Blender/include/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+      - "C:/Program Files/Blender/Redist/10.0.26100.0/ucrt/DLLs/x64/ucrtbase.dll"
+    found: "C:/Program Files (x86)/Windows Kits/10/"
+    search_context:
+      ENV{PATH}:
+        - "D:\\VMware\\bin\\"
+        - "C:\\Windows\\system32"
+        - "C:\\Windows"
+        - "C:\\Windows\\System32\\Wbem"
+        - "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\"
+        - "C:\\Windows\\System32\\OpenSSH\\"
+        - "C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common"
+        - "C:\\Program Files\\NVIDIA Corporation\\NVIDIA NvDLISR"
+        - "D:\\python3.13.5"
+        - "D:\\python3.13.5\\Scripts"
+        - "C:\\Program Files\\Common Files\\Autodesk Shared\\"
+        - "C:\\Program Files\\Microsoft SQL Server\\150\\Tools\\Binn\\"
+        - "C:\\Program Files\\dotnet\\"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Program Files\\cursor\\resources\\app\\bin"
+        - "C:\\Program Files\\Git\\cmd"
+        - "C:\\Program Files (x86)\\Tencent\\\u5fae\u4fe1web\u5f00\u53d1\u8005\u5de5\u5177\\dll"
+        - "C:\\Program Files\\Docker\\Docker\\resources\\bin"
+        - "C:\\Program Files\\Java\\jdk-17.0.9\\bin"
+        - "C:\\Program Files\\apache-maven-3.9.6\\bin"
+        - "C:\\Program Files\\Memurai\\"
+        - "C:\\Users\\Administrator\\.cargo\\bin"
+        - "D:\\python3.13.5\\Scripts\\"
+        - "D:\\python3.13.5\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "D:\\Microsoft VS Code\\bin"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\Administrator\\AppData\\Roaming\\npm"
+        - "C:\\Users\\Administrator\\AppData\\Local\\Microsoft\\WinGet\\Links"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/Administrator/Desktop/Z1D2/build_stealth/bin/${BUILD_TYPE}"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "C:/Program Files"
+        - "C:/Program Files (x86)"
+        - "C:/Program Files/CMake"
+        - "C:/Program Files/Blender"
+...

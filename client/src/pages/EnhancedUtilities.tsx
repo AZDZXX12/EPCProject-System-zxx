@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Row, Col, Tabs, Input, InputNumber, Select, Button, Space, Divider, Statistic, message } from 'antd';
-import { CalculatorOutlined, SwapOutlined, FileTextOutlined, LinkOutlined, DollarOutlined, ClockCircleOutlined, ToolOutlined } from '@ant-design/icons';
+import { CalculatorOutlined, SwapOutlined, FileTextOutlined, LinkOutlined, DollarOutlined, ClockCircleOutlined, ToolOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import './EnhancedUtilities.css';
 import ProfilePlateCalculator from '../components/Utilities/ProfilePlateCalculator';
 import CableCalculator from '../components/Utilities/CableCalculator';
@@ -15,6 +16,7 @@ import BeltSupportCalculator from '../components/Utilities/BeltSupportCalculator
 const { TextArea } = Input;
 
 const EnhancedUtilities: React.FC = () => {
+  const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   // 材料计算器状态
   const [materialType, setMaterialType] = useState('concrete');
@@ -115,9 +117,99 @@ const EnhancedUtilities: React.FC = () => {
       </div>
 
       <Tabs
-        defaultActiveKey="profilePlate"
+        defaultActiveKey="3d-editor"
         tabPosition="left"
         items={[
+          // 三维编辑器 - 新增
+          {
+            label: '🎨 三维编辑器',
+            key: '3d-editor',
+            children: (
+              <Card>
+                <div style={{ textAlign: 'center', padding: '60px 20px' }}>
+                  <AppstoreOutlined style={{ fontSize: 64, color: '#1890ff', marginBottom: 24 }} />
+                  <h2 style={{ fontSize: 24, marginBottom: 16, fontWeight: 600 }}>Blender 3D 编辑器</h2>
+                  <p style={{ fontSize: 16, color: '#666', marginBottom: 40 }}>
+                    专业3D建模工具，支持模型创建、编辑、材质调整和场景导出
+                  </p>
+                  <Button 
+                    type="primary" 
+                    size="large" 
+                    icon={<AppstoreOutlined />}
+                    onClick={() => navigate('/blender-editor')}
+                    style={{ 
+                      height: 56, 
+                      fontSize: 18, 
+                      fontWeight: 700,
+                      minWidth: 240,
+                      padding: '0 32px',
+                      background: 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)',
+                      border: 'none',
+                      boxShadow: '0 6px 20px rgba(24, 144, 255, 0.5)',
+                      color: '#ffffff'
+                    }}
+                  >
+                    打开三维编辑器
+                  </Button>
+                  <Divider />
+                  <Row gutter={[24, 24]} style={{ marginTop: 32 }}>
+                    <Col span={6}>
+                      <Card size="small" style={{ background: '#f0f9ff' }}>
+                        <h4>🎨 Blender 编辑器</h4>
+                        <ul style={{ textAlign: 'left', paddingLeft: 20, fontSize: 13 }}>
+                          <li>专业3D建模工具</li>
+                          <li>添加基础几何体</li>
+                          <li>变换（移动/旋转/缩放）</li>
+                          <li>材质和纹理编辑</li>
+                          <li>光源和相机设置</li>
+                          <li>场景导入导出</li>
+                        </ul>
+                      </Card>
+                    </Col>
+                    <Col span={6}>
+                      <Card size="small" style={{ background: '#e6fffb' }}>
+                        <h4>📁 支持格式</h4>
+                        <ul style={{ textAlign: 'left', paddingLeft: 20, fontSize: 13 }}>
+                          <li>GLB - 推荐</li>
+                          <li>GLTF - 推荐</li>
+                          <li>OBJ - 支持</li>
+                          <li>FBX - 支持</li>
+                          <li>导出JSON场景</li>
+                          <li>截图PNG导出</li>
+                        </ul>
+                      </Card>
+                    </Col>
+                    <Col span={6}>
+                      <Card size="small" style={{ background: '#fff0f6' }}>
+                        <h4>🛠️ 编辑功能</h4>
+                        <ul style={{ textAlign: 'left', paddingLeft: 20, fontSize: 13 }}>
+                          <li>多对象管理</li>
+                          <li>图层组织</li>
+                          <li>精确变换输入</li>
+                          <li>快捷键支持</li>
+                          <li>撤销/重做</li>
+                          <li>实时预览</li>
+                        </ul>
+                      </Card>
+                    </Col>
+                    <Col span={6}>
+                      <Card size="small" style={{ background: '#fffbe6' }}>
+                        <h4>🎯 数字孪生 SCADA</h4>
+                        <ul style={{ textAlign: 'left', paddingLeft: 20, fontSize: 13 }}>
+                          <li>工艺流程监控</li>
+                          <li>DCS控制回路</li>
+                          <li>设备状态显示</li>
+                          <li>实时数据可视化</li>
+                          <li>报警管理</li>
+                          <li>设备控制</li>
+                        </ul>
+                      </Card>
+                    </Col>
+                  </Row>
+                </div>
+              </Card>
+            ),
+          },
           // 材料优化类
           {
             label: '📦 型材/板材优化',

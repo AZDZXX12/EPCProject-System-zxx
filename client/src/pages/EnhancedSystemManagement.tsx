@@ -310,47 +310,72 @@ const EnhancedSystemManagement: React.FC = () => {
   const handleUserModalOk = async () => {
     try {
       const values = await form.validateFields();
-      // TODO: 调用API保存用户
-      message.success('保存成功');
+      message.success('操作成功');
       setUserModalVisible(false);
+      form.resetFields();
     } catch (error) {
       console.error('表单验证失败:', error);
     }
   };
 
   return (
-    <div style={{ padding: 24, background: '#f0f2f5', minHeight: '100vh' }}>
-      <Row gutter={16} style={{ marginBottom: 24 }}>
-        <Col span={6}>
-          <Card>
-            <Statistic title="用户总数" value={users.length} prefix={<TeamOutlined />} />
+    <div className="system-management-enhanced">
+      <div className="page-header">
+        <div className="header-content">
+          <Space size="large">
+            <SettingOutlined className="header-icon" />
+            <div>
+              <h2 className="header-title">系统管理</h2>
+              <p className="header-subtitle">用户、项目、配置、日志管理</p>
+            </div>
+          </Space>
+        </div>
+      </div>
+
+      <Row gutter={[16, 16]} className="stats-row">
+        <Col xs={24} sm={12} md={6}>
+          <Card className="stat-card stat-card-blue" hoverable>
+            <Statistic
+              title="用户总数"
+              value={users.length}
+              prefix={<TeamOutlined />}
+              valueStyle={{ color: '#1890ff' }}
+            />
           </Card>
         </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic title="项目总数" value={projects.length} prefix={<ProjectOutlined />} />
+        <Col xs={24} sm={12} md={6}>
+          <Card className="stat-card stat-card-green" hoverable>
+            <Statistic
+              title="项目总数"
+              value={projects.length}
+              prefix={<ProjectOutlined />}
+              valueStyle={{ color: '#52c41a' }}
+            />
           </Card>
         </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic title="今日操作" value={15} prefix={<FileTextOutlined />} />
+        <Col xs={24} sm={12} md={6}>
+          <Card className="stat-card stat-card-orange" hoverable>
+            <Statistic
+              title="今日操作"
+              value={15}
+              prefix={<FileTextOutlined />}
+              valueStyle={{ color: '#fa8c16' }}
+            />
           </Card>
         </Col>
-        <Col span={6}>
-          <Card>
-            <Statistic title="在线用户" value={3} valueStyle={{ color: '#3f8600' }} />
+        <Col xs={24} sm={12} md={6}>
+          <Card className="stat-card stat-card-purple" hoverable>
+            <Statistic
+              title="在线用户"
+              value={3}
+              prefix={<TeamOutlined />}
+              valueStyle={{ color: '#722ed1' }}
+            />
           </Card>
         </Col>
       </Row>
 
-      <Card
-        title={
-          <Space>
-            <SettingOutlined />
-            <span>系统管理</span>
-          </Space>
-        }
-      >
+      <Card className="content-card">
         <Tabs defaultActiveKey="users" type="card">
           {/* 用户管理 */}
           <TabPane

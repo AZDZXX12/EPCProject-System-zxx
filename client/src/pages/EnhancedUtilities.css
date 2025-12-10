@@ -4,6 +4,26 @@
   padding: 24px;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Ant Design Tabs占满屏幕 */
+.eu-container .ant-tabs {
+  width: 100%;
+}
+
+.eu-container .ant-tabs-content-holder {
+  width: 100%;
+}
+
+.eu-container .ant-tabs-tabpane {
+  width: 100%;
+  max-width: 100%;
+}
+
+.eu-container .ant-card {
+  max-width: 100%;
 }
 
 /* Header */

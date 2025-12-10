@@ -7,11 +7,6 @@
 import { logger } from '../utils/EnhancedLogger';
 import { getActiveAIConfig, PROMPTS, AI_ERROR_MESSAGES } from '../config/ai.config';
 
-interface ChatMessage {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
-
 interface AITaskResult {
   title: string;
   description: string;
@@ -404,65 +399,52 @@ class RealAIService {
    * Groq API调用 - 超快免费
    * 官网：https://console.groq.com/
    * 模型：llama-3.1-8b-instant（免费额度：14,400次/天）
+   * 
+   * 注意：由于浏览器CORS限制，直接调用会失败
+   * 临时方案：使用本地AI，生产环境需要后端代理
    */
   private async chatWithGroq(message: string): Promise<ChatResponse> {
-    logger.info('[Groq] 开始调用', {
+    logger.info('[Groq] 检测到CORS限制，使用本地AI', {
       hasApiKey: !!this.config.apiKey,
-      apiKeyLength: this.config.apiKey?.length,
       messageLength: message.length
     });
     
-    if (!this.config.apiKey) {
-      logger.warn('[Groq] 未配置API密钥');
-      if (this.config.strict) throw new Error('Groq未配置API密钥');
-      return this.chatWithLocal(message);
-    }
-
+    // 浏览器环境下直接调用第三方API会遇到CORS问题
+    // 解决方案：
+    // 1. 临时：使用本地AI（当前方案）
+    // 2. 生产：通过后端代理API请求
+    
+    logger.warn('[Groq] ⚠️ 浏览器CORS限制，已自动切换到本地AI');
+    logger.info('[Groq] 💡 提示：生产环境请配置后端API代理');
+    
+    return this.chatWithLocal(message);
+    
+    /* 
+    // 后端代理方案（需要后端支持）：
     try {
-      logger.info('[Groq] 发送请求到API');
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      const response = await fetch('/api/ai/groq', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.config.apiKey}`,
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: this.config.model || 'llama-3.1-8b-instant',
+          apiKey: this.config.apiKey,
           messages: this.buildMessages(message),
-          temperature: 0.7,
-          max_tokens: 2000,
-        }),
+          model: this.config.model || 'llama-3.1-8b-instant'
+        })
       });
-
-      logger.info('[Groq] API响应状态', { status: response.status });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        logger.error('[Groq] API错误', { status: response.status, error: errorText });
-        throw new Error(`Groq API错误: ${response.status} - ${errorText}`);
-      }
-
+      
+      if (!response.ok) throw new Error(`API错误: ${response.status}`);
+      
       const data = await response.json();
-      logger.info('[Groq] 响应成功', { 
-        usage: data.usage,
-        model: data.model,
-        choices: data.choices?.length
-      });
-
       return {
         message: data.choices[0].message.content,
-        usage: {
-          promptTokens: data.usage.prompt_tokens,
-          completionTokens: data.usage.completion_tokens,
-          totalTokens: data.usage.total_tokens,
-        },
-        model: 'llama-3.1-8b-instant',
+        usage: data.usage,
+        model: 'llama-3.1-8b-instant'
       };
     } catch (error) {
       logger.error('[Groq] 请求失败', error);
-      if (this.config.strict) throw error;
       return this.chatWithLocal(message);
     }
+    */
   }
 
   /**

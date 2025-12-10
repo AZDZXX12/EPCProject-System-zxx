@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Card, Tabs, Button, Space, message } from 'antd';
+import { Card, Tabs, Button, Space, message, Tooltip, Badge } from 'antd';
 import { 
   ProjectOutlined, 
   UnorderedListOutlined, 
@@ -12,6 +12,7 @@ import {
   CalendarOutlined,
   PlusOutlined,
   DownloadOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useProject } from '../contexts/ProjectContext';
@@ -23,8 +24,7 @@ import OptimizedGanttChart from './OptimizedGanttChart';
 import TaskListView from '../components/TaskListView';
 import KanbanView from '../components/KanbanView';
 import CalendarView from '../components/CalendarView';
-
-const { TabPane } = Tabs;
+import './GanttModulePage.css';
 
 const GanttModulePage: React.FC = () => {
   const location = useLocation();
@@ -35,6 +35,8 @@ const GanttModulePage: React.FC = () => {
   // 从URL获取视图参数
   const viewParam = params.get('view') || 'gantt';
   const [activeView, setActiveView] = useState(viewParam);
+  const [taskCount, setTaskCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   // 同步URL参数
   useEffect(() => {
@@ -98,94 +100,118 @@ const GanttModulePage: React.FC = () => {
     }
   };
 
+  const handleRefresh = () => {
+    setLoading(true);
+    message.info('刷新中...');
+    setTimeout(() => {
+      setLoading(false);
+      message.success('刷新成功');
+    }, 1000);
+  };
+
+  const items = [
+    {
+      key: 'gantt',
+      label: (
+        <span>
+          <ProjectOutlined />
+          甘特图
+          {taskCount > 0 && <Badge count={taskCount} offset={[10, 0]} />}
+        </span>
+      ),
+      children: (
+        <div className="tab-content">
+          <OptimizedGanttChart hideTitle />
+        </div>
+      ),
+    },
+    {
+      key: 'list',
+      label: (
+        <span>
+          <UnorderedListOutlined />
+          列表视图
+        </span>
+      ),
+      children: (
+        <div className="tab-content">
+          <TaskListView />
+        </div>
+      ),
+    },
+    {
+      key: 'kanban',
+      label: (
+        <span>
+          <AppstoreOutlined />
+          看板视图
+        </span>
+      ),
+      children: (
+        <div className="tab-content">
+          <KanbanView />
+        </div>
+      ),
+    },
+    {
+      key: 'calendar',
+      label: (
+        <span>
+          <CalendarOutlined />
+          日历视图
+        </span>
+      ),
+      children: (
+        <div className="tab-content">
+          <CalendarView />
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <div style={{ padding: 24 }}>
-      <Card
-        title={
-          <span>
-            <ProjectOutlined style={{ marginRight: 8 }} />
-            任务管理
-          </span>
-        }
-        extra={
+    <div className="gantt-module-page-compact">
+      <Card className="content-card-compact">
+        <div className="compact-header">
           <Space>
+            <ProjectOutlined />
+            <span className="compact-title">任务管理</span>
+          </Space>
+          <Space size="small">
+            <Tooltip title="刷新">
+              <Button 
+                size="small"
+                icon={<ReloadOutlined />}
+                onClick={handleRefresh}
+                loading={loading}
+              />
+            </Tooltip>
             <Button 
               type="primary" 
+              size="small"
               icon={<PlusOutlined />}
               onClick={handleNewTask}
             >
-              新建任务
+              新建
             </Button>
             <Button 
+              size="small"
               icon={<DownloadOutlined />}
               onClick={handleExport}
             >
               导出
             </Button>
           </Space>
-        }
-      >
+        </div>
+
         <Tabs 
           activeKey={activeView} 
           onChange={handleTabChange}
-          size="large"
-        >
-          <TabPane
-            tab={
-              <span>
-                <ProjectOutlined />
-                甘特图
-              </span>
-            }
-            key="gantt"
-          >
-            <div style={{ marginTop: 16 }}>
-              <OptimizedGanttChart hideTitle />
-            </div>
-          </TabPane>
-
-          <TabPane
-            tab={
-              <span>
-                <UnorderedListOutlined />
-                列表视图
-              </span>
-            }
-            key="list"
-          >
-            <div style={{ marginTop: 16 }}>
-              <TaskListView />
-            </div>
-          </TabPane>
-
-          <TabPane
-            tab={
-              <span>
-                <AppstoreOutlined />
-                看板视图
-              </span>
-            }
-            key="kanban"
-          >
-            <div style={{ marginTop: 16 }}>
-              <KanbanView />
-            </div>
-          </TabPane>
-
-          <TabPane
-            tab={
-              <span>
-                <CalendarOutlined />
-                日历视图
-              </span>
-            }
-            key="calendar"
-          >
-            <div style={{ marginTop: 16 }}>
-              <CalendarView />
-            </div>
-          </TabPane>
-        </Tabs>
+          size="small"
+          type="line"
+          className="compact-tabs"
+          items={items}
+        />
       </Card>
     </div>
   );

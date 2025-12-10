@@ -1,0 +1,1618 @@
+/* ============================================
+   🏭 数字孪生 SCADA 系统 - 工业级布局
+   Digital Twin SCADA System - Industrial Layout
+   Version: 5.0.0
+   Date: 2025-12-02
+============================================ */
+
+/* ============================================
+   📐 全局布局架构
+============================================ */
+
+.scada-container {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "sidebar-left main sidebar-right"
+    "footer footer footer";
+  grid-template-columns: 320px 1fr 360px;
+  grid-template-rows: 60px 1fr 180px;
+  gap: 0;
+  background: transparent;
+  overflow: hidden;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ============================================
+   🎯 顶部导航区域
+============================================ */
+
+.scada-header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: linear-gradient(to bottom, 
+    rgba(15, 20, 30, 0.98), 
+    rgba(10, 15, 25, 0.95));
+  border-bottom: 2px solid rgba(34, 211, 238, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  pointer-events: auto;
+  gap: 16px;
+  min-height: 60px;
+}
+
+.scada-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  min-width: 240px;
+}
+
+.scada-logo-icon {
+  width: 32px;
+  height: 32px;
+  color: rgb(34, 211, 238);
+}
+
+.scada-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.scada-logo-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.05em;
+}
+
+.scada-logo-subtitle {
+  font-size: 11px;
+  color: rgb(148, 163, 184);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.scada-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.scada-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-left: 1px solid rgba(71, 85, 105, 0.3);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.scada-toolbar-group:first-child {
+  border-left: none;
+}
+
+.scada-btn {
+  padding: 8px 16px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 4px;
+  color: rgb(148, 163, 184);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scada-btn:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: rgb(34, 211, 238);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
+}
+
+.scada-btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.scada-btn-primary {
+  background: linear-gradient(135deg, 
+    rgba(34, 211, 238, 0.15), 
+    rgba(6, 182, 212, 0.2));
+  border-color: rgba(34, 211, 238, 0.5);
+  color: rgb(34, 211, 238);
+}
+
+.scada-btn-primary:hover {
+  background: linear-gradient(135deg, 
+    rgba(34, 211, 238, 0.25), 
+    rgba(6, 182, 212, 0.3));
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+}
+
+.scada-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.scada-status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.scada-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.scada-status-dot-online {
+  background: rgb(74, 222, 128);
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.6);
+}
+
+.scada-status-dot-alarm {
+  background: rgb(248, 113, 113);
+  box-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+.scada-clock {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(34, 211, 238);
+  letter-spacing: 0.1em;
+}
+
+/* ============================================
+   📊 左侧工艺监控面板
+============================================ */
+
+.scada-sidebar-left {
+  grid-area: sidebar-left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(10, 15, 25, 0.6);
+  border-right: 1px solid rgba(71, 85, 105, 0.3);
+  overflow-y: auto;
+  overflow-x: hidden;
+  pointer-events: auto;
+}
+
+.scada-panel {
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95), 
+    rgba(20, 30, 50, 0.9));
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.scada-panel:hover {
+  border-color: rgba(34, 211, 238, 0.4);
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(34, 211, 238, 0.1);
+}
+
+.scada-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.scada-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgb(226, 232, 240);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scada-panel-icon {
+  width: 18px;
+  height: 18px;
+  color: rgb(34, 211, 238);
+}
+
+.scada-panel-badge {
+  padding: 2px 8px;
+  background: rgba(34, 211, 238, 0.15);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgb(34, 211, 238);
+}
+
+.scada-panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 工艺流程树 */
+.scada-process-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scada-process-node {
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border-left: 3px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scada-process-node:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-left-color: rgb(34, 211, 238);
+}
+
+.scada-process-node-active {
+  background: rgba(34, 211, 238, 0.15);
+  border-left-color: rgb(34, 211, 238);
+}
+
+.scada-process-node-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgb(226, 232, 240);
+}
+
+.scada-process-node-status {
+  padding: 2px 6px;
+  background: rgba(74, 222, 128, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgb(74, 222, 128);
+  text-transform: uppercase;
+}
+
+/* KPI仪表盘 */
+.scada-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.scada-kpi-card {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.8), 
+    rgba(51, 65, 85, 0.6));
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 6px;
+  padding: 12px;
+  transition: all 0.3s;
+}
+
+.scada-kpi-card:hover {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.15);
+  transform: translateY(-2px);
+}
+
+.scada-kpi-label {
+  font-size: 11px;
+  color: rgb(148, 163, 184);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.scada-kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: rgb(34, 211, 238);
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+}
+
+.scada-kpi-unit {
+  font-size: 12px;
+  color: rgb(148, 163, 184);
+  margin-left: 4px;
+}
+
+.scada-kpi-trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+.scada-kpi-trend-up {
+  color: rgb(74, 222, 128);
+}
+
+.scada-kpi-trend-down {
+  color: rgb(248, 113, 113);
+}
+
+/* HSE安全看板 */
+.scada-hse-card {
+  background: linear-gradient(135deg, 
+    rgba(22, 163, 74, 0.1), 
+    rgba(74, 222, 128, 0.05));
+  border: 2px solid rgba(74, 222, 128, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.scada-hse-label {
+  font-size: 12px;
+  color: rgb(74, 222, 128);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.scada-hse-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: rgb(74, 222, 128);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.6);
+}
+
+.scada-hse-unit {
+  font-size: 14px;
+  color: rgb(148, 163, 184);
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   🎛️ 右侧DCS控制面板
+============================================ */
+
+.scada-sidebar-right {
+  grid-area: sidebar-right;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(10, 15, 25, 0.6);
+  border-left: 1px solid rgba(71, 85, 105, 0.3);
+  overflow-y: auto;
+  overflow-x: hidden;
+  pointer-events: auto;
+  align-items: stretch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.4) rgba(15, 23, 42, 0.5);
+}
+
+/* DCS控制回路 */
+.scada-dcs-loop {
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.98), 
+    rgba(20, 30, 50, 0.95));
+  border: 2px solid rgba(34, 211, 238, 0.3);
+  border-radius: 8px;
+  padding: 14px;
+  position: relative;
+  overflow: visible;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.scada-dcs-loop::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, 
+    transparent, 
+    rgba(34, 211, 238, 0.6), 
+    transparent);
+}
+
+.scada-dcs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.scada-dcs-tag {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(34, 211, 238);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+}
+
+.scada-dcs-desc {
+  font-size: 11px;
+  color: rgb(148, 163, 184);
+  margin-top: 4px;
+}
+
+.scada-dcs-mode {
+  padding: 4px 10px;
+  background: rgba(74, 222, 128, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgb(74, 222, 128);
+  text-transform: uppercase;
+}
+
+.scada-dcs-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 控制参数显示 */
+.scada-dcs-params {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.scada-dcs-param {
+  text-align: center;
+  padding: 10px;
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 6px;
+}
+
+.scada-dcs-param-label {
+  font-size: 10px;
+  color: rgb(148, 163, 184);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.scada-dcs-param-value {
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.scada-dcs-param-pv {
+  color: rgb(74, 222, 128);
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+}
+
+.scada-dcs-param-sp {
+  color: rgb(253, 224, 71);
+  text-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+}
+
+.scada-dcs-param-op {
+  color: rgb(34, 211, 238);
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+}
+
+/* 控制条 */
+.scada-dcs-bars {
+  display: flex;
+  gap: 10px;
+  height: 80px;
+}
+
+.scada-dcs-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.scada-dcs-bar-container {
+  width: 100%;
+  height: 60px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.scada-dcs-bar-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  transition: height 0.5s ease-out;
+}
+
+.scada-dcs-bar-fill-pv {
+  background: linear-gradient(to top, 
+    rgba(74, 222, 128, 0.8), 
+    rgba(34, 197, 94, 1));
+}
+
+.scada-dcs-bar-fill-op {
+  background: linear-gradient(to top, 
+    rgba(34, 211, 238, 0.8), 
+    rgba(6, 182, 212, 1));
+}
+
+.scada-dcs-bar-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgb(148, 163, 184);
+  text-transform: uppercase;
+}
+
+/* ============================================
+   📺 中心3D展示区域
+============================================ */
+
+.scada-main {
+  grid-area: main;
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 确保3D场景可见 */
+.twin-scene-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: auto;
+}
+
+/* SCADA覆盖层在3D场景之上 */
+.twin-overlay-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ============================================
+   📊 底部状态和趋势面板
+============================================ */
+
+.scada-footer {
+  grid-area: footer;
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(to top, 
+    rgba(10, 15, 25, 0.98), 
+    rgba(15, 20, 30, 0.95));
+  border-top: 2px solid rgba(71, 85, 105, 0.3);
+  overflow-x: auto;
+  overflow-y: hidden;
+  pointer-events: auto;
+}
+
+.scada-trend-panel {
+  flex: 1;
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95), 
+    rgba(20, 30, 50, 0.9));
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 6px;
+  padding: 12px;
+  min-width: 300px;
+}
+
+.scada-trend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.scada-trend-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(226, 232, 240);
+  text-transform: uppercase;
+}
+
+.scada-trend-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgb(34, 211, 238);
+  font-family: 'Courier New', monospace;
+}
+
+.scada-trend-chart {
+  height: 80px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(71, 85, 105, 0.3);
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  padding: 4px;
+}
+
+.scada-trend-bar {
+  flex: 1;
+  background: linear-gradient(to top, 
+    rgba(34, 211, 238, 0.6), 
+    rgba(6, 182, 212, 0.8));
+  border-radius: 2px;
+  transition: height 0.3s;
+}
+
+/* ============================================
+   🎛️ DCS控制功能样式
+============================================ */
+
+.scada-dcs-controls {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(30, 41, 59, 0.6);
+  border-radius: 6px;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+.scada-control-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.scada-control-row:last-child {
+  margin-bottom: 0;
+}
+
+.scada-control-label {
+  min-width: 70px;
+  color: rgb(148, 163, 184);
+  font-weight: 500;
+}
+
+.scada-control-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.scada-control-btn {
+  padding: 6px 8px;
+  background: rgba(51, 65, 85, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 3px;
+  color: rgb(148, 163, 184);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scada-control-btn:hover {
+  background: rgba(71, 85, 105, 0.8);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: rgb(34, 211, 238);
+}
+
+.scada-control-input {
+  flex: 1;
+  padding: 6px 10px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 4px;
+  color: rgb(34, 211, 238);
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.scada-control-input:focus {
+  outline: none;
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+.scada-control-unit {
+  color: rgb(148, 163, 184);
+  font-size: 11px;
+  min-width: 30px;
+}
+
+.scada-mode-switch {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+
+.scada-mode-btn {
+  flex: 1;
+  padding: 6px 12px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 4px;
+  color: rgb(148, 163, 184);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.scada-mode-btn:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.scada-mode-btn.active {
+  background: linear-gradient(135deg, 
+    rgba(34, 211, 238, 0.2), 
+    rgba(6, 182, 212, 0.3));
+  border-color: rgba(34, 211, 238, 0.5);
+  color: rgb(34, 211, 238);
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+.scada-control-slider {
+  flex: 1;
+  height: 6px;
+  background: rgba(71, 85, 105, 0.5);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.scada-control-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, 
+    rgba(34, 211, 238, 0.8), 
+    rgba(6, 182, 212, 1));
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+}
+
+.scada-control-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, 
+    rgba(34, 211, 238, 0.8), 
+    rgba(6, 182, 212, 1));
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+  border: none;
+}
+
+.scada-apply-btn {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, 
+    rgba(74, 222, 128, 0.2), 
+    rgba(34, 197, 94, 0.3));
+  border: 1px solid rgba(74, 222, 128, 0.5);
+  border-radius: 4px;
+  color: rgb(74, 222, 128);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.scada-apply-btn:hover {
+  background: linear-gradient(135deg, 
+    rgba(74, 222, 128, 0.3), 
+    rgba(34, 197, 94, 0.4));
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+}
+
+/* ============================================
+   🔧 设备控制样式
+============================================ */
+
+.scada-equipment-controls {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.scada-equipment-controls .scada-btn {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 11px;
+  justify-content: center;
+}
+
+.scada-btn-success {
+  background: rgba(74, 222, 128, 0.15);
+  border-color: rgba(74, 222, 128, 0.5);
+  color: rgb(74, 222, 128);
+}
+
+.scada-btn-success:hover:not(:disabled) {
+  background: rgba(74, 222, 128, 0.25);
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+}
+
+.scada-btn-warning {
+  background: rgba(253, 224, 71, 0.15);
+  border-color: rgba(253, 224, 71, 0.5);
+  color: rgb(253, 224, 71);
+}
+
+.scada-btn-warning:hover:not(:disabled) {
+  background: rgba(253, 224, 71, 0.25);
+  box-shadow: 0 0 15px rgba(253, 224, 71, 0.3);
+}
+
+.scada-btn-danger {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.5);
+  color: rgb(248, 113, 113);
+}
+
+.scada-btn-danger:hover:not(:disabled) {
+  background: rgba(248, 113, 113, 0.25);
+  box-shadow: 0 0 15px rgba(248, 113, 113, 0.3);
+}
+
+.scada-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   ⚠️ 报警样式
+============================================ */
+
+.scada-alarm-card {
+  padding: 10px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 4px;
+  margin-bottom: 6px;
+  transition: all 0.3s;
+}
+
+.scada-alarm-card:hover {
+  background: rgba(248, 113, 113, 0.15);
+  border-color: rgba(248, 113, 113, 0.5);
+}
+
+.scada-alarm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.scada-alarm-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: rgb(248, 113, 113);
+  font-weight: 600;
+}
+
+.scada-alarm-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.scada-btn-icon {
+  padding: 4px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 3px;
+  color: rgb(148, 163, 184);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scada-btn-icon:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: rgb(34, 211, 238);
+}
+
+.scada-alarm-message {
+  font-size: 11px;
+  color: rgb(226, 232, 240);
+  margin-bottom: 6px;
+}
+
+.scada-alarm-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgb(100, 116, 139);
+}
+
+/* ============================================
+   🎨 滚动条样式
+============================================ */
+
+.scada-sidebar-left::-webkit-scrollbar,
+.scada-sidebar-right::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scada-sidebar-left::-webkit-scrollbar-track,
+.scada-sidebar-right::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 3px;
+}
+
+.scada-sidebar-left::-webkit-scrollbar-thumb,
+.scada-sidebar-right::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, 
+    rgba(34, 211, 238, 0.4), 
+    rgba(6, 182, 212, 0.6));
+  border-radius: 3px;
+}
+
+.scada-sidebar-left::-webkit-scrollbar-thumb:hover,
+.scada-sidebar-right::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, 
+    rgba(34, 211, 238, 0.6), 
+    rgba(6, 182, 212, 0.8));
+}
+
+/* ============================================
+   🎭 动画效果
+============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scada-panel {
+  animation: fadeIn 0.4s ease-out;
+}
+
+/* ============================================
+   🎨 增强功能样式 - 参考北京齿轮工厂
+============================================ */
+
+/* 设备卡片网格 */
+.scada-devices-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.scada-device-card {
+  background: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95), 
+    rgba(20, 30, 50, 0.9));
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.scada-device-card:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+  transform: translateY(-2px);
+}
+
+.scada-device-card .device-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.scada-device-card .device-name {
+  font-size: 11px;
+  color: rgb(148, 163, 184);
+  text-align: center;
+}
+
+.scada-device-card .device-data {
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: rgb(34, 211, 238);
+  text-align: center;
+}
+
+.scada-device-card .device-data .separator {
+  color: rgb(148, 163, 184);
+  margin: 0 2px;
+}
+
+.scada-device-card .device-efficiency {
+  font-size: 10px;
+  color: rgb(74, 222, 128);
+  background: rgba(74, 222, 128, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* 生产数据表格 */
+.scada-data-table-container {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scada-data-table {
+  width: 100%;
+  font-size: 11px;
+  border-collapse: collapse;
+}
+
+.scada-data-table thead {
+  position: sticky;
+  top: 0;
+  background: rgba(15, 23, 42, 0.98);
+  z-index: 10;
+}
+
+.scada-data-table th {
+  padding: 8px 4px;
+  text-align: left;
+  color: rgb(148, 163, 184);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+.scada-data-table td {
+  padding: 8px 4px;
+  color: rgb(226, 232, 240);
+  border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+}
+
+.scada-data-table tbody tr:nth-child(even) {
+  background: rgba(30, 41, 59, 0.3);
+}
+
+.scada-data-table tbody tr:hover {
+  background: rgba(51, 65, 85, 0.5);
+}
+
+.scada-data-table .equipment-id {
+  color: rgb(34, 211, 238);
+  font-weight: 600;
+}
+
+.scada-data-table .good-count {
+  color: rgb(74, 222, 128);
+}
+
+.scada-data-table .bad-count {
+  color: rgb(248, 113, 113);
+  font-weight: 600;
+}
+
+/* 消息通知列表 */
+.scada-notifications-panel {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.scada-notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 140px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scada-notification-item {
+  padding: 8px 10px;
+  background: rgba(30, 41, 59, 0.5);
+  border-left: 3px solid rgba(34, 211, 238, 0.5);
+  border-radius: 4px;
+  font-size: 11px;
+  transition: all 0.3s;
+}
+
+.scada-notification-item:hover {
+  background: rgba(51, 65, 85, 0.6);
+  border-left-color: rgb(34, 211, 238);
+}
+
+.scada-notification-item.scada-notification-success {
+  border-left-color: rgb(74, 222, 128);
+}
+
+.scada-notification-item.scada-notification-info {
+  border-left-color: rgb(34, 211, 238);
+}
+
+.scada-notification-item .notification-time {
+  font-size: 10px;
+  color: rgb(148, 163, 184);
+  margin-bottom: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+.scada-notification-item .notification-content {
+  color: rgb(226, 232, 240);
+  line-height: 1.4;
+}
+
+/* 生产进度条 */
+.scada-progress-panel {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.scada-production-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scada-progress-item .progress-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: rgb(226, 232, 240);
+}
+
+.scada-progress-item .line-name {
+  font-weight: 600;
+}
+
+.scada-progress-item .progress-value {
+  color: rgb(34, 211, 238);
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+}
+
+.scada-progress-item .progress-bar {
+  height: 20px;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  position: relative;
+}
+
+.scada-progress-item .progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, 
+    rgba(34, 211, 238, 0.8), 
+    rgba(59, 130, 246, 0.9));
+  transition: width 0.5s ease;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+  position: relative;
+}
+
+.scada-progress-item .progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom,
+    rgba(255, 255, 255, 0.2),
+    transparent);
+}
+
+/* 视频监控 */
+.scada-video-panel {
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+.scada-video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.scada-video-item {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  background: rgba(10, 15, 25, 0.8);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.scada-video-item:hover {
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+  transform: scale(1.02);
+}
+
+.scada-video-item .video-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(71, 85, 105);
+  background: linear-gradient(135deg,
+    rgba(15, 23, 42, 0.9),
+    rgba(30, 41, 59, 0.7));
+}
+
+.scada-video-item .video-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.8),
+    transparent);
+  color: rgb(226, 232, 240);
+  padding: 6px 8px;
+  font-size: 11px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.scada-video-item .video-status {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.scada-video-item .status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgb(71, 85, 105);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+.scada-video-item .status-indicator.active {
+  background: rgb(74, 222, 128);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* 滚动条样式优化 */
+.scada-data-table-container::-webkit-scrollbar,
+.scada-notifications-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scada-data-table-container::-webkit-scrollbar-track,
+.scada-notifications-list::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 2px;
+}
+
+.scada-data-table-container::-webkit-scrollbar-thumb,
+.scada-notifications-list::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.4);
+  border-radius: 2px;
+}
+
+.scada-data-table-container::-webkit-scrollbar-thumb:hover,
+.scada-notifications-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.6);
+}
+
+/* ============================================
+   ⚡ 能耗监控样式
+============================================ */
+.scada-energy-monitor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.energy-item {
+  padding: 10px 12px;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 6px;
+  border-left: 3px solid rgba(34, 211, 238, 0.5);
+}
+
+.energy-label {
+  font-size: 11px;
+  color: rgb(148, 163, 184);
+  margin-bottom: 6px;
+}
+
+.energy-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: rgb(226, 232, 240);
+  font-family: 'Courier New', monospace;
+}
+
+.energy-unit {
+  font-size: 12px;
+  color: rgb(148, 163, 184);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+.energy-trend {
+  font-size: 11px;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.energy-trend.up {
+  color: rgb(248, 113, 113);
+}
+
+.energy-trend.down {
+  color: rgb(74, 222, 128);
+}
+
+.energy-progress {
+  margin-top: 8px;
+  height: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.energy-progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, rgb(251, 191, 36), rgb(34, 211, 238));
+  transition: width 0.5s ease;
+}
+
+/* ============================================
+   🛢️ 储罐监控样式
+============================================ */
+.scada-tank-list {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+}
+
+.tank-item {
+  flex: 1;
+  min-width: 80px;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 6px;
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.tank-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.tank-id {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(34, 211, 238);
+}
+
+.tank-status {
+  font-size: 14px;
+}
+
+.tank-status.tank-status-normal {
+  color: rgb(74, 222, 128);
+}
+
+.tank-status.tank-status-warning {
+  color: rgb(251, 191, 36);
+}
+
+.tank-product {
+  font-size: 10px;
+  color: rgb(148, 163, 184);
+  margin-bottom: 8px;
+}
+
+.tank-level-bar {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 4px;
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.tank-level-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(34, 211, 238, 0.8), rgba(59, 130, 246, 0.6));
+  border-radius: 0 0 4px 4px;
+  transition: height 0.5s ease;
+}
+
+.tank-level-fill.tank-level-warning {
+  background: linear-gradient(to top, rgba(251, 191, 36, 0.8), rgba(251, 146, 60, 0.6));
+}
+
+.tank-level-text {
+  position: relative;
+  z-index: 10;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgb(226, 232, 240);
+  margin-bottom: 4px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.tank-capacity {
+  font-size: 10px;
+  color: rgb(148, 163, 184);
+}
+
+/* ============================================
+   🎯 底部操作按钮栏
+============================================ */
+.scada-footer-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+  justify-content: center;
+  align-items: center;
+}
+
+.scada-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 6px;
+  color: rgb(226, 232, 240);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.scada-action-btn:hover {
+  background: rgba(51, 65, 85, 0.9);
+  border-color: rgba(34, 211, 238, 0.6);
+  box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+  transform: translateY(-2px);
+}
+
+.scada-action-btn.scada-action-btn-primary {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(59, 130, 246, 0.2));
+  border-color: rgba(34, 211, 238, 0.6);
+  color: rgb(34, 211, 238);
+  font-weight: 600;
+}
+
+.scada-action-btn.scada-action-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(59, 130, 246, 0.3));
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+}
+
+.scada-action-btn .action-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ============================================
+   📱 响应式适配
+============================================ */
+
+@media (max-width: 1400px) {
+  .scada-container {
+    grid-template-columns: 280px 1fr 320px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .scada-container {
+    grid-template-areas:
+      "header header"
+      "main main"
+      "footer footer";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 60px 1fr 180px;
+  }
+  
+  .scada-sidebar-left,
+  .scada-sidebar-right {
+    display: none;
+  }
+}

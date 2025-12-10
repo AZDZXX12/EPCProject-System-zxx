@@ -70,7 +70,7 @@ const KanbanView: React.FC = () => {
       size="small"
       hoverable
       style={{ marginBottom: 12, cursor: 'pointer' }}
-      bodyStyle={{ padding: 12 }}
+      styles={{ body: { padding: 12 } }}
     >
       <div style={{ marginBottom: 8 }}>
         <Tag color={getPriorityColor(task.priority)} style={{ marginRight: 8 }}>

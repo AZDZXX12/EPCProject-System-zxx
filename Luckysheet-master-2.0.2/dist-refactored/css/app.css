@@ -22,10 +22,6 @@
     
     /* Radius */
     --radius-base: 4px;
-    /* Utility Classes */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* 全局样式 */
@@ -38,61 +34,6 @@ html, body {
     font-size: 14px;
     color: var(--text-primary);
     background-color: var(--bg-color);
-}
-
-.hidden {
-    display: none;
-}
-
-.visibility-hidden {
-    visibility: hidden;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.mt-2 { margin-top: 8px; }
-.mt-3 { margin-top: 12px; }
-.mt-4 { margin-top: 16px; }
-.mb-4 { margin-bottom: 16px; }
-
-.section-padding {
-    padding: 24px;
-}
-
-.section-header {
-    margin-bottom: 24px;
-    color: var(--text-primary);
-    font-size: 16px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.section-header::before {
-    content: '';
-    display: block;
-    width: 4px;
-    height: 16px;
-    background: var(--primary-color);
-    border-radius: 2px;
-}
-
-.login-tip-container {
-    text-align: center;
-    margin-top: 16px;
-    font-size: 12px;
-}
-
-.login-tip {
-    color: var(--text-secondary);
-}
-
-.login-links {
-    text-align: center;
-    margin-top: 12px;
 }
 
 * {
@@ -119,35 +60,6 @@ html, body {
     flex-shrink: 0;
     height: var(--toolbar-height);
     z-index: 100;
-}
-
-/* 工具栏分组 */
-.toolbar-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.toolbar-group.center {
-    flex: 1;
-    justify-content: center;
-}
-
-.toolbar-group.right {
-    justify-content: flex-end;
-}
-
-.app-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-primary);
-    letter-spacing: 0.5px;
-}
-
-.toolbar-hint {
-    color: var(--text-secondary);
-    font-size: 12px;
-    margin-left: 8px;
 }
 
 /* 通用按钮样式 */
@@ -218,6 +130,7 @@ html, body {
     position: relative;
     z-index: 10;
     background: #fff;
+    /* 给予右侧一点空间，如果需要分隔感 */
     border-right: 1px solid var(--border-color); 
 }
 
@@ -245,7 +158,7 @@ html, body {
     width: 0 !important;
     min-width: 0 !important;
     max-width: 0 !important;
-    transform: translateX(100%);
+    transform: translateX(100%); /* 使用 transform 移动出屏幕，比宽度动画更流畅 */
 }
 
 /* 折叠按钮优化 */
@@ -287,16 +200,6 @@ html, body {
     gap: 12px;
 }
 
-.database-load-section span:first-child {
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-#dbFileStatus {
-    color: var(--text-secondary);
-    flex: 1;
-}
-
 /* 详情面板Tab头 */
 .detail-panel-header {
     padding: 0 20px;
@@ -327,6 +230,9 @@ html, body {
     transform: none;
 }
 
+/* 选中状态 (需要在JS中添加 .active 类，或者利用现有的样式逻辑，这里假设是第一个按钮默认高亮) */
+/* 由于当前JS逻辑可能直接操作DOM，我们暂时保持原有逻辑，但优化 .secondary 类 */
+
 .detail-panel-header .action-btn:not(.secondary) {
     color: var(--primary-color);
     border-bottom-color: var(--primary-color);
@@ -339,11 +245,11 @@ html, body {
     background: #fff;
 }
 
-/* 侧边栏列表 (Card/Nav Style) */
+/* 侧边栏列表 */
 .device-sidebar {
-    width: 180px; /* 加宽以适应卡片样式 */
+    width: 160px; /* 稍微加宽 */
     border-right: 1px solid var(--border-color-light);
-    background-color: #f7f9fa; /* 稍微深一点的背景区分 */
+    background-color: #fafafa;
     padding: 12px;
     overflow-y: auto;
 }
@@ -351,66 +257,54 @@ html, body {
 .device-sidebar > div:first-child {
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     padding-bottom: 8px;
     border-bottom: 1px solid var(--border-color-light);
-    font-size: 15px;
 }
 
 #deviceList li {
-    padding: 10px 14px;
-    margin-bottom: 8px;
-    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    border-radius: var(--radius-base);
     cursor: pointer;
     color: var(--text-primary);
-    background-color: #fff;
-    border: 1px solid transparent;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    transition: background 0.2s;
 }
 
 #deviceList li:hover {
-    border-color: #40a9ff;
+    background-color: #e6f7ff;
     color: var(--primary-color);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
 
 #deviceList li.active {
     background-color: #e6f7ff;
-    border-color: #91d5ff;
     color: var(--primary-color);
     font-weight: 500;
-    box-shadow: 0 2px 6px rgba(24, 144, 255, 0.15);
 }
 
 /* 详情内容区 */
 .device-detail-panel {
     flex: 1;
-    padding: 24px 32px; /* 增加水平内边距 */
+    padding: 24px;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: #fff;
 }
 
 /* 表单行优化 */
 .detail-row, .detail-row-pair {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .detail-row-pair {
     display: flex;
-    gap: 24px;
+    gap: 20px;
 }
 
 .detail-field {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    flex-direction: column; /* 垂直排列标签和输入框，更现代 */
+    gap: 6px;
 }
 
 .detail-field label, .detail-row label {
@@ -419,7 +313,7 @@ html, body {
     font-weight: 500;
 }
 
-/* 输入框样式 (Modern Input) */
+/* 输入框样式 */
 .detail-input, .detail-select, .detail-textarea {
     width: 100%;
     padding: 8px 12px;
@@ -443,43 +337,40 @@ html, body {
 }
 
 .detail-input[readonly] {
-    background-color: #f9f9f9;
+    background-color: #f5f5f5;
     color: rgba(0, 0, 0, 0.45);
     cursor: not-allowed;
-    border-color: #e8e8e8;
+    border-color: var(--border-color);
 }
 
 .detail-textarea {
-    min-height: 100px;
+    min-height: 80px;
     resize: vertical;
-    line-height: 1.5;
 }
 
 #technicalParams {
-    min-height: 140px;
+    min-height: 120px;
 }
 
 /* 分隔线 */
 .detail-separator {
     height: 1px;
-    background-color: #e8e8e8;
-    margin: 32px 0;
+    background-color: var(--border-color-light);
+    margin: 24px 0;
 }
 
 /* 底部操作区 */
 .detail-actions {
     display: flex;
-    gap: 16px;
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid #f0f0f0;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 10px;
 }
 
 .detail-actions .action-btn {
-    height: 38px;
-    padding: 0 24px;
+    height: 36px;
+    padding: 0 20px;
     font-size: 14px;
-    font-weight: 500;
 }
 
 .detail-actions .action-btn.secondary {
@@ -494,543 +385,61 @@ html, body {
     border-color: var(--primary-hover);
 }
 
-/* ---------------- Login Modal Styles (Modern SaaS) ---------------- */
-
-/* 登录模态框覆盖层 */
-#loginModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    background-color: #f8f9fa;
-    background-image: 
-        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-        radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-    background-size: 100% 100%;
-}
-
-#loginModal.show {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Canvas粒子背景 (Optional, kept subtle) */
-#particles-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    opacity: 0.3;
-}
-
-/* 登录容器 */
-.login-wrapper {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.login-container {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 48px;
-    width: 420px;
-    max-width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.login-header {
-    margin-bottom: 36px;
-}
-
-.login-title {
-    color: #1a1a1a;
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    letter-spacing: -0.5px;
-}
-
-.login-subtitle {
-    color: #666;
-    font-size: 15px;
-    line-height: 1.5;
-}
-
-.input-group {
-    margin-bottom: 24px;
-    text-align: left;
-}
-
-.input-label {
-    display: block;
-    margin-bottom: 8px;
-    color: #374151;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.input-wrapper {
-    position: relative;
-}
-
-.input-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af;
-    font-size: 18px;
-    z-index: 2;
-    transition: color 0.2s;
-}
-
-.login-input {
-    width: 100%;
-    padding: 12px 16px 12px 42px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 15px;
-    color: #1f2937;
-    background: #fff;
-    transition: all 0.2s ease-in-out;
-}
-
-.login-input:hover {
-    border-color: #d1d5db;
-}
-
-.login-input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.15);
-    outline: none;
-}
-
-.login-input:focus + .input-icon,
-.input-wrapper:focus-within .input-icon {
-    color: var(--primary-color);
-}
-
-.login-btn {
-    width: 100%;
-    padding: 14px;
-    background-color: var(--primary-color);
-    background-image: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0));
-    border: 1px solid rgba(0,0,0,0.05);
-    border-radius: 8px;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 4px 6px -1px rgba(24, 144, 255, 0.3);
-}
-
-.login-btn:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 8px -1px rgba(24, 144, 255, 0.4);
-}
-
-.login-btn:active {
-    transform: translateY(0);
-}
-
-.footer-info {
-    margin-top: 32px;
-    border-top: 1px solid #f3f4f6;
-    padding-top: 20px;
-}
-
-.copyright {
-    font-size: 12px;
-    color: #9ca3af;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    align-items: center;
-}
-
-.toggle-link {
-    color: var(--primary-color);
-    text-decoration: none;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 14px;
-    transition: color 0.2s;
-}
-
-.toggle-link:hover {
-    color: var(--primary-hover);
-    text-decoration: underline;
-}
-
-/* Luckysheet Overrides */
+/* Luckysheet 样式覆盖 (保留并微调) */
 #luckysheet {
-    font-family: "SimSun", "宋体", sans-serif;
+    font-family: "SimSun", "宋体", sans-serif; /* 数据区域保持宋体 */
 }
-.luckysheet-info { display: none !important; }
-.luckysheet-toolbar .iconfont { font-size: 18px !important; }
+
+.luckysheet-info {
+    display: none !important;
+}
+
+/* 调整Luckysheet内部图标大小 */
+.luckysheet-toolbar .iconfont {
+    font-size: 18px !important;
+}
+
+/* 底部Sheet页签样式优化 */
 .luckysheet-sheets-item {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
     font-size: 12px !important;
     border-radius: 4px 4px 0 0 !important;
 }
+
 .luckysheet-sheets-item.luckysheet-sheets-item-active {
     background: #fff !important;
     color: var(--primary-color) !important;
     border-bottom: 2px solid var(--primary-color) !important;
     font-weight: 600 !important;
 }
-.luckysheet-sheets-item-color { display: none !important; }
+
+.luckysheet-sheets-item-color {
+    display: none !important;
+}
+
+/* 编辑器字体修复 */
+#luckysheet-input-box,
+#luckysheet-input-box *,
+.fortune-editor,
+.fortune-editor * {
+    font-family: "宋体", "SimSun", sans-serif !important;
+}
 
 /* 滚动条美化 */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
-::-webkit-scrollbar-track { background: transparent; }
-
-/* 动画定义 */
-@keyframes slideIn {
-    from { transform: translateX(400px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
 }
 
-/* Luckysheet 工具栏深度优化 */
-.luckysheet-wa-editor .luckysheet-toolbar-button {
-    font-size: 15px !important;
-    padding: 6px 8px !important;
+::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
     border-radius: 4px;
 }
-.luckysheet-wa-editor .luckysheet-toolbar-button:hover {
-    background-color: #f5f5f5 !important;
-}
-.luckysheet-wa-editor .luckysheet-toolbar-select,
-.luckysheet-wa-editor .luckysheet-toolbar-combo-button {
-    font-size: 14px !important;
-    height: 28px !important;
-    line-height: 28px !important;
-    border-radius: 4px;
-}
-#luckysheet-wa-editor {
-    min-height: 40px !important;
-    background-color: #fff !important;
-    border-bottom: 1px solid var(--border-color-light) !important;
-}
-.luckysheet-wa-editor {
-    padding: 5px 8px !important;
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bfbfbf;
 }
 
-/* 设备列表额外样式 */
-#deviceList {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-}
-
-#deviceListEmpty {
-    font-size: 12px;
-    color: var(--text-secondary);
-    text-align: center;
-    padding: 20px 0;
-}
-
-/* PDF Preview Modal */
-#pdfPreviewModal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 10000;
-    overflow: auto;
-}
-
-.pdf-modal-content {
-    background: white;
-    margin: 20px auto;
-    max-width: 1200px;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-
-.pdf-modal-header {
-    padding: 20px;
-    border-bottom: 2px solid #e9ecef;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.pdf-modal-header h2 {
-    margin: 0;
-    color: #333;
-    font-size: 20px;
-}
-
-#closePdfModal {
-    background: none;
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-    color: #666;
-    line-height: 1;
-}
-
-.pdf-options-bar {
-    padding: 15px;
-    border-bottom: 1px solid #e9ecef;
-    background: #f8f9fa;
-}
-
-.pdf-options-container {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    align-items: center;
-    font-size: 13px;
-}
-
-.pdf-option-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.pdf-option-label {
-    font-weight: 500;
-    color: #555;
-}
-
-.pdf-select {
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-size: 13px;
-}
-
-#customRangeInput {
-    display: none;
-    align-items: center;
-    gap: 8px;
-}
-
-#pdfCustomRange {
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    width: 120px;
-    font-size: 13px;
-}
-
-.pdf-action-group {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-#enableWatermark {
-    margin-right: 5px;
-    cursor: pointer;
-}
-
-#refreshPdfPreview {
-    padding: 5px 15px;
-    background: #4285f4;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-weight: 500;
-    font-size: 13px;
-}
-
-#watermarkSettings {
-    display: none;
-    width: 100%;
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-top: 8px;
-}
-
-.watermark-controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-    font-size: 12px;
-}
-
-.watermark-input-group {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.watermark-input-group label {
-    color: #666;
-}
-
-.watermark-input-text {
-    width: 100px;
-    padding: 4px 8px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-size: 12px;
-}
-
-.watermark-input-number {
-    width: 50px;
-    padding: 4px 6px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-size: 12px;
-}
-
-.watermark-unit {
-    color: #999;
-}
-
-.pdf-preview-area {
-    padding: 20px;
-    max-height: calc(100vh - 280px);
-    min-height: 500px;
-    overflow-y: auto;
-    overflow-x: auto;
-    background: #e9ecef;
-}
-
-#pdfPreviewContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    min-height: 400px;
-    margin: 0 auto;
-    padding: 0;
-}
-
-#pdfPreviewContent p {
-    text-align: center;
-    color: #999;
-    padding: 50px 0;
-}
-
-.pdf-modal-footer {
-    padding: 20px;
-    border-top: 2px solid #e9ecef;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-}
-
-#cancelPdfExport {
-    padding: 10px 24px;
-    background: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-#confirmPdfExport {
-    padding: 10px 24px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-/* User Info Panel */
-#userInfoPanel {
-    position: fixed;
-    bottom: 3px;
-    right: 10px;
-    font-size: 11px;
-    color: #666;
-    z-index: 100;
-    font-family: 'Microsoft YaHei', SimSun, sans-serif;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.user-action-btn {
-    padding: 4px 12px;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 11px;
-    font-family: inherit;
-    transition: all 0.3s ease;
-    display: none; /* Initially hidden */
-}
-
-#userManagementBtn {
-    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
-    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
-}
-
-#userManagementBtn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.4);
-}
-
-#logoutBtn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    box-shadow: 0 2px 5px rgba(102, 126, 234, 0.3);
-    display: inline-block; /* Always visible if logged in */
-}
-
-#logoutBtn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
-}
-
-/* Copyright Footer */
-.copyright-footer {
-    position: fixed;
-    bottom: 3px;
-    left: 10px;
-    font-size: 11px;
-    color: #666;
-    z-index: 100;
-    font-family: 'Microsoft YaHei', SimSun, sans-serif;
-    white-space: nowrap;
+::-webkit-scrollbar-track {
+    background: transparent;
 }
