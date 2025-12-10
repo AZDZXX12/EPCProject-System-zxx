@@ -722,34 +722,73 @@ const EnhancedConstructionManagement: React.FC = () => {
             </Row>
 
             <Card title="EPC生命周期进度">
-              <Timeline mode="left">
-                <Timeline.Item color="green" label="立项阶段">
-                  <Tag color="success">已完成</Tag> 100%
-                  <div>项目立项、可研报告、投资决策</div>
-                </Timeline.Item>
-                <Timeline.Item color="green" label="设计阶段">
-                  <Tag color="success">已完成</Tag> 100%
-                  <div>初步设计、详细设计、施工图设计</div>
-                </Timeline.Item>
-                <Timeline.Item color="blue" label="采购阶段">
-                  <Tag color="processing">进行中</Tag> 85%
-                  <Progress percent={85} size="small" />
-                  <div>设备采购、材料采购、合同签订</div>
-                </Timeline.Item>
-                <Timeline.Item color="blue" label="施工阶段">
-                  <Tag color="processing">进行中</Tag> 60%
-                  <Progress percent={60} size="small" />
-                  <div>土建施工、设备安装、管道铺设</div>
-                </Timeline.Item>
-                <Timeline.Item color="gray" label="调试阶段">
-                  <Tag>未开始</Tag> 0%
-                  <div>单机调试、联动调试、性能测试</div>
-                </Timeline.Item>
-                <Timeline.Item color="gray" label="验收阶段">
-                  <Tag>未开始</Tag> 0%
-                  <div>预验收、正式验收、资料移交</div>
-                </Timeline.Item>
-              </Timeline>
+              <Timeline
+                mode="left"
+                items={[
+                  {
+                    color: 'green',
+                    label: '立项阶段',
+                    children: (
+                      <>
+                        <Tag color="success">已完成</Tag> 100%
+                        <div>项目立项、可研报告、投资决策</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'green',
+                    label: '设计阶段',
+                    children: (
+                      <>
+                        <Tag color="success">已完成</Tag> 100%
+                        <div>初步设计、详细设计、施工图设计</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'blue',
+                    label: '采购阶段',
+                    children: (
+                      <>
+                        <Tag color="processing">进行中</Tag> 85%
+                        <Progress percent={85} size="small" />
+                        <div>设备采购、材料采购、合同签订</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'blue',
+                    label: '施工阶段',
+                    children: (
+                      <>
+                        <Tag color="processing">进行中</Tag> 60%
+                        <Progress percent={60} size="small" />
+                        <div>土建施工、设备安装、管道铺设</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'gray',
+                    label: '调试阶段',
+                    children: (
+                      <>
+                        <Tag>未开始</Tag> 0%
+                        <div>单机调试、联动调试、性能测试</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'gray',
+                    label: '验收阶段',
+                    children: (
+                      <>
+                        <Tag>未开始</Tag> 0%
+                        <div>预验收、正式验收、资料移交</div>
+                      </>
+                    ),
+                  },
+                ]}
+              />
             </Card>
                 </>
               )
@@ -877,36 +916,73 @@ const EnhancedConstructionManagement: React.FC = () => {
             </Card>
 
             <Card title="关键里程碑">
-              <Timeline>
-                <Timeline.Item color="green">
-                  <strong>项目启动会</strong>
-                  <div>2024-10-01 | 已完成</div>
-                </Timeline.Item>
-                <Timeline.Item color="green">
-                  <strong>初步设计评审</strong>
-                  <div>2024-11-15 | 已完成</div>
-                </Timeline.Item>
-                <Timeline.Item color="green">
-                  <strong>施工图设计完成</strong>
-                  <div>2025-01-20 | 已完成</div>
-                </Timeline.Item>
-                <Timeline.Item color="blue">
-                  <strong>主要设备到货</strong>
-                  <div>2025-06-30 | 进行中</div>
-                </Timeline.Item>
-                <Timeline.Item color="gray">
-                  <strong>土建工程完工</strong>
-                  <div>2025-08-31 | 计划中</div>
-                </Timeline.Item>
-                <Timeline.Item color="gray">
-                  <strong>设备安装完成</strong>
-                  <div>2025-10-31 | 计划中</div>
-                </Timeline.Item>
-                <Timeline.Item color="gray">
-                  <strong>项目竣工验收</strong>
-                  <div>2025-12-31 | 计划中</div>
-                </Timeline.Item>
-              </Timeline>
+              <Timeline
+                items={[
+                  {
+                    color: 'green',
+                    children: (
+                      <>
+                        <strong>项目启动会</strong>
+                        <div>2024-10-01 | 已完成</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'green',
+                    children: (
+                      <>
+                        <strong>初步设计评审</strong>
+                        <div>2024-11-15 | 已完成</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'green',
+                    children: (
+                      <>
+                        <strong>施工图设计完成</strong>
+                        <div>2025-01-20 | 已完成</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'blue',
+                    children: (
+                      <>
+                        <strong>主要设备到货</strong>
+                        <div>2025-06-30 | 进行中</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'gray',
+                    children: (
+                      <>
+                        <strong>土建工程完工</strong>
+                        <div>2025-08-31 | 计划中</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'gray',
+                    children: (
+                      <>
+                        <strong>设备安装完成</strong>
+                        <div>2025-10-31 | 计划中</div>
+                      </>
+                    ),
+                  },
+                  {
+                    color: 'gray',
+                    children: (
+                      <>
+                        <strong>项目竣工验收</strong>
+                        <div>2025-12-31 | 计划中</div>
+                      </>
+                    ),
+                  },
+                ]}
+              />
             </Card>
                 </>
               )
