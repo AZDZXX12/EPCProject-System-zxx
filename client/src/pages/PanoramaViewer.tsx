@@ -23,11 +23,11 @@ const PanoramaViewer: React.FC = () => {
     };
   }, []);
 
-  // Add timestamp to force reload and bypass cache
-  const timestamp = new Date().getTime();
+  // Add timestamp to force reload and bypass cache (only once on mount)
+  const [timestamp] = useState(new Date().getTime());
 
   return (
-    <div className="panorama-viewer-container" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
+    <div className="panorama-viewer-container" style={{ position: 'relative', width: '100%', height: '100%', padding: 0, overflow: 'hidden' }}>
       {loading && (
         <div style={{ 
           position: 'absolute', 
@@ -47,6 +47,7 @@ const PanoramaViewer: React.FC = () => {
         </div>
       )}
       <iframe
+        key="pano-frame"
         id="pano-frame"
         src={`/pano-viewer/index.html?v=${timestamp}`}
         title="Panoramic Viewer"

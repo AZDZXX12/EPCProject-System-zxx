@@ -16,6 +16,61 @@ const appState = {
   gyroEnabled: false
 };
 
+const API_BASE_URL = 'http://localhost:8000';
+
+/**
+ * 显示通知
+ */
+function showNotification(message, type = 'info') {
+  const container = document.getElementById('notification-container') || (() => {
+    const div = document.createElement('div');
+    div.id = 'notification-container';
+    div.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;';
+    document.body.appendChild(div);
+    return div;
+  })();
+
+  const toast = document.createElement('div');
+  toast.className = `notification ${type}`;
+  toast.style.cssText = `
+    padding: 12px 20px;
+    border-radius: 4px;
+    background: ${type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6'};
+    color: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 200px;
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `;
+  
+  // Add animation keyframes if not present
+  if (!document.getElementById('notification-style')) {
+    const style = document.createElement('style');
+    style.id = 'notification-style';
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  toast.innerHTML = `<span>${message}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
 /**
  * 获取URL参数
  */
@@ -78,7 +133,7 @@ async function loadProjectFromBackend() {
   setProgress(10, '加载项目数据...');
   
   try {
-    const response = await fetch(`/api/v1/panoramas/?project_id=${PROJECT_ID}`);
+    const response = await fetch(`${API_BASE_URL}/api/v1/panoramas/?project_id=${PROJECT_ID}`);
     if (!response.ok) throw new Error('Failed to load project data');
     
     const panos = await response.json();
@@ -94,11 +149,11 @@ async function loadProjectFromBackend() {
     for (let i = 0; i < panos.length; i++) {
       const pano = panos[i];
       // Use URL from server
-      const imageUrl = pano.url.startsWith('http') ? pano.url : `http://localhost:8000${pano.url}`;
+      const imageUrl = pano.url.startsWith('http') ? pano.url : `${API_BASE_URL}${pano.url}`;
       
       let thumbnailUrl = pano.thumbnail || imageUrl;
       if (pano.thumbnail && !pano.thumbnail.startsWith('http')) {
-          thumbnailUrl = `http://localhost:8000${pano.thumbnail}`;
+          thumbnailUrl = `${API_BASE_URL}${pano.thumbnail}`;
       }
       
       // Load image
@@ -241,7 +296,7 @@ async function saveProject() {
 
       if (sceneData.id.startsWith('scene_') || sceneData.id.startsWith('PANO-') === false) {
          // Create new
-         const res = await fetch('/api/v1/panoramas/', {
+         const res = await fetch(`${API_BASE_URL}/api/v1/panoramas/`, {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify(payload)
@@ -252,7 +307,7 @@ async function saveProject() {
          }
       } else {
         // Update existing
-        await fetch(`/api/v1/panoramas/${sceneData.id}`, {
+        await fetch(`${API_BASE_URL}/api/v1/panoramas/${sceneData.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -467,7 +522,7 @@ async function uploadFile(file) {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await fetch('/api/v1/upload/panorama', {
+  const response = await fetch(`${API_BASE_URL}/api/v1/upload/panorama`, {
     method: 'POST',
     body: formData
   });
@@ -503,7 +558,17 @@ async function handleFileSelect(e) {
     const isImage = file.type.startsWith('image/');
     const isEXR = window.EXRDecoder && EXRDecoder.isEXRFile(name);
 
-    if (!isImage && !isEXR) return;
+    if (!isImage && !isEXR) {
+        showNotification(`不支持的文件格式: ${name}`, 'error');
+        return;
+    }
+
+    // 文件大小检查 (100MB 限制)
+    const MAX_SIZE = 100 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+        showNotification(`文件过大 (${(file.size / 1024 / 1024).toFixed(1)}MB), 请上传小于 100MB 的文件`, 'error');
+        return;
+    }
 
     try {
       let imageUrl;
@@ -528,10 +593,12 @@ async function handleFileSelect(e) {
 
       // 创建场景 (使用服务器 URL)
       createScene(imageUrl, name, completed === 0, { thumbnail: thumbnailUrl });
+      showNotification(`场景 ${name} 创建成功`, 'success');
       
     } catch (err) {
       console.error('处理文件失败:', err);
       // alert(`文件 ${name} 处理失败: ${err.message}`); // 避免弹窗轰炸
+      showNotification(`文件 ${name} 上传失败: ${err.message}`, 'error');
     } finally {
       completed++;
       const pct = Math.round((completed / total) * 100);
