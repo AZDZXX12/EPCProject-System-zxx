@@ -17,10 +17,22 @@ const appState = {
 };
 
 /**
+ * 获取URL参数
+ */
+function getUrlParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+// 全局项目ID
+const PROJECT_ID = getUrlParam('projectId');
+
+/**
  * 初始化应用
  */
 function initApp() {
   console.log('🚀 初始化全景编辑器...');
+  console.log('Project ID:', PROJECT_ID);
   
   // 检查 Marzipano
   if (typeof Marzipano === 'undefined') {
@@ -39,16 +51,231 @@ function initApp() {
   // 绑定事件
   bindEvents();
   
-  // 从 localStorage 加载项目
-  loadProject();
+  // 加载项目
+  if (PROJECT_ID) {
+    loadProjectFromBackend();
+  } else {
+    loadProject(); // Fallback to localStorage
+  }
   
   // 如果没有场景，显示默认星空
-  if (appState.scenes.length === 0) {
+  // Note: loadProjectFromBackend is async, so this check might happen before load finishes.
+  // We'll handle empty state inside load functions.
+  if (!PROJECT_ID && appState.scenes.length === 0) {
     showDefaultSky();
   }
   
   console.log('✅ 应用初始化完成');
 }
+
+/**
+ * 从后端加载项目
+ */
+async function loadProjectFromBackend() {
+  if (!PROJECT_ID) return;
+  
+  showLoading();
+  setProgress(10, '加载项目数据...');
+  
+  try {
+    const response = await fetch(`/api/v1/panoramas/?project_id=${PROJECT_ID}`);
+    if (!response.ok) throw new Error('Failed to load project data');
+    
+    const panos = await response.json();
+    console.log('Loaded panos:', panos);
+    
+    if (panos.length === 0) {
+      showDefaultSky();
+      hideLoading();
+      return;
+    }
+    
+    // Process each panorama
+    for (let i = 0; i < panos.length; i++) {
+      const pano = panos[i];
+      // Use URL from server
+      const imageUrl = pano.url.startsWith('http') ? pano.url : `http://localhost:8000${pano.url}`;
+      
+      let thumbnailUrl = pano.thumbnail || imageUrl;
+      if (pano.thumbnail && !pano.thumbnail.startsWith('http')) {
+          thumbnailUrl = `http://localhost:8000${pano.thumbnail}`;
+      }
+      
+      // Load image
+      await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          // Create scene
+          // Similar logic to createScene but using existing data
+           const aspectRatio = img.width / img.height;
+           let geometry;
+           if (aspectRatio > 1.8 && aspectRatio < 2.2) {
+             geometry = new Marzipano.EquirectGeometry([{ width: 4096 }]);
+           } else {
+             geometry = new Marzipano.CubeGeometry([{ tileSize: 1024, size: 1024 }]);
+           }
+           const limiter = Marzipano.RectilinearView.limit.traditional(4096, 120 * Math.PI / 180);
+           
+           // Restore view parameters if available
+           let initialView = { yaw: 0, pitch: 0, fov: 90 * Math.PI / 180 };
+           if (pano.scene_data && pano.scene_data.view) {
+             initialView = pano.scene_data.view;
+           }
+           
+           const view = new Marzipano.RectilinearView(initialView, limiter);
+           
+           const source = Marzipano.ImageUrlSource.fromString(imageUrl);
+           const scene = appState.viewer.createScene({
+             source: source,
+             geometry: geometry,
+             view: view,
+             pinFirstLevel: true
+           });
+           
+           const sceneData = {
+             id: pano.id, // Use DB ID
+             name: pano.name,
+             imageData: imageUrl,
+             scene: scene,
+             view: view,
+             hotspots: [],
+             thumbnail: thumbnailUrl,
+             isDefault: false
+           };
+           
+           // Restore hotspots
+           if (pano.hotspots && Array.isArray(pano.hotspots)) {
+             sceneData.hotspots = pano.hotspots;
+           }
+           
+           appState.scenes.push(sceneData);
+           resolve();
+        };
+        img.src = imageUrl;
+      });
+      
+      setProgress(10 + Math.round(((i + 1) / panos.length) * 90), `加载场景 ${i + 1}/${panos.length}`);
+    }
+    
+    updateSceneList();
+    if (appState.scenes.length > 0) {
+      switchScene(appState.scenes[0].id);
+    }
+    
+  } catch (e) {
+    console.error('加载项目失败:', e);
+    alert('加载项目失败，请检查网络');
+    showDefaultSky();
+  } finally {
+    hideLoading();
+  }
+}
+
+/**
+ * 保存项目 (适配后端)
+ */
+async function saveProject() {
+  const saveStatus = document.getElementById('saveStatus');
+  const showStatus = (text) => {
+    if (saveStatus) {
+      saveStatus.textContent = text;
+      saveStatus.classList.add('show');
+    }
+  };
+  const hideStatus = () => {
+    if (saveStatus) {
+      saveStatus.classList.remove('show');
+    }
+  };
+
+  if (!PROJECT_ID) {
+    // Fallback to localStorage
+    const projectData = {
+      scenes: appState.scenes.map(s => ({
+        id: s.id,
+        name: s.name,
+        imageData: s.imageData,
+        hotspots: s.hotspots,
+        thumbnail: s.thumbnail,
+        isDefault: s.isDefault
+      }))
+    };
+    localStorage.setItem('pano_project_structure', JSON.stringify(projectData));
+    console.log('项目结构已保存 (Local)');
+    showStatus('已保存');
+    setTimeout(hideStatus, 2000);
+    return;
+  }
+
+  // Save to Backend
+  // We need to upsert scenes. 
+  // For simplicity, we can just update the current scene or iterate all.
+  // Better approach: Sync all changes.
+  
+  const saveBtn = document.getElementById('saveBtn');
+  const originalText = saveBtn ? saveBtn.textContent : ''; // Handle if saveBtn is null but usually it is there
+  if (saveBtn) {
+    saveBtn.textContent = '保存中...';
+    saveBtn.disabled = true;
+  }
+  showStatus('正在保存...');
+
+  try {
+    for (const sceneData of appState.scenes) {
+      if (sceneData.isDefault) continue;
+      
+      const payload = {
+        id: sceneData.id.startsWith('scene_') ? null : sceneData.id, // If it has 'scene_' prefix, it might be new and not yet persisted with DB ID, but wait, createScene generates temp ID.
+        // Actually, if we loaded from DB, ID is DB ID. If new, it is temp ID.
+        // But our create_panorama endpoint expects us to POST to create.
+        // Let's assume if ID starts with 'scene_', it's new.
+        project_id: PROJECT_ID,
+        name: sceneData.name,
+        url: sceneData.imageData, // This should be the server URL
+        thumbnail: sceneData.thumbnail,
+        hotspots: sceneData.hotspots,
+        scene_data: {
+          view: sceneData.view.parameters()
+        }
+      };
+
+      if (sceneData.id.startsWith('scene_') || sceneData.id.startsWith('PANO-') === false) {
+         // Create new
+         const res = await fetch('/api/v1/panoramas/', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify(payload)
+         });
+         if (res.ok) {
+           const newPano = await res.json();
+           sceneData.id = newPano.id; // Update ID to DB ID
+         }
+      } else {
+        // Update existing
+        await fetch(`/api/v1/panoramas/${sceneData.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+    }
+    console.log('项目已保存 (Server)');
+    if (saveBtn) saveBtn.textContent = '已保存';
+    showStatus('已保存');
+    setTimeout(() => { 
+        if (saveBtn) { saveBtn.textContent = originalText; saveBtn.disabled = false; } 
+        hideStatus();
+    }, 2000);
+    
+  } catch (e) {
+    console.error('保存失败:', e);
+    // alert('保存失败');
+    if (saveBtn) { saveBtn.textContent = '保存失败'; saveBtn.disabled = false; }
+    showStatus('保存失败');
+    setTimeout(hideStatus, 3000);
+  }
+}
+
 
 /**
  * 绑定所有事件
@@ -222,7 +449,39 @@ function bindEvents() {
 }
 
 /**
- * 处理文件选择
+ * 将 DataURL 转换为 Blob
+ */
+function dataURLtoBlob(dataurl) {
+  var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+  while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], {type:mime});
+}
+
+/**
+ * 上传文件到服务器
+ */
+async function uploadFile(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await fetch('/api/v1/upload/panorama', {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error('Upload failed: ' + response.statusText);
+  }
+
+  const result = await response.json();
+  return result;
+}
+
+/**
+ * 处理文件选择 (优化版：并行上传 + 云端存储)
  */
 async function handleFileSelect(e) {
   const files = Array.from(e.target.files);
@@ -230,72 +489,76 @@ async function handleFileSelect(e) {
 
   removeDefaultSceneIfPresent();
   showLoading();
-  setProgress(1, '准备读取文件...');
+  setProgress(1, '准备处理...');
 
   const total = files.length;
   let completed = 0;
-
-  const readNext = async (i) => {
-    if (i >= total) {
-      setProgress(100, '读取完成');
-      setTimeout(() => hideLoading(), 300);
-      return;
-    }
-
-    const file = files[i];
-    const name = file.name || `图片${i+1}`;
+  
+  // 并发控制
+  const CONCURRENCY = 3;
+  
+  // 处理单个文件
+  const processFile = async (file) => {
+    const name = file.name || `图片${Date.now()}`;
     const isImage = file.type.startsWith('image/');
     const isEXR = window.EXRDecoder && EXRDecoder.isEXRFile(name);
 
-    if (!isImage && !isEXR) {
-      completed++;
-      await readNext(i + 1);
-      return;
-    }
+    if (!isImage && !isEXR) return;
 
     try {
-      let dataUrl;
+      let imageUrl;
+      let uploadFileObj = file;
+
       if (isEXR) {
-        if (file.size > 20 * 1024 * 1024) {
-          const proceed = confirm('EXR 文件较大，可能耗时较长，是否继续解码？');
-          if (!proceed) {
-            completed++;
-            await readNext(i + 1);
-            return;
-          }
-        }
+        // EXR 解码
         const res = await EXRDecoder.processFile(file, (pct, msg) => {
-          const overall = Math.max(1, Math.min(99, Math.round(((completed + pct / 100) / total) * 100)));
-          setProgress(overall, msg || `处理 ${name}`);
+          // 忽略解码进度，主要关注整体进度
         });
-        dataUrl = res.dataURL;
-        const sceneIdTmp = 'scene_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        createScene(dataUrl, name, i === 0);
-        const created = appState.scenes.find(s => s.name === name && s.imageData === dataUrl) || appState.scenes[appState.scenes.length - 1];
-        if (created) created.exrBuffer = res.buffer;
-      } else {
-        const res = await EXRDecoder.processFile(file, (pct, msg) => {
-          const overall = Math.max(1, Math.min(99, Math.round(((completed + pct / 100) / total) * 100)));
-          setProgress(overall, msg || `读取 ${name}`);
-        });
-        dataUrl = res.dataURL;
-        createScene(dataUrl, name, i === 0);
+        
+        // 转换 DataURL 为 Blob (转为 PNG 上传，减小体积)
+        const blob = dataURLtoBlob(res.dataURL);
+        uploadFileObj = new File([blob], name.replace(/\.exr$/i, '.png'), { type: 'image/png' });
       }
-      completed++;
-      const overall = Math.max(1, Math.min(99, Math.round((completed / total) * 100)));
-      setProgress(overall, `已处理 ${completed}/${total}`);
-      await readNext(i + 1);
+
+      // 上传到服务器
+      // setProgress(Math.round((completed / total) * 100), `上传中: ${name}`);
+      const uploadResult = await uploadFile(uploadFileObj);
+      imageUrl = uploadResult.url;
+      const thumbnailUrl = uploadResult.thumbnail;
+
+      // 创建场景 (使用服务器 URL)
+      createScene(imageUrl, name, completed === 0, { thumbnail: thumbnailUrl });
+      
     } catch (err) {
       console.error('处理文件失败:', err);
-      if (String(err?.message || '').includes('未加载') || String(err).includes('EXRLoader')) {
-        alert('EXR 支持库未能加载，已跳过该 EXR 文件。请连接网络或稍后重试。');
-      }
+      // alert(`文件 ${name} 处理失败: ${err.message}`); // 避免弹窗轰炸
+    } finally {
       completed++;
-      await readNext(i + 1);
+      const pct = Math.round((completed / total) * 100);
+      setProgress(pct, `已完成 ${completed}/${total}`);
     }
   };
 
-  await readNext(0);
+  // 执行队列
+  const queue = [...files];
+  const activeJobs = [];
+
+  while (queue.length > 0 || activeJobs.length > 0) {
+    while (queue.length > 0 && activeJobs.length < CONCURRENCY) {
+      const file = queue.shift();
+      const promise = processFile(file);
+      activeJobs.push(promise);
+      promise.then(() => {
+        activeJobs.splice(activeJobs.indexOf(promise), 1);
+      });
+    }
+    
+    if (activeJobs.length > 0) {
+      await Promise.race(activeJobs);
+    }
+  }
+
+  hideLoading();
   e.target.value = '';
 }
 
@@ -413,7 +676,7 @@ function createScene(imageData, filename, switchTo = false, options = {}) {
       scene: scene,
       view: view,
       hotspots: [],
-      thumbnail: imageData,
+      thumbnail: options.thumbnail || imageData,
       isDefault: !!options.isDefault
     };
     
@@ -518,8 +781,20 @@ function showDefaultSky() {
   ctx.fillStyle = aurora;
   ctx.fillRect(0, 0, width, height/2);
 
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
   createScene(dataUrl, '数字空间', true, { isDefault: true });
+}
+
+let autoSaveTimer = null;
+function autoSaveProject() {
+  if (autoSaveTimer) clearTimeout(autoSaveTimer);
+  const statusEl = document.getElementById('saveStatus');
+  if (statusEl) statusEl.textContent = '...'; // Saving indicator if we had one
+  
+  autoSaveTimer = setTimeout(() => {
+    saveProject();
+    autoSaveTimer = null;
+  }, 2000);
 }
 
 /**

@@ -66,6 +66,19 @@ body {
 .nav-actions {
   display: flex;
   gap: 16px;
+  align-items: center;
+}
+
+.save-status {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  margin-right: 8px;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.save-status.show {
+  opacity: 1;
 }
 
 .btn {
@@ -739,3 +752,128 @@ input[type=range]:focus {
   gap: 12px;
 }
 
+/* =========================================
+   移动端适配 (Responsive Design)
+   ========================================= */
+
+@media (max-width: 768px) {
+  /* 顶部导航栏调整 */
+  .top-nav {
+    padding: 0 16px;
+    height: 56px;
+  }
+  
+  .logo h1 {
+    font-size: 16px;
+  }
+  
+  .nav-actions {
+    gap: 8px;
+  }
+  
+  .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  /* 侧边栏调整 - 移动端占满大部分屏幕 */
+  .sidebar {
+    width: 85%;
+    max-width: 320px;
+    box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+  }
+  
+  /* 侧边栏开关按钮位置调整 */
+  .sidebar-toggle {
+    left: 16px;
+    top: 70px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* 侧栏展开时开关按钮的位置 - 跟随侧栏移动 */
+  .sidebar:not(.collapsed) + .sidebar-toggle {
+    left: calc(85% + 10px); 
+    transform: translateX(0);
+  }
+  /* 注意：如果 max-width 生效，这里可能需要 JS 动态计算，或者简化处理：
+     移动端展开侧栏时，可以隐藏 toggle 按钮，或者将其固定在侧栏右上角。
+     为了简化 CSS，这里尝试一个近似值，或者让 toggle 按钮始终可见且位于顶层。
+  */
+  
+  /* 底部控制栏 - 紧凑模式 */
+  .control-bar {
+    bottom: 20px;
+    padding: 8px 16px;
+    gap: 16px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 16px;
+    justify-content: space-around;
+    display: flex;
+  }
+  
+  .control-btn {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .control-btn .icon {
+    font-size: 14px;
+  }
+
+  /* 场景标题 - 缩小并上移 */
+  .scene-title-overlay {
+    top: 64px;
+    width: 90%;
+  }
+  
+  .scene-title-overlay h2 {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+  
+  .scene-title-overlay p {
+    font-size: 12px;
+  }
+  
+  /* 属性面板 - 移动端全屏或底部抽屉 */
+  .properties-panel {
+    width: 100%;
+    top: auto;
+    height: 70vh;
+    border-radius: 20px 20px 0 0;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    transform: translateY(100%); /* 向下隐藏 */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* 覆盖默认的 translateX 动画 */
+  .properties-panel.show {
+    transform: translateY(0);
+  }
+  
+  /* 模态框适配 */
+  .modal-content {
+    width: 95%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-body {
+    overflow-y: auto;
+  }
+  
+  /* 场景预览条适配 */
+  .scene-dock {
+    bottom: 80px;
+    height: 60px;
+  }
+  
+  .scene-dock-item {
+    width: 80px;
+    height: 50px;
+  }
+}
