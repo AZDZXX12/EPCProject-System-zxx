@@ -220,23 +220,39 @@ async function loadProjectFromBackend() {
       return;
     }
     
-    // 1. Load the first panorama immediately
-    setProgress(30, '加载首个场景...');
-    await loadOnePano(panos[0]);
+    // 1. Determine which scene to load first
+    const urlSceneId = getUrlParam('sceneId');
+    let initialPanoIndex = 0;
+    
+    if (urlSceneId) {
+      const idx = panos.findIndex(p => p.id === urlSceneId);
+      if (idx !== -1) {
+        initialPanoIndex = idx;
+        console.log('Restoring scene from URL:', urlSceneId);
+      }
+    }
+
+    // 2. Load the initial panorama immediately
+    setProgress(30, '加载场景...');
+    await loadOnePano(panos[initialPanoIndex]);
     
     updateSceneList();
     if (appState.scenes.length > 0) {
-      switchScene(appState.scenes[0].id);
+      // Find the scene we just loaded
+      const loadedSceneId = panos[initialPanoIndex].id;
+      switchScene(loadedSceneId);
     }
     
-    // 2. Hide loading screen immediately so user can interact
+    // 3. Hide loading screen immediately so user can interact
     hideLoading();
     
-    // 3. Load remaining panoramas in background
+    // 4. Load remaining panoramas in background
     if (panos.length > 1) {
       console.log('Background loading remaining scenes...');
       // Load sequentially in background to avoid freezing UI
-      for (let i = 1; i < panos.length; i++) {
+      for (let i = 0; i < panos.length; i++) {
+        if (i === initialPanoIndex) continue; // Skip the one already loaded
+        
         await loadOnePano(panos[i]);
         updateSceneList(); // Update list as they come in
       }
@@ -288,12 +304,8 @@ async function saveProject() {
   }
 
   // Save to Backend
-  // We need to upsert scenes. 
-  // For simplicity, we can just update the current scene or iterate all.
-  // Better approach: Sync all changes.
-  
   const saveBtn = document.getElementById('saveBtn');
-  const originalText = saveBtn ? saveBtn.textContent : ''; // Handle if saveBtn is null but usually it is there
+  const originalText = saveBtn ? saveBtn.textContent : '';
   if (saveBtn) {
     saveBtn.textContent = '保存中...';
     saveBtn.disabled = true;
@@ -305,13 +317,10 @@ async function saveProject() {
       if (sceneData.isDefault) continue;
       
       const payload = {
-        id: sceneData.id.startsWith('scene_') ? null : sceneData.id, // If it has 'scene_' prefix, it might be new and not yet persisted with DB ID, but wait, createScene generates temp ID.
-        // Actually, if we loaded from DB, ID is DB ID. If new, it is temp ID.
-        // But our create_panorama endpoint expects us to POST to create.
-        // Let's assume if ID starts with 'scene_', it's new.
+        id: sceneData.id.startsWith('scene_') ? null : sceneData.id,
         project_id: PROJECT_ID,
         name: sceneData.name,
-        url: sceneData.imageData, // This should be the server URL
+        url: sceneData.imageData,
         thumbnail: sceneData.thumbnail,
         hotspots: sceneData.hotspots,
         scene_data: {
@@ -319,24 +328,38 @@ async function saveProject() {
         }
       };
 
+      console.log(`Saving scene ${sceneData.name} (ID: ${sceneData.id})...`);
+
       if (sceneData.id.startsWith('scene_') || sceneData.id.startsWith('PANO-') === false) {
          // Create new
+         console.log('Creating new panorama...', payload);
          const res = await fetch(`${API_BASE_URL}/api/v1/panoramas/`, {
            method: 'POST',
            headers: { 'Content-Type': 'application/json' },
            body: JSON.stringify(payload)
          });
-         if (res.ok) {
-           const newPano = await res.json();
-           sceneData.id = newPano.id; // Update ID to DB ID
+         
+         if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Failed to create panorama: ${res.status} ${errText}`);
          }
+         
+         const newPano = await res.json();
+         console.log('Created panorama:', newPano);
+         sceneData.id = newPano.id; // Update ID to DB ID
       } else {
         // Update existing
-        await fetch(`${API_BASE_URL}/api/v1/panoramas/${sceneData.id}`, {
+        console.log('Updating existing panorama...', payload);
+        const res = await fetch(`${API_BASE_URL}/api/v1/panoramas/${sceneData.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        
+        if (!res.ok) {
+            const errText = await res.text();
+            throw new Error(`Failed to update panorama ${sceneData.id}: ${res.status} ${errText}`);
+        }
       }
     }
     console.log('项目已保存 (Server)');
@@ -349,9 +372,9 @@ async function saveProject() {
     
   } catch (e) {
     console.error('保存失败:', e);
-    // alert('保存失败');
     if (saveBtn) { saveBtn.textContent = '保存失败'; saveBtn.disabled = false; }
     showStatus('保存失败');
+    showNotification(`保存失败: ${e.message}`, 'error');
     setTimeout(hideStatus, 3000);
   }
 }
@@ -902,6 +925,11 @@ function switchScene(sceneId) {
   
   appState.currentScene = sceneData;
   
+  // Update URL without reloading
+  const newUrl = new URL(window.location);
+  newUrl.searchParams.set('sceneId', sceneId);
+  window.history.replaceState({}, '', newUrl);
+
   updateSceneList();
   document.getElementById('emptyViewer').style.display = 'none';
   document.getElementById('controlBar').style.display = 'flex';
@@ -1258,28 +1286,7 @@ function setProgress(percent, message) {
   if (text) text.textContent = message || `进度 ${percent}%`;
 }
 
-function saveProject() {
-  const projectData = {
-    scenes: appState.scenes
-      .filter(scene => !scene.isDefault)
-      .map(scene => ({
-        id: scene.id,
-        name: scene.name,
-        hotspots: scene.hotspots
-      })),
-    currentSceneId: appState.currentScene?.id,
-    version: '1.0',
-    savedAt: new Date().toISOString()
-  };
-  
-  try {
-    localStorage.setItem('pano_project_structure', JSON.stringify(projectData));
-    console.log('✅ 项目结构已保存');
-    showNotification('✅ 配置已保存');
-  } catch (e) {
-    console.error('保存失败:', e);
-  }
-}
+
 
 function exportProject() {
   const data = {
